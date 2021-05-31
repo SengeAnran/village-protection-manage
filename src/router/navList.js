@@ -1,5 +1,4 @@
-/* Layout */
-import Layout from "@/layout";
+import BlankRouteNode from "./BlankRouteNode";
 
 export const constantRoutes = [
   {
@@ -9,19 +8,19 @@ export const constantRoutes = [
   },
 ];
 
-export const asyncRoutes = [
-  {
-    path: "/",
-    redirect: "/villageApplication",
-  },
+export const defaultRoutes = [
   // 村庄申报
   {
     path: "/villageApplication",
-    component: Layout,
+    component: BlankRouteNode,
+    name: "VillageApplication",
+    redirect: {
+      name: "VillageApplyList",
+    },
     children: [
       {
         path: "index",
-        name: "村庄申报",
+        name: "VillageApplyList",
         meta: {
           title: "村庄申报",
           icon: "cunzhuangshenbao",
@@ -33,12 +32,15 @@ export const asyncRoutes = [
   // 村庄审核
   {
     path: "/villageAudit",
-    component: Layout,
-    redirect: "/villageAudit/index",
+    component: BlankRouteNode,
+    name: "VillageAudit",
+    redirect: {
+      name: "VillageAuditList",
+    },
     children: [
       {
         path: "index",
-        name: "村庄审核",
+        name: "VillageAuditList",
         meta: {
           title: "村庄审核",
           icon: "cunzhuangshenbao",
@@ -50,12 +52,15 @@ export const asyncRoutes = [
   // 规划评审
   {
     path: "/planAudit",
-    component: Layout,
-    redirect: "/planAudit/index",
+    component: BlankRouteNode,
+    name: "PlanAudit",
+    redirect: {
+      name: "PlanAuditList",
+    },
     children: [
       {
         path: "index",
-        name: "规划评审",
+        name: "PlanAuditList",
         meta: {
           title: "规划评审",
           icon: "guihuapingshen",
@@ -67,12 +72,15 @@ export const asyncRoutes = [
   // 项目申报
   {
     path: "/projectApplication",
-    component: Layout,
-    redirect: "/projectApplication/index",
+    component: BlankRouteNode,
+    name: "ProjectApply",
+    redirect: {
+      name: "ProjectApplyList",
+    },
     children: [
       {
         path: "index",
-        name: "项目申报",
+        name: "ProjectApplyList",
         meta: {
           title: "项目申报",
           icon: "xiangmushenbao",
@@ -84,12 +92,15 @@ export const asyncRoutes = [
   // 项目审核
   {
     path: "/projectAudit",
-    component: Layout,
-    redirect: "index",
+    component: BlankRouteNode,
+    name: "ProjectAudit",
+    redirect: {
+      name: "ProjectAuditList",
+    },
     children: [
       {
         path: "index",
-        name: "项目审核",
+        name: "ProjectAuditList",
         meta: {
           title: "项目审核",
           icon: "xiangmushenbao",
@@ -101,12 +112,15 @@ export const asyncRoutes = [
   // 进度上报
   {
     path: "/scheduleReport",
-    component: Layout,
-    redirect: "/scheduleReport/index",
+    component: BlankRouteNode,
+    name: "ScheduleReport",
+    redirect: {
+      name: "ScheduleReportList",
+    },
     children: [
       {
         path: "index",
-        name: "进度上报",
+        name: "ScheduleReportList",
         meta: {
           title: "进度上报",
           icon: "jindushangbao",
@@ -118,12 +132,15 @@ export const asyncRoutes = [
   // 进度监管
   {
     path: "/scheduleSupervise",
-    component: Layout,
-    redirect: "/scheduleSupervise/index",
+    component: BlankRouteNode,
+    name: "ScheduleSupervise",
+    redirect: {
+      name: "ScheduleSuperviseList",
+    },
     children: [
       {
         path: "index",
-        name: "进度监管",
+        name: "ScheduleSuperviseList",
         meta: {
           title: "进度监管",
           icon: "jindushangbao",
@@ -135,12 +152,15 @@ export const asyncRoutes = [
   // 项目验收
   {
     path: "/projectAcceptance",
-    component: Layout,
-    redirect: "/projectAcceptance/index",
+    component: BlankRouteNode,
+    name: "ProjectAcceptance",
+    redirect: {
+      name: "ProjectAcceptanceList",
+    },
     children: [
       {
         path: "index",
-        name: "项目验收",
+        name: "ProjectAcceptanceList",
         meta: {
           title: "项目验收",
           icon: "xiangmuyanshou",
@@ -152,19 +172,22 @@ export const asyncRoutes = [
   // 系统管理
   {
     path: "/setting",
-    component: Layout,
-    redirect: "/setting/info",
+    component: BlankRouteNode,
+    name: "Setting",
+    redirect: {
+      name: "InfoSetting",
+    },
     meta: { title: "系统管理", icon: "xitongguanli" },
     children: [
       {
         path: "/infoSetting",
-        name: "信息库管理",
+        name: "InfoSetting",
         meta: { title: "信息库管理" },
         component: () => import("@/views/Setting/Info/index.vue"),
       },
       {
         path: "/userSetting",
-        name: "用户管理",
+        name: "UserSetting",
         meta: { title: "用户管理" },
         component: () => import("@/views/Setting/User/index.vue"),
       },
@@ -173,15 +196,8 @@ export const asyncRoutes = [
   // 系统日志
   {
     path: "/logs",
-    component: Layout,
-    redirect: "/logs/index",
-    children: [
-      {
-        path: "index",
-        name: "系统日志",
-        meta: { title: "系统日志", icon: "xitongrizhi" },
-        component: () => import("@/views/Logs/index.vue"),
-      },
-    ],
+    name: "Logs",
+    component: () => import("@/views/Logs/index.vue"),
+    meta: { title: "系统日志", icon: "xitongrizhi" },
   },
 ];

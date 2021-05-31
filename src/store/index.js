@@ -10,6 +10,12 @@ const store = new Vuex.Store({
     app,
     user,
   },
+  getters: {
+    hasGetRoute: (state) => state.user.hasGetRoute,
+    userInfo: (state) => state.user.userInfo,
+    permissionList: (state) => state.user.permissionList,
+    routeList: (state) => state.user.routeList,
+  },
 });
 
 export default store;

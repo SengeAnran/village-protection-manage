@@ -12,7 +12,7 @@
         mode="vertical"
       >
         <sidebar-item
-          v-for="route in permission_routes"
+          v-for="route in routeList"
           :key="route.path"
           :item="route"
           :base-path="route.path"
@@ -31,18 +31,16 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import SidebarItem from "./SidebarItem";
 import variables from "@/assets/style/variables.scss";
 import Hamburger from "@/components/Hamburger";
-
-// 测试路由
-import { asyncRoutes } from "@/router/navList";
 
 export default {
   components: { SidebarItem, Hamburger },
   computed: {
     ...mapState("app", ["sidebar"]),
+    ...mapGetters(["routeList"]),
     activeMenu() {
       const route = this.$route;
       const { meta, path } = route;
@@ -58,11 +56,6 @@ export default {
     isCollapse() {
       return !this.sidebar.opened;
     },
-  },
-  data() {
-    return {
-      permission_routes: asyncRoutes,
-    };
   },
   methods: {
     toggleSideBar() {

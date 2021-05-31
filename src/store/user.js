@@ -1,13 +1,32 @@
-import { pwdLogin } from "@/api/user";
+import { pwdLogin, logout, getUserInfo, getUserPermission } from "@/api/user";
 
 export default {
   namespaced: true,
   state: {
     token: "",
+    roleList: [], // 角色列表
+    userInfo: {}, // 用户信息
+    hasGetRoute: false, // 是否获取过路由信息
+    permissionList: [], // 权限列表
+    routeList: [], // 菜单列表
   },
   mutations: {
     setToken(state, value) {
       state.token = value;
+    },
+    SET_ROLE_LIST(state, payload) {
+      state.roleList = payload;
+    },
+    SET_USER_INFO(state, data) {
+      state.userInfo = data || {};
+    },
+    SET_ROUTE_LIST(state, data) {
+      state.routeList = data;
+      // 修改路由获取状态
+      state.hasGetRoute = true;
+    },
+    SET_PERMISSION_LIST(state, data) {
+      state.permissionList = data;
     },
   },
   actions: {
@@ -17,6 +36,27 @@ export default {
         pwdLogin(params).then((res) => {
           commit("setToken", res.token);
           resolve({ token: res.token });
+        });
+      });
+    },
+    // 登出
+    logout() {
+      return new Promise((resolve) => {
+        logout().then(() => {
+          removeToken();
+          location.href = "/login";
+          resolve();
+        });
+      });
+    },
+    getRouteList({ commit }) {
+      return new Promise((resolve) => {
+        getUserInfo().then((res1) => {
+          commit("SET_USER_INFO", res1 || {});
+          getUserPermission().then((data) => {
+            commit("SET_PERMISSION_LIST", data || []);
+            resolve();
+          });
         });
       });
     },
