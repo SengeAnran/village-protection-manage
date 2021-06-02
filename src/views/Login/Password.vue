@@ -8,7 +8,7 @@
         margin-bottom: 30px;
       "
     >
-      历史文化村落保护管理系统
+      跟着节气游乡村管理后台
     </h2>
 
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="input-wrp">
@@ -43,6 +43,7 @@
 <script>
 import { mapActions } from "vuex";
 import { setToken } from "@/utils/auth";
+import md5 from "@/utils/md5.min";
 
 export default {
   name: "Password",
@@ -71,12 +72,12 @@ export default {
         if (valid) {
           await this.login({
             userName: this.ruleForm.name,
-            password: this.ruleForm.password,
+            password: md5(this.ruleForm.password),
             type: "PASSWORD",
           }).then((res) => {
             setToken(res.token);
+            this.$router.push("/").catch(() => {});
           });
-          this.$router.push("/");
         } else {
           return false;
         }
@@ -88,8 +89,9 @@ export default {
 <style lang="scss" scoped>
 .psw-wrp {
   padding: 30px;
-  box-shadow: 0 0 10px #ccc;
   width: 580px;
+  background-color: #fff;
+  border-radius: 6px;
   .el-form-item {
     margin-bottom: 32px;
     ::v-deep .el-input__inner {
