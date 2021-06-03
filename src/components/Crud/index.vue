@@ -12,16 +12,29 @@
     </div>
 
     <!--crud操作-->
-    <div style="margin-bottom: 10px">
-      <el-button v-if="!hideAdd" type="primary" @click="addItem"
+    <div style="margin-bottom: 15px">
+      <el-button
+        v-if="!hideAdd"
+        v-permission="permissionAdd"
+        type="primary"
+        @click="addItem"
         >新增</el-button
       >
       <slot name="crudAction"></slot>
+      <el-button
+        v-if="selection && multipleDelete"
+        v-permission="permissionDelete"
+        :disabled="selections.length === 0"
+        plain
+        @click="deleteMultiple"
+        >批量删除</el-button
+      >
     </div>
 
     <!--表格-->
     <el-table
       v-if="!hideTable"
+      class="table"
       v-loading="loading"
       :data="items"
       @selection-change="selectionChange"
@@ -31,11 +44,12 @@
         type="selection"
         width="50"
         align="center"
+        fixed="left"
       ></el-table-column>
-      <el-table-column label="序号" width="80" align="center">
-        <template slot-scope="scope">{{
-          scope.$index + 1 + (page - 1) * size
-        }}</template>
+      <el-table-column label="序号" width="80" align="center" fixed="left">
+        <template slot-scope="scope">
+          {{ scope.$index + 1 + (page - 1) * size }}
+        </template>
       </el-table-column>
 
       <!--表格列插槽-->
@@ -55,6 +69,7 @@
             <!--          <el-button v-if="!hideEdit" type="text" @click="editItem(scope.row)">编辑</el-button>-->
             <router-link
               v-if="!hideEdit"
+              v-permission="permissionEdit"
               :to="{ path: editPath, query: { id: scope.row[idKey] } }"
             >
               <el-link type="primary">编辑</el-link>
@@ -67,6 +82,7 @@
             </router-link>
             <el-link
               v-if="!hideDelete"
+              v-permission="permissionDelete"
               type="danger"
               @click.native="deleteItem(scope.row)"
               >删除</el-link
@@ -198,7 +214,22 @@ export default {
     // 数据id key
     idKey: {
       type: String,
-      default: "id",
+      required: true,
+    },
+    // 新增权限
+    permissionAdd: {
+      type: [Number, String],
+      required: true,
+    },
+    // 编辑权限
+    permissionEdit: {
+      type: [Number, String],
+      required: true,
+    },
+    // 删除权限
+    permissionDelete: {
+      type: [Number, String],
+      required: true,
     },
     // 新增页面地址
     addPath: {
@@ -217,6 +248,11 @@ export default {
     },
     // 隐藏新增按钮
     hideAdd: {
+      type: Boolean,
+      default: false,
+    },
+    // 批量删除
+    multipleDelete: {
       type: Boolean,
       default: false,
     },
@@ -340,7 +376,7 @@ export default {
     async getItems() {
       const { page, size, query } = this;
       const params = {
-        pageNo: page,
+        pageNum: page,
         pageSize: size,
         ...query,
       };
@@ -350,8 +386,8 @@ export default {
           this.customGetMethod(params);
         } else {
           const res = await this.getMethod(params);
-          this.items = res.records;
-          this.total = res.total;
+          this.items = res.content;
+          this.total = res.totalSize;
         }
         this.loading = false;
         this.afterGetMethod && this.afterGetMethod();
@@ -409,10 +445,26 @@ export default {
       }).then(async () => {
         this.loading = true;
         try {
-          let data = [item.id];
+          let data = [item[this.idKey]];
           if (this.beforeDeleteMethod) {
             data = this.beforeDeleteMethod(item);
           }
+          await this.deleteMethod(data);
+          this.$notify.success("删除成功");
+          await this.getItems();
+        } finally {
+          this.loading = false;
+        }
+      });
+    },
+    // 批量删除
+    async deleteMultiple() {
+      this.$confirm("是否批量删除所选数据？", "提示", {
+        type: "warning",
+      }).then(async () => {
+        this.loading = true;
+        try {
+          let data = this.selections.map((item) => item[this.idKey]);
           await this.deleteMethod(data);
           this.$notify.success("删除成功");
           await this.getItems();
@@ -471,9 +523,17 @@ export default {
 
 <style lang="scss" scoped>
 .search {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   > * {
     margin-right: 15px;
+    margin-bottom: 5px;
+  }
+}
+.table {
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
+  ::v-deep tr th {
+    background-color: #f3f3f3;
+    color: #222;
   }
 }
 .table-action {
