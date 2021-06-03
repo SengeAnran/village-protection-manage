@@ -10,6 +10,7 @@
       :before-upload="beforeImgUpload"
       :on-exceed="handleExceedImg"
       :http-request="uploadImg"
+      :multiple="multiple"
     >
       <div class="default-upload" slot="default">
         <svg-icon :fontSize="48" iconClass="add" />
@@ -53,6 +54,10 @@ export default {
       type: Number,
       default: 10,
     },
+    multiple: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -77,6 +82,7 @@ export default {
       formData.append("file", info.file);
 
       const res = await uploadFile(formData);
+      this.$message.success("图片上传成功");
       this.$emit("add", { ...res, uid: info.file.uid });
 
       if (this.$refs.upload.uploadFiles.length >= this.limit) {
@@ -108,7 +114,7 @@ export default {
       return isFormat && isLt2M;
     },
     handleExceedImg() {
-      this.$message.warning(`当前限制上传 10 张图片`);
+      this.$message.warning(`当前限制上传 ${this.limit} 张图片`);
     },
   },
 };
