@@ -9,6 +9,7 @@ import "./icons"; // icon
 import "tailwindcss/tailwind.css";
 import "@/components/global.js";
 import components from "@/utils/component.js";
+import "./directive/index.js"; // 指令注册
 
 Vue.config.productionTip = false;
 

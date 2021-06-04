@@ -80,7 +80,7 @@ const getAsyncRoutes = (list) => {
       if (item.children && item.children.length) {
         // 默认重定向到第一个子元素
         const childrenItem = getAsyncRoutes(item.children);
-        if (childrenItem.length) {
+        if (childrenItem.length && item.redirect) {
           // 判断新增平台(当length>1)是否为第一个子路由, 如果是 将父路由 重定向设置为 第二个子路由
           item.redirect.name = childrenItem[0].name;
         }
