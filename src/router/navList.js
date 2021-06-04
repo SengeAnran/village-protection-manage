@@ -67,6 +67,28 @@ export const defaultRoutes = [
         },
         component: () => import("@/views/PlanAudit/index"),
       },
+      {
+        path: "/planAudit/save",
+        name: "PlanAuditSave",
+        hidden: true,
+        meta: {
+          title: "评审",
+          noCache: true,
+          activeMenu: "/planAudit/index",
+        },
+        component: () => import("@/views/PlanAudit/Save"),
+      },
+      {
+        path: "/planAudit/detail",
+        name: "PlanAuditDetail",
+        hidden: true,
+        meta: {
+          title: "评审详情",
+          noCache: true,
+          activeMenu: "/planAudit/index",
+        },
+        component: () => import("@/views/PlanAudit/Detail"),
+      },
     ],
   },
   // 项目申报
