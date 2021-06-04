@@ -75,16 +75,21 @@
         <template v-slot:table>
           <el-table-column
             label="申报年度"
-            prop="activityName"
+            prop="declareYear"
           ></el-table-column>
-          <el-table-column label="申报类型" prop="time"></el-table-column>
-          <el-table-column
-            label="申报时间"
-            prop="activityAddress"
-          ></el-table-column>
-          <el-table-column label="状态" prop="isRecommend">
+          <el-table-column label="申报类型" prop="declareType">
             <template slot-scope="scope">
-              <p>{{ scope.row }}</p>
+              <p>{{ declareType[scope.row.declareType] }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column label="申报时间" prop="gmtCreate">
+            <template slot-scope="scope">
+              <p>{{ scope.row.gmtCreate.slice(0, 11) }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column label="状态" prop="declareStatus">
+            <template slot-scope="scope">
+              <p>{{ declareStatus[scope.row.declareStatus] }}</p>
             </template>
           </el-table-column>
         </template>
@@ -96,16 +101,12 @@
 </template>
 <script>
 import { getVillageList } from "@/api/villageManage";
-const DECLEAR_TYPE = {
-  1001: "一般村",
-  1002: "重点村",
-  1003: "提升",
-};
-const DECLEAR_STATUS = {
-  2001: "市级未审核",
-  2004: "省级未审核",
-  2999: "省级已审核",
-};
+import {
+  DECLEAR_TYPE,
+  DECLEAR_STATUS,
+  VILLAGE_LIST_ROUTER_NAME,
+} from "./constants";
+
 export default {
   data() {
     return {
@@ -119,6 +120,8 @@ export default {
     };
   },
   beforeMount() {
+    this.declareType = DECLEAR_TYPE;
+    this.declareStatus = DECLEAR_STATUS;
     this.declareTypeOpt = this.normalizeSelectOptions(DECLEAR_TYPE);
     this.declareStatusOpt = this.normalizeSelectOptions(DECLEAR_STATUS);
   },
@@ -135,20 +138,7 @@ export default {
     },
 
     newApplications(val) {
-      let routerName;
-      switch (Number(val)) {
-        case 1001:
-          routerName = "newOrdinaryApplication";
-          break;
-        case 1002:
-          routerName = "newMajorApplication";
-          break;
-        case 1003:
-          routerName = "newPromoteApplication";
-          break;
-        default:
-          break;
-      }
+      const routerName = VILLAGE_LIST_ROUTER_NAME[Number(val)];
       routerName && this.$router.push({ name: routerName });
     },
   },

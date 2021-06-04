@@ -13,27 +13,26 @@
       :multiple="multiple"
     >
       <div class="default-upload" slot="default">
-        <i class="el-icon-plus"></i>
+        <svg-icon :fontSize="48" iconClass="add" />
         <p class="desc">
-          <span>上传照片</span>
+          <span>支持:png，jpg格式</span>
+          <span>大小不超过3M</span>
+          <span>最多可上传10张</span>
         </p>
       </div>
-      <div slot="file" slot-scope="{ file }">
+      <div
+        class="upload-ready"
+        @click="handlePictureCardPreview(file)"
+        slot="file"
+        slot-scope="{ file, fileList }"
+      >
         <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-        <span class="el-upload-list__item-actions">
-          <span
-            class="el-upload-list__item-preview"
-            @click="handlePictureCardPreview(file)"
-          >
-            <i class="el-icon-zoom-in"></i>
-          </span>
-          <span
-            v-if="!disabled"
-            class="el-upload-list__item-delete"
-            @click="handleRemove(file)"
-          >
-            <i class="el-icon-delete"></i>
-          </span>
+        <span class="delete-active">
+          <svg-icon
+            icon-class="delete"
+            :fontSize="24"
+            @click.stop.prevent="handleRemove(file, fileList)"
+          />
         </span>
       </div>
     </el-upload>
@@ -123,11 +122,6 @@ export default {
 
 <style lang="scss" scoped>
 .upload-img-wrp {
-  .el-icon-plus {
-    font-size: 30px;
-    font-weight: 500;
-    margin-bottom: 14px;
-  }
   &.disabled {
     ::v-deep .el-upload--picture-card {
       display: none;
@@ -136,7 +130,10 @@ export default {
   ::v-deep .el-upload--picture-card {
     width: 124px;
     height: 122px;
+    background: #f4f4f4;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.06);
     border-radius: 4px;
+    border: 0;
     outline: 0;
   }
   ::v-deep .el-upload-list__item {
@@ -154,11 +151,12 @@ export default {
     justify-content: center;
     align-items: center;
     .desc {
+      height: 60px;
       display: flex;
       flex-direction: column;
       & span {
         display: inline-block;
-        font-size: 14px;
+        font-size: 10px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: rgba(0, 0, 0, 0.5);

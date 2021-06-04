@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div v-if="$route.name === routeName">
       <el-form
         class="form"
         label-position="top"
@@ -21,7 +21,12 @@
         <el-form-item label="村庄名单：">
           <VilliageListTable />
         </el-form-item>
-        <el-button class="add-wrp" plain size="small">
+        <el-button
+          class="add-wrp"
+          plain
+          size="small"
+          @click="$router.push({ name: `${routeName}Form` })"
+        >
           <i class="el-icon-plus"></i>
         </el-button>
       </el-form>
@@ -37,6 +42,8 @@
 <script>
 import rule from "@/mixins/rule";
 import VilliageListTable from "../Components/VilliageListTable";
+import { VILLAGE_LIST_ROUTER_NAME } from "../constants";
+
 export default {
   mixins: [rule],
   components: { VilliageListTable },
@@ -46,7 +53,7 @@ export default {
         declareYear: "",
       },
 
-      routerName: "newMajorApplication",
+      routeName: VILLAGE_LIST_ROUTER_NAME[1002],
     };
   },
 };

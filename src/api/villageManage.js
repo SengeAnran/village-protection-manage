@@ -11,3 +11,12 @@ export const getVillageList = (params) => {
     params,
   });
 };
+
+// 镇村二级联动
+export const getVillageArea = (params) => {
+  return axios.request({
+    method: "GET",
+    url: apiHost + "/villageDeclaration/area",
+    params,
+  });
+};

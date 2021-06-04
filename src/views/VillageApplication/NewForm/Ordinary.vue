@@ -255,9 +255,6 @@ export default {
       width: 31%;
       flex-shrink: 0;
       margin-right: 20px;
-      &:nth-child(3n) {
-        margin-right: 3%;
-      }
       .el-form-item__label {
         font-size: 16px;
       }
