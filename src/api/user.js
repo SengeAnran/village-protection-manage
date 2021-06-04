@@ -10,6 +10,15 @@ export const pwdLogin = (data) => {
   });
 };
 
+// 浙政钉扫码登录
+export const QRCodeLogin = (data) => {
+  return axios.request({
+    method: "post",
+    url: apiHost + "/loginByQrCode",
+    data,
+  });
+};
+
 // 登出
 export const logout = () => {
   return axios.post(`${apiHost}/logout`);

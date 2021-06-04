@@ -51,11 +51,15 @@ export default {
       return toPath(params);
     },
     handleLink(item) {
-      const { redirect, path } = item;
+      const { redirect, path, name } = item;
 
       if (redirect) {
         if (redirect === this.$route.path) return;
         this.$router.push(redirect);
+        return;
+      } else if (name) {
+        if (name === this.$route.name) return;
+        this.$router.push({ name });
         return;
       }
       this.$router.push(this.pathCompile(path));

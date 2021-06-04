@@ -3,12 +3,15 @@ import Vuex from "vuex";
 import app from "./app";
 import user from "./user";
 
+import villageMange from "./villageMange"; // 村庄申报、村庄审核
+
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules: {
     app,
     user,
+    villageMange,
   },
   getters: {
     hasGetRoute: (state) => state.user.hasGetRoute,

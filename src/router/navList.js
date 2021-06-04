@@ -19,13 +19,81 @@ export const defaultRoutes = [
     },
     children: [
       {
-        path: "index",
+        path: "/villageApplication/index",
         name: "VillageApplyList",
+        noShowingChildren: true,
         meta: {
           title: "村庄申报",
           icon: "cunzhuangshenbao",
         },
         component: () => import("@/views/VillageApplication/index.vue"),
+        children: [
+          {
+            path: "/villageApplication/newOrdinary",
+            name: "newOrdinaryApplication",
+            meta: {
+              activeMenu: "/villageApplication/index",
+              title: "一般村申报",
+            },
+            component: () =>
+              import("@/views/VillageApplication/New/Ordinary.vue"),
+            children: [
+              {
+                path: "form",
+                name: "newOrdinaryApplicationForm",
+                meta: {
+                  activeMenu: "/villageApplication/index",
+                  title: "新建申报",
+                },
+                component: () =>
+                  import("@/views/VillageApplication/NewForm/Ordinary.vue"),
+              },
+            ],
+          },
+          {
+            path: "/villageApplication/newMajor",
+            name: "newMajorApplication",
+            meta: {
+              activeMenu: "/villageApplication/index",
+              title: "重点村申报",
+            },
+            component: () => import("@/views/VillageApplication/New/Major.vue"),
+            children: [
+              {
+                path: "form",
+                name: "newMajorApplicationForm",
+                meta: {
+                  activeMenu: "/villageApplication/index",
+                  title: "新建申报",
+                },
+                component: () =>
+                  import("@/views/VillageApplication/NewForm/Major.vue"),
+              },
+            ],
+          },
+          {
+            path: "/villageApplication/newPromote",
+            name: "newPromoteApplication",
+            meta: {
+              activeMenu: "/villageApplication/index",
+              title: "提升",
+            },
+            component: () =>
+              import("@/views/VillageApplication/New/Promote.vue"),
+            children: [
+              {
+                path: "form",
+                name: "newPromoteApplicationForm",
+                meta: {
+                  activeMenu: "/villageApplication/index",
+                  title: "新建申报",
+                },
+                component: () =>
+                  import("@/views/VillageApplication/NewForm/Promote.vue"),
+              },
+            ],
+          },
+        ],
       },
     ],
   },
