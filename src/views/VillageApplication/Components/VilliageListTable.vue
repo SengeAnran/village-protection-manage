@@ -1,8 +1,8 @@
 <template>
-  <el-table class="table" :data="tableData" style="width: 45%">
+  <el-table class="table" :data="applyVillageList" style="width: 45%">
     <el-table-column label="序号" type="index"> </el-table-column>
-    <el-table-column prop="name" label="村庄所在乡镇"> </el-table-column>
-    <el-table-column prop="address" label="村庄名称"> </el-table-column>
+    <el-table-column prop="address" label="村庄所在乡镇"> </el-table-column>
+    <el-table-column prop="villageName" label="村庄名称"> </el-table-column>
     <el-table-column label="操作">
       <el-link type="primary">申报详情</el-link>
       <el-divider direction="vertical"></el-divider>
@@ -11,28 +11,16 @@
   </el-table>
 </template>
 <script>
+import { mapState } from "vuex";
+
 export default {
   data() {
     return {
-      tableData: [
-        {
-          name: "莫干山镇",
-          address: "五四村",
-        },
-        {
-          name: "莫干山镇",
-          address: "五四村",
-        },
-        {
-          name: "莫干山镇",
-          address: "五四村",
-        },
-        {
-          name: "莫干山镇",
-          address: "五四村",
-        },
-      ],
+      tableData: [],
     };
+  },
+  computed: {
+    ...mapState("villageMange", ["applyVillageList"]),
   },
 };
 </script>

@@ -18,7 +18,7 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="村庄名单：">
+        <el-form-item label="村庄名单：" :rules="listRules">
           <VilliageListTable />
         </el-form-item>
         <el-button
@@ -32,7 +32,7 @@
       </el-form>
       <div>
         <el-button>取消</el-button>
-        <el-button type="primary">提交</el-button>
+        <el-button type="primary" @click="validateForm">提交</el-button>
       </div>
     </div>
 
@@ -40,21 +40,68 @@
   </div>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
 import rule from "@/mixins/rule";
 import VilliageListTable from "../Components/VilliageListTable";
 import { VILLAGE_LIST_ROUTER_NAME } from "../constants";
+import { villageDeclaration } from "@/api/villageManage";
+
+const declareType = 1002; // 重点村
+
+const tableList = (rule, value, callback) => {
+  if (reg.length) {
+    callback();
+  } else {
+    callback(new Error("请添加村庄"));
+  }
+};
 
 export default {
   mixins: [rule],
   components: { VilliageListTable },
   data() {
     return {
+      routeName: VILLAGE_LIST_ROUTER_NAME[1002],
+
       form: {
         declareYear: "",
       },
 
-      routeName: VILLAGE_LIST_ROUTER_NAME[1002],
+      listRules: { required: true, validator: tableList, trigger: "blur" },
     };
+  },
+  computed: {
+    ...mapState("villageMange", ["applyVillageList"]),
+  },
+  beforeDestroy() {
+    this.changeApplyVillageList([]);
+  },
+  methods: {
+    ...mapMutations("villageMange", ["changeApplyVillageList"]),
+    validateForm() {
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          this.$myConfirm({
+            content: "是否确认提交",
+          }).then(() => {
+            this.submit();
+          });
+        } else {
+          return false;
+        }
+      });
+    },
+
+    submit() {
+      const params = {
+        declareType,
+        declareYear: this.form.declareYear,
+        detail: this.applyVillageList,
+      };
+      villageDeclaration(params).then((res) => {
+        console.log(res, "申报");
+      });
+    },
   },
 };
 </script>
