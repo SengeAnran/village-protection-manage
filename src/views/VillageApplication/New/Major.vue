@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="$route.name === routeName">
+    <div v-show="!showForm">
       <el-form
         class="form"
         label-position="top"
@@ -18,15 +18,10 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="村庄名单：" :rules="listRules">
+        <el-form-item label="村庄名单：" prop="detail" :rules="listRules">
           <VilliageListTable />
         </el-form-item>
-        <el-button
-          class="add-wrp"
-          plain
-          size="small"
-          @click="$router.push({ name: `${routeName}Form` })"
-        >
+        <el-button class="add-wrp" plain size="small" @click="showForm = true">
           <i class="el-icon-plus"></i>
         </el-button>
       </el-form>
@@ -36,7 +31,8 @@
       </div>
     </div>
 
-    <router-view />
+    <Major v-if="showForm" @close="showForm = false" />
+    <!-- <router-view /> -->
   </div>
 </template>
 <script>
@@ -46,10 +42,12 @@ import VilliageListTable from "../Components/VilliageListTable";
 import { VILLAGE_LIST_ROUTER_NAME } from "../constants";
 import { villageDeclaration } from "@/api/villageManage";
 
+import Major from "../NewForm/Major";
+
 const declareType = 1002; // 重点村
 
 const tableList = (rule, value, callback) => {
-  if (reg.length) {
+  if (value.length) {
     callback();
   } else {
     callback(new Error("请添加村庄"));
@@ -58,22 +56,29 @@ const tableList = (rule, value, callback) => {
 
 export default {
   mixins: [rule],
-  components: { VilliageListTable },
+  components: { VilliageListTable, Major },
   data() {
     return {
       routeName: VILLAGE_LIST_ROUTER_NAME[1002],
 
       form: {
         declareYear: "",
+        detail: [],
       },
+
+      showForm: false,
 
       listRules: { required: true, validator: tableList, trigger: "blur" },
     };
   },
   computed: {
     ...mapState("villageMange", ["applyVillageList"]),
+    detail() {
+      return this.applyVillageList;
+    },
   },
   beforeDestroy() {
+    console.log(111);
     this.changeApplyVillageList([]);
   },
   methods: {

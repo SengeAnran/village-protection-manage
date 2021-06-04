@@ -7,7 +7,7 @@
       :model="form"
       label-width="80px"
     >
-      <h3 class="text-gray-800 text-2xl mb-8">重点村申报</h3>
+      <h3 class="text-gray-800 text-2xl mb-8">新建申报</h3>
 
       <el-form-item label="村庄地址" prop="villageId" :rules="rule.select">
         <VillageAddressSelect
@@ -29,7 +29,7 @@
     </el-form>
 
     <div>
-      <el-button @click="$router.back()">取消</el-button>
+      <el-button @click="$emit('close')">取消</el-button>
       <el-button type="primary" @click="validateForm">提交</el-button>
     </div>
   </div>

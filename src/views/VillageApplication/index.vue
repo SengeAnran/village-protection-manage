@@ -6,9 +6,6 @@
         :get-method="getMethod"
         :delete-method="deleteMethod"
         :query.sync="query"
-        add-path="/activity/save?type=add"
-        edit-path="/activity/save?type=edit"
-        view-path="/activity/detail"
         selection
         id-key="id"
         multiple-delete
