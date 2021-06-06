@@ -6,9 +6,13 @@
       :get-method="getMethod"
       :query.sync="query"
       id-key="id"
-      add-path="/agritainment/save?type=add"
-      edit-path="/agritainment/save?type=edit"
-      view-path="/agritainment/detail"
+      add-path="/planAudit/save?type=add"
+      edit-path="/planAudit/save?type=edit"
+      view-path="/planAudit/detail"
+      hide-add
+      :permission-add="100"
+      :permission-edit="100"
+      :permission-delete="100"
     >
       <template v-slot:search>
         <el-select

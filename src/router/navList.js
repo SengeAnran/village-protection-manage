@@ -177,6 +177,28 @@ export const defaultRoutes = [
         },
         component: () => import("@/views/ProjectApplication/index.vue"),
       },
+      {
+        path: "/projectApplication/save",
+        name: "ProjectApplicationSave",
+        hidden: true,
+        meta: {
+          title: "项目管理",
+          noCache: true,
+          activeMenu: "/projectApplication/index",
+        },
+        component: () => import("@/views/ProjectApplication/Save"),
+      },
+      {
+        path: "/projectApplication/detail",
+        name: "ProjectApplicationDetail",
+        hidden: true,
+        meta: {
+          title: "项目详情",
+          noCache: true,
+          activeMenu: "/projectApplication/index",
+        },
+        component: () => import("@/views/ProjectApplication/Detail"),
+      },
     ],
   },
   // 项目审核

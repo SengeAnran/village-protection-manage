@@ -10,6 +10,7 @@
       :before-upload="beforeImgUpload"
       :on-exceed="handleExceedImg"
       :http-request="uploadImg"
+      :on-remove="handleRemove"
       :multiple="multiple"
     >
       <i class="el-icon-upload"></i>
@@ -81,7 +82,7 @@ export default {
       }
     },
     handleRemove(file) {
-      this.$refs.upload.handleRemove(file);
+      // this.$refs.upload.handleRemove(file);
       this.$emit("remove", file);
       this.disabled = false;
     },
@@ -123,8 +124,7 @@ export default {
     outline: 0;
   }
   ::v-deep .el-upload-list__item {
-    width: 124px;
-    height: 122px;
+    width: 360px;
     overflow: visible;
     border: 0;
     outline: 0;

@@ -46,7 +46,38 @@
           </el-form-item>
           <el-form-item
               label="规划文本（仅限PPT格式）："
+              :rules="rule.upload"
+          >
+            <UploadFile
+                @add="onFileAdd"
+                @remove="onFileRemove"
+            />
+          </el-form-item>
+          <p class="ml-4 mb-2">县级规划评审情况</p>
+          <el-form-item
+              label="县级规划评审意见："
               :rules="rule.input"
+          >
+            <el-input
+                v-model="form.agritainmentActivty"
+                type="textarea"
+                :rows="5"
+                placeholder="请输入"
+            />
+          </el-form-item>
+          <el-form-item
+              label="上传附件："
+              :rules="rule.upload"
+          >
+            <UploadFile
+                @add="onFileAdd"
+                @remove="onFileRemove"
+            />
+          </el-form-item>
+          <p class="ml-4 mb-2">政府批复附件</p>
+          <el-form-item
+              label="上传政府批复附件："
+              :rules="rule.upload"
           >
             <UploadFile
                 @add="onFileAdd"

@@ -11,3 +11,42 @@ export const getVillageInfo = (params) => {
     params,
   });
 };
+
+export const getInfoList = (params) => {
+  return axios.request({
+    method: "get",
+    url: apiHost + "/villageInfo",
+    params,
+  });
+};
+
+export const createInfo = (data) => {
+  return axios.request({
+    method: "post",
+    url: apiHost + "/villageInfo",
+    data,
+  });
+};
+
+export const modifyInfo = (data) => {
+  return axios.request({
+    method: "put",
+    url: apiHost + "/villageInfo",
+    data,
+  });
+};
+
+export const deleteInfo = (ids) => {
+  return axios.request({
+    method: "delete",
+    url: apiHost + "/villageInfo",
+    data: ids,
+  });
+};
+
+export const getAreaTree = () => {
+  return axios.request({
+    method: "get",
+    url: apiHost + "/villageInfo/tree",
+  });
+};
