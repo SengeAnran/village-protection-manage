@@ -1,42 +1,56 @@
 <template>
   <div>
-    <div v-show="!showForm">
-      <el-form
-        class="form"
-        label-position="top"
-        ref="form"
-        :model="form"
-        label-width="80px"
-      >
-        <h3 class="text-gray-800 text-2xl mb-8">重点村申报</h3>
-        <el-form-item label="申报年度" prop="declareYear" :rules="rule.input">
-          <el-date-picker
-            v-model="form.declareYear"
-            type="year"
-            placeholder="请选择年度"
-            class="input"
+    <transition name="fade-transform" mode="out-in">
+      <div v-if="!showForm" key="list">
+        <el-form
+          class="form"
+          label-position="top"
+          ref="form"
+          :model="form"
+          label-width="80px"
+        >
+          <h3 class="text-gray-800 text-2xl mb-8">重点村申报</h3>
+          <el-form-item label="申报年度" prop="declareYear" :rules="rule.input">
+            <el-date-picker
+              v-model="form.declareYear"
+              type="year"
+              placeholder="请选择年度"
+              class="input"
+              value-format="yyyy"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="村庄名单：" prop="detail" :rules="listRules">
+            <VilliageListTable :data="form.detail" />
+          </el-form-item>
+          <el-button
+            class="add-wrp"
+            plain
+            size="small"
+            @click="showForm = true"
           >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="村庄名单：" prop="detail" :rules="listRules">
-          <VilliageListTable />
-        </el-form-item>
-        <el-button class="add-wrp" plain size="small" @click="showForm = true">
-          <i class="el-icon-plus"></i>
-        </el-button>
-      </el-form>
-      <div>
-        <el-button>取消</el-button>
-        <el-button type="primary" @click="validateForm">提交</el-button>
+            <i class="el-icon-plus"></i>
+          </el-button>
+        </el-form>
+        <div>
+          <el-button>取消</el-button>
+          <el-button type="primary" @click="validateForm">提交</el-button>
+        </div>
       </div>
-    </div>
 
-    <Major v-if="showForm" @close="showForm = false" />
+      <Major
+        key="addItem"
+        v-if="showForm"
+        @add="addListItem"
+        @close="showForm = false"
+      />
+    </transition>
+
     <!-- <router-view /> -->
   </div>
 </template>
 <script>
-import { mapState, mapMutations } from "vuex";
+// import { mapState, mapMutations } from "vuex";
 import rule from "@/mixins/rule";
 import VilliageListTable from "../Components/VilliageListTable";
 import { VILLAGE_LIST_ROUTER_NAME } from "../constants";
@@ -71,18 +85,17 @@ export default {
       listRules: { required: true, validator: tableList, trigger: "blur" },
     };
   },
-  computed: {
-    ...mapState("villageMange", ["applyVillageList"]),
-    detail() {
-      return this.applyVillageList;
-    },
-  },
+  // computed: {
+  //   // ...mapState("villageMange", ["applyVillageList"]),
+  //   detail() {
+  //     return this.applyVillageList;
+  //   },
+  // },
   beforeDestroy() {
-    console.log(111);
-    this.changeApplyVillageList([]);
+    // this.changeApplyVillageList([]);
   },
   methods: {
-    ...mapMutations("villageMange", ["changeApplyVillageList"]),
+    // ...mapMutations("villageMange", ["changeApplyVillageList"]),
     validateForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
@@ -97,11 +110,17 @@ export default {
       });
     },
 
+    addListItem(params) {
+      this.form.detail.push(params);
+      this.showForm = false;
+    },
+
     submit() {
       const params = {
         declareType,
-        declareYear: this.form.declareYear,
-        detail: this.applyVillageList,
+        declareYear: Number(this.form.declareYear),
+        // detail: this.applyVillageList,
+        detail: this.form.detail,
       };
       villageDeclaration(params).then((res) => {
         console.log(res, "申报");

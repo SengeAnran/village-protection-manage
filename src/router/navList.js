@@ -93,6 +93,28 @@ export const defaultRoutes = [
               },
             ],
           },
+          {
+            path: "/villageApplication/declareList",
+            name: "declareList",
+            meta: {
+              activeMenu: "/villageApplication/index",
+              title: "申报详情",
+            },
+            component: () =>
+              import("@/views/VillageApplication/DeclareList/index.vue"),
+            children: [
+              {
+                path: "detail",
+                name: "declareDetail",
+                meta: {
+                  activeMenu: "/villageApplication/index",
+                  title: "详情",
+                },
+                component: () =>
+                  import("@/views/VillageApplication/Detail/index.vue"),
+              },
+            ],
+          },
         ],
       },
     ],

@@ -1,27 +1,38 @@
 <template>
-  <el-table class="table" :data="applyVillageList" style="width: 45%">
+  <el-table class="table" :data="data" style="width: 45%">
     <el-table-column label="序号" type="index"> </el-table-column>
     <el-table-column prop="address" label="村庄所在乡镇"> </el-table-column>
     <el-table-column prop="villageName" label="村庄名称"> </el-table-column>
+    <el-table-column prop="villageName" label="市级审核结果"> </el-table-column>
+    <el-table-column prop="villageName" label="省级审核结果"> </el-table-column>
     <el-table-column label="操作">
-      <el-link type="primary">申报详情</el-link>
-      <el-divider direction="vertical"></el-divider>
-      <el-link type="danger">删除</el-link>
+      <div>
+        <el-link type="primary">申报详情</el-link>
+        <el-divider direction="vertical"></el-divider>
+        <el-link type="danger">删除</el-link>
+      </div>
+      <div><el-link type="primary">详情</el-link></div>
     </el-table-column>
   </el-table>
 </template>
 <script>
-import { mapState } from "vuex";
+// import { mapState } from "vuex";
 
 export default {
-  data() {
-    return {
-      tableData: [],
-    };
+  props: {
+    data: {
+      type: Array,
+      default: () => [],
+    },
   },
-  computed: {
-    ...mapState("villageMange", ["applyVillageList"]),
-  },
+  // data() {
+  //   return {
+  //     tableData: [],
+  //   };
+  // },
+  // computed: {
+  //   ...mapState("villageMange", ["applyVillageList"]),
+  // },
 };
 </script>
 <style lang="scss" scoped>

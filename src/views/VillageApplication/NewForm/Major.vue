@@ -24,8 +24,34 @@
       <VillageHistoryBuildingForm class="input-item-wrp" :form="form" />
 
       <h4 class="block-tit">推荐村简介</h4>
+      <div>
+        <el-form-item label="推荐村简介">
+          <el-input
+            style="width: 42%"
+            type="textarea"
+            :rows="5"
+            placeholder="请输入"
+            maxlength="500"
+            show-word-limit
+            v-model="form.introduction"
+          >
+          </el-input>
+        </el-form-item>
+        <h4 class="block-tit">村庄图片</h4>
+        <el-form-item label="" prop="villagePicturesArr">
+          <UploadImg
+            :data="imageList"
+            @add="onImageAdd"
+            @remove="onImageRemove"
+          />
+        </el-form-item>
 
-      <VillageUpgradeForm :form="form" />
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="dialogImageUrl" alt="" />
+        </el-dialog>
+      </div>
+
+      <!-- <VillageUpgradeForm :form="form" /> -->
     </el-form>
 
     <div>
@@ -35,12 +61,12 @@
   </div>
 </template>
 <script>
-import { mapMutations } from "vuex";
+// import { mapMutations } from "vuex";
 import rule from "@/mixins/rule";
 import VillageAddressSelect from "../Components/VillageAddressSelect";
 import VillageBaseForm from "../Components/VillageBaseForm";
 import VillageHistoryBuildingForm from "../Components/VillageHistoryBuildingForm";
-import VillageUpgradeForm from "../Components/VillageUpgradeForm";
+// import VillageUpgradeForm from "../Components/VillageUpgradeForm";
 
 import { VILLAGE_LIST_ROUTER_NAME } from "../constants";
 
@@ -50,7 +76,7 @@ export default {
     VillageAddressSelect,
     VillageBaseForm,
     VillageHistoryBuildingForm,
-    VillageUpgradeForm,
+    // VillageUpgradeForm,
   },
   data() {
     return {
@@ -84,11 +110,15 @@ export default {
       },
 
       parentRouteName: VILLAGE_LIST_ROUTER_NAME[1002],
+
+      dialogImageUrl: "",
+      dialogVisible: false,
+      imageList: [], // 回显图片
     };
   },
 
   methods: {
-    ...mapMutations("villageMange", ["addApplyVillageList"]),
+    // ...mapMutations("villageMange", ["addApplyVillageList"]),
     validateForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
@@ -106,8 +136,9 @@ export default {
 
     // 新增申报item
     submit(params) {
-      this.addApplyVillageList(params);
-      this.$router.replace({ name: this.parentRouteName });
+      // this.addApplyVillageList(params);
+      // this.$router.replace({ name: this.parentRouteName });
+      this.$emit("add", params);
     },
 
     // 选择村庄地址
@@ -115,6 +146,25 @@ export default {
       const { village, parent } = val;
       this.form.villageName = village.areaName;
       this.form.address = parent.areaName;
+    },
+
+    onImageAdd(res) {
+      console.log("add");
+      // this.imageList.push(res);
+      this.form.villagePicturesArr.push(res.fileId);
+      this.$refs.form.validateField("villagePicturesArr");
+    },
+    onImageRemove(res) {
+      console.log("remove");
+      const index = this.villagePicturesArr.findIndex((list) => {
+        return list.uid === res.uid || list.filePath === res.url;
+      });
+
+      if (index !== -1) {
+        // this.imageList.splice(index, 1);
+        this.form.villagePicturesArr.splice(index, 1);
+      }
+      this.$refs.form.validateField("villagePicturesArr");
     },
   },
 };

@@ -8,8 +8,12 @@
         :query.sync="query"
         selection
         id-key="id"
+        actionWidth="180px"
         multiple-delete
         :hideAdd="true"
+        :hideEdit="true"
+        :hideView="true"
+        :hideDelete="false"
         :permission-add="30012"
         :permission-edit="30013"
         :permission-delete="30014"
@@ -34,6 +38,7 @@
                 v-model="query.declareYear"
                 type="year"
                 placeholder="选择年"
+                value-format="yyyy"
               >
               </el-date-picker>
             </div>
@@ -49,6 +54,28 @@
                 </el-option>
               </el-select>
             </div>
+          </div>
+        </template>
+
+        <template v-slot:tableAction="scope">
+          <div style="text-align: left; display: inline">
+            <el-link type="primary" @click="goDeclareRouter(scope)"
+              >申报详情</el-link
+            >
+            <el-divider direction="vertical"></el-divider>
+            <el-link v-if="isAudit(scope.data.declareStatus)" type="primary">
+              审核详情
+            </el-link>
+            <el-link v-if="!isAudit(scope.data.declareStatus)" type="primary">
+              修改
+            </el-link>
+            <el-divider
+              direction="vertical"
+              v-if="!isAudit(scope.data.declareStatus)"
+            ></el-divider>
+            <!-- <el-link v-if="!isAudit(scope.data.declareStatus)" type="danger">
+              删除
+            </el-link> -->
           </div>
         </template>
 
@@ -97,7 +124,7 @@
   </div>
 </template>
 <script>
-import { getVillageList } from "@/api/villageManage";
+import { getVillageList, deleteVillageItem } from "@/api/villageManage";
 import {
   DECLEAR_TYPE,
   DECLEAR_STATUS,
@@ -113,7 +140,7 @@ export default {
         declareYear: "",
       },
       getMethod: getVillageList,
-      deleteMethod: () => {},
+      deleteMethod: deleteVillageItem,
     };
   },
   beforeMount() {
@@ -137,6 +164,19 @@ export default {
     newApplications(val) {
       const routerName = VILLAGE_LIST_ROUTER_NAME[Number(val)];
       routerName && this.$router.push({ name: routerName });
+    },
+
+    isAudit(status) {
+      return status !== 2001;
+    },
+    // 申报详情
+    goDeclareRouter(scope) {
+      const { id, declareYear, declareType } = scope.data;
+      console.log();
+      this.$router.push({
+        name: "declareList",
+        query: { id, declareYear, declareType: DECLEAR_TYPE[declareType] },
+      });
     },
   },
 };

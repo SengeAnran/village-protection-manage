@@ -29,3 +29,21 @@ export const villageDeclaration = (data) => {
     data,
   });
 };
+
+// 删除
+export const deleteVillageItem = (data) => {
+  return axios.request({
+    method: "DELETE",
+    url: apiHost + "/villageDeclaration",
+    data,
+  });
+};
+
+// 村庄申报详情
+export const getVillageDetail = (params) => {
+  return axios.request({
+    method: "GET",
+    url: apiHost + "/villageDeclaration/detail/" + params.id,
+    params,
+  });
+};
