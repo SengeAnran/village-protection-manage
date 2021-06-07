@@ -145,6 +145,12 @@ export default {
     overflow: visible;
     border: 0;
     outline: 0;
+
+    img {
+      width: 124px;
+      height: 124px;
+      object-fit: contain;
+    }
   }
   .default-upload {
     width: 124px;

@@ -19,7 +19,7 @@
       <h4 class="block-tit">重点村古建筑调查表</h4>
       <VillageBaseForm class="input-item-wrp" :form="form" />
       <h4 class="block-tit">古建筑数量</h4>
-      <div class="total-wrp"><span>总数：</span>1234个</div>
+      <div class="total-wrp"><span>总数：</span>{{ total }} 个</div>
       <VillageHistoryBuildingForm class="input-item-wrp" :form="form" />
     </el-form>
     <div>
@@ -34,7 +34,7 @@ import VillageAddressSelect from "../Components/VillageAddressSelect";
 import VillageBaseForm from "../Components/VillageBaseForm";
 import VillageHistoryBuildingForm from "../Components/VillageHistoryBuildingForm";
 
-import { VILLAGE_LIST_ROUTER_NAME } from "../constants";
+import { VILLAGE_LIST_ROUTER_NAME, HISTORY_BUILDINGS } from "../constants";
 
 export default {
   mixins: [rule],
@@ -83,6 +83,13 @@ export default {
 
       parentRouteName: VILLAGE_LIST_ROUTER_NAME[1001],
     };
+  },
+  computed: {
+    total() {
+      return HISTORY_BUILDINGS.reduce((pre, next) => {
+        return pre + this.form[next.value];
+      }, 0);
+    },
   },
   watch: {
     type(val) {

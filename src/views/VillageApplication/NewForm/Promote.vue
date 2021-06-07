@@ -20,7 +20,7 @@
       <VillageBaseForm class="input-item-wrp" :form="form" />
 
       <h4 class="block-tit">古建筑数量</h4>
-      <div class="total-wrp"><span>总数：</span>1234个</div>
+      <div class="total-wrp"><span>总数：</span>{{ total }} 个</div>
       <VillageHistoryBuildingForm class="input-item-wrp" :form="form" />
 
       <h4 class="block-tit">推荐村简介</h4>
@@ -68,7 +68,7 @@ import VillageAddressSelect from "../Components/VillageAddressSelect";
 import VillageBaseForm from "../Components/VillageBaseForm";
 import VillageHistoryBuildingForm from "../Components/VillageHistoryBuildingForm";
 
-import { VILLAGE_LIST_ROUTER_NAME } from "../constants";
+import { VILLAGE_LIST_ROUTER_NAME, HISTORY_BUILDINGS } from "../constants";
 
 const imgs = (rule, value, callback) => {
   if (value.length < 5) {
@@ -114,9 +114,10 @@ export default {
 
         introduction: "", //introduction
         villagePicturesArr: [], //图片数组
+        villagePicturesFiles: [],
       },
 
-      parentRouteName: VILLAGE_LIST_ROUTER_NAME[1002],
+      parentRouteName: VILLAGE_LIST_ROUTER_NAME[1003],
 
       dialogImageUrl: "",
       dialogVisible: false,
@@ -125,6 +126,13 @@ export default {
     };
   },
 
+  computed: {
+    total() {
+      return HISTORY_BUILDINGS.reduce((pre, next) => {
+        return pre + this.form[next.value];
+      }, 0);
+    },
+  },
   methods: {
     validateForm() {
       this.$refs["form"].validate((valid) => {
@@ -150,15 +158,18 @@ export default {
 
     onImageAdd(res) {
       this.form.villagePicturesArr.push(res.fileId);
+      this.form.villagePicturesFiles.push(res);
+
       this.$refs.form.validateField("villagePicturesArr");
     },
     onImageRemove(res) {
-      const index = this.villagePicturesArr.findIndex((list) => {
+      const index = this.form.villagePicturesArr.findIndex((list) => {
         return list.uid === res.uid || list.filePath === res.url;
       });
 
       if (index !== -1) {
         this.form.villagePicturesArr.splice(index, 1);
+        this.form.villagePicturesFiles.splice(index, 1);
       }
       this.$refs.form.validateField("villagePicturesArr");
     },

@@ -77,15 +77,28 @@ export default {
     return {
       routeName: VILLAGE_LIST_ROUTER_NAME[1003],
 
+      id: "",
       form: {
         declareYear: "",
         detail: [],
       },
 
+      editType: "add",
+      editIndex: 0,
+      editData: {},
+
       showForm: false,
 
       listRules: { required: true, validator: tableList, trigger: "blur" },
     };
+  },
+  created() {
+    const { id, declareYear } = this.$route.query;
+    if (id && declareYear) {
+      this.id = id;
+      this.form.declareYear = String(declareYear);
+      this.init();
+    }
   },
   methods: {
     validateForm() {
@@ -117,10 +130,18 @@ export default {
         declareYear: Number(this.form.declareYear),
         detail: this.form.detail,
       };
-      villageDeclaration(params).then(() => {
-        this.$notify.success("申报成功");
-        this.$router.replace({ name: "VillageApplyList" });
-      });
+      if (this.id) {
+        params.id = this.id;
+        updateVillageItem(params).then(() => {
+          this.$notify.success("修改成功");
+          this.$router.replace({ name: "VillageApplyList" });
+        });
+      } else {
+        villageDeclaration(params).then(() => {
+          this.$notify.success("申报成功");
+          this.$router.replace({ name: "VillageApplyList" });
+        });
+      }
     },
   },
 };
