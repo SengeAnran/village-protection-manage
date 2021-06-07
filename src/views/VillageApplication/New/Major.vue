@@ -45,8 +45,6 @@
         @close="showForm = false"
       />
     </transition>
-
-    <!-- <router-view /> -->
   </div>
 </template>
 <script>
@@ -122,8 +120,9 @@ export default {
         // detail: this.applyVillageList,
         detail: this.form.detail,
       };
-      villageDeclaration(params).then((res) => {
-        console.log(res, "申报");
+      villageDeclaration(params).then(() => {
+        this.$notify.success("申报成功");
+        this.$router.replace({ name: "VillageApplyList" });
       });
     },
   },

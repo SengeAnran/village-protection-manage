@@ -5,10 +5,11 @@
       v-for="(item, i) in historyBuildings"
       :key="i"
     >
-      <el-input
+      <el-input-number
         v-model.number="form[item.value]"
         placeholder="请输入"
-      ></el-input>
+        :min="0"
+      ></el-input-number>
     </el-form-item>
   </div>
 </template>

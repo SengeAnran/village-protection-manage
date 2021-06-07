@@ -3,6 +3,7 @@
     <div v-if="$route.name === 'VillageApplyList'">
       <div class="text-lg mb-4">申报列表</div>
       <Crud
+        ref="crud"
         :get-method="getMethod"
         :delete-method="deleteMethod"
         :query.sync="query"
@@ -13,7 +14,7 @@
         :hideAdd="true"
         :hideEdit="true"
         :hideView="true"
-        :hideDelete="false"
+        :hideDelete="true"
         :permission-add="30012"
         :permission-edit="30013"
         :permission-delete="30014"
@@ -63,19 +64,31 @@
               >申报详情</el-link
             >
             <el-divider direction="vertical"></el-divider>
-            <el-link v-if="isAudit(scope.data.declareStatus)" type="primary">
+            <el-link
+              @click="goAuditResult(scope.data)"
+              v-if="isAudit(scope.data.declareStatus)"
+              type="primary"
+            >
               审核详情
             </el-link>
-            <el-link v-if="!isAudit(scope.data.declareStatus)" type="primary">
+            <el-link
+              @click="edit(scope.data)"
+              v-if="!isAudit(scope.data.declareStatus)"
+              type="primary"
+            >
               修改
             </el-link>
             <el-divider
               direction="vertical"
               v-if="!isAudit(scope.data.declareStatus)"
             ></el-divider>
-            <!-- <el-link v-if="!isAudit(scope.data.declareStatus)" type="danger">
+            <el-link
+              @click="deleteItem(scope.data.id)"
+              v-if="!isAudit(scope.data.declareStatus)"
+              type="danger"
+            >
               删除
-            </el-link> -->
+            </el-link>
           </div>
         </template>
 
@@ -172,10 +185,30 @@ export default {
     // 申报详情
     goDeclareRouter(scope) {
       const { id, declareYear, declareType } = scope.data;
-      console.log();
       this.$router.push({
         name: "declareList",
         query: { id, declareYear, declareType: DECLEAR_TYPE[declareType] },
+      });
+    },
+    // 审核详情
+    goAuditResult() {},
+    // 修改
+    edit(data) {
+      const { id, declareYear, declareType } = data;
+      this.$router.push({
+        name: VILLAGE_LIST_ROUTER_NAME[declareType],
+        query: { id, declareYear },
+      });
+    },
+    // 删除
+    deleteItem(id) {
+      this.$confirm("是否删除该条数据？", "提示", {
+        type: "warning",
+      }).then(async () => {
+        deleteVillageItem([id]).then(() => {
+          this.$notify.success("删除成功");
+          this.$refs.crud.getItems();
+        });
       });
     },
   },
