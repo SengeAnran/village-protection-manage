@@ -83,15 +83,6 @@ export default {
       listRules: { required: true, validator: tableList, trigger: "blur" },
     };
   },
-  // computed: {
-  //   // ...mapState("villageMange", ["applyVillageList"]),
-  //   detail() {
-  //     return this.applyVillageList;
-  //   },
-  // },
-  beforeDestroy() {
-    // this.changeApplyVillageList([]);
-  },
   methods: {
     // ...mapMutations("villageMange", ["changeApplyVillageList"]),
     validateForm() {

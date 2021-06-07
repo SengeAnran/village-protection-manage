@@ -1,97 +1,123 @@
 <template>
   <div>
-    <div v-if="$route.name === 'newOrdinaryApplication'">
-      <el-form
-        class="form"
-        label-position="top"
-        ref="form"
-        :model="form"
-        label-width="80px"
-      >
-        <h3 class="text-gray-800 text-2xl mb-8">一般村申报</h3>
-        <el-form-item label="申报年度">
-          <el-date-picker
-            v-model="form.declareYear"
-            type="year"
-            placeholder="请选择年度"
-            class="input"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="村庄名单：">
-          <el-table class="table" :data="tableData" style="width: 45%">
-            <el-table-column label="序号" type="index"> </el-table-column>
-            <el-table-column prop="name" label="村庄所在乡镇">
-            </el-table-column>
-            <el-table-column prop="address" label="村庄名称"> </el-table-column>
-            <el-table-column label="操作">
-              <el-link type="primary">申报详情</el-link>
-              <el-divider direction="vertical"></el-divider>
-              <el-link type="danger">删除</el-link>
-            </el-table-column>
-          </el-table>
-        </el-form-item>
-        <el-button
-          class="add-wrp"
-          plain
-          size="small"
-          @click="$router.push({ name: 'newOrdinaryApplicationForm' })"
+    <transition name="fade-transform" mode="out-in">
+      <div v-if="!showForm" key="list">
+        <el-form
+          class="form"
+          label-position="top"
+          ref="form"
+          :model="form"
+          label-width="80px"
         >
-          <i class="el-icon-plus"></i>
-        </el-button>
-      </el-form>
-      <div>
-        <el-button>取消</el-button>
-        <el-button type="primary">提交</el-button>
+          <h3 class="text-gray-800 text-2xl mb-8">一般村申报</h3>
+          <el-form-item label="申报年度" prop="declareYear" :rules="rule.input">
+            <el-date-picker
+              v-model="form.declareYear"
+              type="year"
+              placeholder="请选择年度"
+              class="input"
+              value-format="yyyy"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="村庄名单：" prop="detail" :rules="listRules">
+            <VilliageListTable :data="form.detail" />
+          </el-form-item>
+          <el-button
+            class="add-wrp"
+            plain
+            size="small"
+            @click="showForm = true"
+          >
+            <i class="el-icon-plus"></i>
+          </el-button>
+        </el-form>
+        <div>
+          <el-button>取消</el-button>
+          <el-button type="primary" @click="validateForm">提交</el-button>
+        </div>
       </div>
-    </div>
 
-    <router-view />
+      <Ordinary
+        key="addItem"
+        v-if="showForm"
+        @add="addListItem"
+        @close="showForm = false"
+      />
+    </transition>
   </div>
 </template>
 <script>
+import rule from "@/mixins/rule";
+import VilliageListTable from "../Components/VilliageListTable";
+import { VILLAGE_LIST_ROUTER_NAME } from "../constants";
+import { villageDeclaration } from "@/api/villageManage";
+
+import Ordinary from "../NewForm/Ordinary";
+
+const declareType = 1001; // 一般村
+
+const tableList = (rule, value, callback) => {
+  if (value.length) {
+    callback();
+  } else {
+    callback(new Error("请添加村庄"));
+  }
+};
 export default {
+  mixins: [rule],
+  components: { VilliageListTable, Ordinary },
   data() {
     return {
+      routeName: VILLAGE_LIST_ROUTER_NAME[1001],
+
       form: {
         declareYear: "",
+        detail: [],
       },
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ],
+
+      showForm: false,
+
+      listRules: { required: true, validator: tableList, trigger: "blur" },
     };
+  },
+  methods: {
+    validateForm() {
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          this.$myConfirm({
+            content: "是否确认提交",
+          }).then(() => {
+            this.submit();
+          });
+        } else {
+          return false;
+        }
+      });
+    },
+
+    addListItem(params) {
+      this.form.detail.push(params);
+      this.showForm = false;
+    },
+
+    submit() {
+      const params = {
+        declareType,
+        declareYear: Number(this.form.declareYear),
+        detail: this.form.detail,
+      };
+      villageDeclaration(params).then(() => {
+        this.$notify.success("申报成功");
+        this.$router.replace({ name: "VillageApplyList" });
+      });
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
 .input {
   width: 315px;
-}
-.table {
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
-  ::v-deep tr th {
-    background-color: #f3f3f3;
-    color: #222;
-  }
 }
 .add-wrp {
   width: 45%;
