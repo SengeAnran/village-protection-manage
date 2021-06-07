@@ -5,17 +5,65 @@
     <el-table-column prop="villageName" label="村庄名称"> </el-table-column>
     <el-table-column
       v-if="!hiddenDeclareResult"
-      prop="villageName"
       label="市级审核结果"
+      align="center"
     >
+      <template slot-scope="scope">
+        <el-link v-if="scope.row.cityVerify" :underline="false" type="success"
+          >通过</el-link
+        >
+        <el-link
+          v-if="
+            !scope.row.cityVerify && typeof scope.row.cityVerify === 'number'
+          "
+          :underline="false"
+          type="danger"
+          >不通过</el-link
+        >
+        <el-link
+          v-if="
+            !scope.row.cityVerify && typeof scope.row.cityVerify !== 'number'
+          "
+          :underline="false"
+          type="warning"
+          >未审核</el-link
+        >
+      </template>
     </el-table-column>
     <el-table-column
       v-if="!hiddenDeclareResult"
-      prop="villageName"
       label="省级审核结果"
+      align="center"
     >
+      <template slot-scope="scope">
+        <el-link
+          link
+          v-if="scope.row.provinceVerify"
+          :underline="false"
+          type="success"
+          >通过</el-link
+        >
+        <el-link
+          v-if="
+            !scope.row.provinceVerify &&
+            typeof scope.row.provinceVerify === 'number'
+          "
+          :underline="false"
+          type="danger"
+          >不通过</el-link
+        >
+        <el-link
+          v-if="
+            !scope.row.provinceVerify &&
+            typeof scope.row.provinceVerify !== 'number'
+          "
+          :underline="false"
+          type="warning"
+          >未审核</el-link
+        >
+      </template>
     </el-table-column>
-    <el-table-column label="操作">
+    <el-table-column label="操作" v-if="!(hiddenEdit && hiddenDetail)">
       <template slot-scope="scope">
         <div v-if="!hiddenEdit">
           <el-link type="primary" @click="$emit('editForm', scope.row)">
@@ -26,7 +74,11 @@
             >删除</el-link
           >
         </div>
-        <div v-if="!hiddenDetail"><el-link type="primary">详情</el-link></div>
+        <div v-if="!hiddenDetail">
+          <el-link type="primary" @click="$emit('goDetail', scope.row)"
+            >详情</el-link
+          >
+        </div>
       </template>
     </el-table-column>
   </el-table>

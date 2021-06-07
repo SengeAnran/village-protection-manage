@@ -115,6 +115,16 @@ export const defaultRoutes = [
               },
             ],
           },
+          {
+            path: "/villageApplication/AuditList",
+            name: "AuditList",
+            meta: {
+              activeMenu: "/villageApplication/index",
+              title: "审核详情",
+            },
+            component: () =>
+              import("@/views/VillageApplication/AuditList/index.vue"),
+          },
         ],
       },
     ],

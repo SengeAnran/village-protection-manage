@@ -65,7 +65,7 @@
             >
             <el-divider direction="vertical"></el-divider>
             <el-link
-              @click="goAuditResult(scope.data)"
+              @click="goAuditResult(scope)"
               v-if="isAudit(scope.data.declareStatus)"
               type="primary"
             >
@@ -137,6 +137,7 @@
   </div>
 </template>
 <script>
+import { mapMutations } from "vuex";
 import { getVillageList, deleteVillageItem } from "@/api/villageManage";
 import {
   DECLEAR_TYPE,
@@ -163,6 +164,7 @@ export default {
     this.declareStatusOpt = this.normalizeSelectOptions(DECLEAR_STATUS);
   },
   methods: {
+    ...mapMutations("villageMange", ["changeDeclareList"]),
     normalizeSelectOptions(obj) {
       if (!Object.prototype.toString.call(obj).slice(8, -1) === "Object")
         return [];
@@ -185,13 +187,20 @@ export default {
     // 申报详情
     goDeclareRouter(scope) {
       const { id, declareYear, declareType } = scope.data;
+
+      this.changeDeclareList({ id, declareYear, declareType });
       this.$router.push({
         name: "declareList",
-        query: { id, declareYear, declareType: DECLEAR_TYPE[declareType] },
       });
     },
     // 审核详情
-    goAuditResult() {},
+    goAuditResult(scope) {
+      const { id, declareYear, declareType } = scope.data;
+      this.$router.push({
+        name: "AuditList",
+        query: { id, declareYear, declareType: DECLEAR_TYPE[declareType] },
+      });
+    },
     // 修改
     edit(data) {
       const { id, declareYear, declareType } = data;

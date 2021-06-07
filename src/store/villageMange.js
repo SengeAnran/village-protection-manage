@@ -1,15 +1,19 @@
+const declareList = {
+  id: 0,
+  declareYear: 0,
+  declareType: 0, // 1001 1002 1003
+};
 export default {
   namespaced: true,
   state: {
-    applyVillageList: [], // 申报村庄列表
+    declareList: { ...declareList },
   },
   mutations: {
-    // 新增村庄申报列表
-    addApplyVillageList(state, value) {
-      state.applyVillageList.push(value);
+    changeDeclareList(state, param) {
+      state.declareList = param;
     },
-    changeApplyVillageList(state, value) {
-      state.applyVillageList = value;
+    resetDeclareList(state) {
+      state.declareList = { ...declareList };
     },
   },
 };

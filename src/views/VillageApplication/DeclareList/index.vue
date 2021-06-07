@@ -1,43 +1,45 @@
 <template>
   <div>
-    <transition name="fade-transform" mode="out-in">
-      <div v-if="!showDetail" key="list">
-        <el-form
-          class="form"
-          label-position="top"
-          ref="form"
-          :model="form"
-          label-width="80px"
-        >
-          <h3 class="text-gray-800 text-2xl mb-8">申报详情</h3>
-          <div class="item">
-            <span class="title">申报类型：</span>
-            <span class="con">{{ form.declareType }}申报</span>
-          </div>
-          <div class="item">
-            <span class="title">申报年度：</span>
-            <span class="con">{{ form.declareYear }}</span>
-          </div>
-          <el-form-item label="村庄名单：">
-            <VilliageListTable :data="form.detail" />
-          </el-form-item>
-        </el-form>
-      </div>
+    <!-- <transition name="fade-transform" mode="out-in"> -->
+    <div v-if="$route.name !== 'declareDetail'" key="list">
+      <el-form
+        class="form"
+        label-position="top"
+        ref="form"
+        :model="form"
+        label-width="80px"
+      >
+        <h3 class="text-gray-800 text-2xl mb-8">申报详情</h3>
+        <div class="item">
+          <span class="title">申报类型：</span>
+          <span class="con">{{ form.declareType }}申报</span>
+        </div>
+        <div class="item">
+          <span class="title">申报年度：</span>
+          <span class="con">{{ form.declareYear }}</span>
+        </div>
+        <el-form-item label="村庄名单：">
+          <VilliageListTable :data="form.detail" @goDetail="goDetail" />
+        </el-form-item>
+      </el-form>
+    </div>
 
-      <Detail key="detail" v-if="showDetail" @close="showDetail = false" />
-    </transition>
+    <!-- <Detail key="detail" v-if="showDetail" @close="showDetail = false" /> -->
+    <!-- </transition> -->
+    <router-view />
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 import rule from "@/mixins/rule";
 import VilliageListTable from "../Components/VilliageListTable";
 import { getVillageDetail } from "@/api/villageManage";
 
-import Detail from "../Detail";
-
+// import Detail from "../Detail";
+import { DECLEAR_TYPE } from "../constants";
 export default {
   mixins: [rule],
-  components: { VilliageListTable, Detail },
+  components: { VilliageListTable },
   data() {
     return {
       id: 0,
@@ -50,17 +52,30 @@ export default {
       showDetail: false,
     };
   },
-  created() {
-    this.id = this.$route.query.id;
-    this.form.declareYear = this.$route.query.declareYear;
-    this.form.declareType = this.$route.query.declareType;
-    this.getVillageDetail();
+  computed: {
+    ...mapState("villageMange", ["declareList"]),
+  },
+  mounted() {
+    if (this.$route.name === "declareList") {
+      const { id, declareYear, declareType } = this.declareList;
+      this.id = id;
+      this.form.declareYear = declareYear;
+      this.form.declareType = DECLEAR_TYPE[declareType];
+
+      if (!id) this.$router.replace({ name: "VillageApplyList" });
+
+      this.getVillageDetail();
+    }
   },
   methods: {
     getVillageDetail() {
       getVillageDetail({ id: this.id }).then((res) => {
         this.form.detail = res || [];
       });
+    },
+
+    goDetail(row) {
+      this.$router.push({ name: "declareDetail", query: { id: row.id } });
     },
   },
 };
