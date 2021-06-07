@@ -25,7 +25,11 @@
 
       <h4 class="block-tit">推荐村简介</h4>
       <div>
-        <el-form-item label="推荐村简介">
+        <el-form-item
+          label="推荐村简介"
+          prop="introduction"
+          :rules="rule.input"
+        >
           <el-input
             style="width: 42%"
             type="textarea"
@@ -38,7 +42,11 @@
           </el-input>
         </el-form-item>
         <h4 class="block-tit">村庄图片</h4>
-        <el-form-item label="" prop="villagePicturesArr">
+        <el-form-item
+          label="村庄图片"
+          prop="villagePicturesArr"
+          :rules="imgRule"
+        >
           <UploadImg
             :data="imageList"
             @add="onImageAdd"
@@ -65,6 +73,14 @@ import VillageBaseForm from "../Components/VillageBaseForm";
 import VillageHistoryBuildingForm from "../Components/VillageHistoryBuildingForm";
 
 import { VILLAGE_LIST_ROUTER_NAME } from "../constants";
+
+const imgs = (rule, value, callback) => {
+  if (value.length < 5) {
+    callback(new Error("需要上传5张以上图片"));
+  } else {
+    callback();
+  }
+};
 
 export default {
   mixins: [rule],
@@ -109,6 +125,7 @@ export default {
       dialogImageUrl: "",
       dialogVisible: false,
       imageList: [], // 回显图片
+      imgRule: { required: true, validator: imgs, trigger: "change" },
     };
   },
 
