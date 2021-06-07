@@ -56,3 +56,12 @@ export const getVillageDetail = (params) => {
     params,
   });
 };
+
+// 获取村庄详情
+export const getVillageItemDetail = (params) => {
+  return axios.request({
+    method: "GET",
+    url: apiHost + "/villageDeclaration/villageDetail/" + params.id,
+    params,
+  });
+};

@@ -1,3 +1,187 @@
 <template>
-  <div>detail</div>
+  <div>
+    <el-form
+      ref="form"
+      class="form"
+      label-position="top"
+      :model="form"
+      label-width="80px"
+    >
+      <h3 class="text-gray-800 text-2xl mb-8">详情</h3>
+
+      <el-form-item label="村庄地址" prop="villageId">
+        <p class="content">{{ form.address }}{{ form.villageName }}</p>
+      </el-form-item>
+
+      <h4 class="block-tit">重点村古建筑调查表</h4>
+      <div class="input-item-wrp">
+        <el-form-item label="当年户籍人口（人）" prop="population">
+          <p class="content">{{ form.population }}</p>
+        </el-form-item>
+        <el-form-item label="当年村集体经济收入（万元）" prop="income">
+          <p class="content">{{ form.income }}</p>
+        </el-form-item>
+        <el-form-item label="古建筑村落年代" prop="villageAge">
+          <p class="content">{{ form.villageAge }}</p>
+        </el-form-item>
+        <el-form-item label="是否历史文化名村">
+          <p class="content">{{ (form.isFamous && "是") || "否" }}</p>
+        </el-form-item>
+        <el-form-item label="是否一般村">
+          <p class="content">{{ (form.isGeneral && "是") || "否" }}</p>
+        </el-form-item>
+      </div>
+
+      <h4 class="block-tit">古建筑数量</h4>
+      <div class="total-wrp"><span>总数：</span>{{ total }} 个</div>
+      <div class="input-item-wrp">
+        <el-form-item
+          :label="item.label"
+          v-for="(item, i) in historyBuildings"
+          :key="i"
+        >
+          <p class="content">{{ form[item.value] }}</p>
+        </el-form-item>
+      </div>
+
+      <h4 class="block-tit">推荐村简介</h4>
+      <div class="input-item-wrp">
+        <el-form-item label="推荐村简介" prop="introduction">
+          <p class="content">{{ form.introduction }}</p>
+        </el-form-item>
+      </div>
+      <h4 class="block-tit">村庄图片</h4>
+      <el-form-item label="村庄图片" prop="villagePicturesArr">
+        <ViewImg :data="form.villagePicturesFiles" />
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
+<script>
+import rule from "@/mixins/rule";
+import { HISTORY_BUILDINGS } from "../constants";
+import { getVillageItemDetail } from "@/api/villageManage";
+
+export default {
+  mixins: [rule],
+  props: {
+    type: {
+      type: String,
+      default: "add",
+    },
+    data: {
+      type: Object,
+      default: () => {},
+    },
+  },
+  data() {
+    return {
+      form: {
+        villageId: "", //村庄地址
+        population: "", // 人口数量
+        income: "", //当年集体收入（万元）
+        villageAge: "", //古建筑村落年代
+        isFamous: "", //是否历史文化名村
+        isGeneral: "", //是否一般村
+
+        houseNum: "", //古民宅数量
+        hallNum: "", //古祠堂数量
+        stageNum: "", //古戏台数量
+        archNum: "", //古牌坊数量
+        bridgeNum: "", //古桥数量
+        roadNum: "", //古道数量
+        canalNum: "", //古渠数量
+        barrageNum: "", //古堰坝数量
+        wellNum: "", //古井泉数量
+        streetNum: "", // 古街巷数量
+        guildNum: "", //古会馆数量
+        castleNum: "", //古城堡数量
+        towerNum: "", //古塔数量
+        templeNum: "", //古寺数量
+        modernBuildingNum: "", //近现代建筑数量
+        featureNum: "", //特色建材数量
+
+        introduction: "", //introduction
+        villagePicturesArr: [], //图片数组
+        villagePicturesFiles: [], // 编辑表单时图片回显
+      },
+
+      total: 0,
+    };
+  },
+  watch: {
+    type(val) {
+      if (val === "edit") {
+        this.form = this.data;
+      }
+    },
+  },
+  created() {
+    this.historyBuildings = HISTORY_BUILDINGS;
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      const { id } = this.$route.query;
+      if (!id) return;
+      getVillageItemDetail({ id }).then((res) => {
+        this.form = res;
+
+        this.total = this.countTotal();
+      });
+    },
+
+    countTotal() {
+      return HISTORY_BUILDINGS.reduce((pre, next) => {
+        return pre + this.form[next.value];
+      }, 0);
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.form {
+  max-width: 1600px;
+  padding-left: 8px;
+  .block-tit {
+    margin-top: 14px;
+    margin-bottom: 2px;
+  }
+
+  .input {
+    width: 31%;
+    flex-shrink: 0;
+  }
+  .total-wrp {
+    color: #333333;
+    & span {
+      color: #606266;
+      line-height: 40px;
+      padding: 0 2px 0 0;
+    }
+  }
+  .input-item-wrp {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+
+    ::v-deep .el-form-item {
+      width: 31%;
+      flex-shrink: 0;
+      margin-right: 20px;
+      .el-form-item__label {
+        color: #999;
+        font-size: 16px;
+      }
+    }
+  }
+  .content {
+    font-size: 16px;
+    color: #333333;
+    line-height: 22px;
+  }
+}
+</style>

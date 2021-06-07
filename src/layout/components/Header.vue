@@ -12,7 +12,7 @@
             class="user-avatar"
             :src="require('@/assets/imgs/avatar.jpeg')"
           />
-          <span class="user-name">管理员</span>
+          <span class="user-name">{{ userInfo.userNickname }}</span>
         </div>
 
         <el-dropdown-menu slot="dropdown">
@@ -24,9 +24,16 @@
 </template>
 <script>
 import Notify from "@/components/Notify";
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Header",
   components: { Notify },
+  computed: {
+    ...mapGetters(["userInfo"]),
+  },
+  methods: {
+    ...mapActions("user", ["logout"]),
+  },
 };
 </script>
 <style lang="scss" scoped>

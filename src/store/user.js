@@ -1,4 +1,5 @@
 import { pwdLogin, logout, getUserInfo, getUserPermission } from "@/api/user";
+import { removeToken } from "@/utils/auth";
 
 export default {
   namespaced: true,

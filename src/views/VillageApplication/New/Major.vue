@@ -99,6 +99,7 @@ export default {
       listRules: { required: true, validator: tableList, trigger: "blur" },
     };
   },
+
   created() {
     const { id, declareYear } = this.$route.query;
     if (id && declareYear) {
