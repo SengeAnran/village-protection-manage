@@ -21,13 +21,23 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item label="村庄名单：" prop="detail" :rules="listRules">
-            <VilliageListTable :data="form.detail" />
+            <VilliageListTable
+              :data="form.detail"
+              :hiddenEdit="false"
+              :hiddenDetail="true"
+              @remove="removeListItem"
+              @editForm="editListItem"
+            />
           </el-form-item>
           <el-button
             class="add-wrp"
             plain
             size="small"
-            @click="showForm = true"
+            @click="
+              editId = 0;
+              editType = 'add';
+              showForm = true;
+            "
           >
             <i class="el-icon-plus"></i>
           </el-button>
@@ -41,6 +51,8 @@
       <Ordinary
         key="addItem"
         v-if="showForm"
+        :type="editType"
+        :data="editData"
         @add="addListItem"
         @close="showForm = false"
       />
@@ -78,6 +90,10 @@ export default {
 
       showForm: false,
 
+      editType: "add",
+      editIndex: 0,
+      editData: {},
+
       listRules: { required: true, validator: tableList, trigger: "blur" },
     };
   },
@@ -97,8 +113,24 @@ export default {
     },
 
     addListItem(params) {
-      this.form.detail.push(params);
-      this.showForm = false;
+      if (this.editType === "add") {
+        this.form.detail.push(params);
+        this.showForm = false;
+      } else if (this.editType === "edit") {
+        this.form.detail.splice(this.editIndex, 1, params);
+        this.showForm = false;
+      }
+    },
+
+    removeListItem(index) {
+      this.form.detail.splice(index, 1);
+    },
+
+    editListItem(data, index) {
+      this.editType = "edit";
+      this.editIndex = index;
+      this.editData = data;
+      this.showForm = true;
     },
 
     submit() {

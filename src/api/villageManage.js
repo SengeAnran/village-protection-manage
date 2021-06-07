@@ -39,6 +39,15 @@ export const deleteVillageItem = (data) => {
   });
 };
 
+// 村庄申报修改
+export const updateVillageItem = (data) => {
+  return axios.request({
+    method: "PUT",
+    url: apiHost + "/villageDeclaration",
+    data,
+  });
+};
+
 // 村庄申报详情
 export const getVillageDetail = (params) => {
   return axios.request({

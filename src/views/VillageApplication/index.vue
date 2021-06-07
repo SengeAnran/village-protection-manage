@@ -59,7 +59,7 @@
         </template>
 
         <template v-slot:tableAction="scope">
-          <div style="text-align: left; display: inline">
+          <div style="text-align: left">
             <el-link type="primary" @click="goDeclareRouter(scope)"
               >申报详情</el-link
             >

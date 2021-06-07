@@ -3,8 +3,9 @@
     ref="cascader"
     :options="villageInfoOpt"
     :props="optionProps"
-    v-model="value"
+    v-model="_value"
     @change="getCheckedNodes"
+    :emitPath="false"
   >
   </el-cascader>
 </template>
@@ -12,7 +13,7 @@
 import { getVillageArea } from "@/api/villageManage";
 export default {
   props: {
-    villageId: String,
+    value: String,
   },
   data() {
     return {
@@ -25,9 +26,9 @@ export default {
     };
   },
   computed: {
-    value: {
+    _value: {
       get() {
-        return this.villageId;
+        return this.value;
       },
       set(val) {
         const lastValue = val.slice(-1)[0];

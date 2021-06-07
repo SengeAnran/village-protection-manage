@@ -21,7 +21,12 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item label="村庄名单：" prop="detail" :rules="listRules">
-            <VilliageListTable :data="form.detail" />
+            <VilliageListTable
+              :data="form.detail"
+              :hiddenEdit="false"
+              :hiddenDetail="true"
+              @remove="removeListItem"
+            />
           </el-form-item>
           <el-button
             class="add-wrp"
@@ -100,6 +105,10 @@ export default {
     addListItem(params) {
       this.form.detail.push(params);
       this.showForm = false;
+    },
+
+    removeListItem(index) {
+      this.form.detail.splice(index, 1);
     },
 
     submit() {

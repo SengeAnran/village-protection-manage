@@ -26,12 +26,9 @@
 
       <Detail key="detail" v-if="showDetail" @close="showDetail = false" />
     </transition>
-
-    <!-- <router-view /> -->
   </div>
 </template>
 <script>
-// import { mapState, mapMutations } from "vuex";
 import rule from "@/mixins/rule";
 import VilliageListTable from "../Components/VilliageListTable";
 import { getVillageDetail } from "@/api/villageManage";
@@ -53,12 +50,6 @@ export default {
       showDetail: false,
     };
   },
-  // computed: {
-  //   // ...mapState("villageMange", ["applyVillageList"]),
-  //   detail() {
-  //     return this.applyVillageList;
-  //   },
-  // },
   created() {
     this.id = this.$route.query.id;
     this.form.declareYear = this.$route.query.declareYear;

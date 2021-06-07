@@ -16,12 +16,18 @@
     >
     </el-table-column>
     <el-table-column label="操作">
-      <div v-if="!hiddenEdit">
-        <el-link type="primary">申报详情</el-link>
-        <el-divider direction="vertical"></el-divider>
-        <el-link type="danger">删除</el-link>
-      </div>
-      <div v-if="!hiddenDetail"><el-link type="primary">详情</el-link></div>
+      <template slot-scope="scope">
+        <div v-if="!hiddenEdit">
+          <el-link type="primary" @click="$emit('editForm', scope.row)">
+            申报详情
+          </el-link>
+          <el-divider direction="vertical"></el-divider>
+          <el-link type="danger" @click="removeItem(scope.$index, scope.row)"
+            >删除</el-link
+          >
+        </div>
+        <div v-if="!hiddenDetail"><el-link type="primary">详情</el-link></div>
+      </template>
     </el-table-column>
   </el-table>
 </template>
@@ -43,6 +49,11 @@ export default {
     hiddenDeclareResult: {
       type: Boolean,
       default: true,
+    },
+  },
+  methods: {
+    removeItem(index) {
+      this.$emit("remove", index);
     },
   },
 };

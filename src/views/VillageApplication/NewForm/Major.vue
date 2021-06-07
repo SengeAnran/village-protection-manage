@@ -89,6 +89,16 @@ export default {
     VillageBaseForm,
     VillageHistoryBuildingForm,
   },
+  props: {
+    type: {
+      type: String,
+      default: "add",
+    },
+    data: {
+      type: Object,
+      default: () => {},
+    },
+  },
   data() {
     return {
       form: {
@@ -118,6 +128,7 @@ export default {
 
         introduction: "", //introduction
         villagePicturesArr: [], //图片数组
+        villagePicturesFiles: [], // 编辑表单时图片回显
       },
 
       parentRouteName: VILLAGE_LIST_ROUTER_NAME[1002],
@@ -128,7 +139,19 @@ export default {
       imgRule: { required: true, validator: imgs, trigger: "change" },
     };
   },
-
+  watch: {
+    type(val) {
+      if (val === "edit") {
+        this.form = this.data;
+      }
+    },
+  },
+  mounted() {
+    if (this.type === "edit") {
+      this.form = this.data;
+      this.imageList = [...this.data.villagePicturesFiles];
+    }
+  },
   methods: {
     validateForm() {
       this.$refs["form"].validate((valid) => {
@@ -154,6 +177,8 @@ export default {
 
     onImageAdd(res) {
       this.form.villagePicturesArr.push(res.fileId);
+      this.form.villagePicturesFiles.push(res);
+
       this.$refs.form.validateField("villagePicturesArr");
     },
     onImageRemove(res) {
@@ -163,6 +188,7 @@ export default {
 
       if (index !== -1) {
         this.form.villagePicturesArr.splice(index, 1);
+        this.form.villagePicturesFiles.splice(index, 1);
       }
       this.$refs.form.validateField("villagePicturesArr");
     },

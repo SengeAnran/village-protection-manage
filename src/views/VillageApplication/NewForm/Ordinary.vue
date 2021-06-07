@@ -43,6 +43,16 @@ export default {
     VillageBaseForm,
     VillageHistoryBuildingForm,
   },
+  props: {
+    type: {
+      type: String,
+      default: "add",
+    },
+    data: {
+      type: Object,
+      default: () => {},
+    },
+  },
   data() {
     return {
       form: {
@@ -74,6 +84,18 @@ export default {
       parentRouteName: VILLAGE_LIST_ROUTER_NAME[1001],
     };
   },
+  watch: {
+    type(val) {
+      if (val === "edit") {
+        this.form = this.data;
+      }
+    },
+  },
+  mounted() {
+    if (this.type === "edit") {
+      this.form = this.data;
+    }
+  },
   methods: {
     validateForm() {
       this.$refs["form"].validate((valid) => {
@@ -87,7 +109,7 @@ export default {
 
     // 新增申报item
     submit(params) {
-      this.addApplyVillageList(params);
+      this.$emit("add", params);
     },
 
     // 选择村庄地址

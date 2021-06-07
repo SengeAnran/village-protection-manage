@@ -21,7 +21,13 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item label="村庄名单：" prop="detail" :rules="listRules">
-            <VilliageListTable :data="form.detail" />
+            <VilliageListTable
+              :data="form.detail"
+              :hiddenEdit="false"
+              :hiddenDetail="true"
+              @remove="removeListItem"
+              @editForm="editListItem"
+            />
           </el-form-item>
           <el-button
             class="add-wrp"
@@ -41,6 +47,8 @@
       <Major
         key="addItem"
         v-if="showForm"
+        :type="editType"
+        :data="editData"
         @add="addListItem"
         @close="showForm = false"
       />
@@ -48,11 +56,14 @@
   </div>
 </template>
 <script>
-// import { mapState, mapMutations } from "vuex";
 import rule from "@/mixins/rule";
 import VilliageListTable from "../Components/VilliageListTable";
 import { VILLAGE_LIST_ROUTER_NAME } from "../constants";
-import { villageDeclaration } from "@/api/villageManage";
+import {
+  villageDeclaration,
+  getVillageDetail,
+  updateVillageItem,
+} from "@/api/villageManage";
 
 import Major from "../NewForm/Major";
 
@@ -73,18 +84,35 @@ export default {
     return {
       routeName: VILLAGE_LIST_ROUTER_NAME[1002],
 
+      id: "",
       form: {
         declareYear: "",
         detail: [],
       },
+
+      editType: "add",
+      editIndex: 0,
+      editData: {},
 
       showForm: false,
 
       listRules: { required: true, validator: tableList, trigger: "blur" },
     };
   },
+  created() {
+    const { id, declareYear } = this.$route.query;
+    if (id && declareYear) {
+      this.id = id;
+      this.form.declareYear = String(declareYear);
+      this.init();
+    }
+  },
   methods: {
-    // ...mapMutations("villageMange", ["changeApplyVillageList"]),
+    init() {
+      getVillageDetail({ id: this.id }).then((res) => {
+        this.form.detail = res || [];
+      });
+    },
     validateForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
@@ -100,21 +128,44 @@ export default {
     },
 
     addListItem(params) {
-      this.form.detail.push(params);
-      this.showForm = false;
+      if (this.editType === "add") {
+        this.form.detail.push(params);
+        this.showForm = false;
+      } else if (this.editType === "edit") {
+        this.form.detail.splice(this.editIndex, 1, params);
+        this.showForm = false;
+      }
+    },
+
+    removeListItem(index) {
+      this.form.detail.splice(index, 1);
+    },
+
+    editListItem(data, index) {
+      this.editType = "edit";
+      this.editIndex = index;
+      this.editData = data;
+      this.showForm = true;
     },
 
     submit() {
       const params = {
         declareType,
         declareYear: Number(this.form.declareYear),
-        // detail: this.applyVillageList,
         detail: this.form.detail,
       };
-      villageDeclaration(params).then(() => {
-        this.$notify.success("申报成功");
-        this.$router.replace({ name: "VillageApplyList" });
-      });
+      if (this.id) {
+        params.id = this.id;
+        updateVillageItem(params).then(() => {
+          this.$notify.success("修改成功");
+          this.$router.replace({ name: "VillageApplyList" });
+        });
+      } else {
+        villageDeclaration(params).then(() => {
+          this.$notify.success("申报成功");
+          this.$router.replace({ name: "VillageApplyList" });
+        });
+      }
     },
   },
 };
