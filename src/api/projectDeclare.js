@@ -33,3 +33,11 @@ export const modifyProject = (data) => {
     data,
   });
 };
+
+// 获取项目所在地
+export const getAddress = () => {
+  return axios.request({
+    method: "get",
+    url: apiHost + "/projectDeclare/villageDetailList",
+  });
+};
