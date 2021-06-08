@@ -9,7 +9,7 @@ export const constantRoutes = [
 ];
 
 export const defaultRoutes = [
-  // 村庄申报
+  // 村庄申报 / 村庄审核
   {
     path: "/villageApplication",
     component: BlankRouteNode,
@@ -102,26 +102,6 @@ export const defaultRoutes = [
       },
     ],
   },
-  // 村庄审核
-  // {
-  //   path: "/villageAudit",
-  //   component: BlankRouteNode,
-  //   name: "VillageAudit",
-  //   redirect: {
-  //     name: "VillageAuditList",
-  //   },
-  //   children: [
-  //     {
-  //       path: "index",
-  //       name: "VillageAuditList",
-  //       meta: {
-  //         title: "村庄审核",
-  //         icon: "cunzhuangshenbao",
-  //       },
-  //       component: () => import("@/views/VillageAudit/index"),
-  //     },
-  //   ],
-  // },
   // 规划评审
   {
     path: "/planAudit",
@@ -164,7 +144,7 @@ export const defaultRoutes = [
       },
     ],
   },
-  // 项目申报
+  // 项目申报 / 项目审核
   {
     path: "/projectApplication",
     component: BlankRouteNode,
@@ -206,27 +186,7 @@ export const defaultRoutes = [
       },
     ],
   },
-  // 项目审核
-  {
-    path: "/projectAudit",
-    component: BlankRouteNode,
-    name: "ProjectAudit",
-    redirect: {
-      name: "ProjectAuditList",
-    },
-    children: [
-      {
-        path: "index",
-        name: "ProjectAuditList",
-        meta: {
-          title: "项目审核",
-          icon: "xiangmushenbao",
-        },
-        component: () => import("@/views/ProjectAudit/index"),
-      },
-    ],
-  },
-  // 进度上报
+  // 进度上报 / 进度监管
   {
     path: "/scheduleReport",
     component: BlankRouteNode,
@@ -243,26 +203,6 @@ export const defaultRoutes = [
           icon: "jindushangbao",
         },
         component: () => import("@/views/ScheduleReport/index"),
-      },
-    ],
-  },
-  // 进度监管
-  {
-    path: "/scheduleSupervise",
-    component: BlankRouteNode,
-    name: "ScheduleSupervise",
-    redirect: {
-      name: "ScheduleSuperviseList",
-    },
-    children: [
-      {
-        path: "index",
-        name: "ScheduleSuperviseList",
-        meta: {
-          title: "进度监管",
-          icon: "jindushangbao",
-        },
-        component: () => import("@/views/ScheduleSupervise/index"),
       },
     ],
   },
