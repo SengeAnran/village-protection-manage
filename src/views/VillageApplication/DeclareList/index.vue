@@ -1,14 +1,15 @@
 <template>
   <div class="block">
-    <div v-if="$route.name !== 'declareDetail'" key="list">
+    <RouterBack>申报详情</RouterBack>
+    <div>
       <el-form
+        style="padding-left: 14px"
         class="form"
         label-position="top"
         ref="form"
         :model="form"
         label-width="80px"
       >
-        <h3 class="text-gray-800 text-2xl mb-8">申报详情</h3>
         <div class="item">
           <span class="title">申报类型：</span>
           <span class="con">{{ form.declareType }}申报</span>

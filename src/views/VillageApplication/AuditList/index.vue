@@ -1,36 +1,33 @@
 <template>
   <div class="block">
-    <transition name="fade-transform" mode="out-in">
-      <div v-if="$route.name === 'auditList'" key="list">
-        <el-form
-          class="form"
-          label-position="top"
-          ref="form"
-          :model="form"
-          label-width="80px"
-        >
-          <h3 class="text-gray-800 text-2xl mb-8">审核详情</h3>
-          <div class="item">
-            <span class="title">申报类型：</span>
-            <span class="con">{{ form.declareType }}申报</span>
-          </div>
-          <div class="item">
-            <span class="title">申报年度：</span>
-            <span class="con">{{ form.declareYear }}</span>
-          </div>
-          <el-form-item label="村庄名单：">
-            <VilliageListTable
-              :hiddenDetail="true"
-              :hiddenEdit="true"
-              :hiddenDeclareResult="false"
-              :data="form.detail"
-            />
-          </el-form-item>
-        </el-form>
-      </div>
-
-      <Detail key="detail" v-if="showDetail" @close="showDetail = false" />
-    </transition>
+    <div>
+      <RouterBack>审核详情</RouterBack>
+      <el-form
+        style="padding-left: 14px"
+        class="form"
+        label-position="top"
+        ref="form"
+        :model="form"
+        label-width="80px"
+      >
+        <div class="item">
+          <span class="title">申报类型：</span>
+          <span class="con">{{ form.declareType }}申报</span>
+        </div>
+        <div class="item">
+          <span class="title">申报年度：</span>
+          <span class="con">{{ form.declareYear }}</span>
+        </div>
+        <el-form-item label="村庄名单：">
+          <VilliageListTable
+            :hiddenDetail="true"
+            :hiddenEdit="true"
+            :hiddenDeclareResult="false"
+            :data="form.detail"
+          />
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 <script>
@@ -38,11 +35,9 @@ import rule from "@/mixins/rule";
 import VilliageListTable from "../Components/VilliageListTable";
 import { getVillageDetail } from "@/api/villageManage";
 
-import Detail from "../Detail";
-
 export default {
   mixins: [rule],
-  components: { VilliageListTable, Detail },
+  components: { VilliageListTable },
   data() {
     return {
       id: 0,

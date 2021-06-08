@@ -204,6 +204,28 @@ export const defaultRoutes = [
         },
         component: () => import("@/views/ScheduleReport/index"),
       },
+      {
+        path: "/scheduleReport/new",
+        name: "newSchedule",
+        hidden: true,
+        meta: {
+          title: "上报",
+          icon: "jindushangbao",
+          activeMenu: "/scheduleReport/index",
+        },
+        component: () => import("@/views/ScheduleReport/New/index.vue"),
+      },
+      {
+        path: "/scheduleReport/detail",
+        name: "scheduleDetail",
+        hidden: true,
+        meta: {
+          title: "查看详情",
+          icon: "jindushangbao",
+          activeMenu: "/scheduleReport/index",
+        },
+        component: () => import("@/views/ScheduleReport/Detail/index.vue"),
+      },
     ],
   },
   // 项目验收

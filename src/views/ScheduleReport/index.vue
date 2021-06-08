@@ -44,7 +44,11 @@
         </template>
 
         <template v-slot:crudAction>
-          <el-button type="primary"> 上报 </el-button>
+          <el-button
+            type="primary"
+            @click="$router.push({ name: 'newSchedule' })"
+            >上报
+          </el-button>
         </template>
 
         <template v-slot:table>

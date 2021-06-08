@@ -2,14 +2,15 @@
   <div class="block">
     <transition name="fade-transform" mode="out-in">
       <div v-if="!showForm" key="list">
+        <RouterBack>提升申报</RouterBack>
         <el-form
+          style="padding-left: 14px"
           class="form"
           label-position="top"
           ref="form"
           :model="form"
           label-width="80px"
         >
-          <h3 class="text-gray-800 text-2xl mb-8">提升申报</h3>
           <el-form-item label="申报年度" prop="declareYear" :rules="rule.input">
             <el-date-picker
               v-model="form.declareYear"

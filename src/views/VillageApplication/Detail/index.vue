@@ -1,16 +1,14 @@
 <template>
   <div class="block">
+    <RouterBack>详情</RouterBack>
     <el-form
+      style="padding-left: 14px"
       ref="form"
       class="form"
       label-position="top"
       :model="form"
       label-width="80px"
     >
-      <h3 class="text-gray-800 text-2xl mb-8" @click="$router.back()">
-        <i class="el-icon-arrow-left"></i>详情
-      </h3>
-
       <el-form-item label="村庄地址" prop="villageId">
         <p class="content">{{ form.address }}{{ form.villageName }}</p>
       </el-form-item>
