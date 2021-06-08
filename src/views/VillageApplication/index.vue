@@ -76,7 +76,9 @@
             </el-link>
             <el-link
               @click="goAudit(scope)"
-              v-if="!isAdminAudit(scope.data.declareStatus)"
+              v-if="
+                userInfo.roleId !== 3 && !isAdminAudit(scope.data.declareStatus)
+              "
               type="primary"
             >
               审核
