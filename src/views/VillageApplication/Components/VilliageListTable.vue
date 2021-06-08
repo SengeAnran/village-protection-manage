@@ -4,7 +4,7 @@
     <el-table-column prop="address" label="村庄所在乡镇"> </el-table-column>
     <el-table-column prop="villageName" label="村庄名称"> </el-table-column>
     <el-table-column
-      v-if="!hiddenDeclareResult"
+      v-if="!hiddenDeclareResult && userInfo.roleId > 1"
       label="市级审核结果"
       align="center"
     >
@@ -32,7 +32,7 @@
     </el-table-column>
     <el-table-column
       v-if="!hiddenDeclareResult"
-      label="省级审核结果"
+      :label="userInfo.roleId > 1 ? '省级审核结果' : '审核结果'"
       align="center"
     >
       <template slot-scope="scope">
@@ -84,6 +84,7 @@
   </el-table>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   props: {
     data: {
@@ -102,6 +103,9 @@ export default {
       type: Boolean,
       default: true,
     },
+  },
+  computed: {
+    ...mapGetters(["userInfo"]),
   },
   methods: {
     removeItem(index) {

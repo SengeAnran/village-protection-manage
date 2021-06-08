@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="$route.name !== 'declareDetail'" key="list">
+    <div v-if="$route.name === 'audit'" key="list">
       <el-form
         class="form"
         label-position="top"
@@ -8,7 +8,7 @@
         :model="form"
         label-width="80px"
       >
-        <h3 class="text-gray-800 text-2xl mb-8">申报详情</h3>
+        <h3 class="text-gray-800 text-2xl mb-8">审核</h3>
         <div class="item">
           <span class="title">申报类型：</span>
           <span class="con">{{ form.declareType }}申报</span>
@@ -31,7 +31,7 @@
                 </el-link>
               </template>
             </el-table-column>
-            <el-table-column label="排序">
+            <el-table-column label="排序" v-if="userInfo.roleId === 2">
               <template slot-scope="scope">
                 <el-input-number
                   style="width: 70px"
@@ -62,7 +62,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import rule from "@/mixins/rule";
 import { getVillageDetail, verify } from "@/api/villageManage";
 
@@ -83,6 +83,7 @@ export default {
   },
   computed: {
     ...mapState("villageMange", ["declareList"]),
+    ...mapGetters(["userInfo"]),
   },
   mounted() {
     if (this.$route.name === "audit") {

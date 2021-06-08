@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition name="fade-transform" mode="out-in">
-      <div v-if="!showDetail" key="list">
+      <div v-if="$route.name === 'auditList'" key="list">
         <el-form
           class="form"
           label-position="top"
