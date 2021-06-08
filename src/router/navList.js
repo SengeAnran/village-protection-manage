@@ -189,6 +189,28 @@ export const defaultRoutes = [
         },
         component: () => import("@/views/PlanAudit/index"),
       },
+      {
+        path: "/planAudit/save",
+        name: "PlanAuditSave",
+        hidden: true,
+        meta: {
+          title: "评审",
+          noCache: true,
+          activeMenu: "/planAudit/index",
+        },
+        component: () => import("@/views/PlanAudit/Save"),
+      },
+      {
+        path: "/planAudit/detail",
+        name: "PlanAuditDetail",
+        hidden: true,
+        meta: {
+          title: "评审详情",
+          noCache: true,
+          activeMenu: "/planAudit/index",
+        },
+        component: () => import("@/views/PlanAudit/Detail"),
+      },
     ],
   },
   // 项目申报
@@ -208,6 +230,28 @@ export const defaultRoutes = [
           icon: "xiangmushenbao",
         },
         component: () => import("@/views/ProjectApplication/index.vue"),
+      },
+      {
+        path: "/projectApplication/save",
+        name: "ProjectApplicationSave",
+        hidden: true,
+        meta: {
+          title: "项目管理",
+          noCache: true,
+          activeMenu: "/projectApplication/index",
+        },
+        component: () => import("@/views/ProjectApplication/Save"),
+      },
+      {
+        path: "/projectApplication/detail",
+        name: "ProjectApplicationDetail",
+        hidden: true,
+        meta: {
+          title: "项目详情",
+          noCache: true,
+          activeMenu: "/projectApplication/index",
+        },
+        component: () => import("@/views/ProjectApplication/Detail"),
       },
     ],
   },

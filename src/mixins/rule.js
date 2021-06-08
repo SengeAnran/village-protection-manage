@@ -24,12 +24,24 @@ const age = (rule, value, callback) => {
   }
 };
 
+const upload = (rule, value, callback) => {
+  if (value === "" || value.length === 0) {
+    callback(new Error("请上传"));
+  } else {
+    callback();
+  }
+};
+
 export default {
   data() {
     return {
       rule: {
         input: { required: true, message: "请输入", trigger: "blur" },
-        upload: { required: true, message: "请上传", trigger: "blur" },
+        upload: {
+          required: true,
+          validator: upload,
+          trigger: ["blur", "change"],
+        },
         select: { required: true, message: "请选择", trigger: "change" },
         multiSelect: {
           type: "array",
@@ -38,13 +50,13 @@ export default {
           trigger: "change",
         },
         date: {
-          type: "date",
+          // type: "date",
           required: true,
           message: "请选择日期",
           trigger: "change",
         },
         datetime: {
-          type: "datetime",
+          // type: "datetime",
           required: true,
           message: "请选择时间",
           trigger: "change",
