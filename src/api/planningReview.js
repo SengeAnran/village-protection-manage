@@ -33,3 +33,20 @@ export const modifyPlan = (data) => {
     data,
   });
 };
+
+// 审核 (村id)
+export const verifyPlan = (data) => {
+  return axios.request({
+    method: "post",
+    url: apiHost + "/planningReview/verify",
+    data,
+  });
+};
+
+// 获取审核流程 (村id)
+export const getProcess = (id) => {
+  return axios.request({
+    method: "get",
+    url: apiHost + "/planningReview/process/" + id,
+  });
+};
