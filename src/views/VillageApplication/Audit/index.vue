@@ -45,7 +45,7 @@
             <el-table-column label="审核" width="186">
               <template slot-scope="scope">
                 <el-radio v-model="scope.row.status" label="1">通过</el-radio>
-                <el-radio v-model="scope.row.status" label="2">不通过</el-radio>
+                <el-radio v-model="scope.row.status" label="0">不通过</el-radio>
               </template>
             </el-table-column>
           </el-table>
@@ -127,17 +127,7 @@ export default {
         this.$myConfirm({
           content: "是否确认提交",
         }).then(() => {
-          const params = this.form.detail.map((item) => {
-            return {
-              id: item.id,
-              status: item.status,
-              sortNum: item.sortNum,
-            };
-          });
-
-          verify(params).then((res) => {
-            console.log(res);
-          });
+          this.submit();
         });
       }
     },
@@ -168,7 +158,19 @@ export default {
       }
       return rst;
     },
-    submit() {},
+    submit() {
+      const params = this.form.detail.map((item) => {
+        return {
+          id: item.id,
+          status: item.status,
+          sortNum: item.sortNum,
+        };
+      });
+
+      verify(params).then(() => {
+        this.$router.push({ name: "VillageApplyList" });
+      });
+    },
   },
 };
 </script>

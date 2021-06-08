@@ -10,7 +10,7 @@
         selection
         id-key="id"
         actionWidth="180px"
-        multiple-delete
+        :multiple-delete="userInfo.roleId === 3"
         :hideAdd="true"
         :hideEdit="true"
         :hideView="true"
@@ -103,7 +103,11 @@
         </template>
 
         <template v-slot:crudAction>
-          <el-dropdown class="mr-3" @command="newApplications">
+          <el-dropdown
+            v-if="userInfo.roleId === 3"
+            class="mr-3"
+            @command="newApplications"
+          >
             <el-button type="primary"> 新建申报 </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
