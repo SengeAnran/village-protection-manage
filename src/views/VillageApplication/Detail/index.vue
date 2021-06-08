@@ -147,7 +147,7 @@ export default {
   max-width: 1600px;
   padding-left: 8px;
   .block-tit {
-    margin-top: 14px;
+    margin-top: 18px;
     margin-bottom: 2px;
   }
 

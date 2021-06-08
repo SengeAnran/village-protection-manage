@@ -8,6 +8,7 @@
       <el-input
         v-model.number="form.population"
         placeholder="请输入内容"
+        :disabled="disabled"
       ></el-input>
     </el-form-item>
     <el-form-item
@@ -18,6 +19,7 @@
       <el-input
         v-model.number="form.income"
         placeholder="请输入内容"
+        :disabled="disabled"
       ></el-input>
     </el-form-item>
     <el-form-item label="古建筑村落年代" prop="villageAge" :rules="rule.select">
@@ -25,6 +27,7 @@
         style="width: 100%"
         v-model="form.villageAge"
         placeholder="请选择"
+        :disabled="disabled"
       >
         <el-option
           v-for="item in villageAgeOpt"
@@ -36,12 +39,20 @@
       </el-select>
     </el-form-item>
     <el-form-item label="是否历史文化名村">
-      <el-radio v-model="form.isFamous" :label="true">是</el-radio>
-      <el-radio v-model="form.isFamous" :label="false">否</el-radio>
+      <el-radio v-model="form.isFamous" :label="true" :disabled="disabled">
+        是
+      </el-radio>
+      <el-radio v-model="form.isFamous" :label="false" :disabled="disabled">
+        否
+      </el-radio>
     </el-form-item>
     <el-form-item label="是否一般村">
-      <el-radio v-model="form.isGeneral" :label="true">是</el-radio>
-      <el-radio v-model="form.isGeneral" :label="false">否</el-radio>
+      <el-radio v-model="form.isGeneral" :label="true" :disabled="disabled">
+        是
+      </el-radio>
+      <el-radio v-model="form.isGeneral" :label="false" :disabled="disabled">
+        否
+      </el-radio>
     </el-form-item>
   </div>
 </template>
@@ -56,6 +67,10 @@ export default {
       type: Object,
       required: true,
       default: () => {},
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   created() {

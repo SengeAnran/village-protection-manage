@@ -142,7 +142,13 @@
           </el-table-column>
           <el-table-column label="状态" prop="declareStatus">
             <template slot-scope="scope">
-              <p>{{ declareStatus[scope.row.declareStatus] }}</p>
+              <p>
+                <i
+                  class="status"
+                  :class="{ active: scope.row.declareStatus === 2999 }"
+                ></i>
+                {{ declareStatus[scope.row.declareStatus] }}
+              </p>
             </template>
           </el-table-column>
         </template>
@@ -273,6 +279,17 @@ export default {
   .label {
     font-weight: 400;
     color: #333333;
+  }
+}
+.status {
+  display: inline-block;
+  margin-right: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 100%;
+  background: #ccc;
+  &.active {
+    background: #15be50;
   }
 }
 </style>

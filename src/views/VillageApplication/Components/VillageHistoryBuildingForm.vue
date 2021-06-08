@@ -9,6 +9,7 @@
         v-model.number="form[item.value]"
         placeholder="请输入"
         :min="0"
+        :disabled="disabled"
       ></el-input-number>
     </el-form-item>
   </div>
@@ -24,6 +25,10 @@ export default {
       type: Object,
       required: true,
       default: () => {},
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   created() {

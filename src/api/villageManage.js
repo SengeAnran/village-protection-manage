@@ -74,3 +74,12 @@ export const verify = (data) => {
     data,
   });
 };
+
+// 可申请提升的村庄列表
+export const getCanPromoteList = (params) => {
+  return axios.request({
+    method: "GET",
+    url: apiHost + "/villageDeclaration/detailList",
+    params,
+  });
+};
