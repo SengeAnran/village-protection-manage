@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="block">
     <div v-if="$route.name === 'audit'" key="list">
       <el-form
         class="form"
@@ -58,7 +58,6 @@
         </div>
       </el-form>
     </div>
-    <router-view />
   </div>
 </template>
 <script>
@@ -115,7 +114,7 @@ export default {
     },
 
     goDetail(row) {
-      this.$router.push({ name: "auditDetail", query: { id: row.id } });
+      this.$router.push({ name: "villageDetail", query: { id: row.id } });
     },
 
     validateForm() {

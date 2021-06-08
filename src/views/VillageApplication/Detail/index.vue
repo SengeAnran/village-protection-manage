@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="block">
     <el-form
       ref="form"
       class="form"

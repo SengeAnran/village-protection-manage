@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="block">
     <transition name="fade-transform" mode="out-in">
       <div v-if="!showForm" key="list">
         <el-form

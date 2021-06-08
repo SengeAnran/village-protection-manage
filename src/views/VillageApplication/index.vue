@@ -154,8 +154,6 @@
         </template>
       </Crud>
     </div>
-
-    <router-view />
   </div>
 </template>
 <script>
