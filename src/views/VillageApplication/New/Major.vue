@@ -39,7 +39,9 @@
           </el-button>
         </el-form>
         <div>
-          <el-button>取消</el-button>
+          <el-button @click="$router.push({ name: 'VillageApplyList' })"
+            >取消</el-button
+          >
           <el-button type="primary" @click="validateForm">提交</el-button>
         </div>
       </div>

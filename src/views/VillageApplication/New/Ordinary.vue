@@ -43,7 +43,9 @@
           </el-button>
         </el-form>
         <div>
-          <el-button>取消</el-button>
+          <el-button @click="$router.push({ name: 'VillageApplyList' })"
+            >取消</el-button
+          >
           <el-button type="primary" @click="validateForm">提交</el-button>
         </div>
       </div>
@@ -63,7 +65,11 @@
 import rule from "@/mixins/rule";
 import VilliageListTable from "../Components/VilliageListTable";
 import { VILLAGE_LIST_ROUTER_NAME } from "../constants";
-import { villageDeclaration } from "@/api/villageManage";
+import {
+  villageDeclaration,
+  getVillageDetail,
+  updateVillageItem,
+} from "@/api/villageManage";
 
 import Ordinary from "../NewForm/Ordinary";
 
@@ -107,6 +113,11 @@ export default {
     }
   },
   methods: {
+    init() {
+      getVillageDetail({ id: this.id }).then((res) => {
+        this.form.detail = res || [];
+      });
+    },
     validateForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {

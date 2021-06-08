@@ -65,3 +65,12 @@ export const getVillageItemDetail = (params) => {
     params,
   });
 };
+
+// 市级|省级 申报审核
+export const verify = (data) => {
+  return axios.request({
+    method: "POST",
+    url: apiHost + "/villageDeclaration/verify",
+    data,
+  });
+};

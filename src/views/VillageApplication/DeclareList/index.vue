@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <transition name="fade-transform" mode="out-in"> -->
     <div v-if="$route.name !== 'declareDetail'" key="list">
       <el-form
         class="form"
@@ -23,9 +22,6 @@
         </el-form-item>
       </el-form>
     </div>
-
-    <!-- <Detail key="detail" v-if="showDetail" @close="showDetail = false" /> -->
-    <!-- </transition> -->
     <router-view />
   </div>
 </template>
@@ -35,7 +31,6 @@ import rule from "@/mixins/rule";
 import VilliageListTable from "../Components/VilliageListTable";
 import { getVillageDetail } from "@/api/villageManage";
 
-// import Detail from "../Detail";
 import { DECLEAR_TYPE } from "../constants";
 export default {
   mixins: [rule],
@@ -62,7 +57,10 @@ export default {
       this.form.declareYear = declareYear;
       this.form.declareType = DECLEAR_TYPE[declareType];
 
-      if (!id) this.$router.replace({ name: "VillageApplyList" });
+      if (!id) {
+        this.$router.replace({ name: "VillageApplyList" });
+        return;
+      }
 
       this.getVillageDetail();
     }

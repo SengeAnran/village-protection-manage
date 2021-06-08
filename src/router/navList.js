@@ -117,13 +117,35 @@ export const defaultRoutes = [
           },
           {
             path: "/villageApplication/AuditList",
-            name: "AuditList",
+            name: "auditList",
             meta: {
               activeMenu: "/villageApplication/index",
               title: "审核详情",
             },
             component: () =>
               import("@/views/VillageApplication/AuditList/index.vue"),
+          },
+          {
+            path: "/villageApplication/Audit",
+            name: "audit",
+            meta: {
+              activeMenu: "/villageApplication/index",
+              title: "审核",
+            },
+            component: () =>
+              import("@/views/VillageApplication/Audit/index.vue"),
+            children: [
+              {
+                path: "detail",
+                name: "auditDetail",
+                meta: {
+                  activeMenu: "/villageApplication/index",
+                  title: "详情",
+                },
+                component: () =>
+                  import("@/views/VillageApplication/Detail/index.vue"),
+              },
+            ],
           },
         ],
       },

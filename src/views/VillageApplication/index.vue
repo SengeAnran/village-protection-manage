@@ -66,25 +66,35 @@
             <el-divider direction="vertical"></el-divider>
             <el-link
               @click="goAuditResult(scope)"
-              v-if="isAudit(scope.data.declareStatus)"
+              v-if="
+                (userInfo.roleId === 3 && isAudit(scope.data.declareStatus)) ||
+                isAdminAudit(scope.data.declareStatus)
+              "
               type="primary"
             >
               审核详情
             </el-link>
             <el-link
+              @click="goAudit(scope)"
+              v-if="!isAdminAudit(scope.data.declareStatus)"
+              type="primary"
+            >
+              审核
+            </el-link>
+            <el-link
               @click="edit(scope.data)"
-              v-if="!isAudit(scope.data.declareStatus)"
+              v-if="!isAudit(scope.data.declareStatus) && userInfo.roleId === 3"
               type="primary"
             >
               修改
             </el-link>
             <el-divider
               direction="vertical"
-              v-if="!isAudit(scope.data.declareStatus)"
+              v-if="!isAudit(scope.data.declareStatus) && userInfo.roleId === 3"
             ></el-divider>
             <el-link
               @click="deleteItem(scope.data.id)"
-              v-if="!isAudit(scope.data.declareStatus)"
+              v-if="!isAudit(scope.data.declareStatus) && userInfo.roleId === 3"
               type="danger"
             >
               删除
@@ -137,7 +147,7 @@
   </div>
 </template>
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 import { getVillageList, deleteVillageItem } from "@/api/villageManage";
 import {
   DECLEAR_TYPE,
@@ -156,6 +166,9 @@ export default {
       getMethod: getVillageList,
       deleteMethod: deleteVillageItem,
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"]),
   },
   beforeMount() {
     this.declareType = DECLEAR_TYPE;
@@ -180,9 +193,25 @@ export default {
       const routerName = VILLAGE_LIST_ROUTER_NAME[Number(val)];
       routerName && this.$router.push({ name: routerName });
     },
-
+    // 普通用户，是否可修改
     isAudit(status) {
       return status !== 2001;
+    },
+    // 管理员 -- 是否需要审核
+    isAdminAudit(status) {
+      if (this.userInfo.roleId === 2) {
+        if (status === 2004 || status === 2999) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if (this.userInfo.roleId === 1) {
+        if (status === 2999) {
+          return true;
+        } else {
+          return false;
+        }
+      }
     },
     // 申报详情
     goDeclareRouter(scope) {
@@ -197,8 +226,17 @@ export default {
     goAuditResult(scope) {
       const { id, declareYear, declareType } = scope.data;
       this.$router.push({
-        name: "AuditList",
+        name: "auditList",
         query: { id, declareYear, declareType: DECLEAR_TYPE[declareType] },
+      });
+    },
+    // 审核
+    goAudit(scope) {
+      const { id, declareYear, declareType } = scope.data;
+
+      this.changeDeclareList({ id, declareYear, declareType });
+      this.$router.push({
+        name: "audit",
       });
     },
     // 修改
