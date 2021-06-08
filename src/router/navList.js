@@ -152,25 +152,25 @@ export const defaultRoutes = [
     ],
   },
   // 村庄审核
-  {
-    path: "/villageAudit",
-    component: BlankRouteNode,
-    name: "VillageAudit",
-    redirect: {
-      name: "VillageAuditList",
-    },
-    children: [
-      {
-        path: "index",
-        name: "VillageAuditList",
-        meta: {
-          title: "村庄审核",
-          icon: "cunzhuangshenbao",
-        },
-        component: () => import("@/views/VillageAudit/index"),
-      },
-    ],
-  },
+  // {
+  //   path: "/villageAudit",
+  //   component: BlankRouteNode,
+  //   name: "VillageAudit",
+  //   redirect: {
+  //     name: "VillageAuditList",
+  //   },
+  //   children: [
+  //     {
+  //       path: "index",
+  //       name: "VillageAuditList",
+  //       meta: {
+  //         title: "村庄审核",
+  //         icon: "cunzhuangshenbao",
+  //       },
+  //       component: () => import("@/views/VillageAudit/index"),
+  //     },
+  //   ],
+  // },
   // 规划评审
   {
     path: "/planAudit",

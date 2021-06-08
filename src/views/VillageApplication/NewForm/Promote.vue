@@ -85,7 +85,7 @@ import VillageBaseForm from "../Components/VillageBaseForm";
 import VillageHistoryBuildingForm from "../Components/VillageHistoryBuildingForm";
 
 import { VILLAGE_LIST_ROUTER_NAME, HISTORY_BUILDINGS } from "../constants";
-import { getCanPromoteList, getVillageItemDetail } from "@/api/villageManage";
+import { getCanPromoteList } from "@/api/villageManage";
 
 const imgs = (rule, value, callback) => {
   if (value.length < 5) {
@@ -97,6 +97,16 @@ const imgs = (rule, value, callback) => {
 
 export default {
   mixins: [rule],
+  props: {
+    type: {
+      type: String,
+      default: "add",
+    },
+    data: {
+      type: Object,
+      default: () => {},
+    },
+  },
   components: {
     // VillageAddressSelect,
     VillageBaseForm,
@@ -152,6 +162,20 @@ export default {
       }, 0);
     },
   },
+  watch: {
+    type(val) {
+      if (val === "edit") {
+        this.form = this.data;
+        this.imageList = [...this.data.villagePicturesFiles];
+      }
+    },
+  },
+  mounted() {
+    if (this.type === "edit") {
+      this.form = this.data;
+      this.imageList = [...this.data.villagePicturesFiles];
+    }
+  },
   created() {
     this.getVillageList();
   },
@@ -178,31 +202,31 @@ export default {
 
     // 选择村庄地址
     changeAddress(val) {
-      const { villageName, address } = val;
+      const info = this.villageList.find((item) => item.villageId === val);
+      const form = this.form;
+      Object.keys(form).forEach((key) => {
+        form[key] = info[key];
+      });
+      const { villageName, address } = info;
       this.form.villageName = villageName;
       this.form.address = address;
-
-      console.log(1111);
-      this.getVillageItemDetail();
-    },
-    // 获取村庄详情
-    getVillageItemDetail() {
-      getVillageItemDetail({ id: this.form.villageId }).then((res) => {
-        this.form = {
-          ...res,
-          ...this.form,
-        };
-      });
     },
 
     onImageAdd(res) {
+      if (!this.form.villagePicturesArr) {
+        this.form.villagePicturesArr = [];
+      }
+      if (!this.form.villagePicturesFiles) {
+        this.form.villagePicturesFiles = [];
+      }
+
       this.form.villagePicturesArr.push(res.fileId);
       this.form.villagePicturesFiles.push(res);
 
       this.$refs.form.validateField("villagePicturesArr");
     },
     onImageRemove(res) {
-      const index = this.form.villagePicturesArr.findIndex((list) => {
+      const index = this.form.villagePicturesFiles.findIndex((list) => {
         return list.uid === res.uid || list.filePath === res.url;
       });
 

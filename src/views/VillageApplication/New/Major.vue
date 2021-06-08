@@ -144,7 +144,7 @@ export default {
       this.form.detail.splice(index, 1);
     },
 
-    editListItem(data, index) {
+    editListItem({ data, index }) {
       this.editType = "edit";
       this.editIndex = index;
       this.editData = data;

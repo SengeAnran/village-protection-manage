@@ -150,6 +150,7 @@ export default {
     type(val) {
       if (val === "edit") {
         this.form = this.data;
+        this.imageList = [...this.data.villagePicturesFiles];
       }
     },
   },
@@ -183,6 +184,12 @@ export default {
     },
 
     onImageAdd(res) {
+      if (!this.form.villagePicturesArr) {
+        this.form.villagePicturesArr = [];
+      }
+      if (!this.form.villagePicturesFiles) {
+        this.form.villagePicturesFiles = [];
+      }
       this.form.villagePicturesArr.push(res.fileId);
       this.form.villagePicturesFiles.push(res);
 
