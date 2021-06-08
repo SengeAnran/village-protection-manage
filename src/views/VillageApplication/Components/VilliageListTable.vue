@@ -66,7 +66,10 @@
     <el-table-column label="操作" v-if="!(hiddenEdit && hiddenDetail)">
       <template slot-scope="scope">
         <div v-if="!hiddenEdit">
-          <el-link type="primary" @click="$emit('editForm', scope.row)">
+          <el-link
+            type="primary"
+            @click="$emit('editForm', { data: scope.row, index: scope.$index })"
+          >
             申报详情
           </el-link>
           <el-divider direction="vertical"></el-divider>

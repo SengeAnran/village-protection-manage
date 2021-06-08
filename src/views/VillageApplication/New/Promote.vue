@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="block">
     <transition name="fade-transform" mode="out-in">
       <div v-if="!showForm" key="list">
         <el-form
@@ -26,6 +26,7 @@
               :hiddenEdit="false"
               :hiddenDetail="true"
               @remove="removeListItem"
+              @editForm="editListItem"
             />
           </el-form-item>
           <el-button
@@ -48,6 +49,8 @@
       <Promote
         key="addItem"
         v-if="showForm"
+        :type="editType"
+        :data="editData"
         @add="addListItem"
         @close="showForm = false"
       />
@@ -127,12 +130,24 @@ export default {
     },
 
     addListItem(params) {
-      this.form.detail.push(params);
-      this.showForm = false;
+      if (this.editType === "add") {
+        this.form.detail.push(params);
+        this.showForm = false;
+      } else if (this.editType === "edit") {
+        this.form.detail.splice(this.editIndex, 1, params);
+        this.showForm = false;
+      }
     },
 
     removeListItem(index) {
       this.form.detail.splice(index, 1);
+    },
+
+    editListItem({ data, index }) {
+      this.editType = "edit";
+      this.editIndex = index;
+      this.editData = data;
+      this.showForm = true;
     },
 
     submit() {

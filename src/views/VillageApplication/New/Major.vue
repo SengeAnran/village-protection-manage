@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="block">
     <transition name="fade-transform" mode="out-in">
       <div v-if="!showForm" key="list">
         <el-form
@@ -144,7 +144,7 @@ export default {
       this.form.detail.splice(index, 1);
     },
 
-    editListItem(data, index) {
+    editListItem({ data, index }) {
       this.editType = "edit";
       this.editIndex = index;
       this.editData = data;

@@ -21,156 +21,107 @@ export const defaultRoutes = [
       {
         path: "/villageApplication/index",
         name: "VillageApplyList",
-        noShowingChildren: true,
+
         meta: {
           title: "村庄申报",
           icon: "cunzhuangshenbao",
         },
         component: () => import("@/views/VillageApplication/index.vue"),
-        children: [
-          {
-            path: "/villageApplication/newOrdinary",
-            name: "newOrdinaryApplication",
-            meta: {
-              activeMenu: "/villageApplication/index",
-              title: "一般村申报",
-            },
-            component: () =>
-              import("@/views/VillageApplication/New/Ordinary.vue"),
-            children: [
-              {
-                path: "form",
-                name: "newOrdinaryApplicationForm",
-                meta: {
-                  activeMenu: "/villageApplication/index",
-                  title: "新建申报",
-                },
-                component: () =>
-                  import("@/views/VillageApplication/NewForm/Ordinary.vue"),
-              },
-            ],
-          },
-          {
-            path: "/villageApplication/newMajor",
-            name: "newMajorApplication",
-            meta: {
-              activeMenu: "/villageApplication/index",
-              title: "重点村申报",
-            },
-            component: () => import("@/views/VillageApplication/New/Major.vue"),
-            children: [
-              {
-                path: "form",
-                name: "newMajorApplicationForm",
-                meta: {
-                  activeMenu: "/villageApplication/index",
-                  title: "新建申报",
-                },
-                component: () =>
-                  import("@/views/VillageApplication/NewForm/Major.vue"),
-              },
-            ],
-          },
-          {
-            path: "/villageApplication/newPromote",
-            name: "newPromoteApplication",
-            meta: {
-              activeMenu: "/villageApplication/index",
-              title: "提升",
-            },
-            component: () =>
-              import("@/views/VillageApplication/New/Promote.vue"),
-            children: [
-              {
-                path: "form",
-                name: "newPromoteApplicationForm",
-                meta: {
-                  activeMenu: "/villageApplication/index",
-                  title: "新建申报",
-                },
-                component: () =>
-                  import("@/views/VillageApplication/NewForm/Promote.vue"),
-              },
-            ],
-          },
-          {
-            path: "/villageApplication/declareList",
-            name: "declareList",
-            meta: {
-              activeMenu: "/villageApplication/index",
-              title: "申报详情",
-            },
-            component: () =>
-              import("@/views/VillageApplication/DeclareList/index.vue"),
-            children: [
-              {
-                path: "detail",
-                name: "declareDetail",
-                meta: {
-                  activeMenu: "/villageApplication/index",
-                  title: "详情",
-                },
-                component: () =>
-                  import("@/views/VillageApplication/Detail/index.vue"),
-              },
-            ],
-          },
-          {
-            path: "/villageApplication/AuditList",
-            name: "auditList",
-            meta: {
-              activeMenu: "/villageApplication/index",
-              title: "审核详情",
-            },
-            component: () =>
-              import("@/views/VillageApplication/AuditList/index.vue"),
-          },
-          {
-            path: "/villageApplication/Audit",
-            name: "audit",
-            meta: {
-              activeMenu: "/villageApplication/index",
-              title: "审核",
-            },
-            component: () =>
-              import("@/views/VillageApplication/Audit/index.vue"),
-            children: [
-              {
-                path: "detail",
-                name: "auditDetail",
-                meta: {
-                  activeMenu: "/villageApplication/index",
-                  title: "详情",
-                },
-                component: () =>
-                  import("@/views/VillageApplication/Detail/index.vue"),
-              },
-            ],
-          },
-        ],
+      },
+      {
+        path: "/villageApplication/newOrdinary",
+        name: "newOrdinaryApplication",
+        hidden: true,
+        meta: {
+          activeMenu: "/villageApplication/index",
+          title: "一般村申报",
+        },
+        component: () => import("@/views/VillageApplication/New/Ordinary.vue"),
+      },
+      {
+        path: "/villageApplication/newMajor",
+        name: "newMajorApplication",
+        hidden: true,
+        meta: {
+          activeMenu: "/villageApplication/index",
+          title: "重点村申报",
+        },
+        component: () => import("@/views/VillageApplication/New/Major.vue"),
+      },
+      {
+        path: "/villageApplication/newPromote",
+        name: "newPromoteApplication",
+        hidden: true,
+        meta: {
+          activeMenu: "/villageApplication/index",
+          title: "提升申报",
+        },
+        component: () => import("@/views/VillageApplication/New/Promote.vue"),
+      },
+      {
+        path: "/villageApplication/declareList",
+        name: "declareList",
+        hidden: true,
+        meta: {
+          activeMenu: "/villageApplication/index",
+          title: "申报详情",
+        },
+        component: () =>
+          import("@/views/VillageApplication/DeclareList/index.vue"),
+      },
+      {
+        path: "/villageApplication/AuditList",
+        name: "auditList",
+        hidden: true,
+        meta: {
+          activeMenu: "/villageApplication/index",
+          title: "审核详情",
+        },
+        component: () =>
+          import("@/views/VillageApplication/AuditList/index.vue"),
+      },
+      {
+        path: "/villageApplication/Audit",
+        name: "audit",
+        hidden: true,
+        meta: {
+          activeMenu: "/villageApplication/index",
+          title: "审核",
+        },
+        component: () => import("@/views/VillageApplication/Audit/index.vue"),
+      },
+      {
+        path: "villageDetail",
+        name: "villageDetail",
+        hidden: true,
+        meta: {
+          activeMenu: "/villageApplication/index",
+          title: "详情",
+        },
+        component: () => import("@/views/VillageApplication/Detail/index.vue"),
       },
     ],
   },
   // 村庄审核
-  {
-    path: "/villageAudit",
-    component: BlankRouteNode,
-    name: "VillageAudit",
-    redirect: {
-      name: "VillageAuditList",
-    },
-    children: [
-      {
-        path: "index",
-        name: "VillageAuditList",
-        meta: {
-          title: "村庄审核",
-          icon: "cunzhuangshenbao",
-        },
-        component: () => import("@/views/VillageAudit/index"),
-      },
-    ],
-  },
+  // {
+  //   path: "/villageAudit",
+  //   component: BlankRouteNode,
+  //   name: "VillageAudit",
+  //   redirect: {
+  //     name: "VillageAuditList",
+  //   },
+  //   children: [
+  //     {
+  //       path: "index",
+  //       name: "VillageAuditList",
+  //       meta: {
+  //         title: "村庄审核",
+  //         icon: "cunzhuangshenbao",
+  //       },
+  //       component: () => import("@/views/VillageAudit/index"),
+  //     },
+  //   ],
+  // },
   // 规划评审
   {
     path: "/planAudit",

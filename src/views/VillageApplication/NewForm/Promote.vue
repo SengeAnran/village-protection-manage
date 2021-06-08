@@ -10,18 +10,31 @@
       <h3 class="text-gray-800 text-2xl mb-8">新建申报</h3>
 
       <el-form-item label="村庄地址" prop="villageId" :rules="rule.select">
-        <VillageAddressSelect
+        <el-select
           v-model="form.villageId"
+          placeholder="请选择"
           @change="changeAddress"
-        />
+        >
+          <el-option
+            v-for="item in villageList"
+            :key="item.villageId"
+            :label="item.villageName"
+            :value="item.villageId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
 
       <h4 class="block-tit">重点村古建筑调查表</h4>
-      <VillageBaseForm class="input-item-wrp" :form="form" />
+      <VillageBaseForm class="input-item-wrp" :form="form" disabled />
 
       <h4 class="block-tit">古建筑数量</h4>
       <div class="total-wrp"><span>总数：</span>{{ total }} 个</div>
-      <VillageHistoryBuildingForm class="input-item-wrp" :form="form" />
+      <VillageHistoryBuildingForm
+        class="input-item-wrp"
+        :form="form"
+        disabled
+      />
 
       <h4 class="block-tit">推荐村简介</h4>
       <div>
@@ -42,7 +55,11 @@
           </el-input>
         </el-form-item>
         <h4 class="block-tit">村庄图片</h4>
-        <el-form-item label="" prop="villagePicturesArr" :rules="imgRule">
+        <el-form-item
+          label="村庄图片"
+          prop="villagePicturesArr"
+          :rules="imgRule"
+        >
           <UploadImg
             :data="imageList"
             @add="onImageAdd"
@@ -64,11 +81,11 @@
 </template>
 <script>
 import rule from "@/mixins/rule";
-import VillageAddressSelect from "../Components/VillageAddressSelect";
 import VillageBaseForm from "../Components/VillageBaseForm";
 import VillageHistoryBuildingForm from "../Components/VillageHistoryBuildingForm";
 
 import { VILLAGE_LIST_ROUTER_NAME, HISTORY_BUILDINGS } from "../constants";
+import { getCanPromoteList } from "@/api/villageManage";
 
 const imgs = (rule, value, callback) => {
   if (value.length < 5) {
@@ -80,8 +97,18 @@ const imgs = (rule, value, callback) => {
 
 export default {
   mixins: [rule],
+  props: {
+    type: {
+      type: String,
+      default: "add",
+    },
+    data: {
+      type: Object,
+      default: () => {},
+    },
+  },
   components: {
-    VillageAddressSelect,
+    // VillageAddressSelect,
     VillageBaseForm,
     VillageHistoryBuildingForm,
   },
@@ -123,6 +150,8 @@ export default {
       dialogVisible: false,
       imageList: [], // 回显图片
       imgRule: { required: true, validator: imgs, trigger: "change" },
+
+      villageList: [], // 可提升村庄列表
     };
   },
 
@@ -133,7 +162,29 @@ export default {
       }, 0);
     },
   },
+  watch: {
+    type(val) {
+      if (val === "edit") {
+        this.form = this.data;
+        this.imageList = [...this.data.villagePicturesFiles];
+      }
+    },
+  },
+  mounted() {
+    if (this.type === "edit") {
+      this.form = this.data;
+      this.imageList = [...this.data.villagePicturesFiles];
+    }
+  },
+  created() {
+    this.getVillageList();
+  },
   methods: {
+    getVillageList() {
+      getCanPromoteList().then((res) => {
+        this.villageList = res;
+      });
+    },
     validateForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
@@ -151,19 +202,31 @@ export default {
 
     // 选择村庄地址
     changeAddress(val) {
-      const { village, parent } = val;
-      this.form.villageName = village.areaName;
-      this.form.address = parent.areaName;
+      const info = this.villageList.find((item) => item.villageId === val);
+      const form = this.form;
+      Object.keys(form).forEach((key) => {
+        form[key] = info[key];
+      });
+      const { villageName, address } = info;
+      this.form.villageName = villageName;
+      this.form.address = address;
     },
 
     onImageAdd(res) {
+      if (!this.form.villagePicturesArr) {
+        this.form.villagePicturesArr = [];
+      }
+      if (!this.form.villagePicturesFiles) {
+        this.form.villagePicturesFiles = [];
+      }
+
       this.form.villagePicturesArr.push(res.fileId);
       this.form.villagePicturesFiles.push(res);
 
       this.$refs.form.validateField("villagePicturesArr");
     },
     onImageRemove(res) {
-      const index = this.form.villagePicturesArr.findIndex((list) => {
+      const index = this.form.villagePicturesFiles.findIndex((list) => {
         return list.uid === res.uid || list.filePath === res.url;
       });
 
