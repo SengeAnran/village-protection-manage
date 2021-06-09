@@ -56,12 +56,16 @@
           }}</template>
         </el-table-column>
       </template>
+
+      <template v-slot:tableAction="scope">
+        <el-link type="primary" @click="verify(scope)">审核</el-link>
+      </template>
     </Crud>
   </div>
 </template>
 
 <script>
-import { getProjectList } from "@/api/projectDeclare";
+import { getProjectList, verifyProject } from "@/api/projectDeclare";
 
 export default {
   data() {
@@ -85,6 +89,36 @@ export default {
         30003: "开发利用",
       },
     };
+  },
+  methods: {
+    verify(scope) {
+      this.$confirm(
+        "是否通过该项目审核，若审核通过则项目提交至省级。",
+        "审核",
+        {
+          confirmButtonText: "通过",
+          cancelButtonText: "不通过",
+          distinguishCancelAndClose: true,
+        }
+      )
+        .then(async (action) => {
+          this.submit(action, scope);
+        })
+        .catch(async (action) => {
+          if (action === "cancel") {
+            this.submit(action, scope);
+          }
+        });
+    },
+    async submit(action, scope) {
+      let status = action === "confirm" ? 1 : 0;
+      await verifyProject({
+        id: scope.data.id,
+        status,
+      });
+      this.$notify.success("操作成功");
+      this.$refs.crud.getItems();
+    },
   },
 };
 </script>

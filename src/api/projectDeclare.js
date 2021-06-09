@@ -34,6 +34,15 @@ export const modifyProject = (data) => {
   });
 };
 
+// 项目审核
+export const verifyProject = (data) => {
+  return axios.request({
+    method: "post",
+    url: apiHost + "/projectDeclare/verify",
+    data,
+  });
+};
+
 // 获取项目所在地
 export const getAddress = () => {
   return axios.request({
