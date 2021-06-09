@@ -60,9 +60,9 @@
 
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
-            <el-link type="primary" @click="goDeclareRouter(scope)"
-              >申报详情</el-link
-            >
+            <el-link type="primary" @click="goDeclareRouter(scope)">
+              申报详情
+            </el-link>
             <el-divider direction="vertical"></el-divider>
             <el-link
               @click="goAuditResult(scope)"
@@ -79,25 +79,24 @@
               v-if="
                 userInfo.roleId !== 3 && !isAdminAudit(scope.data.declareStatus)
               "
+              v-permission="20002"
               type="primary"
             >
               审核
             </el-link>
-            <el-link
-              @click="edit(scope.data)"
+            <div
+              style="display: inline-block"
               v-if="!isAudit(scope.data.declareStatus) && userInfo.roleId === 3"
-              type="primary"
+              v-permission="10003"
             >
-              修改
-            </el-link>
-            <el-divider
-              direction="vertical"
-              v-if="!isAudit(scope.data.declareStatus) && userInfo.roleId === 3"
-            ></el-divider>
+              <el-link @click="edit(scope.data)" type="primary"> 修改 </el-link>
+              <el-divider direction="vertical"></el-divider>
+            </div>
             <el-link
               @click="deleteItem(scope.data.id)"
               v-if="!isAudit(scope.data.declareStatus) && userInfo.roleId === 3"
               type="danger"
+              v-permission="10003"
             >
               删除
             </el-link>
