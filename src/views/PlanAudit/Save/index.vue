@@ -54,6 +54,7 @@
           >
             <UploadFile
                 tip="支持格式：.ppt"
+                accept=".ppt"
                 :data="form.planFilesArr"
                 @add="onFileAdd($event, 'planFilesArr')"
                 @remove="onFileRemove($event, 'planFilesArr')"
@@ -79,6 +80,7 @@
           >
             <UploadFile
                 tip="支持格式：.doc, .docx, .ppt"
+                accept=".doc,.docx,.ppt"
                 :data="form.suggestionFilesArr"
                 @add="onFileAdd($event, 'suggestionFilesArr')"
                 @remove="onFileRemove($event, 'suggestionFilesArr')"
@@ -92,6 +94,7 @@
           >
             <UploadFile
                 tip="支持格式：.doc, .docx, .ppt"
+                accept=".doc,.docx,.ppt"
                 :data="form.approvalFilesArr"
                 @add="onFileAdd($event, 'approvalFilesArr')"
                 @remove="onFileRemove($event, 'approvalFilesArr')"
@@ -171,7 +174,7 @@ export default {
             content: "是否确认提交",
           }).then(async () => {
             const form = _.cloneDeep(this.form);
-            form.villageDetailId = this.id
+            form.villageDetailId = this.id;
             // 图片数组处理
             const keyArray = [
               "planFilesArr",
@@ -187,7 +190,7 @@ export default {
               } else {
                 await modifyPlan(form);
               }
-              this.$notify.success("发布成功");
+              this.$notify.success("提交成功");
               this.$router.back();
             } catch (err) {
               console.log(err);
