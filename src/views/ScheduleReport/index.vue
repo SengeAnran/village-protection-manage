@@ -1,6 +1,6 @@
 <template>
   <div class="village-manage block">
-    <div v-if="$route.name === 'ScheduleReportList'">
+    <div>
       <div class="text-lg mb-4">进度列表</div>
       <Crud
         ref="crud"
@@ -8,7 +8,7 @@
         :query.sync="query"
         selection
         id-key="id"
-        actionWidth="180px"
+        actionWidth="200px"
         :multiple-delete="userInfo.roleId === 3"
         :hideAdd="true"
         :hideEdit="true"
@@ -22,85 +22,170 @@
           <div class="inline-flex items-center mb-6 pl-0">
             项目所在地：
             <el-input
-              v-model="query.name"
+              v-model="query.address"
               style="width: 200px"
-              placeholder="请输入关键字"
+              placeholder="请输入"
               clearable
             ></el-input>
           </div>
         </template>
 
         <template v-slot:tableAction="scope">
-          <div style="text-align: left">
-            <el-link type="primary" @click="goDeclareRouter(scope)"
-              >项目详情</el-link
-            >
+          <div>
+            <el-link type="primary" @click="goDetail(scope)">项目详情</el-link>
             <el-divider direction="vertical"></el-divider>
-            <el-link type="primary"> 查看进度 </el-link>
-            <el-link type="primary"> 历史进度 </el-link>
-            <el-link type="primary"> 催办 </el-link>
-            <el-link type="danger"> 删除 </el-link>
+            <el-link
+              type="primary"
+              @click="goDetail(scope)"
+              v-if="userInfo.roleId === 3"
+            >
+              查看进度
+            </el-link>
+            <el-link
+              type="primary"
+              v-if="userInfo.roleId < 3"
+              @click="goHistory(scope)"
+            >
+              历史进度
+            </el-link>
           </div>
         </template>
 
         <template v-slot:crudAction>
           <el-button
             type="primary"
-            @click="$router.push({ name: 'newSchedule' })"
+            @click="$router.push({ name: 'NewSchedule' })"
             >上报
           </el-button>
         </template>
 
         <template v-slot:table>
+          <el-table-column label="申报年度" prop="years"></el-table-column>
+          <el-table-column label="项目所在地" prop="address"> </el-table-column>
           <el-table-column
-            label="申报年度"
-            prop="declareYear"
-          ></el-table-column>
-          <el-table-column label="项目所在地" prop="declareType">
+            label="项目进度"
+            prop="percentage"
+            v-if="userInfo.roleId < 3"
+          >
+          </el-table-column>
+          <el-table-column
+            label="资金拨付进度"
+            prop="funds"
+            v-if="userInfo.roleId < 3"
+          >
             <template slot-scope="scope">
-              <p>{{ declareType[scope.row.declareType] }}</p>
+              {{ scope.row.funds.toFixed(1) }}%
             </template>
           </el-table-column>
-          <el-table-column label="总投资（万元）" prop="gmtCreate">
+          <el-table-column
+            label="项目截止日期"
+            prop="finishTime"
+            v-if="userInfo.roleId < 3"
+            align="center"
+          >
             <template slot-scope="scope">
-              <p>{{ scope.row.gmtCreate.slice(0, 11) }}</p>
+              <div @click="openDateDialog(scope.row)">
+                <span>{{ scope.row.finishTime || " -- " }}</span>
+                <i class="el-icon-date"></i>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column label="进度上报时间" prop="declareStatus">
-            <template slot-scope="scope">
-              <p>
-                <i
-                  class="status"
-                  :class="{ active: scope.row.declareStatus === 2999 }"
-                ></i>
-                {{ declareStatus[scope.row.declareStatus] }}
-              </p>
-            </template>
+          <el-table-column
+            label="总投资（万元）"
+            prop="declareAmount"
+            v-if="userInfo.roleId === 3"
+          >
+          </el-table-column>
+          <el-table-column label="进度上报时间" prop="processTime">
           </el-table-column>
         </template>
       </Crud>
     </div>
-
-    <router-view />
+    <!-- 修改截止日期 -->
+    <el-dialog title="修改项目截止日期" :visible.sync="dateDialog">
+      <el-form ref="form" :model="form" label-width="180px">
+        <el-form-item label="选择截止日期" prop="deadline" :rules="rule.date">
+          <el-date-picker
+            v-model="form.deadline"
+            type="date"
+            placeholder="选择日期"
+            value-format="yyyy-MM-dd"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="closeDialog">取 消</el-button>
+        <el-button type="primary" @click="setDeadline"> 确 定 </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
-import { getProjectProgress } from "@/api/scheduleManage";
+import rule from "@/mixins/rule.js";
+import { getProjectProgress, setProjectDeadline } from "@/api/scheduleManage";
 
 export default {
+  mixins: [rule],
   data() {
     return {
       query: {
         address: "",
       },
       getMethod: getProjectProgress,
+
+      dateDialog: false,
+      form: {
+        editId: "",
+        deadline: "",
+      },
     };
   },
   computed: {
     ...mapGetters(["userInfo"]),
   },
-  methods: {},
+  methods: {
+    goDetail(row) {
+      const { id } = row.data;
+      if (id) this.$router.push({ name: "ScheduleDetail", query: { id } });
+    },
+    goHistory(row) {
+      const { projectId } = row.data;
+      if (projectId)
+        this.$router.push({
+          name: "HistorySchedule",
+          query: { id: projectId },
+        });
+    },
+    // 省级可修改项目截止日期
+    openDateDialog(row) {
+      if (this.userInfo.roleId === 1) {
+        this.form.editId = row.projectId;
+        this.dateDialog = true;
+      }
+    },
+    closeDialog() {
+      this.$refs.form.resetFields();
+      this.dateDialog = false;
+    },
+    setDeadline() {
+      if (this.userInfo.roleId !== 1) return;
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          const params = {
+            projectId: this.form.editId,
+            finishTime: this.form.deadline,
+          };
+          setProjectDeadline(params).then(() => {
+            this.$notify.success("修改成功");
+            this.$refs.crud.getItems();
+            this.closeDialog();
+          });
+        }
+      });
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -110,5 +195,10 @@ export default {
     font-weight: 400;
     color: #333333;
   }
+}
+.el-icon-date {
+  color: #409eff;
+  cursor: pointer;
+  margin-left: 3px;
 }
 </style>

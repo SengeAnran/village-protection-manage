@@ -232,7 +232,7 @@ export const defaultRoutes = [
       },
       {
         path: "/scheduleReport/new",
-        name: "newSchedule",
+        name: "NewSchedule",
         hidden: true,
         meta: {
           title: "上报",
@@ -243,7 +243,7 @@ export const defaultRoutes = [
       },
       {
         path: "/scheduleReport/detail",
-        name: "scheduleDetail",
+        name: "ScheduleDetail",
         hidden: true,
         meta: {
           title: "查看详情",
@@ -251,6 +251,17 @@ export const defaultRoutes = [
           activeMenu: "/scheduleReport/index",
         },
         component: () => import("@/views/ScheduleReport/Detail/index.vue"),
+      },
+      {
+        path: "/scheduleReport/history",
+        name: "HistorySchedule",
+        hidden: true,
+        meta: {
+          title: "历史进度",
+          icon: "jindushangbao",
+          activeMenu: "/scheduleReport/index",
+        },
+        component: () => import("@/views/ScheduleReport/History/index.vue"),
       },
     ],
   },
