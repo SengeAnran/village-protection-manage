@@ -56,6 +56,7 @@
         <template v-slot:crudAction>
           <el-button
             type="primary"
+            v-if="userInfo.roleId === 3"
             @click="$router.push({ name: 'NewSchedule' })"
             >上报
           </el-button>
@@ -79,7 +80,7 @@
                 class="progress-wrp"
                 :class="{
                   success: isSuccess(scope.row.percentage),
-                  fail: isFailed(scope.row.percentage),
+                  fail: isFailed(scope.row.percentage, scope.row.finishTime),
                 }"
               >
                 <span class="bg">
@@ -89,14 +90,22 @@
                   ></i>
                 </span>
                 <span class="value-wrp">
-                  <i class="num">60%</i>
+                  <i
+                    class="num"
+                    v-if="
+                      !isSuccess(scope.row.percentage) &&
+                      !isFailed(scope.row.percentage, scope.row.finishTime)
+                    "
+                  >
+                    60%
+                  </i>
                   <i
                     class="el-icon-success"
                     v-if="isSuccess(scope.row.percentage)"
                   ></i>
                   <i
                     class="el-icon-error"
-                    v-if="isFailed(scope.row.percentage)"
+                    v-if="isFailed(scope.row.percentage, scope.row.finishTime)"
                   ></i>
                 </span>
               </div>
@@ -232,7 +241,8 @@ export default {
     isSuccess(val) {
       return val >= 100;
     },
-    isFailed(deadline) {
+    isFailed(progress, deadline) {
+      if (this.isSuccess(progress)) return false;
       return new Date().getTime() > new Date(`${deadline} 23:59:59`).getTime();
     },
   },
@@ -283,14 +293,18 @@ export default {
     }
   }
 
-  .progress-wrp.success {
-    .bg .value {
-      background: #15be50;
+  &.success {
+    .bg {
+      .value {
+        background: #15be50;
+      }
     }
   }
-  .progress-wrp.fail {
-    .bg .value {
-      background: #d40000;
+  &.fail {
+    .bg {
+      .value {
+        background: #d40000;
+      }
     }
   }
 }

@@ -73,7 +73,7 @@ export const defaultRoutes = [
         meta: {
           activeMenu: "/villageApplication/index",
           title: "申报详情",
-          menuIds: [10002],
+          menuIds: [10002, 20001],
         },
         component: () =>
           import("@/views/VillageApplication/DeclareList/index.vue"),
@@ -85,7 +85,7 @@ export const defaultRoutes = [
         meta: {
           activeMenu: "/villageApplication/index",
           title: "审核详情",
-          menuIds: [20001],
+          menuIds: [10002, 20001],
         },
         component: () =>
           import("@/views/VillageApplication/AuditList/index.vue"),
@@ -108,7 +108,7 @@ export const defaultRoutes = [
         meta: {
           activeMenu: "/villageApplication/index",
           title: "详情",
-          menuIds: [10002],
+          menuIds: [10002, 20001],
         },
         component: () => import("@/views/VillageApplication/Detail/index.vue"),
       },

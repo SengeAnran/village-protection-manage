@@ -44,16 +44,18 @@
         </el-form-item>
       </div>
 
-      <h4 class="block-tit">推荐村简介</h4>
-      <div class="input-item-wrp">
-        <el-form-item label="推荐村简介" prop="introduction">
-          <p class="content">{{ form.introduction }}</p>
+      <div v-if="form.declareType !== 1001">
+        <h4 class="block-tit">推荐村简介</h4>
+        <div class="input-item-wrp">
+          <el-form-item label="推荐村简介" prop="introduction">
+            <p class="content">{{ form.introduction }}</p>
+          </el-form-item>
+        </div>
+        <h4 class="block-tit">村庄图片</h4>
+        <el-form-item label="村庄图片" prop="villagePicturesArr">
+          <ViewImg :data="form.villagePicturesFiles" />
         </el-form-item>
       </div>
-      <h4 class="block-tit">村庄图片</h4>
-      <el-form-item label="村庄图片" prop="villagePicturesArr">
-        <ViewImg :data="form.villagePicturesFiles" />
-      </el-form-item>
     </el-form>
   </div>
 </template>
