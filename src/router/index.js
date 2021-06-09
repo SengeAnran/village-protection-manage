@@ -28,7 +28,7 @@ router.beforeEach((to, from, next) => {
       // 如果没有获取路由信息，先获取路由信息而后跳转
       store.dispatch("user/getRouteList").then(() => {
         const list = lodash.cloneDeep(defaultRoutes);
-        const asyncRoutes = getAsyncRoutes(list);
+        const asyncRoutes = getAsyncRoutes(list, true);
         store.commit("user/SET_ROUTE_LIST", asyncRoutes);
         router.addRoutes([
           {
@@ -65,8 +65,14 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-const getAsyncRoutes = (list) => {
-  const permissionIds = store.getters.permissionList.map((item) => item.menuId);
+/**
+ * @param {Array} list 路由初始列表
+ * @param {Boolean} isRoot 是否为根路由
+ * @returns newList
+ */
+const getAsyncRoutes = (list, isRoot) => {
+  const permissionList = store.getters.permissionList;
+  const permissionIds = permissionList.map((item) => item.menuId);
   return list.filter((item) => {
     const menuIds = item.meta && item.meta.menuIds;
     // 没有设置权限id 或者权限id为空数组，则默认为有访问权限
@@ -76,6 +82,12 @@ const getAsyncRoutes = (list) => {
       menuIds.find((it) => permissionIds.includes(it));
     // 有访问权限
     if (hasPermit) {
+      if (isRoot) {
+        const result = permissionList.find((item) =>
+          menuIds.includes(item.menuId)
+        );
+        item.meta.title = result.menuName || item.meta.title;
+      }
       // 有children
       if (item.children && item.children.length) {
         // 默认重定向到第一个子元素
