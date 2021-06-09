@@ -9,9 +9,9 @@
       add-path="/projectApplication/save?type=add"
       edit-path="/projectApplication/save?type=edit"
       view-path="/projectApplication/detail"
-      :permission-add="100"
-      :permission-edit="100"
-      :permission-delete="100"
+      :permission-add="40001"
+      :permission-edit="40003"
+      :permission-delete="40004"
     >
       <template v-slot:search>
         <el-input
@@ -58,7 +58,7 @@
       </template>
 
       <template v-slot:tableAction="scope">
-        <el-link type="primary" @click="verify(scope)">审核</el-link>
+        <el-link v-permission="50002" type="primary" @click="verify(scope)">审核</el-link>
       </template>
     </Crud>
   </div>

@@ -10,9 +10,9 @@
       hide-add
       hide-edit
       hide-view
-      :permission-add="100"
-      :permission-edit="100"
-      :permission-delete="100"
+      :permission-add="900101"
+      :permission-edit="900103"
+      :permission-delete="900104"
     >
       <template v-slot:search>
         <el-input
@@ -40,7 +40,7 @@
       </template>
 
       <template v-slot:tableAction="scope">
-        <el-link class="mx-2" type="primary" @click="edit(scope)">编辑</el-link>
+        <el-link v-permission="900103" class="mx-2" type="primary" @click="edit(scope)">编辑</el-link>
       </template>
     </Crud>
 
