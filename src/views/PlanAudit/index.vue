@@ -6,13 +6,14 @@
       :get-method="getMethod"
       :query.sync="query"
       id-key="id"
-      add-path="/planAudit/save?type=add"
-      edit-path="/planAudit/save?type=edit"
-      view-path="/planAudit/detail"
       hide-add
+      hide-edit
+      hide-view
+      hide-delete
       :permission-add="100"
       :permission-edit="100"
       :permission-delete="100"
+      action-width="200px"
     >
       <template v-slot:search>
         <el-date-picker
@@ -52,14 +53,63 @@
           }}</template>
         </el-table-column>
       </template>
+
+      <template v-slot:tableAction="scope">
+        <el-link type="primary" @click="toVillage(scope)">村庄详情</el-link>
+        <el-link type="primary" @click="toAuditSave(scope, 'add')"
+          >评审</el-link
+        >
+        <el-link type="primary" @click="toAuditSave(scope, 'edit')"
+          >修改</el-link
+        >
+        <el-link type="primary" @click="toAuditDetail(scope)">评审详情</el-link>
+        <el-link type="primary" @click="openDialog(scope)">审核</el-link>
+        <el-link type="primary" @click="toVerifyDetail(scope)">审核详情</el-link>
+      </template>
     </Crud>
+    <el-dialog
+      :visible.sync="showDialog"
+      title="审核"
+      width="500px"
+      @close="resetForm"
+    >
+      <el-form ref="form" :model="form" label-position="top">
+        <el-form-item
+          label="是否通过该重点村规划评审："
+          :rules="rule.select"
+          prop="status"
+        >
+          <el-radio-group v-model="form.status">
+            <el-radio :label="1">通过</el-radio>
+            <el-radio :label="0">不通过</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="审核意见：">
+          <el-input
+            v-model="form.remark"
+            type="textarea"
+            :rows="5"
+            placeholder="请输入"
+          >
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <div>
+          <el-button @click="resetForm">取消</el-button>
+          <el-button type="primary" @click="submit">确定</el-button>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getPlanList } from "@/api/planningReview";
+import { getPlanList, verifyPlan } from "@/api/planningReview";
+import rule from "@/mixins/rule";
 
 export default {
+  mixins: [rule],
   data() {
     return {
       query: {
@@ -76,7 +126,58 @@ export default {
         2004: "市级审核通过，待省级审核",
         2999: "验收通过",
       },
+      showDialog: false,
+      form: {
+        id: "",
+        remark: "",
+        status: "",
+      },
     };
+  },
+  methods: {
+    toVillage(scope) {
+      this.$router.push(`/villageApplication/villageDetail?id=${scope.data.id}`);
+    },
+    toAuditSave(scope, type) {
+      this.$router.push(`/planAudit/save?type=${type}&id=${scope.data.id}`);
+    },
+    toAuditDetail(scope) {
+      this.$router.push(`/planAudit/detail?id=${scope.data.id}`);
+    },
+    toVerifyDetail(scope) {
+      this.$router.push(`/planAudit/verify/detail?id=${scope.data.id}&villageName=${scope.data.villageName}&reviewStatus=${scope.data.reviewStatus}&declareYear=${scope.data.declareYear}`);
+    },
+    openDialog(scope) {
+      this.form.id = scope.data.id;
+      this.showDialog = true;
+    },
+    resetForm() {
+      this.showDialog = false;
+      this.form = {
+        id: "",
+        remark: "",
+        status: "",
+      };
+      this.$refs.form.resetFields();
+    },
+    async submit() {
+      this.$refs.form.validate(async (valid) => {
+        if (valid) {
+          await verifyPlan(this.form);
+          this.$notify.success("提交成功");
+          this.resetForm();
+          this.$refs.crud.getItems();
+        }
+      });
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+::v-deep .table-action {
+  > * {
+    margin: 2px;
+  }
+}
+</style>

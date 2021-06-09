@@ -15,10 +15,11 @@
             class="inline-block"
             label="设计公司名称："
             :rules="rule.input"
+            prop="companyName"
           >
             <el-input
               class="input"
-              v-model="form.agritainmentActivty"
+              v-model="form.companyName"
               placeholder="请输入"
             />
           </el-form-item>
@@ -26,10 +27,11 @@
             class="inline-block"
             label="项目负责人："
             :rules="rule.input"
+            prop="projectManager"
           >
             <el-input
               class="input"
-              v-model="form.agritainmentActivty"
+              v-model="form.projectManager"
               placeholder="请输入"
             />
           </el-form-item>
@@ -37,29 +39,34 @@
             class="inline-block"
             label="县级负责人："
             :rules="rule.input"
+            prop="countyManager"
           >
             <el-input
               class="input"
-              v-model="form.agritainmentActivty"
+              v-model="form.countyManager"
               placeholder="请输入"
             />
           </el-form-item>
           <el-form-item
               label="规划文本（仅限PPT格式）："
               :rules="rule.upload"
+              prop="planFilesArr"
           >
             <UploadFile
-                @add="onFileAdd"
-                @remove="onFileRemove"
+                tip="支持格式：.ppt"
+                :data="form.planFilesArr"
+                @add="onFileAdd($event, 'planFilesArr')"
+                @remove="onFileRemove($event, 'planFilesArr')"
             />
           </el-form-item>
           <p class="ml-4 mb-2">县级规划评审情况</p>
           <el-form-item
               label="县级规划评审意见："
               :rules="rule.input"
+              prop="suggestion"
           >
             <el-input
-                v-model="form.agritainmentActivty"
+                v-model="form.suggestion"
                 type="textarea"
                 :rows="5"
                 placeholder="请输入"
@@ -68,25 +75,31 @@
           <el-form-item
               label="上传附件："
               :rules="rule.upload"
+              prop="suggestionFilesArr"
           >
             <UploadFile
-                @add="onFileAdd"
-                @remove="onFileRemove"
+                tip="支持格式：.doc, .docx, .ppt"
+                :data="form.suggestionFilesArr"
+                @add="onFileAdd($event, 'suggestionFilesArr')"
+                @remove="onFileRemove($event, 'suggestionFilesArr')"
             />
           </el-form-item>
           <p class="ml-4 mb-2">政府批复附件</p>
           <el-form-item
               label="上传政府批复附件："
               :rules="rule.upload"
+              prop="approvalFilesArr"
           >
             <UploadFile
-                @add="onFileAdd"
-                @remove="onFileRemove"
+                tip="支持格式：.doc, .docx, .ppt"
+                :data="form.approvalFilesArr"
+                @add="onFileAdd($event, 'approvalFilesArr')"
+                @remove="onFileRemove($event, 'approvalFilesArr')"
             />
           </el-form-item>
           <div class="text-center">
             <el-button plain @click="$router.back()">取消</el-button>
-            <el-button type="primary" @click="submit">发布</el-button>
+            <el-button type="primary" @click="submit">提交</el-button>
           </div>
         </div>
       </div>
@@ -98,7 +111,6 @@
 import rule from "@/mixins/rule";
 import _ from "lodash";
 import { getPlanDetail, createPlan, modifyPlan } from "@/api/planningReview";
-import { uploadFile } from "@/api/common";
 
 export default {
   mixins: [rule],
@@ -136,62 +148,48 @@ export default {
         return;
       }
       this.detail = await getPlanDetail(this.id);
-      this.form.id = this.detail.id;
-      this.form.agritainmentName = this.detail.agritainmentName;
-      this.form.creditCode = this.detail.creditCode;
-      this.form.agritainmentIntroduction = this.detail.agritainmentIntroduction;
-      this.form.agritainmentActivty = this.detail.agritainmentActivty;
-      this.form.showImageIdList = _.cloneDeep(this.detail.showImages);
-      this.form.hotelImageIdList = _.cloneDeep(this.detail.hotelImages);
-      this.form.diningImageIdList = _.cloneDeep(this.detail.diningImages);
-      this.form.cateImageIdList = _.cloneDeep(this.detail.cateImages);
-      this.form.goodsImageIdList = _.cloneDeep(this.detail.goodsImages);
+      this.form = _.cloneDeep(this.detail);
+      this.form.planFilesArr = _.cloneDeep(this.detail.planFilesList);
+      this.form.suggestionFilesArr = _.cloneDeep(this.detail.suggestionFilesList);
+      this.form.approvalFilesArr = _.cloneDeep(this.detail.approvalFilesList);
     },
-    onFileAdd(data) {
-      console.log(data);
+    onFileAdd(file, key) {
+      this.form[key].push(file);
     },
-    onFileRemove(data) {
-      console.log(data);
-    },
-    async upload(file, key) {
-      console.log(file, key);
-      const formData = new FormData();
-      formData.append("file", file);
-      await uploadFile();
+    onFileRemove(file, key) {
+      const index = this.form[key].findIndex((item) => {
+        return item.uid === file.uid || item.filePath === file.url;
+      });
+      if (index !== -1) {
+        this.form[key].splice(index, 1);
+      }
     },
     async submit() {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
           this.$myConfirm({
-            content: "是否确认发布",
+            content: "是否确认提交",
           }).then(async () => {
+            const form = _.cloneDeep(this.form);
+            form.villageDetailId = this.id
             // 图片数组处理
-            const imageObj = {};
             const keyArray = [
-              "cateImageIdList",
-              "diningImageIdList",
-              "goodsImageIdList",
-              "hotelImageIdList",
-              "showImageIdList",
+              "planFilesArr",
+              "suggestionFilesArr",
+              "approvalFilesArr",
             ];
             keyArray.forEach((key) => {
-              imageObj[key] = _.cloneDeep(this.form[key]);
+              form[key] = form[key].map((item) => item.fileId);
             });
             try {
-              keyArray.forEach((key) => {
-                this.form[key] = this.form[key].map((item) => item.fileId);
-              });
               if (this.type === "add") {
-                await createPlan(this.form);
+                await createPlan(form);
               } else {
-                await modifyPlan(this.form);
+                await modifyPlan(form);
               }
               this.$notify.success("发布成功");
               this.$router.back();
             } catch (err) {
-              keyArray.forEach((key) => {
-                this.form[key] = imageObj[key];
-              });
               console.log(err);
             }
           });
