@@ -25,7 +25,9 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <div style="text-align: left">
-              <el-link type="primary">项目详情</el-link>
+              <el-link type="primary" @click="goProjectDetail(scope.row)"
+                >项目详情</el-link
+              >
               <el-divider direction="vertical"></el-divider>
               <el-link type="primary" @click="goDetail(scope.row)">
                 查看进度
@@ -87,6 +89,14 @@ export default {
     goDetail(row) {
       const { id } = row;
       if (id) this.$router.push({ name: "ScheduleDetail", query: { id } });
+    },
+    // 项目详情
+    goProjectDetail(row) {
+      const { projectId } = row;
+      this.$router.push({
+        name: "ProjectApplicationDetail",
+        query: { id: projectId },
+      });
     },
   },
 };

@@ -32,7 +32,9 @@
 
         <template v-slot:tableAction="scope">
           <div>
-            <el-link type="primary" @click="goDetail(scope)">项目详情</el-link>
+            <el-link type="primary" @click="goProjectDetail(scope)"
+              >项目详情</el-link
+            >
             <el-divider direction="vertical"></el-divider>
             <el-link
               type="primary"
@@ -60,13 +62,45 @@
         </template>
 
         <template v-slot:table>
-          <el-table-column label="申报年度" prop="years"></el-table-column>
+          <el-table-column
+            min-width="60px"
+            label="申报年度"
+            prop="years"
+          ></el-table-column>
           <el-table-column label="项目所在地" prop="address"> </el-table-column>
           <el-table-column
             label="项目进度"
             prop="percentage"
             v-if="userInfo.roleId < 3"
+            min-width="110px"
           >
+            <template slot-scope="scope">
+              <div
+                class="progress-wrp"
+                :class="{
+                  success: isSuccess(scope.row.percentage),
+                  fail: isFailed(scope.row.percentage),
+                }"
+              >
+                <span class="bg">
+                  <i
+                    class="value"
+                    :style="`width:${scope.row.percentage}%`"
+                  ></i>
+                </span>
+                <span class="value-wrp">
+                  <i class="num">60%</i>
+                  <i
+                    class="el-icon-success"
+                    v-if="isSuccess(scope.row.percentage)"
+                  ></i>
+                  <i
+                    class="el-icon-error"
+                    v-if="isFailed(scope.row.percentage)"
+                  ></i>
+                </span>
+              </div>
+            </template>
           </el-table-column>
           <el-table-column
             label="资金拨付进度"
@@ -146,10 +180,20 @@ export default {
     ...mapGetters(["userInfo"]),
   },
   methods: {
+    // 进度详情
     goDetail(row) {
       const { id } = row.data;
       if (id) this.$router.push({ name: "ScheduleDetail", query: { id } });
     },
+    // 项目详情
+    goProjectDetail(row) {
+      const { projectId } = row.data;
+      this.$router.push({
+        name: "ProjectApplicationDetail",
+        query: { id: projectId },
+      });
+    },
+    // 历史详情
     goHistory(row) {
       const { projectId } = row.data;
       if (projectId)
@@ -185,6 +229,12 @@ export default {
         }
       });
     },
+    isSuccess(val) {
+      return val >= 100;
+    },
+    isFailed(deadline) {
+      return new Date().getTime() > new Date(`${deadline} 23:59:59`).getTime();
+    },
   },
 };
 </script>
@@ -200,5 +250,48 @@ export default {
   color: #409eff;
   cursor: pointer;
   margin-left: 3px;
+}
+.progress-wrp {
+  display: flex;
+  align-items: center;
+  .bg {
+    position: relative;
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: #f2f3f5;
+    border-radius: 2px;
+    margin-right: 8px;
+    overflow: hidden;
+    .value {
+      position: absolute;
+      display: block;
+      height: 4px;
+      top: 0;
+      left: 0;
+      background: #1492ff;
+    }
+  }
+  .value-wrp {
+    .el-icon-success {
+      font-size: 16px;
+      color: #15be50;
+    }
+    .el-icon-error {
+      font-size: 16px;
+      color: #d40000;
+    }
+  }
+
+  .progress-wrp.success {
+    .bg .value {
+      background: #15be50;
+    }
+  }
+  .progress-wrp.fail {
+    .bg .value {
+      background: #d40000;
+    }
+  }
 }
 </style>
