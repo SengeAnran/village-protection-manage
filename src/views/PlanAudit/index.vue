@@ -136,7 +136,7 @@ export default {
   },
   methods: {
     toVillage(scope) {
-      console.log(scope);
+      this.$router.push(`/villageApplication/villageDetail?id=${scope.data.id}`);
     },
     toAuditSave(scope, type) {
       this.$router.push(`/planAudit/save?type=${type}&id=${scope.data.id}`);
