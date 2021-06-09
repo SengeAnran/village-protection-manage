@@ -28,9 +28,9 @@
       hide-edit
       hide-view
       hide-delete
-      :permission-add="100"
-      :permission-edit="100"
-      :permission-delete="100"
+      :permission-add="0"
+      :permission-edit="80002"
+      :permission-delete="0"
       action-width="200px"
     >
       <template v-slot:search>
@@ -79,10 +79,10 @@
           @click="toProject(scope)"
           >项目详情</el-link
         >
-        <el-link type="primary" @click="toAuditSave(scope, 'add')"
+        <el-link v-permission="80002" type="primary" @click="toAuditSave(scope, 'add')"
           >验收</el-link
         >
-        <el-link type="primary" @click="toAuditSave(scope, 'edit')"
+        <el-link v-permission="80002" type="primary" @click="toAuditSave(scope, 'edit')"
           >修改</el-link
         >
         <el-link type="primary" @click="toVerifyDetail(scope)"

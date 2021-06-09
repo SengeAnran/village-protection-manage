@@ -10,9 +10,9 @@
       hide-edit
       hide-view
       hide-delete
-      :permission-add="100"
-      :permission-edit="100"
-      :permission-delete="100"
+      :permission-add="0"
+      :permission-edit="3002"
+      :permission-delete="0"
       action-width="200px"
     >
       <template v-slot:search>
@@ -56,10 +56,10 @@
 
       <template v-slot:tableAction="scope">
         <el-link type="primary" @click="toVillage(scope)">村庄详情</el-link>
-        <el-link type="primary" @click="toAuditSave(scope, 'add')"
+        <el-link v-permission="3002" type="primary" @click="toAuditSave(scope, 'add')"
           >评审</el-link
         >
-        <el-link type="primary" @click="toAuditSave(scope, 'edit')"
+        <el-link v-permission="3002" type="primary" @click="toAuditSave(scope, 'edit')"
           >修改</el-link
         >
         <el-link type="primary" @click="toAuditDetail(scope)">评审详情</el-link>
