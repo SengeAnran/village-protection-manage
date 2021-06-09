@@ -300,6 +300,29 @@ export const defaultRoutes = [
         },
         component: () => import("@/views/ProjectAcceptance/index"),
       },
+      {
+        path: "/projectAcceptance/save",
+        name: "ProjectAcceptanceSave",
+        hidden: true,
+        meta: {
+          title: "验收",
+          noCache: true,
+          activeMenu: "/projectAcceptance/index",
+          menuIds: [80002],
+        },
+        component: () => import("@/views/ProjectAcceptance/Save"),
+      },
+      {
+        path: "/projectAcceptance/verify/detail",
+        name: "ProjectAcceptanceVerifyDetail",
+        hidden: true,
+        meta: {
+          title: "验收详情",
+          noCache: true,
+          activeMenu: "/projectAcceptance/index",
+        },
+        component: () => import("@/views/ProjectAcceptance/VerifyDetail"),
+      },
     ],
   },
   // 系统管理
