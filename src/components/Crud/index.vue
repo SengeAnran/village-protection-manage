@@ -66,20 +66,29 @@
           <!--表格操作插槽-->
           <div class="table-action">
             <slot name="tableAction" :data="scope.row"></slot>
-            <!--          <el-button v-if="!hideEdit" type="text" @click="editItem(scope.row)">编辑</el-button>-->
-            <router-link
+            <el-link
               v-if="!hideEdit"
               v-permission="permissionEdit"
-              :to="{ path: editPath, query: { id: scope.row[idKey] } }"
+              type="primary"
+              @click="
+                $router.push({
+                  path: editPath,
+                  query: { id: scope.row[idKey] },
+                })
+              "
+              >编辑</el-link
             >
-              <el-link type="primary">编辑</el-link>
-            </router-link>
-            <router-link
+            <el-link
               v-if="!hideView"
-              :to="{ path: viewPath, query: { id: scope.row[idKey] } }"
+              type="primary"
+              @click="
+                $router.push({
+                  path: viewPath,
+                  query: { id: scope.row[idKey] },
+                })
+              "
+              >查看</el-link
             >
-              <el-link type="primary">查看</el-link>
-            </router-link>
             <el-link
               v-if="!hideDelete"
               v-permission="permissionDelete"

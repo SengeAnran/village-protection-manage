@@ -79,10 +79,10 @@
           @click="toProject(scope)"
           >项目详情</el-link
         >
-        <el-link v-permission="80002" type="primary" @click="toAuditSave(scope, 'add')"
+        <el-link v-if="scope.data.checkFlag" v-permission="80002" type="primary" @click="toAuditSave(scope, 'add')"
           >验收</el-link
         >
-        <el-link v-permission="80002" type="primary" @click="toAuditSave(scope, 'edit')"
+        <el-link v-if="scope.data.modifyFlag" v-permission="80002" type="primary" @click="toAuditSave(scope, 'edit')"
           >修改</el-link
         >
         <el-link type="primary" @click="toVerifyDetail(scope)"
