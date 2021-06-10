@@ -58,13 +58,20 @@
       </template>
 
       <template v-slot:tableAction="scope">
-        <el-link v-permission="50002" type="primary" @click="verify(scope)">审核</el-link>
+        <el-link
+          v-permission="50002"
+          type="primary"
+          v-if="canDeclare(scope.data.projectStatus)"
+          @click="verify(scope)"
+          >审核</el-link
+        >
       </template>
     </Crud>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { getProjectList, verifyProject } from "@/api/projectDeclare";
 
 export default {
@@ -89,6 +96,9 @@ export default {
         30003: "开发利用",
       },
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"]),
   },
   methods: {
     verify(scope) {
@@ -118,6 +128,17 @@ export default {
       });
       this.$notify.success("操作成功");
       this.$refs.crud.getItems();
+    },
+
+    // 审核
+    canDeclare(declareStatus) {
+      const { roleId } = this.userInfo;
+      if (roleId === 2) {
+        return declareStatus === 2001;
+      } else if (roleId === 1) {
+        return declareStatus === 2004;
+      }
+      return false;
     },
   },
 };

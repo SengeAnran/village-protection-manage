@@ -15,8 +15,8 @@
         :hideEdit="true"
         :hideView="true"
         :hideDelete="true"
-        :permission-add="30012"
-        :permission-edit="30013"
+        :permission-add="0"
+        :permission-edit="0"
         :permission-delete="10004"
       >
         <template v-slot:search>
@@ -66,19 +66,14 @@
             <el-divider direction="vertical"></el-divider>
             <el-link
               @click="goAuditResult(scope)"
-              v-if="
-                (userInfo.roleId === 3 && isAudit(scope.data.declareStatus)) ||
-                isAdminAudit(scope.data.declareStatus)
-              "
+              v-if="actionControl('审核详情', scope.data.declareStatus)"
               type="primary"
             >
               审核详情
             </el-link>
             <el-link
               @click="goAudit(scope)"
-              v-if="
-                userInfo.roleId !== 3 && !isAdminAudit(scope.data.declareStatus)
-              "
+              v-if="actionControl('审核', scope.data.declareStatus)"
               v-permission="20002"
               type="primary"
             >
@@ -86,7 +81,7 @@
             </el-link>
             <div
               style="display: inline-block"
-              v-if="!isAudit(scope.data.declareStatus) && userInfo.roleId === 3"
+              v-if="actionControl('修改', scope.data.declareStatus)"
               v-permission="10003"
             >
               <el-link @click="edit(scope.data)" type="primary"> 修改 </el-link>
@@ -94,7 +89,7 @@
             </div>
             <el-link
               @click="deleteItem(scope.data.id)"
-              v-if="!isAudit(scope.data.declareStatus) && userInfo.roleId === 3"
+              v-if="actionControl('删除', scope.data.declareStatus)"
               type="danger"
               v-permission="10003"
             >
@@ -105,7 +100,7 @@
 
         <template v-slot:crudAction>
           <el-dropdown
-            v-if="userInfo.roleId === 3"
+            v-permission="10001"
             class="mr-3"
             @command="newApplications"
           >
@@ -178,12 +173,32 @@ export default {
   },
   computed: {
     ...mapGetters(["userInfo"]),
+    roleId() {
+      return this.userInfo.roleId;
+    },
   },
   beforeMount() {
     this.declareType = DECLEAR_TYPE;
     this.declareStatus = DECLEAR_STATUS;
     this.declareTypeOpt = this.normalizeSelectOptions(DECLEAR_TYPE);
     this.declareStatusOpt = this.normalizeSelectOptions(DECLEAR_STATUS);
+
+    this.XIANJI_ACTION = {
+      申报详情: true,
+      修改: (declareStatus) => this._canModify(declareStatus, 3),
+      删除: (declareStatus) => this._canModify(declareStatus, 3),
+      审核详情: (declareStatus) => this._canViewDeclare(declareStatus, 3),
+    };
+    this.SHIJI_ACTION = {
+      申报详情: true,
+      审核: (declareStatus) => this._canDeclare(declareStatus, 2),
+      审核详情: (declareStatus) => this._canViewDeclare(declareStatus, 3),
+    };
+    this.ADMIN_ACTION = {
+      申报详情: true,
+      审核: (declareStatus) => this._canDeclare(declareStatus, 1),
+      审核详情: (declareStatus) => this._canViewDeclare(declareStatus, 1),
+    };
   },
   methods: {
     ...mapMutations("villageMange", ["changeDeclareList"]),
@@ -202,26 +217,7 @@ export default {
       const routerName = VILLAGE_LIST_ROUTER_NAME[Number(val)];
       routerName && this.$router.push({ name: routerName });
     },
-    // 普通用户，是否可修改
-    isAudit(status) {
-      return status !== 2001;
-    },
-    // 管理员 -- 是否需要审核
-    isAdminAudit(status) {
-      if (this.userInfo.roleId === 2) {
-        if (status === 2004 || status === 2999) {
-          return true;
-        } else {
-          return false;
-        }
-      } else if (this.userInfo.roleId === 1) {
-        if (status === 2999) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    },
+
     // 申报详情
     goDeclareRouter(scope) {
       const { id, declareYear, declareType } = scope.data;
@@ -266,6 +262,56 @@ export default {
           this.$refs.crud.getItems();
         });
       });
+    },
+
+    /**
+     * @desc 判断action按钮是否显示
+     * @param {String} actionName 按钮名称
+     * @param {Number} declareStatus 审核状态码
+     */
+    actionControl(actionName, declareStatus) {
+      if (this.roleId === 3) {
+        return (
+          this.XIANJI_ACTION[actionName] &&
+          this.XIANJI_ACTION[actionName](declareStatus)
+        );
+      } else if (this.roleId === 2) {
+        return (
+          this.SHIJI_ACTION[actionName] &&
+          this.SHIJI_ACTION[actionName](declareStatus)
+        );
+      } else if (this.roleId === 1) {
+        return (
+          this.ADMIN_ACTION[actionName] &&
+          this.ADMIN_ACTION[actionName](declareStatus)
+        );
+      }
+      return false;
+    },
+
+    // 修改、删除
+    _canModify(declareStatus, roleId) {
+      return roleId === 3 && declareStatus === 2001;
+    },
+    // 审核详情
+    _canViewDeclare(declareStatus, roleId) {
+      if (roleId === 3) {
+        return declareStatus !== 2001;
+      } else if (roleId === 2) {
+        return declareStatus === 2004 || declareStatus === 2999;
+      } else if (roleId === 1) {
+        return declareStatus === 2999;
+      }
+      return false;
+    },
+    // 审核
+    _canDeclare(declareStatus, roleId) {
+      if (roleId === 2) {
+        return !(declareStatus === 2004 || declareStatus === 2999);
+      } else if (roleId === 1) {
+        return !(declareStatus === 2999);
+      }
+      return false;
     },
   },
 };
