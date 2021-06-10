@@ -63,7 +63,7 @@
           >修改</el-link
         >
         <el-link type="primary" @click="toAuditDetail(scope)">评审详情</el-link>
-        <el-link type="primary" @click="openDialog(scope)">审核</el-link>
+        <el-link v-if="showVerify(scope.data.reviewStatus)" type="primary" @click="openDialog(scope)">审核</el-link>
         <el-link type="primary" @click="toVerifyDetail(scope)">审核详情</el-link>
       </template>
     </Crud>
@@ -107,6 +107,7 @@
 <script>
 import { getPlanList, verifyPlan } from "@/api/planningReview";
 import rule from "@/mixins/rule";
+import { mapGetters } from "vuex";
 
 export default {
   mixins: [rule],
@@ -134,7 +135,29 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapGetters(["userInfo"]),
+  },
   methods: {
+    showVerify(status) {
+      if (this.userInfo.roleId === 3) {
+        return false;
+      }
+      if (this.userInfo.roleId === 2) {
+        if (status === 2001) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      if (this.userInfo.roleId === 1) {
+        if (status === 2004) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    },
     toVillage(scope) {
       this.$router.push(`/villageApplication/villageDetail?id=${scope.data.id}`);
     },
