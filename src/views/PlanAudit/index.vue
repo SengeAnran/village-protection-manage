@@ -56,15 +56,40 @@
 
       <template v-slot:tableAction="scope">
         <el-link type="primary" @click="toVillage(scope)">村庄详情</el-link>
-        <el-link v-permission="3002" type="primary" @click="toAuditSave(scope, 'add')"
+        <el-link
+          v-permission="30002"
+          type="primary"
+          @click="toAuditSave(scope, 'add')"
+          v-if="scope.data.reviewStatus === 2000"
           >评审</el-link
         >
-        <el-link v-permission="3002" type="primary" @click="toAuditSave(scope, 'edit')"
+        <el-link
+          v-permission="30002"
+          type="primary"
+          v-if="userInfo.roleId === 3 && scope.data.reviewStatus === 2001"
+          @click="toAuditSave(scope, 'edit')"
           >修改</el-link
         >
-        <el-link type="primary" @click="toAuditDetail(scope)">评审详情</el-link>
-        <el-link v-if="showVerify(scope.data.reviewStatus)" type="primary" @click="openDialog(scope)">审核</el-link>
-        <el-link type="primary" @click="toVerifyDetail(scope)">审核详情</el-link>
+        <el-link
+          type="primary"
+          v-if="
+            scope.data.reviewStatus !== 2001 && scope.data.reviewStatus !== 2000
+          "
+          @click="toAuditDetail(scope)"
+          >评审详情</el-link
+        >
+        <el-link
+          v-if="showVerify(scope.data.reviewStatus)"
+          type="primary"
+          @click="openDialog(scope)"
+          >审核</el-link
+        >
+        <el-link
+          type="primary"
+          v-if="scope.data.reviewStatus > 2001"
+          @click="toVerifyDetail(scope)"
+          >审核详情</el-link
+        >
       </template>
     </Crud>
     <el-dialog
@@ -159,7 +184,9 @@ export default {
       }
     },
     toVillage(scope) {
-      this.$router.push(`/villageApplication/villageDetail?id=${scope.data.id}`);
+      this.$router.push(
+        `/villageApplication/villageDetail?id=${scope.data.id}`
+      );
     },
     toAuditSave(scope, type) {
       this.$router.push(`/planAudit/save?type=${type}&id=${scope.data.id}`);
@@ -168,7 +195,9 @@ export default {
       this.$router.push(`/planAudit/detail?id=${scope.data.id}`);
     },
     toVerifyDetail(scope) {
-      this.$router.push(`/planAudit/verify/detail?id=${scope.data.id}&villageName=${scope.data.villageName}&reviewStatus=${scope.data.reviewStatus}&declareYear=${scope.data.declareYear}`);
+      this.$router.push(
+        `/planAudit/verify/detail?id=${scope.data.id}&villageName=${scope.data.villageName}&reviewStatus=${scope.data.reviewStatus}&declareYear=${scope.data.declareYear}`
+      );
     },
     openDialog(scope) {
       this.form.id = scope.data.id;
