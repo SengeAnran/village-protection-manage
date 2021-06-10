@@ -17,7 +17,7 @@
         :hideDelete="true"
         :permission-add="30012"
         :permission-edit="30013"
-        :permission-delete="30014"
+        :permission-delete="10004"
       >
         <template v-slot:search>
           <div class="inline-flex mb-6 pl-0">
