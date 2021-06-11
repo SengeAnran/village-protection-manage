@@ -13,7 +13,7 @@
             :type="index === active ? 'primary' : 'info'"
             :effect="index === active ? 'dark' : 'light'"
             size="large"
-            class="mr-4"
+            class="mr-4 cursor-pointer"
             @click="active = index"
             >{{ item }}</el-tag
           >
@@ -39,7 +39,7 @@
                 type="year"
                 value-format="yyyy"
                 placeholder="请选择"
-                style="width: 300px;"
+                style="width: 300px"
               ></el-date-picker>
             </el-form-item>
             <el-form-item
@@ -51,13 +51,13 @@
               <el-select
                 v-model="form1.projectType"
                 placeholder="请选择"
-                style="width: 300px;"
+                style="width: 300px"
               >
                 <el-option
-                    v-for="item in projectTypeList"
-                    :key="item.value"
-                    :value="item.value"
-                    :label="item.label"
+                  v-for="item in projectTypeList"
+                  :key="item.value"
+                  :value="item.value"
+                  :label="item.label"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -70,13 +70,13 @@
               <el-select
                 v-model="form1.villageDetailId"
                 placeholder="请选择"
-                style="width: 300px;"
+                style="width: 300px"
               >
                 <el-option
-                    v-for="item in projectAddressList"
-                    :key="item.villageDetailId"
-                    :value="item.villageDetailId"
-                    :label="item.address + item.villageName"
+                  v-for="item in projectAddressList"
+                  :key="item.villageDetailId"
+                  :value="item.villageDetailId"
+                  :label="item.address + item.villageName"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -99,7 +99,7 @@
             <el-form-item
               class="inline-block"
               label="负责人联系电话："
-              :rules="rule.input"
+              :rules="rule.mobile"
               prop="managerMobile"
             >
               <el-input
@@ -137,7 +137,7 @@
             <el-form-item
               class="inline-block"
               label="主管部门联系电话："
-              :rules="rule.input"
+              :rules="rule.mobile"
               prop="departmentMobile"
             >
               <el-input
@@ -163,7 +163,7 @@
             <el-form-item
               class="inline-block"
               label="施工单位联系电话："
-              :rules="rule.input"
+              :rules="rule.mobile"
               prop="companyMobile"
             >
               <el-input
@@ -274,7 +274,11 @@
             >
             </el-alert>
             <el-form-item :rules="rule.upload" prop="imagesArr">
-              <UploadImg :data="form1.imagesArr" @add="onImageAdd" @remove="onImageRemove" />
+              <UploadImg
+                :data="imageList"
+                @add="onImageAdd"
+                @remove="onImageRemove"
+              />
             </el-form-item>
           </div>
           <div class="text-right">
@@ -290,7 +294,11 @@
           label-width="100px"
           label-position="top"
         >
-          <el-form-item label="项目村概况：" :rules="rule.input" prop="villageOverview">
+          <el-form-item
+            label="项目村概况："
+            :rules="rule.input"
+            prop="villageOverview"
+          >
             <el-input
               v-model="form2.villageOverview"
               type="textarea"
@@ -298,7 +306,11 @@
               :rows="5"
             />
           </el-form-item>
-          <el-form-item label="投资必要性分析：" :rules="rule.input" prop="investAnalysis">
+          <el-form-item
+            label="投资必要性分析："
+            :rules="rule.input"
+            prop="investAnalysis"
+          >
             <el-input
               v-model="form2.investAnalysis"
               type="textarea"
@@ -306,7 +318,11 @@
               :rows="5"
             />
           </el-form-item>
-          <el-form-item label="建设项目：" :rules="rule.input" prop="projectDetails">
+          <el-form-item
+            label="建设项目："
+            :rules="rule.input"
+            prop="projectDetails"
+          >
             <el-input
               v-model="form2.projectDetails"
               type="textarea"
@@ -314,7 +330,11 @@
               :rows="5"
             />
           </el-form-item>
-          <el-form-item label="建设方案：" :rules="rule.input" prop="projectPlan">
+          <el-form-item
+            label="建设方案："
+            :rules="rule.input"
+            prop="projectPlan"
+          >
             <el-input
               v-model="form2.projectPlan"
               type="textarea"
@@ -322,7 +342,11 @@
               :rows="5"
             />
           </el-form-item>
-          <el-form-item label="政府补助资金支持环节：" :rules="rule.input" prop="financialSupport">
+          <el-form-item
+            label="政府补助资金支持环节："
+            :rules="rule.input"
+            prop="financialSupport"
+          >
             <el-input
               v-model="form2.financialSupport"
               type="textarea"
@@ -330,7 +354,11 @@
               :rows="5"
             />
           </el-form-item>
-          <el-form-item label="社会效益分析：" :rules="rule.input" prop="benefitAnalysis">
+          <el-form-item
+            label="社会效益分析："
+            :rules="rule.input"
+            prop="benefitAnalysis"
+          >
             <el-input
               v-model="form2.benefitAnalysis"
               type="textarea"
@@ -690,7 +718,12 @@
 <script>
 import rule from "@/mixins/rule";
 import _ from "lodash";
-import { getProjectDetail, createProject, modifyProject, getAddress } from "@/api/projectDeclare";
+import {
+  getProjectDetail,
+  createProject,
+  modifyProject,
+  getAddress,
+} from "@/api/projectDeclare";
 
 export default {
   mixins: [rule],
@@ -723,6 +756,7 @@ export default {
         otherFee: undefined,
         imagesArr: [],
       },
+      imageList: [], // 回显图片
       // 可行性摘要
       form2: {
         villageOverview: "",
@@ -786,6 +820,7 @@ export default {
       this.form3 = _.cloneDeep(this.detail.checkListInfo);
       this.form1.years = this.form1.years.toString();
       this.form1.imagesArr = _.cloneDeep(this.detail.baseInfo.imagesFilesList);
+      this.imageList = _.cloneDeep(this.detail.baseInfo.imagesFilesList);
     },
     onImageAdd(file) {
       this.form1.imagesArr.push(file);
@@ -828,7 +863,9 @@ export default {
               checkListInfo: _.cloneDeep(this.form3),
             };
             // 图片数组处理
-            form.baseInfo.imagesArr = form.baseInfo.imagesArr.map((item) => item.fileId);
+            form.baseInfo.imagesArr = form.baseInfo.imagesArr.map(
+              (item) => item.fileId
+            );
             try {
               if (this.type === "add") {
                 await createProject(form);
