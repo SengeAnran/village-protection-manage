@@ -14,9 +14,9 @@
         :hideEdit="true"
         :hideView="true"
         :hideDelete="true"
-        :permission-add="30012"
-        :permission-edit="30013"
-        :permission-delete="30014"
+        :permission-add="0"
+        :permission-edit="0"
+        :permission-delete="0"
       >
         <template v-slot:search>
           <div class="inline-flex items-center mb-6 pl-0">
@@ -57,6 +57,7 @@
           <el-button
             type="primary"
             v-if="userInfo.roleId === 3"
+            v-permission="60001"
             @click="$router.push({ name: 'NewSchedule' })"
             >上报
           </el-button>
@@ -127,9 +128,13 @@
             align="center"
           >
             <template slot-scope="scope">
-              <div @click="openDateDialog(scope.row)">
+              <div>
                 <span>{{ scope.row.finishTime || " -- " }}</span>
-                <i class="el-icon-date"></i>
+                <i
+                  @click="openDateDialog(scope.row)"
+                  v-permission="70002"
+                  class="el-icon-date"
+                ></i>
               </div>
             </template>
           </el-table-column>

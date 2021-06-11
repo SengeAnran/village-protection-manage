@@ -12,9 +12,9 @@
       add-path="/projectApplication/save?type=add"
       edit-path="/projectApplication/save?type=edit"
       view-path="/projectApplication/detail"
-      :permission-add="40001"
-      :permission-edit="40003"
-      :permission-delete="40004"
+      :permission-add="0"
+      :permission-edit="0"
+      :permission-delete="0"
     >
       <template v-slot:search>
         <el-input
@@ -126,7 +126,7 @@ export default {
     this.XIANJI_ACTION = {
       详情: () => true,
       修改: (status) => this._canModify(status, 3),
-      删除: (status) => this._canDelete(status, 3),
+      // 删除: (status) => this._canDelete(status, 3),  // 没有删除接口
       审核详情: (status) => this._canViewDeclare(status, 3),
     };
     this.SHIJI_ACTION = {
