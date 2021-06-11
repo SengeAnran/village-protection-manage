@@ -67,24 +67,20 @@
         <div
           class="inline"
           v-if="actionControl('修改', scope.data.projectStatus)"
+          v-permission="40003"
         >
           <el-divider direction="vertical"></el-divider>
-          <el-link
-            v-permission="40003"
-            type="primary"
-            @click="goModify(scope.data.id)"
-          >
+          <el-link type="primary" @click="goModify(scope.data.id)">
             修改
           </el-link>
         </div>
         <div
           class="inline"
           v-if="actionControl('修改', scope.data.projectStatus)"
+          v-permission="50002"
         >
           <el-divider direction="vertical"></el-divider>
-          <el-link v-permission="50002" type="primary" @click="verify(scope)">
-            审核
-          </el-link>
+          <el-link type="primary" @click="verify(scope)"> 审核 </el-link>
         </div>
       </template>
     </Crud>
