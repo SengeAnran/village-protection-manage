@@ -6,6 +6,9 @@
       :get-method="getMethod"
       :query.sync="query"
       id-key="id"
+      hide-view
+      hide-edit
+      hide-delete
       add-path="/projectApplication/save?type=add"
       edit-path="/projectApplication/save?type=edit"
       view-path="/projectApplication/detail"
@@ -58,13 +61,31 @@
       </template>
 
       <template v-slot:tableAction="scope">
-        <el-link
-          v-permission="50002"
-          type="primary"
-          v-if="canDeclare(scope.data.projectStatus)"
-          @click="verify(scope)"
-          >审核</el-link
+        <el-link type="primary" @click="goDetail(scope.data.id)">
+          详情
+        </el-link>
+        <div
+          class="inline"
+          v-if="actionControl('修改', scope.data.projectStatus)"
         >
+          <el-divider direction="vertical"></el-divider>
+          <el-link
+            v-permission="40003"
+            type="primary"
+            @click="goModify(scope.data.id)"
+          >
+            修改
+          </el-link>
+        </div>
+        <div
+          class="inline"
+          v-if="actionControl('修改', scope.data.projectStatus)"
+        >
+          <el-divider direction="vertical"></el-divider>
+          <el-link v-permission="50002" type="primary" @click="verify(scope)">
+            审核
+          </el-link>
+        </div>
       </template>
     </Crud>
   </div>
@@ -100,7 +121,37 @@ export default {
   computed: {
     ...mapGetters(["userInfo"]),
   },
+
+  beforeMount() {
+    this.XIANJI_ACTION = {
+      详情: () => true,
+      修改: (status) => this._canModify(status, 3),
+      删除: (status) => this._canDelete(status, 3),
+      审核详情: (status) => this._canViewDeclare(status, 3),
+    };
+    this.SHIJI_ACTION = {
+      详情: () => true,
+      审核: (status) => this._canDeclare(status, 2),
+    };
+    this.ADMIN_ACTION = {
+      详情: () => true,
+      审核: (status) => this._canDeclare(status, 1),
+    };
+  },
+
   methods: {
+    goDetail(id) {
+      this.$router.push({
+        name: "ProjectApplicationDetail",
+        query: { id },
+      });
+    },
+    goModify(id) {
+      this.$router.push({
+        name: "ProjectApplicationSave",
+        query: { id },
+      });
+    },
     verify(scope) {
       this.$confirm(
         "是否通过该项目审核，若审核通过则项目提交至省级。",
@@ -130,15 +181,52 @@ export default {
       this.$refs.crud.getItems();
     },
 
-    // 审核
-    canDeclare(declareStatus) {
-      const { roleId } = this.userInfo;
-      if (roleId === 2) {
-        return declareStatus === 2001;
-      } else if (roleId === 1) {
-        return declareStatus === 2004;
+    /**
+     * @desc 判断action按钮是否显示
+     * @param {String} actionName 按钮名称
+     * @param {Number} declareStatus 审核状态码
+     */
+    actionControl(actionName, declareStatus) {
+      if (this.roleId === 3) {
+        return (
+          this.XIANJI_ACTION[actionName] &&
+          this.XIANJI_ACTION[actionName](declareStatus)
+        );
+      } else if (this.roleId === 2) {
+        return (
+          this.SHIJI_ACTION[actionName] &&
+          this.SHIJI_ACTION[actionName](declareStatus)
+        );
+      } else if (this.roleId === 1) {
+        return (
+          this.ADMIN_ACTION[actionName] &&
+          this.ADMIN_ACTION[actionName](declareStatus)
+        );
       }
       return false;
+    },
+    // 可修改
+    _canModify(status, roleId) {
+      return roleId === 3 && status === 2001;
+    },
+    // 可删除
+    _canDelete(status, roleId) {
+      return (
+        roleId === 3 && (status === 2001 || status === 2002 || status === 2003)
+      );
+    },
+    // 审核详情
+    _canViewDeclare(status, roleId) {
+      return roleId === 3 && status > 2001;
+    },
+    // 可审核
+    _canDeclare(status, roleId) {
+      if (roleId === 2) {
+        return status === 2001;
+      } else if (roleId === 1) {
+        return status === 2004;
+      }
+      return;
     },
   },
 };

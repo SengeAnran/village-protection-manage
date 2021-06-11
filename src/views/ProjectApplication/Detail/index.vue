@@ -13,7 +13,7 @@
             :type="index === active ? 'primary' : 'info'"
             :effect="index === active ? 'dark' : 'light'"
             size="large"
-            class="mr-4"
+            class="mr-4 cursor-pointer"
             @click="active = index"
             >{{ item }}</el-tag
           >

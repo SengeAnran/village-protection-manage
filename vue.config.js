@@ -2,7 +2,7 @@ const path = require("path");
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
-const name = "历史文化村落保护管理系统";
+const name = "历史文化村落保护管理应用";
 
 module.exports = {
   productionSourceMap: false,

@@ -184,18 +184,18 @@ export default {
     this.declareStatusOpt = this.normalizeSelectOptions(DECLEAR_STATUS);
 
     this.XIANJI_ACTION = {
-      申报详情: true,
+      申报详情: () => true,
       修改: (declareStatus) => this._canModify(declareStatus, 3),
       删除: (declareStatus) => this._canModify(declareStatus, 3),
       审核详情: (declareStatus) => this._canViewDeclare(declareStatus, 3),
     };
     this.SHIJI_ACTION = {
-      申报详情: true,
+      申报详情: () => true,
       审核: (declareStatus) => this._canDeclare(declareStatus, 2),
       审核详情: (declareStatus) => this._canViewDeclare(declareStatus, 3),
     };
     this.ADMIN_ACTION = {
-      申报详情: true,
+      申报详情: () => true,
       审核: (declareStatus) => this._canDeclare(declareStatus, 1),
       审核详情: (declareStatus) => this._canViewDeclare(declareStatus, 1),
     };

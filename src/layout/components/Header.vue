@@ -1,6 +1,6 @@
 <template>
   <div class="header-wrp">
-    <h2 class="title">历史文化村落保护管理系统</h2>
+    <h2 class="title">历史文化村落保护管理应用</h2>
     <div class="right-menu">
       <Notify style="margin-right: 20px" />
       <el-dropdown
