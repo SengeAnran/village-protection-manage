@@ -55,15 +55,70 @@
         </el-select>
       </template>
 
-      <template v-slot:table>
-        <el-table-column label="申报年度" prop="years"></el-table-column>
-        <el-table-column label="项目所在地" prop="address"></el-table-column>
-        <el-table-column label="申报时间" prop="gmtCreate"></el-table-column>
-        <el-table-column label="状态" prop="reviewStatus">
-          <template slot-scope="scope">{{
-            reviewStatusMap[scope.row.checkStatus]
-          }}</template>
+      <template
+        v-slot:table
+        v-if="
+          query.declareType === 1001 ||
+          (query.declareType === 1002 && userInfo.roleId !== 3)
+        "
+      >
+        <!-- S 一般村申报 -->
+        <el-table-column
+          label="申报年度"
+          prop="years"
+          key="table1"
+        ></el-table-column>
+        <el-table-column
+          label="项目所在地"
+          prop="address"
+          key="table1"
+        ></el-table-column>
+        <el-table-column
+          label="申报时间"
+          prop="gmtCreate"
+          key="table1"
+        ></el-table-column>
+        <el-table-column label="状态" prop="reviewStatus" key="table1">
+          <template slot-scope="scope">
+            <p v-if="scope.row.checkStatus">
+              <i
+                class="status"
+                :class="{
+                  active: scope.row.checkStatus === 2999,
+                  failed: [2003, 2002].includes(scope.row.checkStatus),
+                }"
+              ></i>
+              {{ reviewStatusMap[scope.row.checkStatus] }}
+            </p>
+          </template>
         </el-table-column>
+        <!-- E 一般村申报 -->
+      </template>
+      <template v-slot:table v-else>
+        <!-- S 重点村申报 -->
+        <el-table-column label="项目所在地" prop="address" key="table2">
+          <template slot-scope="scope">
+            <div class="address-wrp">
+              <p class="addressCon">
+                <span class="address">{{ scope.row.address }}</span>
+                <span class="years">{{ scope.row.years }}年度</span>
+              </p>
+              <p class="createTime">申报时间：{{ scope.row.gmtCreate }}</p>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :min-width="40"
+          label="总投资"
+          prop="totalFee"
+          key="table2"
+        ></el-table-column>
+        <el-table-column label="进度" align="center" key="table2">
+          <template slot-scope="scope">
+            <Steps :status="scope.row.checkStatus" />
+          </template>
+        </el-table-column>
+        <!-- E 重点村申报 -->
       </template>
 
       <template v-slot:tableAction="scope">
@@ -119,9 +174,11 @@
 import { mapGetters } from "vuex";
 import { getAcceptanceList } from "@/api/projectAcceptance";
 import rule from "@/mixins/rule";
+import Steps from "./components/Steps.vue";
 
 export default {
   mixins: [rule],
+  components: { Steps },
   data() {
     return {
       query: {
@@ -254,6 +311,51 @@ export default {
 ::v-deep .table-action {
   > * {
     margin: 2px;
+  }
+}
+.status {
+  display: inline-block;
+  margin-right: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 100%;
+  background: #ccc;
+  &.active {
+    background: #15be50;
+  }
+  &.failed {
+    background: #d40000;
+  }
+}
+.address-wrp {
+  .addressCon {
+    display: flex;
+    margin-bottom: 8px;
+    .address {
+      color: #333333;
+      line-height: 22px;
+    }
+    .years {
+      display: inline-block;
+      width: 70px;
+      height: 22px;
+      background: #fff5ed;
+      border-radius: 2px;
+      border: 1px solid #f1924e;
+      color: #ff6b00;
+      line-height: 20px;
+      text-align: center;
+      margin-left: 4px;
+    }
+  }
+  .createTime {
+    color: #999999;
+    line-height: 22px;
+  }
+}
+.process-step {
+  ::v-deep .el-step__title {
+    font-size: 14px;
   }
 }
 </style>
