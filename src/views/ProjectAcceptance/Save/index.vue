@@ -13,7 +13,11 @@
           <el-form-item class="inline-block" label="申报年度：">
             <p class="input">{{ year }}</p>
           </el-form-item>
-          <el-form-item class="inline-block" label="总投资：">
+          <el-form-item
+            class="inline-block"
+            label="总投资："
+            v-if="declareType === 1002"
+          >
             <p class="input">{{ total }}</p>
           </el-form-item>
           <el-form-item class="inline-block" label="申报日期：">
@@ -25,7 +29,11 @@
           <el-form-item class="inline-block" label="项目类型：">
             <p class="input">{{ declareTypeMap[declareType] }}</p>
           </el-form-item>
-          <el-form-item class="inline-block" label="验收详情：">
+          <el-form-item
+            class="inline-block"
+            label="验收详情："
+            v-if="userInfo.roleId !== 3"
+          >
             <el-button type="primary" @click="toVerifyDetail"
               >查看验收详情</el-button
             >
@@ -75,6 +83,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import rule from "@/mixins/rule";
 import _ from "lodash";
 import {
@@ -112,6 +121,9 @@ export default {
       address: "",
       declareType: "",
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"]),
   },
   created() {
     this.type = this.$route.query.type;

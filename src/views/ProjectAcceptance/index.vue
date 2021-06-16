@@ -66,19 +66,25 @@
         <el-table-column
           label="申报年度"
           prop="years"
-          key="table1"
+          key="years"
         ></el-table-column>
         <el-table-column
           label="项目所在地"
           prop="address"
-          key="table1"
+          key="address"
+        ></el-table-column>
+        <el-table-column
+          v-if="query.declareType === 1002"
+          label="总投资（万元）"
+          prop="totalFee"
+          key="totalFee"
         ></el-table-column>
         <el-table-column
           label="申报时间"
           prop="gmtCreate"
-          key="table1"
+          key="gmtCreate"
         ></el-table-column>
-        <el-table-column label="状态" prop="reviewStatus" key="table1">
+        <el-table-column label="状态" prop="reviewStatus" key="reviewStatus">
           <template slot-scope="scope">
             <p v-if="scope.row.checkStatus">
               <i
@@ -96,7 +102,7 @@
       </template>
       <template v-slot:table v-else>
         <!-- S 重点村申报 -->
-        <el-table-column label="项目所在地" prop="address" key="table2">
+        <el-table-column label="项目所在地" prop="address" key="address2">
           <template slot-scope="scope">
             <div class="address-wrp">
               <p class="addressCon">
@@ -111,9 +117,9 @@
           :min-width="40"
           label="总投资"
           prop="totalFee"
-          key="table2"
+          key="totalFee2"
         ></el-table-column>
-        <el-table-column label="进度" align="center" key="table2">
+        <el-table-column label="进度" align="center" key="checkStatus2">
           <template slot-scope="scope">
             <Steps :status="scope.row.checkStatus" />
           </template>
@@ -122,19 +128,21 @@
       </template>
 
       <template v-slot:tableAction="scope">
-        <!-- <el-link
-          v-if="query.declareType === 1001"
-          type="primary"
-          @click="toVillage(scope)"
-          >村庄详情</el-link
-        > -->
-        <el-link
-          v-if="actionControl('项目详情', scope.data.checkStatus)"
-          type="primary"
-          @click="toProject(scope)"
-          >项目详情</el-link
+        <div class="inline" v-if="query.declareType === 1001">
+          <el-link type="primary" @click="toVillage(scope)">村庄详情</el-link>
+          <el-divider direction="vertical"></el-divider>
+        </div>
+        <div
+          class="inline"
+          v-if="
+            actionControl('项目详情', scope.data.checkStatus) &&
+            query.declareType === 1002
+          "
         >
-        <el-divider direction="vertical"></el-divider>
+          <el-link type="primary" @click="toProject(scope)">项目详情</el-link>
+          <el-divider direction="vertical"></el-divider>
+        </div>
+
         <el-link
           v-if="actionControl('验收', scope.data.checkStatus)"
           v-permission="auditPermission"
