@@ -285,12 +285,14 @@ export default {
     },
     // 修改
     _canModify(reviewStatus, roleId) {
-      return roleId === 3 && reviewStatus === 2001;
+      return roleId === 3 && [2001, 2002, 2003].includes(reviewStatus);
     },
     // 评审详情
     _canViewReview(reviewStatus, roleId) {
       if (roleId === 3) {
-        return reviewStatus > 2001; // 2001 可修改，此时不展示详情，可从修改里看
+        return (
+          reviewStatus > 2001 && reviewStatus !== 2002 && reviewStatus !== 2003
+        ); // 2001 可修改，此时不展示详情，可从修改里看
       } else if (roleId < 3) {
         return reviewStatus > 2000; // 县级提交后就可以看评审详情
       }
@@ -307,7 +309,9 @@ export default {
     // 审核详情
     _canViewDeclare(reviewStatus, roleId) {
       if (roleId === 3) {
-        return reviewStatus > 2001;
+        return (
+          reviewStatus > 2001 && reviewStatus !== 2002 && reviewStatus !== 2003
+        );
       } else if (roleId === 2) {
         return reviewStatus > 2001;
       } else if (roleId === 1) {

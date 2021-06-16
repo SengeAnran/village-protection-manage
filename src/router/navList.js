@@ -2,6 +2,11 @@ import BlankRouteNode from "./BlankRouteNode";
 
 export const constantRoutes = [
   {
+    name: "notFound",
+    path: "/404",
+    component: () => import("../views/NotFound"),
+  },
+  {
     name: "login",
     path: "/login",
     component: () => import("@/views/Login"),
