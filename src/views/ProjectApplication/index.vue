@@ -48,6 +48,12 @@
         </el-select>
       </template>
 
+      <template v-slot:crudAction v-if="userInfo.roleId === 3">
+        <el-button type="primary" v-permission="40001" @click="goAdd"
+          >新建申报
+        </el-button>
+      </template>
+
       <template v-slot:table>
         <el-table-column label="申报年度" prop="years"></el-table-column>
         <el-table-column label="项目所在地" prop="address"></el-table-column>
@@ -67,7 +73,6 @@
         <div
           class="inline"
           v-if="actionControl('修改', scope.data.projectStatus)"
-          v-permission="40003"
         >
           <el-divider direction="vertical"></el-divider>
           <el-link type="primary" @click="goModify(scope.data.id)">
@@ -76,7 +81,16 @@
         </div>
         <div
           class="inline"
-          v-if="actionControl('修改', scope.data.projectStatus)"
+          v-if="actionControl('删除', scope.data.projectStatus)"
+        >
+          <el-divider direction="vertical"></el-divider>
+          <el-link type="primary" @click="goDelete(scope.data.id)">
+            删除
+          </el-link>
+        </div>
+        <div
+          class="inline"
+          v-if="actionControl('审核', scope.data.projectStatus)"
           v-permission="50002"
         >
           <el-divider direction="vertical"></el-divider>
@@ -89,7 +103,11 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getProjectList, verifyProject } from "@/api/projectDeclare";
+import {
+  getProjectList,
+  verifyProject,
+  deleteProject,
+} from "@/api/projectDeclare";
 
 export default {
   data() {
@@ -122,7 +140,7 @@ export default {
     this.XIANJI_ACTION = {
       详情: () => true,
       修改: (status) => this._canModify(status, 3),
-      // 删除: (status) => this._canDelete(status, 3),  // 没有删除接口
+      删除: (status) => this._canDelete(status, 3), // 没有删除接口
       审核详情: (status) => this._canViewDeclare(status, 3),
     };
     this.SHIJI_ACTION = {
@@ -136,6 +154,11 @@ export default {
   },
 
   methods: {
+    goAdd() {
+      this.$router.push({
+        path: "/projectApplication/save?type=add",
+      });
+    },
     goDetail(id) {
       this.$router.push({
         name: "ProjectApplicationDetail",
@@ -144,8 +167,20 @@ export default {
     },
     goModify(id) {
       this.$router.push({
-        name: "ProjectApplicationSave",
+        path: "/projectApplication/save?type=edit",
         query: { id },
+      });
+    },
+    // 删除
+    goDelete(id) {
+      this.$confirm("是否删除该条数据？", "提示", {
+        type: "warning",
+      }).then(async () => {
+        const deleteId = Array.isArray(id) ? id : [id];
+        deleteProject(deleteId).then(() => {
+          this.$notify.success("删除成功");
+          this.$refs.crud.getItems();
+        });
       });
     },
     verify(scope) {
@@ -183,17 +218,17 @@ export default {
      * @param {Number} declareStatus 审核状态码
      */
     actionControl(actionName, declareStatus) {
-      if (this.roleId === 3) {
+      if (this.userInfo.roleId === 3) {
         return (
           this.XIANJI_ACTION[actionName] &&
           this.XIANJI_ACTION[actionName](declareStatus)
         );
-      } else if (this.roleId === 2) {
+      } else if (this.userInfo.roleId === 2) {
         return (
           this.SHIJI_ACTION[actionName] &&
           this.SHIJI_ACTION[actionName](declareStatus)
         );
-      } else if (this.roleId === 1) {
+      } else if (this.userInfo.roleId === 1) {
         return (
           this.ADMIN_ACTION[actionName] &&
           this.ADMIN_ACTION[actionName](declareStatus)

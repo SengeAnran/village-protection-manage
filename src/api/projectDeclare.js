@@ -50,3 +50,12 @@ export const getAddress = () => {
     url: apiHost + "/projectDeclare/villageDetailList",
   });
 };
+
+// 项目删除
+export const deleteProject = (data) => {
+  return axios.request({
+    method: "DELETE",
+    url: apiHost + "/projectDeclare",
+    data,
+  });
+};
