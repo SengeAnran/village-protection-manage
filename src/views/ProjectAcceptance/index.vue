@@ -31,7 +31,7 @@
       :permission-add="0"
       :permission-edit="80002"
       :permission-delete="0"
-      action-width="200px"
+      action-width="220px"
     >
       <template v-slot:search>
         <el-date-picker

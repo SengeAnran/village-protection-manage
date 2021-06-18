@@ -50,6 +50,16 @@
             >
               历史进度
             </el-link>
+            <div
+              class="inline"
+              v-if="canRemind(scope.data.percentage)"
+              v-permission="70002"
+            >
+              <el-divider direction="vertical"></el-divider>
+              <el-link type="primary" @click="remindProgress(scope.data.id)">
+                催办
+              </el-link>
+            </div>
           </div>
         </template>
 
@@ -172,7 +182,11 @@
 <script>
 import { mapGetters } from "vuex";
 import rule from "@/mixins/rule.js";
-import { getProjectProgress, setProjectDeadline } from "@/api/scheduleManage";
+import {
+  getProjectProgress,
+  setProjectDeadline,
+  remindProgress,
+} from "@/api/scheduleManage";
 
 export default {
   mixins: [rule],
@@ -223,6 +237,17 @@ export default {
         this.dateDialog = true;
       }
     },
+    // 省市进度催办
+    remindProgress(id) {
+      this.$confirm("是否催办该项目进度？", "提示", {
+        type: "warning",
+      }).then(async () => {
+        const ids = Array.isArray(id) ? id : [id];
+        remindProgress(ids).then(() => {
+          this.$notify.success("催办成功");
+        });
+      });
+    },
     closeDialog() {
       this.$refs.form.resetFields();
       this.dateDialog = false;
@@ -249,6 +274,11 @@ export default {
     isFailed(progress, deadline) {
       if (this.isSuccess(progress)) return false;
       return new Date().getTime() > new Date(`${deadline} 23:59:59`).getTime();
+    },
+    // 是否催办
+    canRemind(percentage) {
+      if (this.userInfo.roleId === 3 || percentage >= 100) return false;
+      return true;
     },
   },
 };

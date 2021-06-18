@@ -35,3 +35,12 @@ export const verifyByCounty = (data) => {
     data,
   });
 };
+
+// 整改详情
+export const getRectificationInfo = (params) => {
+  return axios.request({
+    method: "GET",
+    url: apiHost + "/acceptanceInfo/rectification/" + params.id,
+    params,
+  });
+};

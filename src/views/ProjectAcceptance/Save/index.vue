@@ -87,9 +87,10 @@ import { mapGetters } from "vuex";
 import rule from "@/mixins/rule";
 import _ from "lodash";
 import {
-  getAcceptanceDetail,
+  // getAcceptanceDetail,
   verify,
   verifyByCounty,
+  getRectificationInfo,
 } from "@/api/projectAcceptance";
 
 export default {
@@ -126,14 +127,14 @@ export default {
     ...mapGetters(["userInfo"]),
   },
   created() {
-    this.type = this.$route.query.type;
     this.id = this.$route.query.id;
+    this.type = this.$route.query.type;
+    this.declareType = this.$route.query.declareType;
+    this.form.declareType = this.declareType;
     this.year = this.$route.query.year;
     this.total = this.$route.query.total;
     this.date = this.$route.query.date;
     this.address = this.$route.query.address;
-    this.declareType = this.$route.query.declareType;
-    this.form.declareType = this.declareType;
     this.getDetail();
   },
   methods: {
@@ -141,8 +142,10 @@ export default {
       if (this.type === "add") {
         return;
       }
-      this.detail = (await getAcceptanceDetail(this.id))[0] || {};
+      // this.detail = (await getAcceptanceDetail(this.id))[0] || {};
+      await this.getEditInfo(this.id);
       this.form = _.cloneDeep(this.detail);
+
       this.form.processFilesArr = _.cloneDeep(this.detail.processFilesList);
     },
     onFileAdd(file, key) {
@@ -186,6 +189,20 @@ export default {
             }
           });
         }
+      });
+    },
+
+    // edit 情况获取详情
+    getEditInfo(id) {
+      return new Promise((resolve, reject) => {
+        getRectificationInfo({ id })
+          .then((res) => {
+            this.detail = res && res.processLogDOList[0];
+            resolve();
+          })
+          .catch(() => {
+            reject();
+          });
       });
     },
   },

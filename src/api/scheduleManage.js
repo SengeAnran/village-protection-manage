@@ -83,3 +83,12 @@ export const setProjectDeadline = (data) => {
     data,
   });
 };
+
+// 进度批量催办
+export const remindProgress = (data) => {
+  return axios.request({
+    method: "POST",
+    url: apiHost + "/projectProgress/remind",
+    data,
+  });
+};
