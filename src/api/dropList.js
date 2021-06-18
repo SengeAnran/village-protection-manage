@@ -38,3 +38,13 @@ export const getVillageType = (params) => {
     params,
   });
 };
+
+// 日志类型
+export const getLogType = (params) => {
+  return axios.request({
+    method: 'get',
+    url: apiHost + '/systemLog/logType',
+    params
+  })
+}
+
