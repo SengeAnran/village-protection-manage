@@ -374,13 +374,13 @@ export const defaultRoutes = [
   },
   // 系统日志
   {
-    path: "/logs",
-    name: "Logs",
-    component: () => import("@/views/Logs/index.vue"),
+    path: '/systçemLog',
+    name: 'systemLog',
     meta: {
-      title: "系统日志",
-      icon: "xitongrizhi",
+      title: '系统日志',
+      icon: 'xitongrizhi',
       menuIds: [101],
     },
-  },
+    component: () => import("@/views/SystemLog/index.vue")
+  } 
 ];
