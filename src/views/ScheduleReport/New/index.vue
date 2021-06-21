@@ -44,7 +44,7 @@
       </div>
       <div class="input-item-wrp" v-if="declareTime">
         <el-form-item label="总投资">
-          <p>{{ delcareAmount }} 万元</p>
+          <p>{{ declareAmount }} 万元</p>
         </el-form-item>
         <el-form-item label="申报日期">
           <p>{{ declareTime.slice(0, 10) }}</p>
@@ -238,7 +238,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item
-          label="乡镇、村集体资金（万元）"
+          label="社会资金（万元）"
           prop="communityFee"
           :rules="rule.input"
         >
@@ -274,7 +274,7 @@ export default {
       projectInfo: [],
       yearsOption: [],
 
-      delcareAmount: "", // 总投资
+      declareAmount: "", // 总投资
       declareTime: "", // 申报日期
       form: {
         year: "",
@@ -366,7 +366,7 @@ export default {
     // 获取项目基本信息
     getBaseInfo() {
       getProjectInfo({ id: this.form.projectId }).then((res) => {
-        this.delcareAmount = res.delcareAmount;
+        this.declareAmount = res.declareAmount;
         this.declareTime = res.declareTime;
       });
     },

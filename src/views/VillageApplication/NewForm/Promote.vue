@@ -53,13 +53,16 @@
             v-model="form.introduction"
           >
           </el-input>
+          <p style="width: 42%; color: #999" class="py-4 leading-5">
+            要求：1、标题简炼，特色鲜明；2、简介内容包含村庄基本概况、古建状况、人文底蕴；3、文字精炼、彰显其历史文化价值和保护利用价值这两个价值的必要性。
+          </p>
         </el-form-item>
         <h4 class="block-tit">村庄图片</h4>
-        <el-form-item
-          label="村庄图片"
-          prop="villagePicturesArr"
-          :rules="imgRule"
-        >
+        <el-form-item prop="villagePicturesArr" :rules="imgRule">
+          <p style="color: #ff6b00" class="py-3">
+            <i class="el-icon-warning"></i>
+            需要上传5张以上图片，包括村庄全景图、重要古建筑全景图及珍贵构件细节图，否则将影响申报结果。
+          </p>
           <UploadImg
             :data="imageList"
             @add="onImageAdd"

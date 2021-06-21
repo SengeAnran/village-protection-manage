@@ -34,15 +34,13 @@
       action-width="220px"
     >
       <template v-slot:search>
-        <el-date-picker
-          v-model="query.declareYear"
-          type="year"
-          value-format="yyyy"
-          placeholder="请选择年度"
-          clearable
-        ></el-date-picker>
+        <el-input
+          style="width: 200px"
+          v-model="query.address"
+          placeholder="请输入项目所在地"
+        ></el-input>
         <el-select
-          v-model="query.reviewStatus"
+          v-model="query.checkStatus"
           placeholder="请选择状态"
           clearable
         >
@@ -115,7 +113,7 @@
         </el-table-column>
         <el-table-column
           :min-width="40"
-          label="总投资"
+          label="总投资（万元）"
           prop="totalFee"
           key="totalFee2"
         ></el-table-column>
@@ -193,6 +191,7 @@ export default {
         // 一般村:1001 重点村:1002 提升村:1003
         declareType: 1002,
         checkStatus: "",
+        address: "",
       },
       getMethod: getAcceptanceList,
       // 验收状态 待县级填报: 2000 待市级审核：2001 市级审核驳回:2002 省级审核驳回: 2003 市级审核通过 待省级审核:2004 验收通过:2999
@@ -229,7 +228,8 @@ export default {
     this.SHIJI_ACTION = {
       项目详情: () => true,
       验收: (declareStatus) => this._canAudit(declareStatus, 2), // 未验收时显示验收，验收后显示修改
-      修改: (declareStatus) => this._canViewAudit(declareStatus, 2),
+      修改: (declareStatus) => this._canModify(declareStatus, 2),
+      验收详情: (declareStatus) => this._canViewAudit(declareStatus, 2),
     };
     this.ADMIN_ACTION = {
       项目详情: () => true,
@@ -297,7 +297,7 @@ export default {
     _canViewAudit(status, roleId) {
       return (
         (roleId === 3 && status > 2001) ||
-        (roleId === 2 && status > 2001) ||
+        (roleId === 2 && status > 2001 && status !== 2004) ||
         (roleId === 1 && (status === 2003 || status === 2999))
       );
     },

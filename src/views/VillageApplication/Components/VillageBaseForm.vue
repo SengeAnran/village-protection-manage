@@ -38,7 +38,7 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="是否历史文化名村">
+    <el-form-item label="是否历史文化名村" prop="isFamous" :rules="rule.select">
       <el-radio v-model="form.isFamous" :label="true" :disabled="disabled">
         是
       </el-radio>
@@ -46,7 +46,7 @@
         否
       </el-radio>
     </el-form-item>
-    <el-form-item label="是否一般村">
+    <el-form-item label="是否一般村" prop="isGeneral" :rules="rule.select">
       <el-radio v-model="form.isGeneral" :label="true" :disabled="disabled">
         是
       </el-radio>

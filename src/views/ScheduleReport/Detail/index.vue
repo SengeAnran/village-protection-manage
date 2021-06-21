@@ -54,7 +54,7 @@
           <p>{{ form.faceReformArea }}</p>
         </el-form-item>
         <el-form-item label="构建修复（个）">
-          <p>{{ form.componentRepairNum }}</p>
+          <p>{{ form.componentRepairQuantity }}</p>
         </el-form-item>
         <el-form-item label="异地迁入面积（㎡）">
           <p>{{ form.moveInArea }}</p>
@@ -92,7 +92,7 @@
         <el-form-item label="乡镇、村集体资金（万元）">
           <p>{{ form.countryFee }}</p>
         </el-form-item>
-        <el-form-item label="乡镇、村集体资金（万元）">
+        <el-form-item label="社会资金（万元）">
           <p>{{ form.communityFee }}</p>
         </el-form-item>
       </div>
@@ -126,7 +126,7 @@ export default {
         tileRepairArea: "", //顶瓦修补面积（㎡）
         wallRepairArea: "", //墙体加固面积（㎡）
         faceReformArea: "", //立面改造面积（㎡
-        componentRepairNum: "", //构建修复（个）
+        componentRepairQuantity: "", //构建修复（个）
         moveInArea: "", //异地迁入面积
 
         clashFaceReformArea: "", // 有冲突的立面改造面积（㎡)

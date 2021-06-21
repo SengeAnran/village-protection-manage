@@ -7,33 +7,24 @@
           @click="$router.back()"
         >
           <i class="el-icon-arrow-left"></i>
-          <span> 查看审核流程</span>
+          <span> 审核详情</span>
         </div>
         <div class="mt-4">
           <div>
-            <el-form-item
-                class="inline-block"
-                label="重点村名称："
-            >
+            <el-form-item class="inline-block" label="重点村名称：">
               <p class="input">{{ villageName }}</p>
             </el-form-item>
-            <el-form-item
-                class="inline-block"
-                label="年度："
-            >
+            <el-form-item class="inline-block" label="年度：">
               <p class="input">{{ declareYear }}</p>
             </el-form-item>
           </div>
           <div>
-            <el-form-item
-                class="inline-block"
-                label="审核状态："
-            >
+            <el-form-item class="inline-block" label="审核状态：">
               <p class="input">{{ reviewStatusMap[reviewStatus] }}</p>
             </el-form-item>
           </div>
           <p class="ml-4 mb-2 mt-4">审核详情</p>
-          <el-timeline class="mt-8 ml-14">
+          <el-timeline class="mt-8 ml-14" v-if="processList.length">
             <el-timeline-item v-for="item in processList" :key="item.id">
               <div class="relative">
                 <div class="role">{{ roleMap[item.role] }}</div>
@@ -46,6 +37,7 @@
               </div>
             </el-timeline-item>
           </el-timeline>
+          <p v-else class="pl-4 text-sm pt-2">无</p>
         </div>
       </div>
     </el-form>

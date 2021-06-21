@@ -108,7 +108,7 @@
                       !isFailed(scope.row.percentage, scope.row.finishTime)
                     "
                   >
-                    60%
+                    {{ scope.row.percentage.toFixed(1) }}%
                   </i>
                   <i
                     class="el-icon-success"

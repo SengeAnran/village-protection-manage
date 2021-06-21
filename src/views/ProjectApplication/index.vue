@@ -184,15 +184,15 @@ export default {
       });
     },
     verify(scope) {
-      this.$confirm(
-        "是否通过该项目审核，若审核通过则项目提交至省级。",
-        "审核",
-        {
-          confirmButtonText: "通过",
-          cancelButtonText: "不通过",
-          distinguishCancelAndClose: true,
-        }
-      )
+      const tips =
+        this.userInfo.roleId === 1
+          ? "是否通过该项目审核？"
+          : "是否通过该项目审核，若审核通过则项目提交至省级。";
+      this.$confirm(tips, "审核", {
+        confirmButtonText: "通过",
+        cancelButtonText: "不通过",
+        distinguishCancelAndClose: true,
+      })
         .then(async (action) => {
           this.submit(action, scope);
         })

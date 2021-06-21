@@ -29,10 +29,10 @@
           clearable
         >
           <el-option
-            v-for="item in Object.keys(reviewStatusMap)"
+            v-for="item in Object.keys(formatReviewStatus)"
             :key="item"
             :value="item"
-            :label="reviewStatusMap[item]"
+            :label="formatReviewStatus[item]"
           ></el-option>
         </el-select>
       </template>
@@ -173,6 +173,12 @@ export default {
   },
   computed: {
     ...mapGetters(["userInfo"]),
+    formatReviewStatus() {
+      if (this.userInfo.roleId !== 3) {
+        delete this.reviewStatusMap[2000];
+      }
+      return this.reviewStatusMap;
+    },
   },
   beforeMount() {
     this.XIANJI_ACTION = {

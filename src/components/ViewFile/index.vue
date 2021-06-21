@@ -21,8 +21,7 @@ export default {
     },
   },
   data() {
-    return {
-    };
+    return {};
   },
   methods: {
     open(src) {
@@ -33,5 +32,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.file {}
+.file {
+}
 </style>

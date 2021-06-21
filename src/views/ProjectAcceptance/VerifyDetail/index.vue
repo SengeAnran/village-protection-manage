@@ -22,7 +22,11 @@
                 <div class="mb-4">{{ item.remark }}</div>
                 <div class="text-gray-400 mb-2">附件</div>
                 <div class="mb-4">
-                  <ViewFile :data="item.processFilesList"/>
+                  <ViewFile
+                    :data="item.processFilesList"
+                    v-if="item.processFilesList && item.processFilesList.length"
+                  />
+                  <p v-else>--</p>
                 </div>
               </div>
             </el-timeline-item>

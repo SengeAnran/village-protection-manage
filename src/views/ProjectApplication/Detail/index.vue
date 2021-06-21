@@ -260,7 +260,7 @@
             />
           </el-form-item>
           <el-form-item
-            label="政府补助资金支持环节："
+            label="财政补助资金支持环节："
             :rules="rule.input"
             prop="financialSupport"
           >

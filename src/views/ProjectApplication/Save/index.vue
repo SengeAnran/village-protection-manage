@@ -262,6 +262,13 @@
                   :min="0"
                 />
               </el-form-item>
+              <el-form-item
+                class="inline-flex"
+                label="总投资（万元）："
+                prop="otherFee"
+              >
+                <span class="input">{{ totalFee }}万元</span>
+              </el-form-item>
             </div>
           </div>
           <div>
@@ -283,7 +290,7 @@
           </div>
           <div class="text-right">
             <el-button plain @click="$router.back()">取消</el-button>
-            <el-button type="primary" @click="toForm2">下一表</el-button>
+            <el-button type="primary" @click="toForm2">下一步</el-button>
           </div>
         </el-form>
 
@@ -343,7 +350,7 @@
             />
           </el-form-item>
           <el-form-item
-            label="政府补助资金支持环节："
+            label="财政补助资金支持环节："
             :rules="rule.input"
             prop="financialSupport"
           >
@@ -367,8 +374,8 @@
             />
           </el-form-item>
           <div class="text-right">
-            <el-button plain @click="active = 0">上一表</el-button>
-            <el-button type="primary" @click="toForm3">下一表</el-button>
+            <el-button plain @click="active = 0">上一步</el-button>
+            <el-button type="primary" @click="toForm3">下一步</el-button>
           </div>
         </el-form>
 
@@ -706,7 +713,7 @@
             </el-form-item>
           </div>
           <div class="text-right">
-            <el-button plain @click="active = 1">上一表</el-button>
+            <el-button plain @click="active = 1">上一步</el-button>
             <el-button type="primary" @click="submit">提交</el-button>
           </div>
         </el-form>
@@ -799,6 +806,22 @@ export default {
       ],
       projectAddressList: [],
     };
+  },
+  computed: {
+    totalFee() {
+      const countFee = [
+        "provinceFee",
+        "cityFee",
+        "countryFee",
+        "villageFee",
+        "bankFee",
+        "otherFee",
+      ];
+      const total = countFee.reduce((pre, next) => {
+        return Number(pre || 0) + Number(this.form1[next] || 0);
+      }, 0);
+      return isNaN(total) ? "--" : total;
+    },
   },
   created() {
     this.type = this.$route.query.type;
