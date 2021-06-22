@@ -25,7 +25,7 @@ export default {
       return "";
     },
     shiji_status() {
-      if (this.status === 2001 && this.status === 2000) {
+      if (!this.status || this.status === 2001 || this.status === 2000) {
         return "";
       } else if (this.status === 2002) {
         return "error";

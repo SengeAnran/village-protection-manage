@@ -37,7 +37,7 @@
               </div>
             </el-timeline-item>
           </el-timeline>
-          <p v-else class="pl-4 text-sm pt-2">无</p>
+          <p v-else class="pl-4 text-sm pt-2">--</p>
         </div>
       </div>
     </el-form>

@@ -44,3 +44,12 @@ export const getRectificationInfo = (params) => {
     params,
   });
 };
+
+// 项目详情
+export const getAcceptanceInfo = (params) => {
+  return axios.request({
+    method: "GET",
+    url: apiHost + "/acceptanceInfo/projectDetail/" + params.id,
+    params,
+  });
+};

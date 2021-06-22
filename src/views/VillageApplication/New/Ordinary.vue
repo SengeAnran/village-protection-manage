@@ -37,6 +37,7 @@
             size="small"
             @click="
               editId = 0;
+              editData = {};
               editType = 'add';
               showForm = true;
             "

@@ -35,7 +35,12 @@
             class="add-wrp"
             plain
             size="small"
-            @click="showForm = true"
+            @click="
+              editId = 0;
+              editData = {};
+              editType = 'add';
+              showForm = true;
+            "
           >
             <i class="el-icon-plus"></i>
           </el-button>

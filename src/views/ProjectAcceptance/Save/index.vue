@@ -7,7 +7,7 @@
           @click="$router.back()"
         >
           <i class="el-icon-arrow-left"></i>
-          <span> {{ typeMap[type] }}验收</span>
+          <span> {{ typeMap[type] }}</span>
         </div>
         <div class="mt-4">
           <el-form-item class="inline-block" label="申报年度：">
@@ -16,9 +16,9 @@
           <el-form-item
             class="inline-block"
             label="总投资："
-            v-if="declareType === 1002"
+            v-if="Number(declareType) === 1002"
           >
-            <p class="input">{{ total }}</p>
+            <p class="input">{{ total }}万元</p>
           </el-form-item>
           <el-form-item class="inline-block" label="申报日期：">
             <p class="input">{{ date }}</p>
@@ -32,13 +32,13 @@
           <el-form-item
             class="inline-block"
             label="验收详情："
-            v-if="userInfo.roleId !== 3"
+            v-if="userInfo.roleId !== 3 || type === 'rectify'"
           >
             <el-button type="primary" @click="toVerifyDetail"
               >查看验收详情</el-button
             >
           </el-form-item>
-          <p class="ml-4 mb-2 mt-4">验收</p>
+          <p class="ml-4 mb-2 mt-4">{{ descName.slice(0, 2) }}</p>
           <el-form-item
             v-if="type === 'add'"
             class="inline-block"
@@ -51,7 +51,7 @@
               <el-radio :label="0">不通过</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="验收意见：" :rules="rule.input" prop="remark">
+          <el-form-item :label="descName" :rules="rule.input" prop="remark">
             <el-input
               v-model="form.remark"
               type="textarea"
@@ -90,7 +90,8 @@ import {
   // getAcceptanceDetail,
   verify,
   verifyByCounty,
-  getRectificationInfo,
+  // getRectificationInfo,
+  getAcceptanceInfo,
 } from "@/api/projectAcceptance";
 
 export default {
@@ -101,8 +102,9 @@ export default {
       type: "",
       typeMap: {
         add: "新增",
-        edit: "编辑",
+        edit: "修改",
         view: "查看",
+        rectify: "整改",
       },
       form: {
         declareType: 0,
@@ -125,7 +127,15 @@ export default {
   },
   computed: {
     ...mapGetters(["userInfo"]),
+    descName() {
+      return this.type === "edit"
+        ? "修改描述"
+        : this.type === "rectify"
+        ? "整改描述"
+        : "验收意见";
+    },
   },
+
   created() {
     this.id = this.$route.query.id;
     this.type = this.$route.query.type;
@@ -142,7 +152,6 @@ export default {
       if (this.type === "add") {
         return;
       }
-      // this.detail = (await getAcceptanceDetail(this.id))[0] || {};
       await this.getEditInfo(this.id);
       this.form = _.cloneDeep(this.detail);
 
@@ -195,7 +204,7 @@ export default {
     // edit 情况获取详情
     getEditInfo(id) {
       return new Promise((resolve, reject) => {
-        getRectificationInfo({ id })
+        getAcceptanceInfo({ id })
           .then((res) => {
             this.detail = res && res.processLogDOList[0];
             resolve();
@@ -215,5 +224,8 @@ export default {
 }
 .el-form-item {
   margin-left: 15px;
+  ::v-deep .el-form-item__label {
+    color: #999;
+  }
 }
 </style>

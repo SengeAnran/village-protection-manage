@@ -167,7 +167,7 @@
           v-permission="80002"
         >
           <el-divider direction="vertical"></el-divider>
-          <el-link type="primary" @click="toAuditSave(scope, 'edit')"
+          <el-link type="primary" @click="toAuditSave(scope, 'rectify')"
             >整改</el-link
           >
         </div>
@@ -290,7 +290,7 @@ export default {
       return (
         (roleId === 3 && status === 2000) ||
         (roleId === 2 && status === 2001) ||
-        (roleId === 1 && status === 2004)
+        (this.query.declareType === 1002 && roleId === 1 && status === 2004)
       );
     },
     // 验收详情

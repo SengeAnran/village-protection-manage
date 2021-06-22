@@ -23,7 +23,7 @@
       <VillageHistoryBuildingForm class="input-item-wrp" :form="form" />
     </el-form>
     <div>
-      <el-button @click="$router.back()">取消</el-button>
+      <el-button @click="$emit('close')">取消</el-button>
       <el-button type="primary" @click="validateForm">提交</el-button>
     </div>
   </div>

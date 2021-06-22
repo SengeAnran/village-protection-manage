@@ -14,7 +14,6 @@
           <el-form-item
             class="inline-block"
             label="设计公司名称："
-            :rules="rule.input"
             prop="companyName"
           >
             <p class="input">{{ form.companyName }}</p>
@@ -22,7 +21,6 @@
           <el-form-item
             class="inline-block"
             label="项目负责人："
-            :rules="rule.input"
             prop="projectManager"
           >
             <p class="input">{{ form.projectManager }}</p>
@@ -30,24 +28,19 @@
           <el-form-item
             class="inline-block"
             label="县级负责人："
-            :rules="rule.input"
             prop="countyManager"
           >
             <p class="input">{{ form.countyManager }}</p>
           </el-form-item>
-          <el-form-item
-            label="规划文本（仅限PPT格式）："
-            :rules="rule.upload"
-            prop="planFilesArr"
-          >
-            <ViewFile :data="form.planFilesArr" />
+          <el-form-item label="规划文本（仅限PPT格式）：" prop="planFilesArr">
+            <ViewFile
+              :data="form.planFilesArr"
+              v-if="form.suggestionFilesArr.length"
+            />
+            <span v-else>--</span>
           </el-form-item>
           <p class="ml-4 mb-2">县级规划评审情况</p>
-          <el-form-item
-            label="县级规划评审意见："
-            :rules="rule.input"
-            prop="suggestion"
-          >
+          <el-form-item label="县级规划评审意见：" prop="suggestion">
             <el-input
               v-model="form.suggestion"
               type="textarea"
@@ -56,20 +49,20 @@
               readonly
             />
           </el-form-item>
-          <el-form-item
-            label="上传附件："
-            :rules="rule.upload"
-            prop="suggestionFilesArr"
-          >
-            <ViewFile :data="form.suggestionFilesArr" />
+          <el-form-item label="上传附件：" prop="suggestionFilesArr">
+            <ViewFile
+              :data="form.suggestionFilesArr"
+              v-if="form.suggestionFilesArr.length"
+            />
+            <span v-else>--</span>
           </el-form-item>
           <p class="ml-4 mb-2">政府批复附件</p>
-          <el-form-item
-            label="上传政府批复附件："
-            :rules="rule.upload"
-            prop="approvalFilesArr"
-          >
-            <ViewFile :data="form.approvalFilesArr" />
+          <el-form-item label="上传政府批复附件：" prop="approvalFilesArr">
+            <ViewFile
+              :data="form.approvalFilesArr"
+              v-if="form.approvalFilesArr.length"
+            />
+            <span v-else>--</span>
           </el-form-item>
         </div>
       </div>
@@ -125,5 +118,8 @@ export default {
 }
 .el-form-item {
   margin-left: 15px;
+  ::v-deep .el-form-item__label {
+    color: #999;
+  }
 }
 </style>
