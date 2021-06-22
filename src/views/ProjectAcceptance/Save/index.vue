@@ -90,8 +90,8 @@ import {
   // getAcceptanceDetail,
   verify,
   verifyByCounty,
-  // getRectificationInfo,
-  getAcceptanceInfo,
+  getRectificationInfo,
+  // getAcceptanceInfo,
 } from "@/api/projectAcceptance";
 
 export default {
@@ -204,7 +204,7 @@ export default {
     // edit 情况获取详情
     getEditInfo(id) {
       return new Promise((resolve, reject) => {
-        getAcceptanceInfo({ id })
+        getRectificationInfo({ id, declareType: this.declareType })
           .then((res) => {
             this.detail = res && res.processLogDOList[0];
             resolve();

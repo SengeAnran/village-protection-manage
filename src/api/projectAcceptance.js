@@ -40,7 +40,9 @@ export const verifyByCounty = (data) => {
 export const getRectificationInfo = (params) => {
   return axios.request({
     method: "GET",
-    url: apiHost + "/acceptanceInfo/rectification/" + params.id,
+    url:
+      apiHost +
+      `/acceptanceInfo/rectification/${params.id}/${params.declareType}`,
     params,
   });
 };
