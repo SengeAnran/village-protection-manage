@@ -200,7 +200,7 @@ export default {
       this.$refs.form.validateField("villagePicturesArr");
     },
     onImageRemove(res) {
-      const index = this.form.villagePicturesArr.findIndex((list) => {
+      const index = this.form.villagePicturesFiles.findIndex((list) => {
         return list.uid === res.uid || list.filePath === res.url;
       });
 
