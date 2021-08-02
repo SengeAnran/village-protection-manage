@@ -7,6 +7,11 @@ export const constantRoutes = [
     component: () => import("../views/NotFound"),
   },
   {
+    name: "noAuth",
+    path: "/noAuth",
+    component: () => import("../views/NoAuth"),
+  },
+  {
     name: "login",
     path: "/login",
     component: () => import("@/views/Login"),
@@ -379,13 +384,13 @@ export const defaultRoutes = [
   },
   // 系统日志
   {
-    path: '/systçemLog',
-    name: 'systemLog',
+    path: "/systçemLog",
+    name: "systemLog",
     meta: {
-      title: '系统日志',
-      icon: 'xitongrizhi',
+      title: "系统日志",
+      icon: "xitongrizhi",
       menuIds: [101],
     },
-    component: () => import("@/views/SystemLog/index.vue")
-  } 
+    component: () => import("@/views/SystemLog/index.vue"),
+  },
 ];

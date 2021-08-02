@@ -12,6 +12,10 @@ import "@/components/global.js";
 import components from "@/utils/component.js";
 import "./directive/index.js"; // 指令注册
 
+// 从集合平台跳转过来，首先验证token信息
+import { verifyAuth } from "@/utils/auth";
+verifyAuth();
+
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI, {
