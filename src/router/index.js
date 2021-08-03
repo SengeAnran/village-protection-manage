@@ -4,11 +4,13 @@ import { constantRoutes, defaultRoutes } from "./navList";
 import { getToken } from "@/utils/auth";
 import lodash from "lodash";
 import store from "@/store";
+import config from "@/utils/config";
 
 Vue.use(VueRouter);
 const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
+  // mode: "history",
+  // base: process.env.BASE_URL,
+  base: config.routerBase,
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes,
 });

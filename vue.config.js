@@ -5,6 +5,7 @@ function resolve(dir) {
 const name = "历史文化村落保护管理应用";
 
 module.exports = {
+  publicPath: "/lswhcl",
   productionSourceMap: false,
 
   css: {

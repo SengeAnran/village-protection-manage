@@ -1,6 +1,7 @@
 const config = {
-  apiHost: "/apiProxy",
-  loginPath: window.location.origin,
+  apiHost: "/api/lswhcl",
+  loginPath: window.location.origin + "/lswhcl",
+  routerBase: "/lswhcl",
 };
 
 export default config;
