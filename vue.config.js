@@ -38,10 +38,10 @@ module.exports = {
 
   devServer: {
     proxy: {
-      "/apiProxy": {
-        target: "http://172.16.24.248:8280/", // 测试环境
+      "/api/lswhcl": {
+        target: "http://jqy.zjagri.cn/",
         changeOrigin: true,
-        pathRewrite: (path) => path.replace("/apiProxy", ""),
+        // pathRewrite: (path) => path.replace("/apiProxy", ""),
       },
     },
   },

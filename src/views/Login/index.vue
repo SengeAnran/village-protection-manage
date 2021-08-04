@@ -1,11 +1,11 @@
 <template>
   <div class="login-wrp">
-    <el-button
+    <!-- <el-button
       type="warning"
       @click="showTab = Number(!showTab)"
       class="switch-btn"
       >切换登录方式</el-button
-    >
+    > -->
     <div class="desc-wrp">
       <h2 class="title">历史文化村落保护管理系统</h2>
       <img

@@ -1,5 +1,6 @@
 import { pwdLogin, logout, getUserInfo, getUserPermission } from "@/api/user";
 import { removeToken } from "@/utils/auth";
+import config from "@/utils/config";
 
 export default {
   namespaced: true,
@@ -45,7 +46,7 @@ export default {
       return new Promise((resolve) => {
         logout().then(() => {
           removeToken();
-          location.href = "/login";
+          location.href = config.loginPath;
           resolve();
         });
       });

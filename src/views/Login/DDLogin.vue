@@ -9,7 +9,7 @@
         <iframe
           class="iframe"
           width="200"
-          height="224"
+          height="300"
           :src="QRCodeUrl"
           frameborder="0"
           scrolling="no"
@@ -63,7 +63,7 @@ export default {
   }
   .code-wrp {
     width: 238px;
-    height: 225px;
+    height: 270px;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
     border-radius: 4px;
     overflow: hidden;
@@ -72,10 +72,10 @@ export default {
     .code-con {
       margin: 0 auto;
       width: 200px;
-      height: 200px;
+      height: 260px;
       .iframe {
         position: relative;
-        top: -24px;
+        top: -52px;
       }
     }
   }

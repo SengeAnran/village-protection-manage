@@ -19,10 +19,10 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const token = getToken();
   if (!token) {
-    if (to.fullPath === "/noAuth") {
+    if (to.fullPath === "/login") {
       return next();
     } else {
-      return next({ path: "/noAuth", replace: true });
+      return next({ path: "/login", replace: true });
     }
   } else {
     // 根据token获取用户信息
@@ -50,7 +50,7 @@ router.beforeEach((to, from, next) => {
             redirect: "/404",
           },
         ]);
-        if (to.fullPath === "/noAuth") {
+        if (to.fullPath === "/login") {
           next("/");
           return;
         }
@@ -58,7 +58,7 @@ router.beforeEach((to, from, next) => {
         next({ ...to, replace: true });
       });
     } else {
-      if (to.fullPath === "/noAuth") {
+      if (to.fullPath === "/login") {
         next("/");
         return;
       }
