@@ -4,8 +4,9 @@ function resolve(dir) {
 }
 const name = "历史文化村落保护管理应用";
 
+const publicPath = process.env.VUE_APP_ENV === "production" ? "/lswhcl" : "/";
 module.exports = {
-  publicPath: "/lswhcl",
+  publicPath,
   productionSourceMap: false,
 
   css: {
@@ -39,9 +40,13 @@ module.exports = {
   devServer: {
     proxy: {
       "/api/lswhcl": {
-        target: "http://jqy.zjagri.cn/",
+        target: "http://jqy.zjagri.cn/", //生产环境
         changeOrigin: true,
-        // pathRewrite: (path) => path.replace("/apiProxy", ""),
+      },
+      "/apiProxy": {
+        target: "http://172.16.24.248:8280/", // 测试环境
+        changeOrigin: true,
+        pathRewrite: (path) => path.replace("/apiProxy", ""),
       },
     },
   },
