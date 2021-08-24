@@ -1,62 +1,67 @@
 <template>
-  <div class="block">
-    <RouterBack>详情</RouterBack>
-    <el-form
-      style="padding-left: 14px"
-      ref="form"
-      class="form"
-      label-position="top"
-      :model="form"
-      label-width="80px"
-    >
-      <el-form-item label="村庄地址" prop="villageId">
-        <p class="content">{{ form.address }}{{ form.villageName }}</p>
-      </el-form-item>
+  <div>
+    <div class="clearfix export">
+      <el-button class="export-button" @click="clickExport">导出</el-button>
+    </div>
+    <div class="block">
+      <RouterBack>详情</RouterBack>
+      <el-form
+        style="padding-left: 14px"
+        ref="form"
+        class="form"
+        label-position="top"
+        :model="form"
+        label-width="80px"
+      >
+        <el-form-item label="村庄地址" prop="villageId">
+          <p class="content">{{ form.address }}{{ form.villageName }}</p>
+        </el-form-item>
 
-      <h4 class="block-tit">重点村古建筑调查表</h4>
-      <div class="input-item-wrp">
-        <el-form-item label="当年户籍人口（人）" prop="population">
-          <p class="content">{{ form.population }}</p>
-        </el-form-item>
-        <el-form-item label="当年村集体经济收入（万元）" prop="income">
-          <p class="content">{{ form.income }}</p>
-        </el-form-item>
-        <el-form-item label="古建筑村落年代" prop="villageAge">
-          <p class="content">{{ form.villageAge }}</p>
-        </el-form-item>
-        <el-form-item label="是否历史文化名村">
-          <p class="content">{{ (form.isFamous && "是") || "否" }}</p>
-        </el-form-item>
-        <el-form-item label="是否一般村">
-          <p class="content">{{ (form.isGeneral && "是") || "否" }}</p>
-        </el-form-item>
-      </div>
-
-      <h4 class="block-tit">古建筑数量</h4>
-      <div class="total-wrp"><span>总数：</span>{{ total }} 个</div>
-      <div class="input-item-wrp">
-        <el-form-item
-          :label="item.label"
-          v-for="(item, i) in historyBuildings"
-          :key="i"
-        >
-          <p class="content">{{ form[item.value] }}</p>
-        </el-form-item>
-      </div>
-
-      <div v-if="form.declareType !== 1001">
-        <h4 class="block-tit">推荐村简介</h4>
+        <h4 class="block-tit">重点村古建筑调查表</h4>
         <div class="input-item-wrp">
-          <el-form-item label="推荐村简介" prop="introduction">
-            <p class="content">{{ form.introduction }}</p>
+          <el-form-item label="当年户籍人口（人）" prop="population">
+            <p class="content">{{ form.population }}</p>
+          </el-form-item>
+          <el-form-item label="当年村集体经济收入（万元）" prop="income">
+            <p class="content">{{ form.income }}</p>
+          </el-form-item>
+          <el-form-item label="古建筑村落年代" prop="villageAge">
+            <p class="content">{{ form.villageAge }}</p>
+          </el-form-item>
+          <el-form-item label="是否历史文化名村">
+            <p class="content">{{ (form.isFamous && "是") || "否" }}</p>
+          </el-form-item>
+          <el-form-item label="是否一般村">
+            <p class="content">{{ (form.isGeneral && "是") || "否" }}</p>
           </el-form-item>
         </div>
-        <h4 class="block-tit">村庄图片</h4>
-        <el-form-item label="村庄图片" prop="villagePicturesArr">
-          <ViewImg :data="form.villagePicturesFiles" />
-        </el-form-item>
-      </div>
-    </el-form>
+
+        <h4 class="block-tit">古建筑数量</h4>
+        <div class="total-wrp"><span>总数：</span>{{ total }} 个</div>
+        <div class="input-item-wrp">
+          <el-form-item
+            :label="item.label"
+            v-for="(item, i) in historyBuildings"
+            :key="i"
+          >
+            <p class="content">{{ form[item.value] }}</p>
+          </el-form-item>
+        </div>
+
+        <div v-if="form.declareType !== 1001">
+          <h4 class="block-tit">推荐村简介</h4>
+          <div class="input-item-wrp">
+            <el-form-item label="推荐村简介" prop="introduction">
+              <p class="content">{{ form.introduction }}</p>
+            </el-form-item>
+          </div>
+          <h4 class="block-tit">村庄图片</h4>
+          <el-form-item label="村庄图片" prop="villagePicturesArr">
+            <ViewImg :data="form.villagePicturesFiles" />
+          </el-form-item>
+        </div>
+      </el-form>
+    </div>
   </div>
 </template>
 <script>
@@ -134,7 +139,9 @@ export default {
         this.total = this.countTotal();
       });
     },
-
+    clickExport() {
+      console.log('点击了导出');
+    },
     countTotal() {
       return HISTORY_BUILDINGS.reduce((pre, next) => {
         return pre + this.form[next.value];
@@ -145,6 +152,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.export {
+  margin-bottom: 25px;
+  .export-button{
+    float: right;
+  }
+}
 .form {
   max-width: 1600px;
   padding-left: 8px;
