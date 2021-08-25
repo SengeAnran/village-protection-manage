@@ -28,11 +28,17 @@
           <el-form-item label="古建筑村落年代" prop="villageAge">
             <p class="content">{{ form.villageAge }}</p>
           </el-form-item>
+          <el-form-item label="当年常住人口（人）" prop="resPopulation">
+            <p class="content">{{ form.resPopulation }}</p>
+          </el-form-item>
           <el-form-item label="是否历史文化名村">
-            <p class="content">{{ (form.isFamous && "是") || "否" }}</p>
+            <p class="content">{{ conversionLeve(form.isFamous) }}</p>
           </el-form-item>
           <el-form-item label="是否一般村">
             <p class="content">{{ (form.isGeneral && "是") || "否" }}</p>
+          </el-form-item>
+          <el-form-item label="是否传统村">
+            <p class="content">{{ conversionLeve(form.isTradition)}}</p>
           </el-form-item>
         </div>
 
@@ -88,8 +94,12 @@ export default {
         population: "", // 人口数量
         income: "", //当年集体收入（万元）
         villageAge: "", //古建筑村落年代
-        isFamous: "", //是否历史文化名村
+        isFamous: "", //是否历史文化名村 0：否，1：省级，2：国家级
+        // famousGrade: "", // 历史文化名村级别
         isGeneral: "", //是否一般村
+        resPopulation: "", // 当年常住人口
+        isTradition: "", // 是否传统村 0：否，1：省级，2：国家级
+        // traditionGrade: "", // 传统村级别
 
         houseNum: "", //古民宅数量
         hallNum: "", //古祠堂数量
@@ -146,6 +156,14 @@ export default {
       return HISTORY_BUILDINGS.reduce((pre, next) => {
         return pre + this.form[next.value];
       }, 0);
+    },
+    conversionLeve(index) {
+      switch (index) {
+        case 0 : return '否';
+        case 1 : return '是，省级';
+        case 2 : return '是，国家级';
+        default: return ''
+      }
     },
   },
 };

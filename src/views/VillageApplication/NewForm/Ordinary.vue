@@ -60,8 +60,10 @@ export default {
         population: "", // 人口数量
         income: "", //当年集体收入（万元）
         villageAge: "", //古建筑村落年代
-        isFamous: "", //是否历史文化名村
+        isFamous: "", //是否历史文化名村  0：否，1：省级，2：国家级
         isGeneral: "", //是否一般村
+        resPopulation: "", // 当年常住人口
+        isTradition: "", // 是否传统村 0：否，1：省级，2：国家级
 
         houseNum: "", //古民宅数量
         hallNum: "", //古祠堂数量

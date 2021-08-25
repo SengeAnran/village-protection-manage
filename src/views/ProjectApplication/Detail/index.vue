@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="clearfix export">
+      <el-button class="export-button" @click="clickExport">导出</el-button>
+    </div>
     <div class="block">
       <div class="text-lg cursor-pointer inline-block" @click="$router.back()">
         <i class="el-icon-arrow-left"></i>
@@ -573,6 +576,10 @@ export default {
     this.getDetail();
   },
   methods: {
+    //导出
+    clickExport() {
+      console.log('点击了导出');
+    },
     async getDetail() {
       if (this.type === "add") {
         return;
@@ -589,6 +596,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.export {
+  margin-bottom: 25px;
+  .export-button{
+    float: right;
+  }
+}
 .input {
   width: 300px;
 }

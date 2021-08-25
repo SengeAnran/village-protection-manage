@@ -9,6 +9,7 @@
         <el-button type="primary" @click="search">查询</el-button>
         <el-button plain @click="resetSearch">重置</el-button>
       </div>
+      <slot name="export"></slot>
     </div>
 
     <!--crud操作-->

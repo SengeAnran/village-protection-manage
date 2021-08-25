@@ -40,17 +40,39 @@
           </el-form-item>
           <p class="ml-4 mb-2 mt-4">{{ descName.slice(0, 2) }}</p>
           <el-form-item
-            v-if="type === 'add'"
+            v-if="type === 'add' && declareType === '1001'"
             class="inline-block"
             label="验收结果："
             :rules="rule.select"
             prop="status"
           >
             <el-radio-group v-model="form.status">
-              <el-radio :label="1">通过</el-radio>
-              <el-radio :label="0">不通过</el-radio>
+              <el-radio :label="1">合格</el-radio>
+              <el-radio :label="0">不合格</el-radio>
             </el-radio-group>
           </el-form-item>
+          <el-row :gutter="40" v-if="type === 'add' && declareType === '1002'">
+            <el-col :span="6">
+              <el-form-item label="分数:" :rules="rule.input" prop="score">
+                <el-input
+                  v-model.lazy="form.score"
+                  type="number"
+                  placeholder="请输入评价分数"
+                  @change="computeGrade"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="等级:" prop="grade">
+                <el-input
+                  v-model="form.grade"
+                  type="text"
+                  disabled
+                  placeholder="自动计算"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-form-item :label="descName" :rules="rule.input" prop="remark">
             <el-input
               v-model="form.remark"
@@ -112,6 +134,8 @@ export default {
         processFilesArr: [],
         remark: "",
         status: "",
+        score: "", // 分数
+        grade: "", // 等级
       },
       declareTypeMap: {
         1001: "一般村项目",
@@ -137,6 +161,7 @@ export default {
   },
 
   created() {
+    console.log(this.$route.query)
     this.id = this.$route.query.id;
     this.type = this.$route.query.type;
     this.declareType = this.$route.query.declareType;
@@ -156,6 +181,15 @@ export default {
       this.form = _.cloneDeep(this.detail);
 
       this.form.processFilesArr = _.cloneDeep(this.detail.processFilesList);
+    },
+    // 计算等级
+    computeGrade() {
+      switch (true) {
+        case this.form.score < 60: this.form.grade = '不合格'; break;
+        case this.form.score < 70: this.form.grade = '合格'; break;
+        case this.form.score < 85: this.form.grade = '良好'; break;
+        default: this.form.grade = '优秀';
+      }
     },
     onFileAdd(file, key) {
       this.form[key].push(file);

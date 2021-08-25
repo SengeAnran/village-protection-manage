@@ -38,11 +38,25 @@
         </el-option>
       </el-select>
     </el-form-item>
+    <el-form-item
+      label="当年常住人口（人）"
+      prop="resPopulation"
+      :rules="rule.input"
+    >
+      <el-input
+        v-model.number="form.resPopulation"
+        placeholder="请输入内容"
+        :disabled="disabled"
+      ></el-input>
+    </el-form-item>
     <el-form-item label="是否历史文化名村" prop="isFamous" :rules="rule.select">
-      <el-radio v-model="form.isFamous" :label="true" :disabled="disabled">
-        是
+      <el-radio v-model="form.isFamous" :label="2" :disabled="disabled">
+        是，国家级
       </el-radio>
-      <el-radio v-model="form.isFamous" :label="false" :disabled="disabled">
+      <el-radio v-model="form.isFamous" :label="1" :disabled="disabled">
+        是，省级
+      </el-radio>
+      <el-radio v-model="form.isFamous" :label="0" :disabled="disabled">
         否
       </el-radio>
     </el-form-item>
@@ -51,6 +65,17 @@
         是
       </el-radio>
       <el-radio v-model="form.isGeneral" :label="false" :disabled="disabled">
+        否
+      </el-radio>
+    </el-form-item>
+    <el-form-item label="是否传统村" prop="isTradition" :rules="rule.select">
+      <el-radio v-model="form.isTradition" :label="2" :disabled="disabled">
+        是，国家级
+      </el-radio>
+      <el-radio v-model="form.isTradition" :label="1" :disabled="disabled">
+        是，省级
+      </el-radio>
+      <el-radio v-model="form.isTradition" :label="0" :disabled="disabled">
         否
       </el-radio>
     </el-form-item>

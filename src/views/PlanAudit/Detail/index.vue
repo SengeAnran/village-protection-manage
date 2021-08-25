@@ -20,6 +20,13 @@
           </el-form-item>
           <el-form-item
             class="inline-block"
+            label="单位资质："
+            prop="unitQualification"
+          >
+            <p class="input">{{ form.unitQualification }}</p>
+          </el-form-item>
+          <el-form-item
+            class="inline-block"
             label="项目负责人："
             prop="projectManager"
           >
@@ -31,6 +38,20 @@
             prop="countyManager"
           >
             <p class="input">{{ form.countyManager }}</p>
+          </el-form-item>
+          <el-form-item
+            class="inline-block"
+            label="分数："
+            prop="score"
+          >
+            <p class="input">{{ form.score }}</p>
+          </el-form-item>
+          <el-form-item
+            class="inline-block"
+            label="评审等次："
+            prop="grade"
+          >
+            <p class="input">{{ form.grade }}</p>
           </el-form-item>
           <el-form-item label="规划文本（仅限PPT格式）：" prop="planFilesArr">
             <ViewFile
@@ -90,6 +111,9 @@ export default {
         suggestion: "",
         suggestionFilesArr: [],
         villageDetailId: "",
+        unitQualification: "",
+        score: "", // 分数
+        grade: "", // 等级
       },
       detail: {},
     };

@@ -37,6 +37,10 @@
         </el-select>
       </template>
 
+      <template v-slot:export>
+        <el-button class="export-button" @click="clickExport">导出</el-button>
+      </template>
+
       <template v-slot:table>
         <el-table-column label="申报年度" prop="declareYear"></el-table-column>
         <el-table-column
@@ -200,6 +204,10 @@ export default {
     };
   },
   methods: {
+    clickExport() {
+      const data = this.query;
+      console.log(data);
+    },
     showVerify(status) {
       if (this.userInfo.roleId === 3) {
         return false;
@@ -330,6 +338,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.export-button{
+  float: right;
+}
 ::v-deep .table-action {
   > * {
     margin: 2px;

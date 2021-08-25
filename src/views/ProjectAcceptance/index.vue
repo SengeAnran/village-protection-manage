@@ -53,6 +53,10 @@
         </el-select>
       </template>
 
+      <template v-slot:export>
+        <el-button class="export-button" @click="clickExport">导出</el-button>
+      </template>
+
       <template
         v-slot:table
         v-if="
@@ -238,6 +242,11 @@ export default {
     };
   },
   methods: {
+    // 导出
+    clickExport() {
+      const data = this.query;
+      console.log(data);
+    },
     changeType(code) {
       this.query.declareType = code;
       this.$refs.crud.search();
@@ -316,6 +325,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.export-button{
+  float: right;
+}
 ::v-deep .table-action {
   > * {
     margin: 2px;

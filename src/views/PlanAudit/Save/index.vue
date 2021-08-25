@@ -20,6 +20,18 @@
             <el-input
               class="input"
               v-model="form.companyName"
+              placeholder="请输入设计公司全称"
+            />
+          </el-form-item>
+          <el-form-item
+            class="inline-block"
+            label="单位资质："
+            :rules="rule.input"
+            prop="unitQualification"
+          >
+            <el-input
+              class="input"
+              v-model="form.unitQualification"
               placeholder="请输入"
             />
           </el-form-item>
@@ -45,6 +57,32 @@
               class="input"
               v-model="form.countyManager"
               placeholder="请输入"
+            />
+          </el-form-item>
+          <el-form-item
+            class="inline-block"
+            label="分数:"
+            :rules="rule.input"
+            prop="score"
+          >
+            <el-input
+              class="input"
+              type="number"
+              v-model="form.score"
+              placeholder="请输入评审分数"
+              @change="computeGrade"
+            />
+          </el-form-item>
+          <el-form-item
+            class="inline-block"
+            label="评审等次:"
+            prop="grade"
+          >
+            <el-input
+              class="input"
+              v-model="form.grade"
+              disabled
+              placeholder="自动计算"
             />
           </el-form-item>
           <el-form-item
@@ -129,6 +167,7 @@ export default {
       form: {
         approvalFilesArr: [],
         companyName: "",
+        unitQualification: "",
         countyManager: "",
         id: "",
         planFilesArr: [],
@@ -136,6 +175,8 @@ export default {
         suggestion: "",
         suggestionFilesArr: [],
         villageDetailId: "",
+        score: "", // 分数
+        grade: "", // 等级
       },
       detail: {},
     };
@@ -146,6 +187,15 @@ export default {
     this.getDetail();
   },
   methods: {
+    // 计算等级
+    computeGrade() {
+      switch (true) {
+        case this.form.score < 60: this.form.grade = '不合格'; break;
+        case this.form.score < 70: this.form.grade = '合格'; break;
+        case this.form.score < 85: this.form.grade = '良好'; break;
+        default: this.form.grade = '优秀';
+      }
+    },
     async getDetail() {
       if (this.type === "add") {
         return;

@@ -29,6 +29,9 @@
             ></el-input>
           </div>
         </template>
+        <template v-slot:export>
+          <el-button class="export-button" @click="clickExport">导出</el-button>
+        </template>
 
         <template v-slot:tableAction="scope">
           <div>
@@ -208,6 +211,11 @@ export default {
     ...mapGetters(["userInfo"]),
   },
   methods: {
+    // 导出
+    clickExport() {
+      const data = this.query;
+      console.log(data);
+    },
     // 进度详情
     goDetail(row) {
       const { id } = row.data;
@@ -284,6 +292,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.export-button{
+  float: right;
+}
 .search-item {
   margin-right: 20px;
   .label {

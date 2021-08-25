@@ -19,7 +19,7 @@
       <h4 class="block-tit">重点村古建筑调查表</h4>
       <VillageBaseForm class="input-item-wrp" :form="form" />
 
-      <h4 class="block-tit">古建筑数量</h4>
+      <h4 class="block-tit">古建筑数量（处）</h4>
       <div class="total-wrp"><span>总数：</span>{{ total }} 个</div>
       <VillageHistoryBuildingForm class="input-item-wrp" :form="form" />
 

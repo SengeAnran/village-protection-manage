@@ -45,4 +45,5 @@ export const HISTORY_BUILDINGS = [
   { label: "古寺庙", value: "templeNum" },
   { label: "近现代建筑", value: "modernBuildingNum" },
   { label: "特色建材", value: "featureNum" },
+  { label: "其他", value: "other" },
 ];
