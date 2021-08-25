@@ -372,6 +372,15 @@ export const defaultRoutes = [
         component: () => import("@/views/Setting/Info/index.vue"),
       },
       {
+        path: "/statistics",
+        name: "Statistics",
+        meta: {
+          title: "数据统计",
+          menuIds: [9003],
+        },
+        component: () => import("@/views/Setting/Statistics/index.vue"),
+      },
+      {
         path: "/userSetting",
         name: "UserSetting",
         meta: {
