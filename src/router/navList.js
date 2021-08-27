@@ -348,6 +348,17 @@ export const defaultRoutes = [
       },
     ],
   },
+  // 政策查询
+  {
+    path: "/policyQuery",
+    component: () => import("@/views/PolicyQuery/index.vue"),
+    neme: "PolicyQuery",
+    meta: {
+      title: "政策查询",
+      icon: "zhengcechaxun",
+      menuIds: [10000],
+    },
+  },
   // 系统管理
   {
     path: "/setting",
@@ -401,5 +412,16 @@ export const defaultRoutes = [
       menuIds: [101],
     },
     component: () => import("@/views/SystemLog/index.vue"),
+  },
+  // 政策文件管理
+  {
+    path: "/policyDocManage",
+    component: () => import("@/views/PolicyDocManage/index.vue"),
+    neme: "PolicyDocManage",
+    meta: {
+      title: "政策文件管理",
+      icon: "zhengcewenjianguanli",
+      menuIds: [201],
+    },
   },
 ];

@@ -11,7 +11,6 @@
       </div>
       <slot name="export"></slot>
     </div>
-
     <!--crud操作-->
     <div style="margin-bottom: 15px">
       <el-button
@@ -30,6 +29,10 @@
         @click="deleteMultiple"
         >批量删除</el-button
       >
+    </div>
+    <!--    表格与搜索之间的插槽 -->
+    <div>
+      <slot name="insert"></slot>
     </div>
 
     <!--表格-->

@@ -1,0 +1,100 @@
+<template>
+  <div class="village-manage block">
+    <!--    <div v-if="$route.name === 'Statistics'">-->
+    <div>
+      <div class="text-lg mb-4">政策列表</div>
+      <Crud
+        ref="crud"
+        :get-method="getMethod"
+        :query.sync="query"
+        id-key="id"
+        :selection="true"
+        actionWidth="180px"
+        :multipleDelete="true"
+        :hideEdit="true"
+        :hideView="true"
+        :permission-add="10004"
+        :permission-edit="0"
+        :permission-delete="10004"
+      >
+        <template v-slot:search>
+          <div class="inline-flex items-center mb-6 pl-0">
+            政策名称：
+            <el-input
+              v-model="query.policyName"
+              style="width: 200px"
+              placeholder="请输入"
+              clearable
+            ></el-input>
+          </div>
+        </template>
+
+        <template v-slot:table>
+          <el-table-column
+            label="政策名称"
+            prop="policyName"
+            width="500"
+          ></el-table-column>
+          <el-table-column label="上传时间" prop="gmtCreate">
+            <!--            <template slot-scope="scope">-->
+            <!--              <p>{{ declareType[scope.row.declareType] }}</p>-->
+            <!--            </template>-->
+          </el-table-column>
+        </template>
+        <template v-slot:tableEdit="scope">
+          <el-link
+            type="danger"
+            @click.native="download(scope)"
+          >下载</el-link
+          >
+        </template>
+      </Crud>
+    </div>
+  </div>
+</template>
+<script>
+// import { mapMutations, mapGetters } from "vuex";
+import { getVillageList } from "@/api/villageManage";
+
+export default {
+  data() {
+    return {
+      query: {
+        policyName: '',
+      },
+      getMethod: getVillageList,
+    };
+  },
+  computed: {
+  },
+  beforeMount() {
+  },
+  mounted() {
+  },
+  methods: {
+    download(row) {
+      console.log(row)
+    }
+  }
+};
+</script>
+<style lang="scss" scoped>
+.search-item {
+  margin-right: 20px;
+  .label {
+    font-weight: 400;
+    color: #333333;
+  }
+}
+.status {
+  display: inline-block;
+  margin-right: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 100%;
+  background: #ccc;
+  &.active {
+    background: #15be50;
+  }
+}
+</style>

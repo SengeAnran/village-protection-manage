@@ -7,6 +7,7 @@ import "tailwindcss/tailwind.css";
 import "element-ui/lib/theme-chalk/index.css";
 import "@/assets/style/index.scss";
 import "./icons"; // icon
+import * as echarts from 'echarts';
 
 import "@/components/global.js";
 import components from "@/utils/component.js";
@@ -21,6 +22,7 @@ Vue.config.productionTip = false;
 Vue.use(ElementUI, {
   size: "small",
 });
+Vue.prototype.$echarts = echarts;
 Vue.use(components);
 
 new Vue({
