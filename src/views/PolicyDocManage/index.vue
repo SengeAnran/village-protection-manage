@@ -48,6 +48,18 @@
           >下载</el-link
           >
         </template>
+        <template v-slot:form>
+          <el-form-item label="政策名称：" prop="policyName">
+            <el-input v-model="form.policyName" placeholder="请输入"></el-input>
+          </el-form-item>
+          <el-form-item label="政策文件：">
+            <UploadFile
+              @add="addFile"
+              @remove="removeFile"
+            >
+            </UploadFile>
+          </el-form-item>
+        </template>
       </Crud>
     </div>
   </div>
@@ -62,6 +74,9 @@ export default {
       query: {
         policyName: '',
       },
+      form: {
+        policyName: '',
+      },
       getMethod: getVillageList,
     };
   },
@@ -74,6 +89,12 @@ export default {
   methods: {
     download(row) {
       console.log(row)
+    },
+    addFile(data) {
+      console.log(data);
+    },
+    removeFile(fileInfo) {
+      console.log(fileInfo);
     }
   }
 };
