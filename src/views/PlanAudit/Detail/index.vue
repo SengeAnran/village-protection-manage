@@ -21,9 +21,9 @@
           <el-form-item
             class="inline-block"
             label="单位资质："
-            prop="unitQualification"
+            prop="qualification"
           >
-            <p class="input">{{ form.unitQualification }}</p>
+            <p class="input">{{ form.qualification }}</p>
           </el-form-item>
           <el-form-item
             class="inline-block"
@@ -111,7 +111,7 @@ export default {
         suggestion: "",
         suggestionFilesArr: [],
         villageDetailId: "",
-        unitQualification: "",
+        qualification: "",
         score: "", // 分数
         grade: "", // 等级
       },

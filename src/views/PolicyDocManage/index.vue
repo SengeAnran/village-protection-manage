@@ -5,6 +5,7 @@
       <div class="text-lg mb-4">政策列表</div>
       <Crud
         ref="crud"
+        :form.sync="form"
         :get-method="getMethod"
         :query.sync="query"
         id-key="id"
@@ -13,9 +14,9 @@
         :multipleDelete="true"
         :hideEdit="true"
         :hideView="true"
-        :permission-add="10004"
+        :permission-add="20101"
         :permission-edit="0"
-        :permission-delete="10004"
+        :permission-delete="20102"
       >
         <template v-slot:search>
           <div class="inline-flex items-center mb-6 pl-0">
@@ -49,15 +50,22 @@
           >
         </template>
         <template v-slot:form>
-          <el-form-item label="政策名称：" prop="policyName">
+          <el-form-item label="政策名称：" prop="policyName" :rules="rule.input">
             <el-input v-model="form.policyName" placeholder="请输入"></el-input>
           </el-form-item>
-          <el-form-item label="政策文件：">
+          <el-form-item label="政策文件：" :rules="rule.upload" prop="processFilesArr" >
             <UploadFile
-              @add="addFile"
-              @remove="removeFile"
+              :data="form.processFilesArr"
+              tip="支持扩展名：.rar .zip .doc .docx .pdf .jpg..."
+              accept=".rar,.zip,.doc,.docx,.pdf,.jpg"
+              @add="addFile($event, 'processFilesArr')"
+              @remove="removeFile($event, 'processFilesArr')"
             >
             </UploadFile>
+<!--            <p style="color: #999999" class="py-3">-->
+<!--&lt;!&ndash;              <i class="el-icon-warning"></i>&ndash;&gt;-->
+<!--              支持扩展名：.rar .zip .doc .docx .pdf .jpg...-->
+<!--            </p>-->
           </el-form-item>
         </template>
       </Crud>
@@ -67,8 +75,10 @@
 <script>
 // import { mapMutations, mapGetters } from "vuex";
 import { getVillageList } from "@/api/villageManage";
+import rule from "@/mixins/rule";
 
 export default {
+  mixins: [rule],
   data() {
     return {
       query: {
@@ -76,6 +86,7 @@ export default {
       },
       form: {
         policyName: '',
+        processFilesArr:[],
       },
       getMethod: getVillageList,
     };
@@ -90,12 +101,19 @@ export default {
     download(row) {
       console.log(row)
     },
-    addFile(data) {
-      console.log(data);
+    addFile(file, key) {
+      this.form[key].push(file);
     },
-    removeFile(fileInfo) {
-      console.log(fileInfo);
-    }
+    removeFile(file, key) {
+      let removeIndex;
+      this.form[key].forEach((item, index) => {
+        if(item.uid === file.uid || item.filePath === file.url)
+          removeIndex = index
+      })
+      if(removeIndex !== -1) {
+        this.form[key].splice(removeIndex,1);
+      }
+    },
   }
 };
 </script>

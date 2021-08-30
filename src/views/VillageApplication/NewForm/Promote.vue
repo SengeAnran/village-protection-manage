@@ -141,6 +141,7 @@ export default {
         templeNum: "", //古寺数量
         modernBuildingNum: "", //近现代建筑数量
         featureNum: "", //特色建材数量
+        other: "", //其他
 
         introduction: "", //introduction
         villagePicturesArr: [], //图片数组

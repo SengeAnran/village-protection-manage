@@ -27,11 +27,11 @@
             class="inline-block"
             label="单位资质："
             :rules="rule.input"
-            prop="unitQualification"
+            prop="qualification"
           >
             <el-input
               class="input"
-              v-model="form.unitQualification"
+              v-model="form.qualification"
               placeholder="请输入"
             />
           </el-form-item>
@@ -167,7 +167,7 @@ export default {
       form: {
         approvalFilesArr: [],
         companyName: "",
-        unitQualification: "",
+        qualification: "",
         countyManager: "",
         id: "",
         planFilesArr: [],

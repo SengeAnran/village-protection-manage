@@ -432,10 +432,13 @@ export default {
     },
     // 新增
     addItem() {
-      this.$router.push(this.addPath);
-      // this.updateForm(_.cloneDeep(this.defaultForm));
-      // this.openDialog();
-      // this.mode = 0;
+      if(this.addPath) {
+        this.$router.push(this.addPath);
+      } else {
+        this.updateForm(_.cloneDeep(this.defaultForm));
+        this.openDialog();
+        this.mode = 0;
+      }
     },
     // 编辑
     editItem(item) {
