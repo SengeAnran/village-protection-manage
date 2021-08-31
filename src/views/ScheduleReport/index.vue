@@ -189,7 +189,9 @@ import {
   getProjectProgress,
   setProjectDeadline,
   remindProgress,
+  exportList,
 } from "@/api/scheduleManage";
+import { downloadFile } from "@/utils/data"
 
 export default {
   mixins: [rule],
@@ -213,8 +215,9 @@ export default {
   methods: {
     // 导出
     clickExport() {
-      const data = this.query;
-      console.log(data);
+      exportList().then(res => {
+        downloadFile(res,'XX县重点项目最新进度')
+      })
     },
     // 进度详情
     goDetail(row) {

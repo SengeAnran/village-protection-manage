@@ -153,7 +153,7 @@ export default {
     async clickExport() {
       const { id } = this.$route.query;
       const res = await getvillageDetailExport({id})
-      downloadFile(res.data,'古建筑村落调查表')
+      downloadFile(res,'古建筑村落调查表')
     },
     countTotal() {
       return HISTORY_BUILDINGS.reduce((pre, next) => {

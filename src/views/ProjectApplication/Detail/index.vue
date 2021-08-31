@@ -494,7 +494,8 @@
 <script>
 import rule from "@/mixins/rule";
 import _ from "lodash";
-import { getProjectDetail } from "@/api/projectDeclare";
+import { getProjectDetail, pogressExport } from "@/api/projectDeclare";
+import { downloadFile } from "@/utils/data"
 
 export default {
   mixins: [rule],
@@ -578,7 +579,10 @@ export default {
   methods: {
     //导出
     clickExport() {
-      console.log('点击了导出');
+      const { id } = this.$route.query;
+      pogressExport({id}).then(res => {
+        downloadFile(res,'古建筑村落调查表')
+      })
     },
     async getDetail() {
       if (this.type === "add") {

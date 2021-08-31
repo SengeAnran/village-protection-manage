@@ -59,3 +59,12 @@ export const deleteProject = (data) => {
     data,
   });
 };
+
+
+// 导出
+export const pogressExport = (params) => {
+  return axios.request({
+    method: "get",
+    url: apiHost + "/projectProgress/pogressExport/" + params.id,
+  });
+};

@@ -92,3 +92,12 @@ export const remindProgress = (data) => {
     data,
   });
 };
+
+// 导出 (村id)
+export const exportList = (params) => {
+  return axios.request({
+    method: "get",
+    url: apiHost + "/projectProgress/pogressExport/" + params.id ,
+    responseType: "blob"
+  });
+};

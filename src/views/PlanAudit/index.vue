@@ -148,6 +148,7 @@
 import { getPlanList, exportList, verifyPlan } from "@/api/planningReview";
 import rule from "@/mixins/rule";
 import { mapGetters } from "vuex";
+import { downloadFile } from "@/utils/data"
 
 export default {
   mixins: [rule],
@@ -206,7 +207,7 @@ export default {
   methods: {
     clickExport() {
       exportList().then(res => {
-        console.log(res)
+        downloadFile(res,'历史文化（传统）村落保护利用重点村规划评审结果情况表')
       })
     },
     showVerify(status) {

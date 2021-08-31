@@ -120,9 +120,7 @@ export default {
         declareYear: Number(this.query.declareYear),
       }
       const res = await exportData(data)
-      console.log(res)
       const fileName = this.query.declareYear +'年度历史文化（传统）村落保护利用'+ (this.query.declareType === 1001? '一般村':'中带农村')+'备案名单';
-      console.log(fileName)
       downloadFile(res, fileName )
     },
   }
