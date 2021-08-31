@@ -45,11 +45,11 @@
         </template>
 
         <template v-slot:crudAction>
-          <el-button type="primary" size="small" icon="el-icon-upload2"> 导出数据 </el-button>
+          <el-button type="primary" size="small" icon="el-icon-upload2" @click="exportData"> 导出数据 </el-button>
         </template>
 
         <template v-slot:insert>
-          <bar :data="barDate"></bar>
+          <bar :query="query"></bar>
         </template>
 
         <template v-slot:table>
@@ -79,6 +79,8 @@
 <script>
 // import { mapMutations, mapGetters } from "vuex";
 import { getVillageList } from "@/api/villageManage";
+import { exportData } from "@/api/statistics";
+import { downloadFile } from "@/utils/data"
 import bar from "./Bar"
 
 export default {
@@ -88,17 +90,17 @@ export default {
   data() {
     return {
       query: {
-        declareType: 1,
-        declareYear: new Date(),
+        declareType: 1001,
+        declareYear: new Date().getFullYear().toString(),
       },
       declareTypeOpt: [
         {
-          value: 1,
-          label: '重点村',
+          value: 1001 ,
+          label: '一般村',
         },
         {
-          value: 2,
-          label: '一般村',
+          value: 1002,
+          label: '重点村',
         },
       ],
       barDate: [],
@@ -110,10 +112,19 @@ export default {
   beforeMount() {
   },
   mounted() {
-    console.log(new Date().getFullYear())
   },
   methods: {
-
+    async exportData() {
+      const data = {
+        declareType: this.query.declareType,
+        declareYear: Number(this.query.declareYear),
+      }
+      const res = await exportData(data)
+      console.log(res)
+      const fileName = this.query.declareYear +'年度历史文化（传统）村落保护利用'+ (this.query.declareType === 1001? '一般村':'中带农村')+'备案名单';
+      console.log(fileName)
+      downloadFile(res, fileName )
+    },
   }
 };
 </script>

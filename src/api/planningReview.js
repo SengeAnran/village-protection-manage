@@ -50,3 +50,11 @@ export const getProcess = (id) => {
     url: apiHost + "/planningReview/process/" + id,
   });
 };
+// 导出 (村id)
+export const exportList = () => {
+  return axios.request({
+    method: "get",
+    url: apiHost + "/planningReview/export" ,
+    responseType: "blob"
+  });
+};

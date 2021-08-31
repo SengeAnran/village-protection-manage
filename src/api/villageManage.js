@@ -83,3 +83,12 @@ export const getCanPromoteList = (params) => {
     params,
   });
 };
+// 导出村庄详情
+export const getvillageDetailExport = (params) => {
+  return axios.request({
+    method: "GET",
+    url: apiHost + "/villageDeclaration/villageDetailExport/" + params.id,
+    params,
+    responseType: "blob"
+  });
+};

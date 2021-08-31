@@ -73,7 +73,8 @@
 <script>
 import rule from "@/mixins/rule";
 import { HISTORY_BUILDINGS } from "../constants";
-import { getVillageItemDetail } from "@/api/villageManage";
+import { getVillageItemDetail, getvillageDetailExport } from "@/api/villageManage";
+import { downloadFile } from "@/utils/data"
 
 export default {
   mixins: [rule],
@@ -149,8 +150,10 @@ export default {
         this.total = this.countTotal();
       });
     },
-    clickExport() {
-      console.log('点击了导出');
+    async clickExport() {
+      const { id } = this.$route.query;
+      const res = await getvillageDetailExport({id})
+      downloadFile(res.data,'古建筑村落调查表')
     },
     countTotal() {
       return HISTORY_BUILDINGS.reduce((pre, next) => {

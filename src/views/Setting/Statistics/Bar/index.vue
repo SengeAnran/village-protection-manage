@@ -6,13 +6,13 @@
 <script>
 import * as echarts from "echarts/lib/echarts";
 import getOptions from "./options";
-import { getEchartData } from "../../../../api/statistics";
+import { getEchartData } from "@/api/statistics";
 
 export default {
   name: "bar",
   props: {
-    data: {
-      type: Array,
+    query: {
+      type: Object,
       default: () => {}
     }
   },
@@ -66,8 +66,19 @@ export default {
       ]
     }
   },
+  watch: {
+    query: {
+      // immediate: true,
+      handler(oldval, newval) {
+        console.log(oldval, newval);
+        this.fetchData();
+      },
+      deep: true,
+    },
+  },
   mounted() {
     this.initChart()
+    this.fetchData()
   },
   methods: {
     initChart() {
@@ -76,14 +87,12 @@ export default {
     },
     async fetchData() {
       const params = {
+        declareType: this.query.declareType,
+        declareYear: Number(this.query.declareYear),
       }
       const data = await getEchartData(params);
-      const list = data.map((d) => ({
-        ...d
-        // name: d
-      }));
-      this.chart.setOption(getOptions(list));
-
+      console.log(data)
+      this.chart.setOption(getOptions(data.distributionList));
     }
   },
 }

@@ -145,7 +145,7 @@
 </template>
 
 <script>
-import { getPlanList, verifyPlan } from "@/api/planningReview";
+import { getPlanList, exportList, verifyPlan } from "@/api/planningReview";
 import rule from "@/mixins/rule";
 import { mapGetters } from "vuex";
 
@@ -205,8 +205,9 @@ export default {
   },
   methods: {
     clickExport() {
-      const data = this.query;
-      console.log(data);
+      exportList().then(res => {
+        console.log(res)
+      })
     },
     showVerify(status) {
       if (this.userInfo.roleId === 3) {
