@@ -55,3 +55,12 @@ export const getAcceptanceInfo = (params) => {
     params,
   });
 };
+// 导出
+export const exportList = (params) => {
+  return axios.request({
+    method: "GET",
+    url: apiHost + "/acceptanceInfo/projectAssessExport",
+    params,
+    responseType: "blob"
+  });
+};

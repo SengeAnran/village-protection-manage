@@ -50,3 +50,13 @@ export const getProcess = (id) => {
     url: apiHost + "/planningReview/process/" + id,
   });
 };
+
+// 导出村庄详情
+export const exportList = (params) => {
+  return axios.request({
+    method: "GET",
+    url: apiHost + "/planningReview/export",
+    params,
+    responseType: "blob"
+  });
+};

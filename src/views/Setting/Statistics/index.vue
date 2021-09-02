@@ -58,14 +58,11 @@
             prop="villageName"
           ></el-table-column>
           <el-table-column label="类型" prop="declareType">
-<!--            <template slot-scope="scope">-->
-<!--              <p>{{ declareType[scope.row.declareType] }}</p>-->
-<!--            </template>-->
+            <template slot-scope="scope">
+              {{ scope.row.declareType | declareType }}
+            </template>
           </el-table-column>
-          <el-table-column label="申报年度" prop="gmtCreate">
-<!--            <template slot-scope="scope">-->
-<!--              <p>{{ scope.row.gmtCreate.slice(0, 11) }}</p>-->
-<!--            </template>-->
+          <el-table-column label="申报年度" prop="declareYear">
           </el-table-column>
           <el-table-column label="所属市" prop="city">
           </el-table-column>
@@ -78,8 +75,7 @@
 </template>
 <script>
 // import { mapMutations, mapGetters } from "vuex";
-import { getVillageList } from "@/api/villageManage";
-import { exportData } from "@/api/statistics";
+import { exportData, getList } from "@/api/statistics";
 import { downloadFile } from "@/utils/data"
 import bar from "./Bar"
 
@@ -104,7 +100,7 @@ export default {
         },
       ],
       barDate: [],
-      getMethod: getVillageList,
+      getMethod: getList,
     };
   },
   computed: {
@@ -123,6 +119,11 @@ export default {
       const fileName = this.query.declareYear +'年度历史文化（传统）村落保护利用'+ (this.query.declareType === 1001? '一般村':'中带农村')+'备案名单';
       downloadFile(res, fileName )
     },
+  },
+  filters: {
+    declareType(data) {
+      return data === 1001? '一般村' : '重点村'
+    }
   }
 };
 </script>

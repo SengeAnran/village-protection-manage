@@ -1,10 +1,23 @@
 <template>
   <div class="input-item-wrp">
     <el-form-item
-      label="当年户籍人口（人）"
+      label=""
       prop="population"
       :rules="rule.input"
     >
+      <div style="display: inline-block" slot="label">
+        当年户籍人口（人）
+        <el-popover
+          placement="top-start"
+          title=""
+          width="200"
+          trigger="hover"
+          content="按农经年报数填写。">
+          <div slot="reference" style="display: inline-block;width: 0.8rem; height: 0.8rem" >
+            <img src="./img/u15.png" alt="">
+          </div>
+        </el-popover>
+      </div>
       <el-input
         v-model.number="form.population"
         placeholder="请输入内容"
@@ -12,10 +25,22 @@
       ></el-input>
     </el-form-item>
     <el-form-item
-      label="当年村集体经济收入（万元）"
       prop="income"
       :rules="rule.input"
     >
+      <div style="display: inline-block" slot="label">
+        当年村集体经济收入（万元）
+        <el-popover
+          placement="top-start"
+          title=""
+          width="200"
+          trigger="hover"
+          content="按农经年报数填写。">
+          <div slot="reference" style="display: inline-block;width: 0.8rem; height: 0.8rem" >
+            <img src="./img/u15.png" alt="">
+          </div>
+        </el-popover>
+      </div>
       <el-input
         v-model.number="form.income"
         placeholder="请输入内容"
@@ -23,6 +48,19 @@
       ></el-input>
     </el-form-item>
     <el-form-item label="古建筑村落年代" prop="villageAge" :rules="rule.select">
+      <div style="display: inline-block" slot="label">
+        古建筑村落年代
+        <el-popover
+          placement="top-start"
+          title=""
+          width="200"
+          trigger="hover"
+          content="以村落内主要古建筑所属年代来确定村落年代，清代是指 1644—1911 年，明代是指 1368—1643 年，明代前是指 1367 年前，年代不能交叉。">
+          <div slot="reference" style="display: inline-block;width: 0.8rem; height: 0.8rem" >
+            <img src="./img/u15.png" alt="">
+          </div>
+        </el-popover>
+      </div>
       <el-select
         style="width: 100%"
         v-model="form.villageAge"

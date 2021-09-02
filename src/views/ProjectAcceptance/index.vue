@@ -54,7 +54,7 @@
       </template>
 
       <template v-slot:export>
-        <el-button class="export-button" @click="clickExport">导出</el-button>
+        <el-button v-if="userInfo.roleId === 1" class="export-button" @click="clickExport">导出</el-button>
       </template>
 
       <template
@@ -182,9 +182,10 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getAcceptanceList } from "@/api/projectAcceptance";
+import { getAcceptanceList, exportList } from "@/api/projectAcceptance";
 import rule from "@/mixins/rule";
 import Steps from "./components/Steps.vue";
+import { downloadFile } from "@/utils/data"
 
 export default {
   mixins: [rule],
@@ -244,8 +245,9 @@ export default {
   methods: {
     // 导出
     clickExport() {
-      const data = this.query;
-      console.log(data);
+      exportList().then(res => {
+        downloadFile(res,'重点村规划评审清单')
+      })
     },
     changeType(code) {
       this.query.declareType = code;

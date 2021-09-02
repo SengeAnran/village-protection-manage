@@ -21,3 +21,12 @@ export const exportData = (params) => {
     responseType: "blob"
   });
 };
+
+// 导出全省范围内已申报的村庄分布数据统计结果
+export const getList = (params) => {
+  return axios.request({
+    method: "GET",
+    url: apiHost + "/villageInfo/villageDistributionList",
+    params,
+  });
+};

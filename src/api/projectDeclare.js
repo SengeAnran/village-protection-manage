@@ -65,6 +65,7 @@ export const deleteProject = (data) => {
 export const pogressExport = (params) => {
   return axios.request({
     method: "get",
-    url: apiHost + "/projectProgress/pogressExport/" + params.id,
+    url: apiHost + "/projectDeclare/detailExport/" + params.id,
+    responseType: "blob"
   });
 };

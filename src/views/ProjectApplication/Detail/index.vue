@@ -495,7 +495,7 @@
 import rule from "@/mixins/rule";
 import _ from "lodash";
 import { getProjectDetail, pogressExport } from "@/api/projectDeclare";
-import { downloadFile } from "@/utils/data"
+import { downloadWordFile } from "@/utils/data"
 
 export default {
   mixins: [rule],
@@ -580,8 +580,10 @@ export default {
     //导出
     clickExport() {
       const { id } = this.$route.query;
+      const fileName = '项目申报文本'
       pogressExport({id}).then(res => {
-        downloadFile(res,'古建筑村落调查表')
+        console.log(res)
+        downloadWordFile(res,fileName)
       })
     },
     async getDetail() {

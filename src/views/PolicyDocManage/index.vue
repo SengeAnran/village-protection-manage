@@ -7,6 +7,8 @@
         ref="crud"
         :form.sync="form"
         :get-method="getMethod"
+        :add-method="addMethod"
+        :delete-method="deleteMethod"
         :query.sync="query"
         id-key="id"
         :selection="true"
@@ -53,13 +55,13 @@
           <el-form-item label="政策名称：" prop="policyName" :rules="rule.input">
             <el-input v-model="form.policyName" placeholder="请输入"></el-input>
           </el-form-item>
-          <el-form-item label="政策文件：" :rules="rule.upload" prop="processFilesArr" >
+          <el-form-item label="政策文件：" :rules="rule.upload" prop="multipartFileVOList" >
             <UploadFile
-              :data="form.processFilesArr"
+              :data="form.multipartFileVOList"
               tip="支持扩展名：.rar .zip .doc .docx .pdf .jpg..."
               accept=".rar,.zip,.doc,.docx,.pdf,.jpg"
-              @add="addFile($event, 'processFilesArr')"
-              @remove="removeFile($event, 'processFilesArr')"
+              @add="addFile($event, 'multipartFileVOList')"
+              @remove="removeFile($event, 'multipartFileVOList')"
             >
             </UploadFile>
 <!--            <p style="color: #999999" class="py-3">-->
@@ -74,7 +76,8 @@
 </template>
 <script>
 // import { mapMutations, mapGetters } from "vuex";
-import { getVillageList } from "@/api/villageManage";
+import {downloadFileByI} from '@/utils/data'
+import { getList, createPolicy, deletePolicy } from "@/api/policy";
 import rule from "@/mixins/rule";
 
 export default {
@@ -86,9 +89,11 @@ export default {
       },
       form: {
         policyName: '',
-        processFilesArr:[],
+        multipartFileVOList:[],
       },
-      getMethod: getVillageList,
+      getMethod: getList,
+      addMethod: createPolicy,
+      deleteMethod: deletePolicy,
     };
   },
   computed: {
@@ -99,10 +104,13 @@ export default {
   },
   methods: {
     download(row) {
-      console.log(row)
+      row.data.filePathList.forEach(item =>{
+        downloadFileByI(item);
+      });
     },
     addFile(file, key) {
       this.form[key].push(file);
+      console.log(this.form[key]);
     },
     removeFile(file, key) {
       let removeIndex;

@@ -491,11 +491,13 @@ export default {
     },
     // 保存
     async saveItem() {
+      console.log('点击了');
       this.$refs.form.validate(async (valid) => {
         if (valid) {
           try {
             this.loading = true;
             let data = this.form;
+            console.log(data);
             if (this.beforeSaveMethod) {
               data = this.beforeSaveMethod();
             }

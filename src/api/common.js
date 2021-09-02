@@ -9,3 +9,18 @@ export const uploadFile = (data) => {
     data,
   });
 };
+
+export const downloadFile = (params) => {
+  return axios.request({
+    method: "get",
+    url: apiHost + "/file/download/" + params.id,
+  });
+};
+
+export const deleteFile = (params) => {
+  return axios.request({
+    method: "get",
+    url: apiHost + "/file",
+    params,
+  });
+};

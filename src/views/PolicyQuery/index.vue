@@ -53,7 +53,8 @@
 </template>
 <script>
 // import { mapMutations, mapGetters } from "vuex";
-import { getVillageList } from "@/api/villageManage";
+import { getList } from "@/api/policy";
+import { downloadFileByI } from '@/utils/data'
 
 export default {
   data() {
@@ -61,7 +62,7 @@ export default {
       query: {
         policyName: '',
       },
-      getMethod: getVillageList,
+      getMethod: getList,
     };
   },
   computed: {
@@ -72,7 +73,9 @@ export default {
   },
   methods: {
     download(row) {
-      console.log(row)
+      row.data.filePathList.forEach(item =>{
+        downloadFileByI(item);
+      });
     }
   }
 };

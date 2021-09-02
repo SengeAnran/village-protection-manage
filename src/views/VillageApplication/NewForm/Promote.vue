@@ -28,7 +28,21 @@
       <h4 class="block-tit">重点村古建筑调查表</h4>
       <VillageBaseForm class="input-item-wrp" :form="form" disabled />
 
-      <h4 class="block-tit">古建筑数量</h4>
+      <div class="block-tit">
+        古建筑数量（处）
+        <div style="display: inline-block">
+          <el-popover
+            placement="top-start"
+            title=""
+            width="200"
+            trigger="hover"
+            content="“处”是指相对独立存在古建筑的数量单位，连为一体的几幢古建筑视为一处（如四合院就为一处），以下填报想总数与其中数之和相等，总数在 10 处以上。">
+            <div slot="reference" style="display: inline-block;width: 0.8rem; height: 0.8rem" >
+              <img src="../Components/img/u15.png" alt="">
+            </div>
+          </el-popover>
+        </div>
+      </div>
       <div class="total-wrp"><span>总数：</span>{{ total }} 个</div>
       <VillageHistoryBuildingForm
         class="input-item-wrp"

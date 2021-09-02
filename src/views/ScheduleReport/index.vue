@@ -216,7 +216,7 @@ export default {
     // 导出
     clickExport() {
       exportList().then(res => {
-        downloadFile(res,'XX县重点项目最新进度')
+        downloadFile(res,'重点项目最新进度')
       })
     },
     // 进度详情

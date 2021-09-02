@@ -97,7 +97,8 @@ export const remindProgress = (data) => {
 export const exportList = (params) => {
   return axios.request({
     method: "get",
-    url: apiHost + "/projectProgress/pogressExport/" + params.id ,
+    url: apiHost + "/projectProgress/pogressExport" ,
+    params,
     responseType: "blob"
   });
 };
