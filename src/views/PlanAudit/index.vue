@@ -206,7 +206,13 @@ export default {
   },
   methods: {
     clickExport() {
-      exportList().then(res => {
+      const params = {
+        declareYear: this.query.declareYear,
+        // pageNum: '',
+        // pageSize: '',
+        reviewStatus: this.query.reviewStatus,
+      }
+      exportList(params).then(res => {
         downloadFile(res,'历史文化（传统）村落保护利用重点村规划评审结果情况表')
       })
     },

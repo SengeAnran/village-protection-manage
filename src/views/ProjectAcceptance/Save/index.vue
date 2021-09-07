@@ -40,7 +40,7 @@
           </el-form-item>
           <p class="ml-4 mb-2 mt-4">{{ descName.slice(0, 2) }}</p>
           <el-form-item
-            v-if="type === 'add' && declareType === '1001'"
+            v-if="type === 'add' && roleId === 2"
             class="inline-block"
             label="验收结果："
             :rules="rule.select"
@@ -51,7 +51,7 @@
               <el-radio :label="0">不合格</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-row :gutter="40" v-if="type === 'add' && declareType === '1002'">
+          <el-row :gutter="40" v-if="type === 'add' && declareType === '1002' && roleId === 1">
             <el-col :span="6">
               <el-form-item label="分数:" :rules="rule.input" prop="score">
                 <el-input
@@ -147,6 +147,7 @@ export default {
       date: "",
       address: "",
       declareType: "",
+      roleId: "",
     };
   },
   computed: {
@@ -170,6 +171,7 @@ export default {
     this.total = this.$route.query.total;
     this.date = this.$route.query.date;
     this.address = this.$route.query.address;
+    this.roleId = this.$store.state.user.userInfo.roleId
     this.getDetail();
   },
   methods: {
