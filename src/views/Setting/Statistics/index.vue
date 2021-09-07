@@ -86,7 +86,7 @@ export default {
   data() {
     return {
       query: {
-        declareType: 1001,
+        declareType: 1002,
         declareYear: new Date().getFullYear().toString(),
       },
       declareTypeOpt: [
