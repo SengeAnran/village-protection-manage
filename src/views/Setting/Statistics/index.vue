@@ -16,6 +16,7 @@
         :permission-add="0"
         :permission-edit="0"
         :permission-delete="0"
+        @changeData="changeData"
       >
         <template v-slot:search>
           <div class="inline-flex mb-6 pl-0">
@@ -49,7 +50,7 @@
         </template>
 
         <template v-slot:insert>
-          <bar :query="query"></bar>
+          <bar :query="chartQuery"></bar>
         </template>
 
         <template v-slot:table>
@@ -89,6 +90,10 @@ export default {
         declareType: 1002,
         declareYear: new Date().getFullYear().toString(),
       },
+      chartQuery: {
+        declareType: 1002,
+        declareYear: new Date().getFullYear().toString(),
+      },
       declareTypeOpt: [
         {
           value: 1001 ,
@@ -112,14 +117,20 @@ export default {
   methods: {
     async exportData() {
       const data = {
-        declareType: this.query.declareType,
-        declareYear: Number(this.query.declareYear),
+        declareType: this.chartQuery.declareType,
+        declareYear: Number(this.chartQuery.declareYear),
       }
       const res = await exportData(data)
-      const fileName = this.query.declareYear +'年度历史文化（传统）村落保护利用'+ (this.query.declareType === 1001? '一般村':'中带农村')+'备案名单';
+      const fileName = this.chartQuery.declareYear +'年度历史文化（传统）村落保护利用'+ (this.chartQuery.declareType === 1001? '一般村':'中带农村')+'备案名单';
       downloadFile(res, fileName )
     },
+    changeData() {
+      console.log('change');
+      this.chartQuery.declareType = this.query.declareType;
+      this.chartQuery.declareYear = this.query.declareYear;
+    },
   },
+
   filters: {
     declareType(data) {
       return data === 1001? '一般村' : '重点村'

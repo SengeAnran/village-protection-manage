@@ -404,6 +404,7 @@ export default {
         }
         this.loading = false;
         this.afterGetMethod && this.afterGetMethod();
+        this.$emit('changeData')
       } finally {
         this.loading = false;
       }
