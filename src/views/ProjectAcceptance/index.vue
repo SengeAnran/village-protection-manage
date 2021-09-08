@@ -245,7 +245,12 @@ export default {
   methods: {
     // 导出
     clickExport() {
-      exportList().then(res => {
+      const data = {
+        declareType: this.query.declareType,
+        checkStatus: this.query.checkStatus,
+        address: this.query.address,
+      };
+      exportList(data).then(res => {
         downloadFile(res,'重点村规划评审清单')
       })
     },
