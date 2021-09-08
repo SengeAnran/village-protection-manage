@@ -118,6 +118,17 @@ export default {
       title: "新增",
     };
   },
+  watch: {
+    'form.areaId': {
+      handler(newVal, oldVal) {
+        if (newVal !== oldVal) {
+          console.log(newVal, oldVal)
+          console.log('改变了');
+        }
+      },
+      deep: true
+    }
+  },
   created() {
     this.getTree();
   },
