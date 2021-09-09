@@ -54,7 +54,7 @@
       </template>
 
       <template v-slot:export>
-        <el-button v-if="userInfo.roleId === 1" class="export-button" @click="clickExport">导出</el-button>
+        <el-button v-if="userInfo.roleId === 1 && query.declareType === 1002" class="export-button" @click="clickExport">导出</el-button>
       </template>
 
       <template

@@ -95,6 +95,7 @@ import {
   createInfo,
   modifyInfo,
   deleteInfo,
+  getArea,
 } from "@/api/infoSetting";
 import rule from "@/mixins/rule";
 
@@ -121,9 +122,10 @@ export default {
   watch: {
     'form.areaId': {
       handler(newVal, oldVal) {
-        if (newVal !== oldVal) {
-          console.log(newVal, oldVal)
-          console.log('改变了');
+        if (newVal) {
+          getArea(newVal).then(res => {
+            this.form.villageName = res.areaName;
+          })
         }
       },
       deep: true

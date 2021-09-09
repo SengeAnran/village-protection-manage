@@ -50,3 +50,10 @@ export const getAreaTree = () => {
     url: apiHost + "/villageInfo/tree",
   });
 };
+// 查询区域信息详情
+export const getArea = (id) => {
+  return axios.request({
+    method: "get",
+    url: apiHost + "/villageInfo/queryArea/" + id,
+  });
+};
