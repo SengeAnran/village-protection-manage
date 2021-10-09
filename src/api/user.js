@@ -20,8 +20,12 @@ export const QRCodeLogin = (data) => {
 };
 
 // 登出
-export const logout = () => {
-  return axios.post(`${apiHost}/logout`);
+export const logout = (data) => {
+  return axios.request({
+    method: "post",
+    url: apiHost + "/logout?loginType=" + data,
+  });
+  // return axios.post(`${apiHost}/logout`);
 };
 
 // 获取用户信息

@@ -117,8 +117,8 @@
               prop="suggestionFilesArr"
           >
             <UploadFile
-                tip="支持格式：.doc, .docx, .ppt"
-                accept=".doc,.docx,.ppt"
+                tip="支持格式：.doc, .docx, .pdf"
+                accept=".doc,.docx,.pdf"
                 :data="form.suggestionFilesArr"
                 @add="onFileAdd($event, 'suggestionFilesArr')"
                 @remove="onFileRemove($event, 'suggestionFilesArr')"
@@ -131,8 +131,8 @@
               prop="approvalFilesArr"
           >
             <UploadFile
-                tip="支持格式：.doc, .docx, .ppt"
-                accept=".doc,.docx,.ppt"
+                tip="支持格式：.doc, .docx,.pdf"
+                accept=".doc,.docx,.pdf"
                 :data="form.approvalFilesArr"
                 @add="onFileAdd($event, 'approvalFilesArr')"
                 @remove="onFileRemove($event, 'approvalFilesArr')"

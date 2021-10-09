@@ -44,7 +44,7 @@ export default {
     // 登出
     logout() {
       return new Promise((resolve) => {
-        logout().then(() => {
+        logout('ext').then(() => {
           removeToken();
           location.href = config.loginPath;
           resolve();

@@ -53,7 +53,8 @@
               :rules="rule.select"
               prop="villageDetailId"
             >
-              <p class="input">{{ form1.address }}{{ form1.villageName }}</p>
+              <p class="input">{{ form1.address }}</p>
+<!--              <p class="input">{{ form1.address }}{{ form1.villageName }}</p>-->
             </el-form-item>
           </div>
           <div>

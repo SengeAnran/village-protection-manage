@@ -14,7 +14,8 @@
         label-width="80px"
       >
         <el-form-item label="村庄地址" prop="villageId">
-          <p class="content">{{ form.address }}{{ form.villageName }}</p>
+          <p class="content">{{ form.address }}</p>
+<!--          <p class="content">{{ form.address }}{{ form.villageName }}</p>-->
         </el-form-item>
 
         <h4 class="block-tit">重点村古建筑调查表</h4>
@@ -54,7 +55,8 @@
           </el-form-item>
         </div>
 
-        <div v-if="form.declareType !== 1001">
+<!--        <div v-if="form.declareType !== 1001">-->
+        <div>
           <h4 class="block-tit">推荐村简介</h4>
           <div class="input-item-wrp">
             <el-form-item label="推荐村简介" prop="introduction">

@@ -51,7 +51,7 @@
             type="textarea"
             :rows="5"
             placeholder="请输入"
-            maxlength="500"
+            maxlength="2000"
             show-word-limit
             v-model="form.introduction"
           >

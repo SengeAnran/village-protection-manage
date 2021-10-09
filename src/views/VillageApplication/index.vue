@@ -25,7 +25,7 @@
               <span class="label">申请类型：</span>
               <el-select v-model="query.declareType" placeholder="请选择">
                 <el-option
-                  v-for="item in declareTypeOpt"
+                  v-for="item in queryDeclareTypeOpt"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
@@ -167,6 +167,12 @@ export default {
         declareStatus: "",
         declareYear: "",
       },
+      queryDeclareTypeOpt: [
+        {
+          label: "全部",
+          value: ""
+        }
+      ],
       getMethod: getVillageList,
       deleteMethod: deleteVillageItem,
     };
@@ -181,7 +187,9 @@ export default {
     this.declareType = DECLEAR_TYPE;
     this.declareStatus = DECLEAR_STATUS;
     this.declareTypeOpt = this.normalizeSelectOptions(DECLEAR_TYPE);
-    this.declareStatusOpt = this.normalizeSelectOptions(DECLEAR_STATUS);
+    this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(this.normalizeSelectOptions(DECLEAR_TYPE));
+    console.log(this.queryDeclareTypeOpt);
+    this.declareStatusOpt = this.queryDeclareTypeOpt.concat(this.normalizeSelectOptions(DECLEAR_STATUS));
 
     this.XIANJI_ACTION = {
       申报详情: () => true,

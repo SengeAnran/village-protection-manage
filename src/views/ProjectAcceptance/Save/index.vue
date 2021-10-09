@@ -87,8 +87,8 @@
             prop="processFilesArr"
           >
             <UploadFile
-              tip="支持格式：.doc, .docx, .ppt"
-              accept=".doc,.docx,.ppt"
+              tip="支持格式：.doc, .docx, .pdf"
+              accept=".doc,.docx,.pdf"
               :data="form.processFilesArr"
               @add="onFileAdd($event, 'processFilesArr')"
               @remove="onFileRemove($event, 'processFilesArr')"

@@ -35,6 +35,45 @@
       </div>
       <div class="total-wrp"><span>总数：</span>{{ total }} 个</div>
       <VillageHistoryBuildingForm class="input-item-wrp" :form="form" />
+      <h4 class="block-tit">推荐村简介</h4>
+      <div>
+        <el-form-item
+          label="推荐村简介"
+          prop="introduction"
+          :rules="rule.input"
+        >
+          <el-input
+            style="width: 42%"
+            type="textarea"
+            :rows="5"
+            placeholder="请输入"
+            maxlength="2000"
+            show-word-limit
+            v-model="form.introduction"
+          >
+          </el-input>
+          <p style="width: 42%; color: #999" class="py-4 leading-5">
+            要求：1、标题简炼，特色鲜明；2、简介内容包含村庄基本概况、古建状况、人文底蕴；3、文字精炼、彰显其历史文化价值和保护利用价值这两个价值的必要性。
+          </p>
+        </el-form-item>
+
+        <h4 class="block-tit">村庄图片</h4>
+        <el-form-item label="" prop="villagePicturesArr" :rules="imgRule">
+          <p style="color: #ff6b00" class="py-3">
+            <i class="el-icon-warning"></i>
+            需要上传5张以上图片，包括村庄全景图、重要古建筑全景图及珍贵构件细节图，否则将影响申报结果。
+          </p>
+          <UploadImg
+            :data="imageList"
+            @add="onImageAdd"
+            @remove="onImageRemove"
+          />
+        </el-form-item>
+
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="dialogImageUrl" alt="" />
+        </el-dialog>
+      </div>
     </el-form>
     <div>
       <el-button @click="$emit('close')">取消</el-button>
@@ -96,6 +135,10 @@ export default {
         modernBuildingNum: "", //近现代建筑数量
         featureNum: "", //特色建材数量
         other: "", //其他
+
+        introduction: "", //introduction
+        villagePicturesArr: [], //图片数组
+        villagePicturesFiles: [], // 编辑表单时图片回显
       },
 
       parentRouteName: VILLAGE_LIST_ROUTER_NAME[1001],
@@ -112,12 +155,14 @@ export default {
     type(val) {
       if (val === "edit") {
         this.form = this.data;
+        this.imageList = [...this.data.villagePicturesFiles];
       }
     },
   },
   mounted() {
     if (this.type === "edit") {
       this.form = this.data;
+      this.imageList = [...this.data.villagePicturesFiles];
     }
   },
   methods: {
@@ -141,6 +186,30 @@ export default {
       const { village, parent } = val;
       this.form.villageName = village.areaName;
       this.form.address = parent.areaName;
+    },
+
+    onImageAdd(res) {
+      if (!this.form.villagePicturesArr) {
+        this.form.villagePicturesArr = [];
+      }
+      if (!this.form.villagePicturesFiles) {
+        this.form.villagePicturesFiles = [];
+      }
+      this.form.villagePicturesArr.push(res.fileId);
+      this.form.villagePicturesFiles.push(res);
+
+      this.$refs.form.validateField("villagePicturesArr");
+    },
+    onImageRemove(res) {
+      const index = this.form.villagePicturesFiles.findIndex((list) => {
+        return list.uid === res.uid || list.filePath === res.url;
+      });
+
+      if (index !== -1) {
+        this.form.villagePicturesArr.splice(index, 1);
+        this.form.villagePicturesFiles.splice(index, 1);
+      }
+      this.$refs.form.validateField("villagePicturesArr");
     },
   },
 };
