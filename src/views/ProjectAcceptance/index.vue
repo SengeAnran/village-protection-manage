@@ -45,6 +45,10 @@
           clearable
         >
           <el-option
+            value=""
+            label="全部"
+          ></el-option>
+          <el-option
             v-for="item in Object.keys(reviewStatusMap)"
             :key="item"
             :value="item"

@@ -86,13 +86,13 @@
             />
           </el-form-item>
           <el-form-item
-              label="规划文本（仅限PPT格式）："
+              label="规划文本："
               :rules="rule.upload"
               prop="planFilesArr"
           >
             <UploadFile
-                tip="支持格式：.ppt"
-                accept=".ppt"
+                tip="支持格式：.ppt, .pptx"
+                accept=".ppt,.pptx"
                 :data="form.planFilesArr"
                 @add="onFileAdd($event, 'planFilesArr')"
                 @remove="onFileRemove($event, 'planFilesArr')"

@@ -28,17 +28,22 @@
           clearable
         >
           <el-option
-            v-for="item in Object.keys(projectTypeMap)"
-            :key="item"
-            :value="item"
-            :label="projectTypeMap[item]"
-          ></el-option>
+            v-for="item in statusOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
         </el-select>
         <el-select
           v-model="query.projectStatus"
           placeholder="请选择状态"
           clearable
         >
+          <el-option
+            value=""
+            label="全部"
+          ></el-option>
           <el-option
             v-for="item in Object.keys(projectStatusMap)"
             :key="item"
@@ -118,6 +123,13 @@ export default {
         projectStatus: "",
       },
       getMethod: getProjectList,
+      basicOption: [
+        {
+          label: "全部",
+          value: ""
+        }
+      ],
+      statusOptions: [],
       projectStatusMap: {
         2001: "待市级审核",
         2002: "市级审核不通过",
@@ -137,6 +149,8 @@ export default {
   },
 
   beforeMount() {
+    this.statusOptions = this.basicOption.concat(this.normalizeSelectOptions(this.projectTypeMap));
+    console.log( this.statusOptions)
     this.XIANJI_ACTION = {
       详情: () => true,
       修改: (status) => this._canModify(status, 3),
@@ -154,6 +168,16 @@ export default {
   },
 
   methods: {
+    normalizeSelectOptions(obj) {
+      if (!Object.prototype.toString.call(obj).slice(8, -1) === "Object")
+        return [];
+      return Object.keys(obj).map((key) => {
+        return {
+          label: obj[key],
+          value: key,
+        };
+      });
+    },
     goAdd() {
       this.$router.push({
         path: "/projectApplication/save?type=add",

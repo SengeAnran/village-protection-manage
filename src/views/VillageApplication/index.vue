@@ -173,6 +173,12 @@ export default {
           value: ""
         }
       ],
+      declareStatusOpt: [
+        {
+          label: "全部",
+          value: ""
+        }
+      ],
       getMethod: getVillageList,
       deleteMethod: deleteVillageItem,
     };
@@ -188,8 +194,7 @@ export default {
     this.declareStatus = DECLEAR_STATUS;
     this.declareTypeOpt = this.normalizeSelectOptions(DECLEAR_TYPE);
     this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(this.normalizeSelectOptions(DECLEAR_TYPE));
-    console.log(this.queryDeclareTypeOpt);
-    this.declareStatusOpt = this.queryDeclareTypeOpt.concat(this.normalizeSelectOptions(DECLEAR_STATUS));
+    this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(DECLEAR_STATUS));
 
     this.XIANJI_ACTION = {
       申报详情: () => true,
