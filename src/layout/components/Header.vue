@@ -16,7 +16,10 @@
         </div>
 
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click.native="logout"> 退出登录 </el-dropdown-item>
+          <el-dropdown-item @click.native="handleLogout"> 退出登录 </el-dropdown-item>
+          <el-dropdown-item @click.native="handleUnbind" v-show="zzdName">
+            解除绑定
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -25,14 +28,51 @@
 <script>
 import Notify from "@/components/Notify";
 import { mapGetters, mapActions } from "vuex";
+import { getLoginType } from "@/utils/auth";
+import { unBind } from "@/api/user";
+import { handleLoginOut } from "@/utils/auth";
 export default {
   name: "Header",
   components: { Notify },
   computed: {
     ...mapGetters(["userInfo"]),
+    zzdName() {
+      return this.userInfo.zzdName;
+    },
   },
   methods: {
     ...mapActions("user", ["logout"]),
+    handleLogout() {
+      const loginType = getLoginType();
+      const params = {
+        loginType: loginType === "in" ? "in" : "ext",
+      };
+      console.log(params);
+      this.logout(params);
+    },
+    handleUnbind() {
+      this.$confirm(
+        `确认将当前账户与浙政钉用户【${this.zzdName}】解绑?`,
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          this.unBind();
+        })
+        .catch(() => {});
+    },
+    unBind() {
+      const { userId } = this.$store.getters.userInfo;
+      if (!userId) return;
+      unBind({ userId }).then(() => {
+        handleLoginOut();
+        this.$message.success("解绑成功!");
+      });
+    },
   },
 };
 </script>

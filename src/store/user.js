@@ -1,6 +1,7 @@
 import { pwdLogin, logout, getUserInfo, getUserPermission } from "@/api/user";
-import { removeToken } from "@/utils/auth";
-import config from "@/utils/config";
+// import { removeToken } from "@/utils/auth";
+import { handleLoginOut } from "@/utils/auth";
+// import config from "@/utils/config";
 
 export default {
   namespaced: true,
@@ -41,12 +42,21 @@ export default {
         });
       });
     },
+    // // 登出
+    // logout() {
+    //   return new Promise((resolve) => {
+    //     logout('ext').then(() => {
+    //       removeToken();
+    //       location.href = config.loginPath;
+    //       resolve();
+    //     });
+    //   });
+    // },
     // 登出
-    logout() {
+    logout(context, params) {
       return new Promise((resolve) => {
-        logout('ext').then(() => {
-          removeToken();
-          location.href = config.loginPath;
+        logout(params).then(() => {
+          handleLoginOut();
           resolve();
         });
       });

@@ -28,6 +28,15 @@ export const logout = (data) => {
   // return axios.post(`${apiHost}/logout`);
 };
 
+// 解除绑定
+export const unBind = (params) => {
+  return axios.request({
+    method: "GET",
+    url: apiHost + "/user/unBind",
+    params,
+  });
+};
+
 // 获取用户信息
 export const getUserInfo = () => {
   return axios.get(`${apiHost}/user/info`);
@@ -71,4 +80,9 @@ export const postAuth = (data) => {
 // 解除授权
 export const postUnAuth = (data) => {
   return axios.post(`${apiHost}/user/unAuth`, data);
+};
+
+// 子系统扫码绑定
+export const scanBinding = (data) => {
+  return axios.post(`${apiHost}/scanBinding`, data);
 };
