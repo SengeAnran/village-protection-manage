@@ -15,7 +15,7 @@
               <div class="relative">
                 <div class="role">{{ roleMap[item.role] }}</div>
                 <div class="mb-4">
-                  <el-tag>{{ reviewStatusMap[item.lastStatus] }}</el-tag>
+                  <el-tag  :type="reviewStatusMap[item.lastStatus] === '不通过'? 'danger' : ''">{{ reviewStatusMap[item.lastStatus] }}</el-tag>
                 </div>
                 <div class="mb-4">{{ item.gmtCreate }}</div>
                 <div class="text-gray-400 mb-2">验收意见</div>
@@ -51,11 +51,16 @@ export default {
       declareYear: "",
       reviewStatusMap: {
         2000: "未填报",
-        2001: "待市级审核",
-        2002: "市级审核不通过",
-        2003: "省级审核不通过",
-        2004: "市级审核通过，待省级审核",
-        2999: "验收通过",
+        // 2001: "待市级审核",
+        // 2002: "市级审核不通过",
+        // 2003: "省级审核不通过",
+        // 2004: "市级审核通过，待省级审核",
+        // 2999: "验收通过",
+        2001: "通过",
+        2002: "不通过",
+        2003: "不通过",
+        2004: "通过",
+        2999: "通过",
       },
       form: {},
       processList: [],
