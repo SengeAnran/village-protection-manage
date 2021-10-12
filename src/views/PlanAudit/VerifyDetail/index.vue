@@ -25,11 +25,17 @@
           </div>
           <p class="ml-4 mb-2 mt-4">审核详情</p>
           <el-timeline class="mt-8 ml-14" v-if="processList.length">
-            <el-timeline-item v-for="item in processList" :key="item.id">
+            <el-timeline-item
+              v-for="item in processList"
+              :key="item.id"
+              :icon="reviewStatusMap[item.lastStatus] === '通过'? 'el-icon-check':'el-icon-close'"
+              :type="reviewStatusMap[item.lastStatus] === '通过'? 'success':'danger'"
+              size="large"
+            >
               <div class="relative">
                 <div class="role">{{ roleMap[item.role] }}</div>
                 <div class="mb-4">
-                  <el-tag>{{ reviewStatusMap[item.lastStatus] }}</el-tag>
+                  <el-tag :type="reviewStatusMap[item.lastStatus] === '不通过'? 'danger' : 'success'">{{ reviewStatusMap[item.lastStatus] }}</el-tag>
                 </div>
                 <div class="mb-4">{{ item.gmtCreate }}</div>
                 <div class="text-gray-400 mb-4">验收意见</div>

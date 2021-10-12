@@ -55,7 +55,7 @@ export default {
     // 登出
     logout(context, params) {
       return new Promise((resolve) => {
-        logout(params).then(() => {
+        logout(params.loginType).then(() => {
           handleLoginOut();
           resolve();
         });

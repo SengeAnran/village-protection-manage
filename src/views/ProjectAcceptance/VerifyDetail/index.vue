@@ -11,11 +11,17 @@
         </div>
         <div class="mt-4">
           <el-timeline class="mt-8 ml-14">
-            <el-timeline-item v-for="item in processList" :key="item.id">
+            <el-timeline-item
+              v-for="item in processList"
+              :key="item.id"
+              :icon="reviewStatusMap[item.lastStatus] === '通过'? 'el-icon-check':'el-icon-close'"
+              :type="reviewStatusMap[item.lastStatus] === '通过'? 'success':'danger'"
+              size="large"
+            >
               <div class="relative">
                 <div class="role">{{ roleMap[item.role] }}</div>
                 <div class="mb-4">
-                  <el-tag  :type="reviewStatusMap[item.lastStatus] === '不通过'? 'danger' : ''">{{ reviewStatusMap[item.lastStatus] }}</el-tag>
+                  <el-tag  :type="reviewStatusMap[item.lastStatus] === '不通过'? 'danger' : 'success'">{{ reviewStatusMap[item.lastStatus] }}</el-tag>
                 </div>
                 <div class="mb-4">{{ item.gmtCreate }}</div>
                 <div class="text-gray-400 mb-2">验收意见</div>
