@@ -39,20 +39,20 @@
           >
             <p class="input">{{ form.countyManager }}</p>
           </el-form-item>
-          <el-form-item
-            class="inline-block"
-            label="分数："
-            prop="score"
-          >
-            <p class="input">{{ form.score }}</p>
-          </el-form-item>
-          <el-form-item
-            class="inline-block"
-            label="评审等次："
-            prop="grade"
-          >
-            <p class="input">{{ form.grade }}</p>
-          </el-form-item>
+<!--          <el-form-item-->
+<!--            class="inline-block"-->
+<!--            label="分数："-->
+<!--            prop="score"-->
+<!--          >-->
+<!--            <p class="input">{{ form.score }}</p>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item-->
+<!--            class="inline-block"-->
+<!--            label="评审等次："-->
+<!--            prop="grade"-->
+<!--          >-->
+<!--            <p class="input">{{ form.grade }}</p>-->
+<!--          </el-form-item>-->
           <el-form-item label="规划文本（仅限PPT格式）：" prop="planFilesArr">
             <ViewFile
               :data="form.planFilesArr"
@@ -112,8 +112,8 @@ export default {
         suggestionFilesArr: [],
         villageDetailId: "",
         qualification: "",
-        score: "", // 分数
-        grade: "", // 等级
+        // score: "", // 分数
+        // grade: "", // 等级
       },
       detail: {},
     };

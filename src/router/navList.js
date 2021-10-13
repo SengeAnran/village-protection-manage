@@ -184,6 +184,18 @@ export const defaultRoutes = [
         },
         component: () => import("@/views/PlanAudit/VerifyDetail"),
       },
+      {
+        path: "/planAudit/review",
+        name: "PlanAuditReview",
+        hidden: true,
+        meta: {
+          title: "评审",
+          noCache: true,
+          activeMenu: "/planAudit/index",
+          menuIds: [30003],
+        },
+        component: () => import("@/views/PlanAudit/Review"),
+      },
     ],
   },
   // 项目申报 / 项目审核

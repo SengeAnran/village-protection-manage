@@ -57,11 +57,11 @@
           </p>
         </el-form-item>
 
-        <h4 class="block-tit">村庄图片</h4>
-        <el-form-item label="" prop="villagePicturesArr" :rules="imgRule">
+<!--        <h4 class="block-tit">村庄图片</h4>-->
+        <el-form-item label="村庄图片" prop="villagePicturesArr" :rules="imgRule">
           <p style="color: #ff6b00" class="py-3">
             <i class="el-icon-warning"></i>
-            需要上传5张以上图片，包括村庄全景图、重要古建筑全景图及珍贵构件细节图，否则将影响申报结果。
+            需要上传1张以上图片。
           </p>
           <UploadImg
             :data="imageList"
@@ -88,7 +88,13 @@ import VillageBaseForm from "../Components/VillageBaseForm";
 import VillageHistoryBuildingForm from "../Components/VillageHistoryBuildingForm";
 
 import { VILLAGE_LIST_ROUTER_NAME, HISTORY_BUILDINGS } from "../constants";
-
+const imgs = (rule, value, callback) => {
+  if (value.length < 1) {
+    callback(new Error("需要上传1张以上图片"));
+  } else {
+    callback();
+  }
+};
 export default {
   mixins: [rule],
   components: {
@@ -142,6 +148,7 @@ export default {
       },
 
       parentRouteName: VILLAGE_LIST_ROUTER_NAME[1001],
+      imgRule: { required: true, validator: imgs, trigger: "change" },
     };
   },
   computed: {

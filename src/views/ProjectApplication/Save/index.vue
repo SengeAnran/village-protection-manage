@@ -149,8 +149,6 @@
             <el-form-item
               class="inline-block"
               label="项目施工单位："
-              :rules="rule.input"
-              prop="constructionCompanyName"
             >
               <el-input
                 class="input"
@@ -163,8 +161,6 @@
             <el-form-item
               class="inline-block"
               label="施工单位联系电话："
-              :rules="rule.mobile"
-              prop="companyMobile"
             >
               <el-input
                 class="input"

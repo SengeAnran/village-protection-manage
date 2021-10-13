@@ -61,8 +61,8 @@
           </p>
         </el-form-item>
 
-        <h4 class="block-tit">村庄图片</h4>
-        <el-form-item label="" prop="villagePicturesArr" :rules="imgRule">
+<!--        <h4 class="block-tit">村庄图片</h4>-->
+        <el-form-item label="村庄图片" prop="villagePicturesArr" :rules="imgRule">
           <p style="color: #ff6b00" class="py-3">
             <i class="el-icon-warning"></i>
             需要上传5张以上图片，包括村庄全景图、重要古建筑全景图及珍贵构件细节图，否则将影响申报结果。

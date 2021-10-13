@@ -19,7 +19,7 @@
     <p class="tips">手机扫码登录</p>
     <BindAccount
       :visible.sync="bindVisible"
-      title="历史文化村落保护管理系统"
+      title="历史文化村落保护管理应用"
       @confirm="bindConfirm"
       @cancel="refreshIframe"
     />

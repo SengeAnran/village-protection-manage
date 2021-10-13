@@ -53,16 +53,16 @@
             >
               历史进度
             </el-link>
-            <div
-              class="inline"
-              v-if="canRemind(scope.data.percentage)"
-              v-permission="70002"
-            >
-              <el-divider direction="vertical"></el-divider>
-              <el-link type="primary" @click="remindProgress(scope.data.id)">
-                催办
-              </el-link>
-            </div>
+<!--            <div-->
+<!--              class="inline"-->
+<!--              v-if="canRemind(scope.data.percentage)"-->
+<!--              v-permission="70002"-->
+<!--            >-->
+<!--              <el-divider direction="vertical"></el-divider>-->
+<!--              <el-link type="primary" @click="remindProgress(scope.data.id)">-->
+<!--                催办-->
+<!--              </el-link>-->
+<!--            </div>-->
           </div>
         </template>
 

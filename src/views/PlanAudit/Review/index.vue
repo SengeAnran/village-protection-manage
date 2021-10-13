@@ -7,135 +7,72 @@
           @click="$router.back()"
         >
           <i class="el-icon-arrow-left"></i>
-          <span> {{ typeMap[type] }}评审</span>
+          <span>评审</span>
         </div>
         <div class="mt-4">
-          <p class="ml-4 mb-2">报送规划设计公司</p>
           <el-form-item
             class="inline-block"
-            label="设计公司名称："
+            label="分数:"
             :rules="rule.input"
-            prop="companyName"
+            prop="score"
           >
             <el-input
               class="input"
-              v-model="form.companyName"
-              placeholder="请输入设计公司全称"
+              type="number"
+              v-model="form.score"
+              placeholder="请输入评审分数"
+              @change="computeGrade"
             />
           </el-form-item>
           <el-form-item
             class="inline-block"
-            label="单位资质："
-            :rules="rule.input"
-            prop="qualification"
+            label="评审等次:"
+            prop="grade"
           >
             <el-input
               class="input"
-              v-model="form.qualification"
+              v-model="form.grade"
+              disabled
+              placeholder="自动计算"
+            />
+          </el-form-item>
+          <el-form-item
+            label="规划评审意见："
+            :rules="rule.input"
+            prop="suggestion"
+          >
+            <el-input
+              v-model="form.suggestion"
+              type="textarea"
+              :rows="5"
               placeholder="请输入"
             />
           </el-form-item>
           <el-form-item
-            class="inline-block"
-            label="项目负责人："
-            :rules="rule.input"
-            prop="projectManager"
-          >
-            <el-input
-              class="input"
-              v-model="form.projectManager"
-              placeholder="请输入"
-            />
-          </el-form-item>
-          <el-form-item
-            class="inline-block"
-            label="县级负责人："
-            :rules="rule.input"
-            prop="countyManager"
-          >
-            <el-input
-              class="input"
-              v-model="form.countyManager"
-              placeholder="请输入"
-            />
-          </el-form-item>
-<!--          <el-form-item-->
-<!--            class="inline-block"-->
-<!--            label="分数:"-->
-<!--            :rules="rule.input"-->
-<!--            prop="score"-->
-<!--          >-->
-<!--            <el-input-->
-<!--              class="input"-->
-<!--              type="number"-->
-<!--              v-model="form.score"-->
-<!--              placeholder="请输入评审分数"-->
-<!--              @change="computeGrade"-->
-<!--            />-->
-<!--          </el-form-item>-->
-<!--          <el-form-item-->
-<!--            class="inline-block"-->
-<!--            label="评审等次:"-->
-<!--            prop="grade"-->
-<!--          >-->
-<!--            <el-input-->
-<!--              class="input"-->
-<!--              v-model="form.grade"-->
-<!--              disabled-->
-<!--              placeholder="自动计算"-->
-<!--            />-->
-<!--          </el-form-item>-->
-          <el-form-item
-              label="规划文本："
-              :rules="rule.upload"
-              prop="planFilesArr"
+            label="上传附件："
+            :rules="rule.upload"
+            prop="planFilesArr"
           >
             <UploadFile
-                tip="支持格式：.ppt, .pptx"
-                accept=".ppt,.pptx"
-                :data="form.planFilesArr"
-                @add="onFileAdd($event, 'planFilesArr')"
-                @remove="onFileRemove($event, 'planFilesArr')"
-            />
-          </el-form-item>
-          <p class="ml-4 mb-2">县级规划评审情况</p>
-          <el-form-item
-              label="县级规划评审意见："
-              :rules="rule.input"
-              prop="suggestion"
-          >
-            <el-input
-                v-model="form.suggestion"
-                type="textarea"
-                :rows="5"
-                placeholder="请输入"
-            />
-          </el-form-item>
-          <el-form-item
-              label="上传附件："
-              :rules="rule.upload"
-              prop="suggestionFilesArr"
-          >
-            <UploadFile
-                tip="支持格式：.doc, .docx, .pdf"
-                accept=".doc,.docx,.pdf"
-                :data="form.suggestionFilesArr"
-                @add="onFileAdd($event, 'suggestionFilesArr')"
-                @remove="onFileRemove($event, 'suggestionFilesArr')"
+              tip="支持格式：.ppt, .pptx"
+              accept=".ppt,.pptx"
+              :data="form.planFilesArr"
+              @add="onFileAdd($event, 'planFilesArr')"
+              @remove="onFileRemove($event, 'planFilesArr')"
             />
           </el-form-item>
           <p class="ml-4 mb-2">政府批复附件</p>
           <el-form-item
-              label="上传政府批复附件："
-              :rules="rule.upload"
-              prop="approvalFilesArr"
+            label="上传政府批复附件："
+            :rules="rule.upload"
+            prop="approvalFilesArr"
           >
             <UploadFile
-                tip="支持格式：.doc, .docx,.pdf"
-                accept=".doc,.docx,.pdf"
-                :data="form.approvalFilesArr"
-                @add="onFileAdd($event, 'approvalFilesArr')"
-                @remove="onFileRemove($event, 'approvalFilesArr')"
+              tip="支持格式：.doc, .docx,.pdf"
+              accept=".doc,.docx,.pdf"
+              :data="form.approvalFilesArr"
+              @add="onFileAdd($event, 'approvalFilesArr')"
+              @remove="onFileRemove($event, 'approvalFilesArr')"
             />
           </el-form-item>
           <div class="text-center">
@@ -159,24 +96,20 @@ export default {
     return {
       id: "",
       type: "",
-      typeMap: {
-        add: "新增",
-        edit: "编辑",
-        view: "查看",
-      },
+      // typeMap: {
+      //   add: "新增",
+      //   edit: "编辑",
+      //   view: "查看",
+      // },
       form: {
         approvalFilesArr: [],
-        companyName: "",
-        qualification: "",
-        countyManager: "",
         id: "",
         planFilesArr: [],
-        projectManager: "",
         suggestion: "",
         suggestionFilesArr: [],
         villageDetailId: "",
-        // score: "", // 分数
-        // grade: "", // 等级
+        score: "", // 分数
+        grade: "", // 等级
       },
       detail: {},
     };
