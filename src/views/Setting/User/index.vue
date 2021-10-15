@@ -3,8 +3,19 @@
     <div class="main-title">用户管理</div>
     <div class="permission-content">
       <OrgTree class="left-module" @deauthorize="handleDeauth" />
-      <UserList class="right-module" @deauthorize="handleDeauth" />
+      <UserList
+        class="right-module"
+        @deauthorize="handleDeauth"
+        @modifyAuth="modifyAuth"
+        @bindAuth="bindAuth"
+      />
     </div>
+    <AuthDialog
+      :visible="authVisible"
+      :data="authData"
+      :edit="authEdit"
+      @close="authVisible = false"
+    />
   </div>
 </template>
 <script>
@@ -13,6 +24,15 @@ import { mapMutations } from "vuex";
 
 export default {
   inject: ["reload"],
+  data() {
+    return {
+      authVisible: false,
+      authEdit: false,
+      authData: {},
+
+      searchAreaId: "33",
+    }
+  },
   mounted() {
     this.getRoleData();
   },
@@ -44,10 +64,23 @@ export default {
         })
         .catch(() => {});
     },
+    // 权限绑定
+    bindAuth(val) {
+      this.authVisible = true;
+      this.authEdit = false;
+      this.authData = { ...val, nickNameCn: val.userNickname };
+    },
+    // 修改权限
+    modifyAuth(val) {
+      this.authVisible = true;
+      this.authEdit = true;
+      this.authData = { ...val, nickNameCn: val.userNickname };
+    },
   },
   components: {
     OrgTree: () => import("./OrgTree"),
     UserList: () => import("./UserList"),
+    AuthDialog: () => import("./AuthDialog"),
   },
 };
 </script>

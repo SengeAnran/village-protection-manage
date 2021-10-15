@@ -32,11 +32,36 @@
         width="160"
       ></el-table-column>
       <el-table-column prop="areaName" label="所属区域"></el-table-column>
-      <el-table-column label="操作" width="80">
+      <el-table-column label="操作" width="180">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="medium"
-            >解除授权</el-button
-          >
+<!--          <el-button @click="handleClick(scope.row)" type="text" size="medium"-->
+<!--            >解除授权</el-button-->
+<!--          >-->
+          <span v-if="scope.row.roleId">
+            <el-button
+              type="text"
+              size="medium"
+              @click="handleModifyClick(scope.row)"
+            >
+              修改权限
+            </el-button>
+            <el-button
+              type="text"
+              size="medium"
+              @click="handleClick(scope.row)"
+            >
+              解除授权
+            </el-button>
+          </span>
+          <span v-else>
+            <el-button
+              type="text"
+              size="medium"
+              @click="handleAuthClick(scope.row)"
+            >
+              授权
+            </el-button>
+          </span>
         </template>
       </el-table-column>
     </el-table>
@@ -99,6 +124,12 @@ export default {
     },
     handleClick(row) {
       this.$emit("deauthorize", row);
+    },
+    handleModifyClick(row) {
+      this.$emit("modifyAuth", row);
+    },
+    handleAuthClick(row) {
+      this.$emit("bindAuth", row);
     },
   },
 };

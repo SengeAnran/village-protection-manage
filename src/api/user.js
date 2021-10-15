@@ -81,7 +81,10 @@ export const postAuth = (data) => {
 export const postUnAuth = (data) => {
   return axios.post(`${apiHost}/user/unAuth`, data);
 };
-
+// 修改权限
+export const editUser = (params) => {
+  return axios.get(`${apiHost}/user/editUser`, { params });
+};
 // 子系统扫码绑定
 export const scanBinding = (data) => {
   return axios.post(`${apiHost}/scanBinding`, data);

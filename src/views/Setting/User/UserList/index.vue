@@ -2,7 +2,7 @@
   <div class="user-list-wrapper block">
     <div class="text-lg">用户列表</div>
     <SearchForm @search="handleSearch" />
-    <List :form="form" @deauthorize="handleClick" />
+    <List v-on="$listeners" :form="form" @deauthorize="handleClick" />
   </div>
 </template>
 <script>

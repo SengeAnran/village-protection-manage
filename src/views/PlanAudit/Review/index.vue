@@ -9,6 +9,7 @@
           <i class="el-icon-arrow-left"></i>
           <span>评审</span>
         </div>
+        <div style="margin-top: 32px; margin-left: 10px" >审核打分</div>
         <div class="mt-4">
           <el-form-item
             class="inline-block"
@@ -51,14 +52,14 @@
           <el-form-item
             label="上传附件："
             :rules="rule.upload"
-            prop="planFilesArr"
+            prop="suggestionFilesArr"
           >
             <UploadFile
-              tip="支持格式：.ppt, .pptx"
-              accept=".ppt,.pptx"
-              :data="form.planFilesArr"
-              @add="onFileAdd($event, 'planFilesArr')"
-              @remove="onFileRemove($event, 'planFilesArr')"
+              tip="支持格式：.doc, .docx,.pdf"
+              accept=".doc,.docx,.pdf"
+              :data="form.suggestionFilesArr"
+              @add="onFileAdd($event, 'suggestionFilesArr')"
+              @remove="onFileRemove($event, 'suggestionFilesArr')"
             />
           </el-form-item>
           <p class="ml-4 mb-2">政府批复附件</p>
@@ -88,7 +89,7 @@
 <script>
 import rule from "@/mixins/rule";
 import _ from "lodash";
-import { getPlanDetail, createPlan, modifyPlan } from "@/api/planningReview";
+import { getPlanDetail, verifyPlan, modifyPlan } from "@/api/planningReview";
 
 export default {
   mixins: [rule],
@@ -104,7 +105,6 @@ export default {
       form: {
         approvalFilesArr: [],
         id: "",
-        planFilesArr: [],
         suggestion: "",
         suggestionFilesArr: [],
         villageDetailId: "",
@@ -115,9 +115,11 @@ export default {
     };
   },
   created() {
-    this.type = this.$route.query.type;
+    // this.type = this.$route.query.type;
+    this.type = "add";
     this.id = this.$route.query.id;
-    this.getDetail();
+    this.form.id = this.$route.query.id;
+    // this.getDetail();
   },
   methods: {
     // 计算等级
@@ -136,7 +138,7 @@ export default {
       this.detail = await getPlanDetail(this.id);
       this.form = _.cloneDeep(this.detail);
       this.form.planFilesArr = _.cloneDeep(this.detail.planFilesList);
-      this.form.suggestionFilesArr = _.cloneDeep(this.detail.suggestionFilesList);
+      this.form.suggestionFiles = _.cloneDeep(this.detail.suggestionFilesList);
       this.form.approvalFilesArr = _.cloneDeep(this.detail.approvalFilesList);
     },
     onFileAdd(file, key) {
@@ -157,10 +159,10 @@ export default {
             content: "是否确认提交",
           }).then(async () => {
             const form = _.cloneDeep(this.form);
-            form.villageDetailId = this.id;
+            form.id = this.id;
             // 图片数组处理
             const keyArray = [
-              "planFilesArr",
+              // "planFilesArr",
               "suggestionFilesArr",
               "approvalFilesArr",
             ];
@@ -169,7 +171,7 @@ export default {
             });
             try {
               if (this.type === "add") {
-                await createPlan(form);
+                await verifyPlan(form);
               } else {
                 await modifyPlan(form);
               }

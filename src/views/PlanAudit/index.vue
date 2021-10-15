@@ -203,7 +203,7 @@ export default {
       审核详情: (reviewStatus) => this._canViewDeclare(reviewStatus, 2),
     };
     this.ADMIN_ACTION = {
-      审核: (reviewStatus) => this._canDeclare(reviewStatus, 1),
+      审核: (reviewStatus) => this._canAdminReview(reviewStatus, 1),
       评审详情: (reviewStatus) => this._canViewReview(reviewStatus, 1),
       审核详情: (reviewStatus) => this._canViewDeclare(reviewStatus, 1),
     };
@@ -256,8 +256,16 @@ export default {
       );
     },
     openDialog(scope) {
-      this.form.id = scope.data.id;
-      this.showDialog = true;
+      if( this.userInfo.roleId === 1 ) {
+        this.goReview(scope)
+      } else {
+        this.form.id = scope.data.id;
+        this.showDialog = true;
+      }
+    },
+    goReview(scope) {
+      console.log(scope)
+      this.$router.push(`/planAudit/review?id=${scope.data.id}`);
     },
     resetForm() {
       this.showDialog = false;
@@ -309,6 +317,7 @@ export default {
     _canReview(reviewStatus, roleId) {
       return roleId === 3 && reviewStatus === 2000;
     },
+
     // 修改
     _canModify(reviewStatus, roleId) {
       return roleId === 3 && [2001, 2002, 2003].includes(reviewStatus);
@@ -344,6 +353,10 @@ export default {
         return reviewStatus !== 2004;
       }
       return false;
+    },
+    // 省级评审
+    _canAdminReview(reviewStatus, roleId) {
+      return roleId === 1 && reviewStatus === 2004;
     },
   },
 };

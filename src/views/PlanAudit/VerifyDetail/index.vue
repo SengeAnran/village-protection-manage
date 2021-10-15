@@ -28,18 +28,36 @@
             <el-timeline-item
               v-for="item in processList"
               :key="item.id"
-              :icon="reviewStatusMap[item.lastStatus] === '通过'? 'el-icon-check':'el-icon-close'"
-              :type="reviewStatusMap[item.lastStatus] === '通过'? 'success':'danger'"
+              :icon="reviewStatusMap[item.lastStatus] === '通过' || item.score >= 60? 'el-icon-check':'el-icon-close'"
+              :type="reviewStatusMap[item.lastStatus] === '通过' || item.score >= 60? 'success':'danger'"
               size="large"
             >
               <div class="relative">
                 <div class="role">{{ roleMap[item.role] }}</div>
                 <div class="mb-4">
-                  <el-tag :type="reviewStatusMap[item.lastStatus] === '不通过'? 'danger' : 'success'">{{ reviewStatusMap[item.lastStatus] }}</el-tag>
+                  <el-tag :type="reviewStatusMap[item.lastStatus] === '不通过' || item.score >= 60? 'success' : 'danger'">{{ reviewStatusMap[item.lastStatus] || item.grade }}</el-tag>
                 </div>
                 <div class="mb-4">{{ item.gmtCreate }}</div>
-                <div class="text-gray-400 mb-4">验收意见</div>
-                <div>{{ item.remark }}</div>
+                <div class="text-gray-400 mb-4">审核意见</div>
+                <div class="mb-4">{{ item.remark || item.suggestion }}</div>
+                <div v-if="item.score >= 0">
+                  <div class="text-gray-400 mb-2">审核附件</div>
+                  <div class="mb-4">
+                    <ViewFile
+                      :data="item.approvalFilesList"
+                      v-if="item.approvalFilesList && item.approvalFilesList.length"
+                    />
+                    <p v-else>--</p>
+                  </div>
+                  <div class="text-gray-400 mb-2">政府批复附件</div>
+                  <div class="mb-4">
+                    <ViewFile
+                      :data="item.suggestionFilesList"
+                      v-if="item.suggestionFilesList && item.suggestionFilesList.length"
+                    />
+                    <p v-else>--</p>
+                  </div>
+                </div>
               </div>
             </el-timeline-item>
           </el-timeline>
