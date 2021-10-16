@@ -1,58 +1,42 @@
 <template>
   <div class="organization-tree-wrapper block">
-    <div class="text-lg organization-title">浙政钉组织树</div>
-    <!-- <el-input
-      placeholder="请输入"
-      v-model="keyWord"
-      suffix="el-icon-search"
-      clearable
-      class="search-input"
-    >
-    </el-input> -->
+    <div class="text-lg organization-title">用户组织树</div>
     <el-tree
+      ref="tree"
       class="org-tree"
       :load="loadNode"
       :props="defaultProps"
-      :filter-node-method="filterNode"
-      ref="tree"
+      :expand-on-click-node="false"
+      @node-click="handleNodeClick"
       lazy
     >
-      <span class="custom-tree-node" slot-scope="{ node, data }">
-        <span>{{ node.label }}</span>
-        <span>
-          <el-button
-            class="handle-btn"
-            @click="handleClick(node, data)"
-            type="text"
-            size="small"
-            v-if="node.isLeaf"
-            >{{ data.roleId ? "解除授权" : "授权" }}</el-button
-          >
-        </span>
-      </span>
+      <div
+        class="custom-tree-node"
+        :class="{ active: activeDep === data.areaId }"
+        slot-scope="{ node, data }"
+      >
+        <span class="label">{{ node.label }}</span>
+      </div>
     </el-tree>
-    <AuthDialog
-      :visible="visible"
-      @close="visible = false"
-      :data="selectNode"
-    />
   </div>
 </template>
 <script>
-import { getDepListById, getUserListByDepId } from "@/api/user";
+import { getAreaListById, getUserListByDepId } from "@/api/user";
 export default {
   name: "OrganizationTree",
   data() {
     return {
       keyWord: undefined,
       visible: false,
-      rootData: [],
       defaultProps: {
         children: "children",
-        label: "name",
+        label: "areaName",
         isLeaf: "leaf",
       },
       selectNode: {},
+
+      // 选中组织节点
+      activeDep: null,
     };
   },
   watch: {
@@ -61,35 +45,6 @@ export default {
     },
   },
   methods: {
-    async loadNode(node, resolve) {
-      if (node.level === 0) {
-        return resolve(await this.getTreeData());
-      }
-      // 如果 isLeadf === true, 则请求用户列表
-      if (node.data.isLeaf) {
-        this.getUserData(node.data.depId).then((data) => {
-          setTimeout(() => {
-            return resolve(data);
-          }, 500);
-        });
-      } else {
-        // 否则继续请求组织树
-        this.getTreeData(node.data.depId).then((data) => {
-          //如果有数据返回，则通过resolve方法懒加载到相应节点
-          setTimeout(() => {
-            return resolve(data);
-          }, 500);
-        });
-      }
-    },
-    getTreeData(depPId = "ROOT") {
-      return getDepListById({ depPId }).then((data) => {
-        return (data || []).map((item) => ({
-          ...item,
-          name: item.depName,
-        }));
-      });
-    },
     getUserData(depId) {
       return getUserListByDepId({ depId }).then((data) => {
         return (data || []).map((item) => ({
@@ -99,23 +54,42 @@ export default {
         }));
       });
     },
-    filterNode(value, data) {
-      if (!value) return true;
-      return data.label.indexOf(value) !== -1;
+
+    // 点击组织节点，获取该组织下用户信息
+    handleNodeClick(data) {
+      console.log(data)
+      this.activeDep = this.activeDep === data.areaId ? "" : data.areaId;
+      this.$emit("changeArea", data);
     },
-    handleClick(node, data) {
-      // 有roleId 则是已授权的用户，显示接触授权提示框
-      if (data.roleId) {
-        this.$emit("deauthorize", data);
+
+    async loadNode(node, resolve) {
+      if (node.level === 0) {
+        const rootData = {
+          areaId: "33",
+          areaName: "浙江省",
+          level: 1,
+        };
+        return resolve([rootData]);
+      }
+      if (node.data.level < 3) {
+        this.getTreeData(node.data.areaId).then((data) => {
+          //如果有数据返回，则通过resolve方法懒加载到相应节点
+          setTimeout(() => {
+            return resolve(data);
+          }, 150);
+        });
       } else {
-        // 否则，显示授权弹窗
-        this.visible = true;
-        this.selectNode = Object.assign({}, data);
+        resolve([]);
       }
     },
-  },
-  components: {
-    AuthDialog: () => import("./AuthDialog"),
+    getTreeData(areaId = "33") {
+      return getAreaListById({ areaId }).then((data) => {
+        return (data || []).map((item) => ({
+          ...item,
+          name: item.depName,
+        }));
+      });
+    },
   },
 };
 </script>
@@ -142,24 +116,29 @@ export default {
     .custom-tree-node {
       flex: 1;
       display: flex;
+      flex-grow: 0;
+      height: 28px;
+      line-height: 28px;
       align-items: center;
       justify-content: space-between;
-      padding-right: 8px;
+      padding: 0 10px 0 8px;
+      transition: all 0.25s;
+      border-radius: 4px;
 
-      .handle-btn {
-        display: none;
-        color: #1492ff;
-        font-size: 16px;
-      }
-
-      &:hover .handle-btn {
-        display: block;
+      .label {
+        margin-left: 4px;
+        user-select: none;
       }
     }
 
     ::v-deep .el-tree-node__content {
       height: 38px;
     }
+  }
+
+  .custom-tree-node.active {
+    background: #409eff;
+    color: #fff;
   }
 }
 </style>

@@ -76,7 +76,7 @@
                   v-for="item in projectAddressList"
                   :key="item.villageDetailId"
                   :value="item.villageDetailId"
-                  :label="item.address + item.villageName"
+                  :label="item.address"
                 ></el-option>
               </el-select>
             </el-form-item>

@@ -35,7 +35,7 @@
               <div class="relative">
                 <div class="role">{{ roleMap[item.role] }}</div>
                 <div class="mb-4">
-                  <el-tag :type="reviewStatusMap[item.lastStatus] === '不通过' || item.score >= 60? 'success' : 'danger'">{{ reviewStatusMap[item.lastStatus] || item.grade }}</el-tag>
+                  <el-tag :type="reviewStatusMap[item.lastStatus] === '通过' || item.score >= 60? 'success' : 'danger'">{{ reviewStatusMap[item.lastStatus] || item.grade }}</el-tag>
                 </div>
                 <div class="mb-4">{{ item.gmtCreate }}</div>
                 <div class="text-gray-400 mb-4">审核意见</div>

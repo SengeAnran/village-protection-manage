@@ -83,6 +83,7 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    searchAreaId: String,
   },
   data() {
     return {
@@ -106,6 +107,11 @@ export default {
       },
       deep: true,
     },
+    searchAreaId() {
+      this.pagination.total = 0;
+      this.pagination.currentPage = 1;
+      this.initTableData();
+    },
   },
   mounted() {
     this.initTableData();
@@ -116,6 +122,7 @@ export default {
         ...this.form,
         pageNo: this.pagination.currentPage,
         pageSize: this.pagination.pageSize,
+        areaId: this.searchAreaId,
       }).then((res) => {
         const { content, totalSize } = res;
         this.pagination.total = totalSize;

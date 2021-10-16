@@ -2,9 +2,14 @@
   <div class="permission-wrapper block">
     <div class="main-title">用户管理</div>
     <div class="permission-content">
-      <OrgTree class="left-module" @deauthorize="handleDeauth" />
+      <OrgTree
+        class="left-module"
+        @deauthorize="handleDeauth"
+        @changeArea="changeOrgArea"
+      />
       <UserList
         class="right-module"
+        :searchAreaId="searchAreaId"
         @deauthorize="handleDeauth"
         @modifyAuth="modifyAuth"
         @bindAuth="bindAuth"
@@ -75,6 +80,10 @@ export default {
       this.authVisible = true;
       this.authEdit = true;
       this.authData = { ...val, nickNameCn: val.userNickname };
+    },
+    //组织树区域修改
+    changeOrgArea(data) {
+      this.searchAreaId = data.areaId || "33";
     },
   },
   components: {
