@@ -46,7 +46,7 @@
           </el-button>
         </el-form>
         <div>
-          <el-button @click="$router.push({ name: 'VillageApplyList' })"
+          <el-button @click="onCancel"
             >取消</el-button
           >
           <el-button type="primary" @click="validateForm">提交</el-button>
@@ -160,6 +160,18 @@ export default {
       this.editIndex = index;
       this.editData = data;
       this.showForm = true;
+    },
+
+    onCancel() {
+      if (this.form.detail && this.form.detail.length !== 0) {
+        this.$myConfirm({
+          content: "表中已填写数据，是否确认取消",
+        }).then(() => {
+          this.$router.push({ name: "VillageApplyList" });
+        })
+      } else {
+        this.$router.push({ name: "VillageApplyList" });
+      }
     },
 
     submit() {

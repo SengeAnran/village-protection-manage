@@ -52,7 +52,6 @@ export default {
     },
     handleLink(item) {
       const { redirect, path, name } = item;
-
       if (redirect) {
         if (redirect === this.$route.path) return;
         this.$router.push(redirect);

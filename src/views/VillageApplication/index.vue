@@ -167,6 +167,12 @@ export default {
         declareStatus: "",
         declareYear: "",
       },
+      declareYearOpt: [
+        {
+          value: "",
+          label: "2021",
+        }
+      ],
       queryDeclareTypeOpt: [
         {
           label: "全部",

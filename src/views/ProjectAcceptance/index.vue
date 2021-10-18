@@ -34,27 +34,35 @@
       action-width="220px"
     >
       <template v-slot:search>
-        <el-input
-          style="width: 200px"
-          v-model="query.address"
-          placeholder="请输入项目所在地"
-        ></el-input>
-        <el-select
-          v-model="query.checkStatus"
-          placeholder="请选择状态"
-          clearable
-        >
-          <el-option
-            value=""
-            label="全部"
-          ></el-option>
-          <el-option
-            v-for="item in Object.keys(reviewStatusMap)"
-            :key="item"
-            :value="item"
-            :label="reviewStatusMap[item]"
-          ></el-option>
-        </el-select>
+        <div class="inline-flex mb-6 pl-0">
+          <div class="search-item">
+            <span class="label">项目所在地：</span>
+            <el-input
+              style="width: 200px"
+              v-model="query.address"
+              placeholder="请输入项目所在地"
+            ></el-input>
+          </div>
+          <div class="search-item">
+            <span class="label">状态：</span>
+            <el-select
+              v-model="query.checkStatus"
+              placeholder="请选择状态"
+              clearable
+            >
+              <el-option
+                value=""
+                label="全部"
+              ></el-option>
+              <el-option
+                v-for="item in Object.keys(reviewStatusMap)"
+                :key="item"
+                :value="item"
+                :label="reviewStatusMap[item]"
+              ></el-option>
+            </el-select>
+          </div>
+        </div>
       </template>
 
       <template v-slot:export>
@@ -185,7 +193,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 import { getAcceptanceList, exportList } from "@/api/projectAcceptance";
 import rule from "@/mixins/rule";
 import Steps from "./components/Steps.vue";
@@ -212,9 +220,17 @@ export default {
         2004: "市级审核通过，待省级审核",
         2999: "验收通过",
       },
+      routers: {
+        "/projectApplication/detail": true,
+        "/projectAcceptance/save": true,
+        "/projectAcceptance/verify/detail": true,
+        "/villageApplication/villageDetail": true,
+      }
+
     };
   },
   computed: {
+    ...mapGetters(["declareType"]),
     ...mapGetters(["userInfo"]),
     modifyPermission() {
       const roleId = this.userInfo.roleId;
@@ -225,6 +241,9 @@ export default {
       if (![1, 2, 3].includes(roleId)) return 0;
       return roleId === 3 ? 80002 : roleId === 2 ? 10202 : 10302;
     },
+  },
+  created() {
+    this.query.declareType = this.declareType;
   },
   beforeMount() {
     this.XIANJI_ACTION = {
@@ -246,7 +265,16 @@ export default {
       验收详情: (declareStatus) => this._canViewAudit(declareStatus, 1),
     };
   },
+  beforeRouteLeave(to, from, next) {
+    // 导航离开该组件的对应路由时调用
+    // 可以访问组件实例 `this
+    if ( !this.routers[to.path] ) {
+      this.resetDeclareList();
+    }
+    next();
+  },
   methods: {
+    ...mapMutations("projectAcceptance", ["changeDeclareType", "resetDeclareList"]),
     // 导出
     clickExport() {
       const data = {
@@ -260,6 +288,7 @@ export default {
     },
     changeType(code) {
       this.query.declareType = code;
+      this.changeDeclareType(code);
       this.$refs.crud.search();
     },
     toVillage(scope) {
@@ -336,6 +365,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.search-item {
+  margin-right: 20px;
+  .label {
+    font-weight: 400;
+    color: #333333;
+  }
+}
 .export-button{
   float: right;
 }

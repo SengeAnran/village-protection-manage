@@ -112,7 +112,11 @@ export default {
   },
   methods: {
     removeItem(index) {
-      this.$emit("remove", index);
+      this.$myConfirm({
+        content: "确认删除该村庄申报数据？"
+      }).then(() => {
+        this.$emit("remove", index);
+      })
     },
   },
 };

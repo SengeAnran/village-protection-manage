@@ -16,29 +16,46 @@
       :action-width="`${userInfo.roleId === 3 ? '240px' : '200px'}`"
     >
       <template v-slot:search>
-        <el-date-picker
-          v-model="query.declareYear"
-          type="year"
-          value-format="yyyy"
-          placeholder="请选择年度"
-          clearable
-        ></el-date-picker>
-        <el-select
-          v-model="query.reviewStatus"
-          placeholder="请选择状态"
-          clearable
-        >
-          <el-option
-            value=""
-            label="全部"
-          ></el-option>
-          <el-option
-            v-for="item in Object.keys(formatReviewStatus)"
-            :key="item"
-            :value="item"
-            :label="formatReviewStatus[item]"
-          ></el-option>
-        </el-select>
+        <div class="inline-flex mb-6 pl-0">
+          <div class="search-item">
+            <span class="label">申报年度：</span>
+            <el-date-picker
+              v-model="query.declareYear"
+              type="year"
+              value-format="yyyy"
+              placeholder="请选择年度"
+              clearable
+            ></el-date-picker>
+          </div>
+          <div class="search-item">
+            <span class="label">状态：</span>
+            <el-select
+              v-model="query.reviewStatus"
+              placeholder="请选择状态"
+              clearable
+            >
+              <el-option
+                value=""
+                label="全部"
+              ></el-option>
+              <el-option
+                v-for="item in Object.keys(formatReviewStatus)"
+                :key="item"
+                :value="item"
+                :label="formatReviewStatus[item]"
+              ></el-option>
+            </el-select>
+          </div>
+          <div class="search-item">
+            <span class="label">项目所在地：</span>
+            <el-input
+              v-model="query.address"
+              style="width: 200px"
+              placeholder="请输入"
+              clearable
+            ></el-input>
+          </div>
+        </div>
       </template>
 
       <template v-slot:export>
@@ -363,6 +380,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.search-item {
+  margin-right: 20px;
+  .label {
+    font-weight: 400;
+    color: #333333;
+  }
+}
 .export-button{
   float: right;
 }

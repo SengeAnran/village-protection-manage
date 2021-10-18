@@ -17,40 +17,51 @@
       :permission-delete="0"
     >
       <template v-slot:search>
-        <el-input
-          style="width: 200px"
-          v-model="query.address"
-          placeholder="请输入项目所在地"
-        ></el-input>
-        <el-select
-          v-model="query.projectType"
-          placeholder="请选择项目类型"
-          clearable
-        >
-          <el-option
-            v-for="item in statusOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-        <el-select
-          v-model="query.projectStatus"
-          placeholder="请选择状态"
-          clearable
-        >
-          <el-option
-            value=""
-            label="全部"
-          ></el-option>
-          <el-option
-            v-for="item in Object.keys(projectStatusMap)"
-            :key="item"
-            :value="item"
-            :label="projectStatusMap[item]"
-          ></el-option>
-        </el-select>
+        <div class="inline-flex mb-6 pl-0">
+          <div class="search-item">
+            <span class="label">项目所在地：</span>
+            <el-input
+              style="width: 200px"
+              v-model="query.address"
+              placeholder="请输入项目所在地"
+            ></el-input>
+          </div>
+          <div class="search-item">
+            <span class="label">项目类型：</span>
+            <el-select
+              v-model="query.projectType"
+              placeholder="请选择项目类型"
+              clearable
+            >
+              <el-option
+                v-for="item in statusOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <div class="search-item">
+            <span class="label">状态：</span>
+            <el-select
+              v-model="query.projectStatus"
+              placeholder="请选择状态"
+              clearable
+            >
+              <el-option
+                value=""
+                label="全部"
+              ></el-option>
+              <el-option
+                v-for="item in Object.keys(projectStatusMap)"
+                :key="item"
+                :value="item"
+                :label="projectStatusMap[item]"
+              ></el-option>
+            </el-select>
+          </div>
+        </div>
       </template>
 
       <template v-slot:crudAction v-if="userInfo.roleId === 3">
@@ -286,3 +297,12 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.search-item {
+  margin-right: 20px;
+  .label {
+    font-weight: 400;
+    color: #333333;
+  }
+}
+</style>
