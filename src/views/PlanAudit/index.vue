@@ -10,10 +10,12 @@
       hide-edit
       hide-view
       hide-delete
+      selection
       :permission-add="0"
       :permission-edit="30002"
       :permission-delete="0"
       :action-width="`${userInfo.roleId === 3 ? '240px' : '200px'}`"
+      @selectionChange="selectionChange"
     >
       <template v-slot:search>
         <div class="inline-flex mb-6 pl-0">
@@ -179,6 +181,7 @@ export default {
         declareYear: "",
         reviewStatus: "",
       },
+      ids: [],
       getMethod: getPlanList,
       // 未填报:2000（此状态县级可进行填报） 待市级审核：2001（此状态县级可修改评审） 市级审核不通过:2002 省级审核不通过: 2003 市级审核通过 待省级审核:2004 验收通过:2999
       reviewStatusMap: {
@@ -232,10 +235,19 @@ export default {
         // pageNum: '',
         // pageSize: '',
         reviewStatus: this.query.reviewStatus,
+        ids: this.ids,
       }
       exportList(params).then(res => {
         downloadFile(res,'历史文化（传统）村落保护利用重点村规划评审结果情况表')
       })
+    },
+    selectionChange(val) {
+      console.log(val);
+      this.ids = [];
+      val.forEach(item => {
+        this.ids.push(item.id)
+      });
+      console.log(this.ids);
     },
     showVerify(status) {
       if (this.userInfo.roleId === 3) {

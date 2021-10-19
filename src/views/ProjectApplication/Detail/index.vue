@@ -310,7 +310,7 @@
             </el-form-item>
             <el-form-item
               class="inline-block"
-              label="顶瓦修补面积（200-1000㎡）："
+              label="顶瓦修补面积（200-100000㎡）："
               :rules="rule.input"
               prop="tileRepairArea"
             >
@@ -328,7 +328,7 @@
           <div>
             <el-form-item
               class="inline-block"
-              label="墙体加固面积（200-1000㎡）："
+              label="墙体加固面积（200-100000㎡）："
               :rules="rule.input"
               prop="wallRepairArea"
             >
@@ -344,7 +344,7 @@
             </el-form-item>
             <el-form-item
               class="inline-block"
-              label="立面改造面积（200-1500㎡）："
+              label="立面改造面积（200-150000㎡）："
               :rules="rule.input"
               prop="faceReformArea"
             >
@@ -362,7 +362,7 @@
             </el-form-item>
             <el-form-item
               class="inline-block"
-              label="构件修复个数（0-50个）："
+              label="构件修复个数（0-1000个）："
               :rules="rule.input"
               prop="componentRepairQuantity"
             >
@@ -399,7 +399,7 @@
             </el-form-item>
             <el-form-item
               class="inline-block"
-              label="立面改造面积（0-4000㎡）："
+              label="立面改造面积（0-150000㎡）："
               :rules="rule.input"
               prop="clashFaceReformArea"
             >
@@ -417,7 +417,7 @@
           <div>
             <el-form-item
               class="inline-block"
-              label="结构降层面积（0-2000㎡）："
+              label="结构降层面积（0-100000㎡）："
               :rules="rule.input"
               prop="structureArea"
             >
@@ -425,7 +425,7 @@
             </el-form-item>
             <el-form-item
               class="inline-block"
-              label="整体拆除面积（0-2000㎡）："
+              label="整体拆除面积（0-100000㎡）："
               :rules="rule.input"
               prop="demolishArea"
             >

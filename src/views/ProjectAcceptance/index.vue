@@ -44,6 +44,16 @@
             ></el-input>
           </div>
           <div class="search-item">
+            <span class="label">申报年度：</span>
+            <el-date-picker
+              v-model="query.years"
+              type="year"
+              placeholder="选择年"
+              value-format="yyyy"
+            >
+            </el-date-picker>
+          </div>
+          <div class="search-item">
             <span class="label">状态：</span>
             <el-select
               v-model="query.checkStatus"
@@ -207,6 +217,7 @@ export default {
       query: {
         // 一般村:1001 重点村:1002 提升村:1003
         declareType: 1002,
+        years: "",
         checkStatus: "",
         address: "",
       },
@@ -252,6 +263,7 @@ export default {
       验收详情: (declareStatus) => this._canViewAudit(declareStatus, 3),
       修改: (declareStatus) => this._canModify(declareStatus, 3),
       整改: (declareStatus) => this._canReview(declareStatus, 3),
+      // 整改详情: (declareStatus) => this._canReview(declareStatus, 3),
     };
     this.SHIJI_ACTION = {
       项目详情: () => true,
@@ -265,16 +277,30 @@ export default {
       验收详情: (declareStatus) => this._canViewAudit(declareStatus, 1),
     };
   },
-  beforeRouteLeave(to, from, next) {
-    // 导航离开该组件的对应路由时调用
-    // 可以访问组件实例 `this
-    if ( !this.routers[to.path] ) {
-      this.resetDeclareList();
-    }
-    next();
+  beforeRouteEnter(to, from, next) {
+    const routers = {
+      "/projectApplication/detail": true,
+      "/projectAcceptance/save": true,
+      "/projectAcceptance/verify/detail": true,
+      "/villageApplication/villageDetail": true,
+    };
+    next((vm => {
+      if (!routers[from.path]) { // 如果来自非二级页面
+        vm.resetDeclareType(); // 一些操作
+        vm.query.declareType = vm.declareType; // 修改本地值
+      }
+    }));
   },
+  // beforeRouteLeave(to, from, next) {
+  //   // 导航离开该组件的对应路由时调用
+  //   // 可以访问组件实例 `this
+  //   if (!this.routers[to.path]) { // 如果去往非本页面的二级页面，重置store内的值
+  //     this.resetDeclareType();
+  //   }
+  //   next();
+  // },
   methods: {
-    ...mapMutations("projectAcceptance", ["changeDeclareType", "resetDeclareList"]),
+    ...mapMutations("projectAcceptance", ["changeDeclareType", "resetDeclareType"]),
     // 导出
     clickExport() {
       const data = {
@@ -352,7 +378,7 @@ export default {
     },
     // 整改
     _canReview(status, roleId) {
-      return roleId === 3 && (status === 2002 || status === 2003);
+      return roleId === 3 && (status === 2999);
     },
     // 修改
     _canModify(status, roleId) {

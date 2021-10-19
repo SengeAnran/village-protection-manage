@@ -55,6 +55,14 @@
                 </el-option>
               </el-select>
             </div>
+            <div class="search-item">
+              <span class="label">村庄名称：</span>
+              <el-input
+                style="width: 200px"
+                v-model="query.createBy"
+                placeholder="请输入村庄名称"
+              ></el-input>
+            </div>
           </div>
         </template>
 
@@ -166,6 +174,7 @@ export default {
         declareType: "",
         declareStatus: "",
         declareYear: "",
+        createBy: "",
       },
       declareYearOpt: [
         {

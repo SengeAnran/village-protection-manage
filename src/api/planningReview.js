@@ -2,7 +2,7 @@
 import axios from "@/utils/request";
 import config from "@/utils/config";
 const { apiHost } = config;
-
+import qs from 'qs'
 export const getPlanList = (params) => {
   return axios.request({
     method: "get",
@@ -55,8 +55,7 @@ export const getProcess = (id) => {
 export const exportList = (params) => {
   return axios.request({
     method: "GET",
-    url: apiHost + "/planningReview/export",
-    params,
+    url: apiHost + "/planningReview/export/?" + qs.stringify(params),
     responseType: "blob"
   });
 };

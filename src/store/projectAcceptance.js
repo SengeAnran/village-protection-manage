@@ -8,7 +8,7 @@ export default {
     changeDeclareType(state, param) {
       state.declareType = param;
     },
-    resetDeclareList(state) {
+    resetDeclareType(state) {
       state.declareType = declareType;
     },
   },

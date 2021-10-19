@@ -164,7 +164,7 @@ export default {
     onCancel() {
       if (this.form.detail && this.form.detail.length !== 0) {
         this.$myConfirm({
-          content: "表中已填写数据，是否确认取消",
+          content: "村庄信息已修改，确认取消?",
         }).then(() => {
           this.$router.push({ name: "VillageApplyList" });
         })

@@ -15,16 +15,16 @@
       :permission-delete="900104"
     >
       <template v-slot:search>
-        <el-input
-          v-model="query.villageName"
-          style="width: 200px"
-          placeholder="请输入村名"
-          clearable
-        ></el-input>
+<!--        <el-input-->
+<!--          v-model="query.villageName"-->
+<!--          style="width: 200px"-->
+<!--          placeholder="请输入村名"-->
+<!--          clearable-->
+<!--        ></el-input>-->
         <el-input
           v-model="query.address"
           style="width: 200px"
-          placeholder="请输入地址"
+          placeholder="请输入"
           clearable
         ></el-input>
       </template>
@@ -75,6 +75,7 @@
               emitPath: false,
             }"
             placeholder="请选择"
+            @change="handleChange"
           ></el-cascader>
         </el-form-item>
       </el-form>
@@ -104,7 +105,7 @@ export default {
   data() {
     return {
       query: {
-        villageName: "",
+        // villageName: "",
         address: "",
       },
       form: {
@@ -121,7 +122,7 @@ export default {
   },
   watch: {
     'form.areaId': {
-      handler(newVal, oldVal) {
+      handler(newVal) {
         if (newVal) {
           getArea(newVal).then(res => {
             this.form.villageName = res.areaName;
@@ -135,11 +136,14 @@ export default {
     this.getTree();
   },
   methods: {
+    handleChange(value) {
+      console.log(value);
+    },
     async getTree() {
       this.areaTree = await getAreaTree();
     },
     add() {
-      this.title = "编辑";
+      this.title = "增加";
       this.showDialog = true;
     },
     edit(scope) {
@@ -150,6 +154,7 @@ export default {
         villageName: scope.data.villageName,
         areaId: scope.data.areaId,
       };
+      console.log(this.form);
     },
     resetForm() {
       this.showDialog = false;

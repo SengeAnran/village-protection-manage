@@ -27,6 +27,16 @@
             ></el-input>
           </div>
           <div class="search-item">
+            <span class="label">申报年度：</span>
+            <el-date-picker
+              v-model="query.years"
+              type="year"
+              value-format="yyyy"
+              placeholder="请选择年度"
+              clearable
+            ></el-date-picker>
+          </div>
+          <div class="search-item">
             <span class="label">项目类型：</span>
             <el-select
               v-model="query.projectType"
@@ -130,6 +140,7 @@ export default {
     return {
       query: {
         address: "",
+        years: "",
         projectType: "",
         projectStatus: "",
       },

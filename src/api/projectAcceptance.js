@@ -36,6 +36,15 @@ export const verifyByCounty = (data) => {
   });
 };
 
+// 整改
+export const addRectify = (data) => {
+  return axios.request({
+    method: "post",
+    url: apiHost + "/acceptanceInfo/addRectify",
+    data,
+  });
+};
+
 // 整改详情
 export const getRectificationInfo = (params) => {
   return axios.request({
@@ -43,6 +52,16 @@ export const getRectificationInfo = (params) => {
     url:
       apiHost +
       `/acceptanceInfo/rectification/${params.id}/${params.declareType}`,
+    params,
+  });
+};
+// 整改详情(新)
+export const getRectifyDetail = (params) => {
+  return axios.request({
+    method: "GET",
+    url:
+      apiHost +
+      `/acceptanceInfo/rectifyDetail/${params.id}/${params.declareType}`,
     params,
   });
 };

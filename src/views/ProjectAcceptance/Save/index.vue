@@ -113,6 +113,7 @@ import {
   verify,
   verifyByCounty,
   getRectificationInfo,
+  addRectify,
   // getAcceptanceInfo,
 } from "@/api/projectAcceptance";
 
@@ -224,6 +225,8 @@ export default {
             try {
               if (this.type === "add") {
                 await verify(form);
+              } else if(this.type === "rectify") {
+                await addRectify(form)
               } else {
                 await verifyByCounty(form);
               }
