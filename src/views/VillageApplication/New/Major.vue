@@ -18,7 +18,6 @@
               placeholder="请选择年度"
               class="input"
               value-format="yyyy"
-              :picker-options="pickerOptions"
             >
             </el-date-picker>
           </el-form-item>
@@ -109,7 +108,7 @@ export default {
 
       pickerOptions: {
         disabledDate(date) {
-          return date.getFullYear() !== new Date().getFullYear();
+          return date.getFullYear() > new Date().getFullYear();
         },
       },
     };

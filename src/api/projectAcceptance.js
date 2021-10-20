@@ -59,9 +59,7 @@ export const getRectificationInfo = (params) => {
 export const getRectifyDetail = (params) => {
   return axios.request({
     method: "GET",
-    url:
-      apiHost +
-      `/acceptanceInfo/rectifyDetail/${params.id}/${params.declareType}`,
+    url: apiHost + "/acceptanceInfo/rectifyDetail",
     params,
   });
 };

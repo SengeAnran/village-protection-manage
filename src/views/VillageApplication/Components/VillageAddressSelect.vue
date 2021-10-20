@@ -5,6 +5,7 @@
     :props="optionProps"
     v-model="_value"
     @change="getCheckedNodes"
+    :filterable="true"
     :emitPath="false"
   >
   </el-cascader>

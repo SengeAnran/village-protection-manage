@@ -174,12 +174,21 @@
           @click="toAuditSave(scope, 'add')"
           >验收</el-link
         >
+<!--        <el-link-->
+<!--          v-if="actionControl('修改', scope.data.checkStatus)"-->
+<!--          v-permission="modifyPermission"-->
+<!--          type="primary"-->
+<!--          @click="toAuditSave(scope, 'edit')"-->
+<!--          >修改</el-link-->
+<!--        >-->
         <el-link
-          v-if="actionControl('修改', scope.data.checkStatus)"
+          v-if="scope.data.modifyFlag"
           v-permission="modifyPermission"
           type="primary"
           @click="toAuditSave(scope, 'edit')"
-          >修改</el-link
+          >修改
+          <el-divider direction="vertical"></el-divider>
+        </el-link
         >
         <el-link
           type="primary"
@@ -187,16 +196,16 @@
           @click="toVerifyDetail(scope)"
           >验收详情</el-link
         >
-        <div
-          class="inline"
-          v-if="actionControl('整改', scope.data.checkStatus)"
-          v-permission="80002"
-        >
-          <el-divider direction="vertical"></el-divider>
-          <el-link type="primary" @click="toAuditSave(scope, 'rectify')"
-            >整改</el-link
-          >
-        </div>
+<!--        <div-->
+<!--          class="inline"-->
+<!--          v-if="scope.data.rectifyFlag"-->
+<!--          v-permission="80002"-->
+<!--        >-->
+<!--          <el-divider direction="vertical"></el-divider>-->
+<!--          <el-link type="primary" @click="toAuditSave(scope, 'rectify')"-->
+<!--            >整改</el-link-->
+<!--          >-->
+<!--        </div>-->
       </template>
     </Crud>
   </div>
@@ -378,6 +387,7 @@ export default {
     },
     // 整改
     _canReview(status, roleId) {
+      // return roleId === 3 && (status === 2002 || status === 2003);
       return roleId === 3 && (status === 2999);
     },
     // 修改

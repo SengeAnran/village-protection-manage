@@ -94,7 +94,7 @@
               @remove="onFileRemove($event, 'processFilesArr')"
             />
           </el-form-item>
-          <div class="text-center">
+          <div class="text-center" v-if="type !== 'rectifyDetail'">
             <el-button plain @click="$router.back()">取消</el-button>
             <el-button type="primary" @click="submit">提交</el-button>
           </div>
@@ -114,7 +114,7 @@ import {
   verifyByCounty,
   getRectificationInfo,
   addRectify,
-  // getAcceptanceInfo,
+  getRectifyDetail,
 } from "@/api/projectAcceptance";
 
 export default {
@@ -128,6 +128,7 @@ export default {
         edit: "修改",
         view: "查看",
         rectify: "整改",
+        rectifyDetail: "整改详情",
       },
       form: {
         declareType: 0,
@@ -156,14 +157,14 @@ export default {
     descName() {
       return this.type === "edit"
         ? "修改描述"
-        : this.type === "rectify"
+        : this.type === "rectify" || this.type === "rectifyDetail"
         ? "整改描述"
         : "验收意见";
     },
   },
 
   created() {
-    console.log(this.$route.query)
+    // console.log(this.$route.query)
     this.id = this.$route.query.id;
     this.type = this.$route.query.type;
     this.declareType = this.$route.query.declareType;
@@ -180,10 +181,19 @@ export default {
       if (this.type === "add") {
         return;
       }
-      await this.getEditInfo(this.id);
-      this.form = _.cloneDeep(this.detail);
+      if (this.type === "rectifyDetail") {
+        await this.getRectifyDetail(this.id)
+        // this.form = _.cloneDeep(this.detail);
+        // console.log('111');
+        this.form.processFilesArr = _.cloneDeep(this.detail.uploadFileList);
+        this.form.remark = _.cloneDeep(this.detail.modifyDescription);
+      } else {
+        await this.getEditInfo(this.id);
+        this.form = _.cloneDeep(this.detail);
 
-      this.form.processFilesArr = _.cloneDeep(this.detail.processFilesList);
+        this.form.processFilesArr = _.cloneDeep(this.detail.processFilesList);
+      }
+
     },
     // 计算等级
     computeGrade() {
@@ -226,6 +236,9 @@ export default {
               if (this.type === "add") {
                 await verify(form);
               } else if(this.type === "rectify") {
+                // form.projectId = this.id;
+                // form.modifyDescription = form.remark;
+                // form.uploadFiles = form.processFilesArr;
                 await addRectify(form)
               } else {
                 await verifyByCounty(form);
@@ -246,6 +259,19 @@ export default {
         getRectificationInfo({ id, declareType: this.declareType })
           .then((res) => {
             this.detail = res && res.processLogDOList[0];
+            resolve();
+          })
+          .catch(() => {
+            reject();
+          });
+      });
+    },
+    // edit 情况获取整改详情
+    getRectifyDetail(id) {
+      return new Promise((resolve, reject) => {
+        getRectifyDetail({ id })
+          .then((res) => {
+            this.detail = res;
             resolve();
           })
           .catch(() => {

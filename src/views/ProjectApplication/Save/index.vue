@@ -661,7 +661,7 @@
             </el-form-item>
             <el-form-item
               class="inline-block"
-              label="基本公建设施投资总额（1-5万/户）："
+              label="基本公建设施投资总额（0-5万/户）："
               :rules="rule.input"
               prop="totalInvestment"
             >
@@ -670,7 +670,7 @@
                 v-model="form3.totalInvestment"
                 placeholder="请输入"
                 :controls="false"
-                :min="1"
+                :min="0"
                 :max="50000"
               />
             </el-form-item>
