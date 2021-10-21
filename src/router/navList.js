@@ -358,6 +358,18 @@ export const defaultRoutes = [
         },
         component: () => import("@/views/ProjectAcceptance/VerifyDetail"),
       },
+      {
+        path: "/projectAcceptance/rectification/detail",
+        name: "ProjectRectificationDetail",
+        hidden: true,
+        meta: {
+          title: "整改详情",
+          noCache: true,
+          activeMenu: "/projectAcceptance/index",
+          // menuIds: [80002, 10201, 10301],
+        },
+        component: () => import("@/views/ProjectAcceptance/RectificationDetails"),
+      },
     ],
   },
   // 政策查询

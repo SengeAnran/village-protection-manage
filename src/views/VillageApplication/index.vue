@@ -137,6 +137,16 @@
               <p>{{ declareType[scope.row.declareType] }}</p>
             </template>
           </el-table-column>
+          <el-table-column v-if="roleId < 3" label="申报县" prop="gmtCreate">
+            <template slot-scope="scope">
+              <p>{{ scope.row.county }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column v-if="roleId < 2" label="申报市" prop="gmtCreate">
+            <template slot-scope="scope">
+              <p>{{ scope.row.city }}</p>
+            </template>
+          </el-table-column>
           <el-table-column label="申报时间" prop="gmtCreate">
             <template slot-scope="scope">
               <p>{{ scope.row.gmtCreate.slice(0, 11) }}</p>
@@ -201,6 +211,7 @@ export default {
   computed: {
     ...mapGetters(["userInfo"]),
     roleId() {
+      console.log(this.userInfo.roleId);
       return this.userInfo.roleId;
     },
   },

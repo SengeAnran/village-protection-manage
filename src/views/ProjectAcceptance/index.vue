@@ -31,7 +31,7 @@
       :permission-add="0"
       :permission-edit="80002"
       :permission-delete="0"
-      action-width="220px"
+      action-width="270px"
     >
       <template v-slot:search>
         <div class="inline-flex mb-6 pl-0">
@@ -182,30 +182,38 @@
 <!--          >修改</el-link-->
 <!--        >-->
         <el-link
-          v-if="scope.data.modifyFlag"
-          v-permission="modifyPermission"
-          type="primary"
-          @click="toAuditSave(scope, 'edit')"
-          >修改
-          <el-divider direction="vertical"></el-divider>
-        </el-link
-        >
-        <el-link
           type="primary"
           v-if="actionControl('验收详情', scope.data.checkStatus)"
           @click="toVerifyDetail(scope)"
           >验收详情</el-link
         >
-<!--        <div-->
-<!--          class="inline"-->
-<!--          v-if="scope.data.rectifyFlag"-->
-<!--          v-permission="80002"-->
-<!--        >-->
-<!--          <el-divider direction="vertical"></el-divider>-->
-<!--          <el-link type="primary" @click="toAuditSave(scope, 'rectify')"-->
-<!--            >整改</el-link-->
-<!--          >-->
-<!--        </div>-->
+        <div
+          class="inline"
+          v-if="scope.data.rectifyFlag"
+        >
+          <el-divider direction="vertical"></el-divider>
+          <el-link type="primary" @click="toAuditSave(scope, 'rectify')"
+            >整改</el-link
+          >
+        </div>
+        <div
+          class="inline"
+          v-if="scope.data.rectifyDetailFlag"
+        >
+          <el-divider direction="vertical"></el-divider>
+          <el-link type="primary" @click="toRectificationDetail(scope)"
+            >整改详情</el-link
+          >
+        </div>
+        <el-divider v-if="actionControl('验收详情', scope.data.checkStatus) && scope.data.modifyFlag" direction="vertical"></el-divider>
+        <el-link
+          v-if="scope.data.modifyFlag"
+          v-permission="modifyPermission"
+          type="primary"
+          @click="toAuditSave(scope, 'edit')"
+        >修改
+        </el-link
+        >
       </template>
     </Crud>
   </div>
@@ -272,18 +280,20 @@ export default {
       验收详情: (declareStatus) => this._canViewAudit(declareStatus, 3),
       修改: (declareStatus) => this._canModify(declareStatus, 3),
       整改: (declareStatus) => this._canReview(declareStatus, 3),
-      // 整改详情: (declareStatus) => this._canReview(declareStatus, 3),
+      整改详情: (declareStatus) => this._canReviewDetail(declareStatus),
     };
     this.SHIJI_ACTION = {
       项目详情: () => true,
       验收: (declareStatus) => this._canAudit(declareStatus, 2), // 未验收时显示验收，验收后显示修改
       修改: (declareStatus) => this._canModify(declareStatus, 2),
       验收详情: (declareStatus) => this._canViewAudit(declareStatus, 2),
+      整改详情: (declareStatus) => this._canReviewDetail(declareStatus),
     };
     this.ADMIN_ACTION = {
       项目详情: () => true,
       验收: (declareStatus) => this._canAudit(declareStatus, 1),
       验收详情: (declareStatus) => this._canViewAudit(declareStatus, 1),
+      整改详情: (declareStatus) => this._canReviewDetail(declareStatus),
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -339,6 +349,12 @@ export default {
         `/projectAcceptance/save?type=${type}&id=${scope.data.id}&year=${scope.data.years}&total=${scope.data.totalFee}&date=${scope.data.gmtCreate}&address=${scope.data.address}&declareType=${this.query.declareType}`
       );
     },
+    // 去整改详情
+    toRectificationDetail(scope) {
+      this.$router.push(
+        `/projectAcceptance/rectification/detail?id=${scope.data.id}&year=${scope.data.years}&total=${scope.data.totalFee}&date=${scope.data.gmtCreate}&address=${scope.data.address}&declareType=${this.query.declareType}`
+      );
+    },
     toVerifyDetail(scope) {
       this.$router.push(`/projectAcceptance/verify/detail?id=${scope.data.id}`);
     },
@@ -389,6 +405,11 @@ export default {
     _canReview(status, roleId) {
       // return roleId === 3 && (status === 2002 || status === 2003);
       return roleId === 3 && (status === 2999);
+    },
+    // 整改详情
+    _canReviewDetail(status) {
+      // return roleId === 3 && (status === 2002 || status === 2003);
+      return status === 2999;
     },
     // 修改
     _canModify(status, roleId) {

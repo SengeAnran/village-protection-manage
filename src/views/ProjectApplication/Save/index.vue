@@ -400,7 +400,7 @@
             </el-form-item>
             <el-form-item
               class="inline-block"
-              label="顶瓦修补面积（200-100000㎡）："
+              label="顶瓦修补面积（0-100000㎡）："
               :rules="rule.input"
               prop="tileRepairArea"
             >
@@ -409,7 +409,7 @@
                 v-model="form3.tileRepairArea"
                 placeholder="请输入"
                 :controls="false"
-                :min="200"
+                :min="0"
                 :max="100000"
               />
             </el-form-item>
@@ -431,7 +431,7 @@
           <div>
             <el-form-item
               class="inline-block"
-              label="墙体加固面积（200-100000㎡）："
+              label="墙体加固面积（0-100000㎡）："
               :rules="rule.input"
               prop="wallRepairArea"
             >
@@ -440,7 +440,7 @@
                 v-model="form3.wallRepairArea"
                 placeholder="请输入"
                 :controls="false"
-                :min="200"
+                :min="0"
                 :max="100000"
               />
             </el-form-item>
@@ -460,7 +460,7 @@
             </el-form-item>
             <el-form-item
               class="inline-block"
-              label="立面改造面积（200-150000㎡）："
+              label="立面改造面积（0-150000㎡）："
               :rules="rule.input"
               prop="faceReformArea"
             >
@@ -469,7 +469,7 @@
                 v-model="form3.faceReformArea"
                 placeholder="请输入"
                 :controls="false"
-                :min="200"
+                :min="0"
                 :max="150000"
               />
             </el-form-item>

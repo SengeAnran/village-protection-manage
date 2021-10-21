@@ -235,11 +235,11 @@ export default {
             try {
               if (this.type === "add") {
                 await verify(form);
-              } else if(this.type === "rectify") {
-                // form.projectId = this.id;
-                // form.modifyDescription = form.remark;
-                // form.uploadFiles = form.processFilesArr;
-                await addRectify(form)
+              } else if (this.type === "rectify") {
+                form.projectId = this.id;
+                form.modifyDescription = form.remark;
+                form.uploadFiles = form.processFilesArr;
+                await addRectify(form);
               } else {
                 await verifyByCounty(form);
               }

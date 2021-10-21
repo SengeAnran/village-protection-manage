@@ -310,7 +310,7 @@
             </el-form-item>
             <el-form-item
               class="inline-block"
-              label="顶瓦修补面积（200-100000㎡）："
+              label="顶瓦修补面积（0-100000㎡）："
               :rules="rule.input"
               prop="tileRepairArea"
             >
@@ -328,7 +328,7 @@
           <div>
             <el-form-item
               class="inline-block"
-              label="墙体加固面积（200-100000㎡）："
+              label="墙体加固面积（0-100000㎡）："
               :rules="rule.input"
               prop="wallRepairArea"
             >
@@ -344,7 +344,7 @@
             </el-form-item>
             <el-form-item
               class="inline-block"
-              label="立面改造面积（200-150000㎡）："
+              label="立面改造面积（0-150000㎡）："
               :rules="rule.input"
               prop="faceReformArea"
             >

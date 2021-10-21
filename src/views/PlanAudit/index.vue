@@ -70,6 +70,14 @@
           label="重点村庄名称"
           prop="villageName"
         ></el-table-column>
+        <el-table-column v-if="userInfo.roleId < 3 "
+          label="所在县"
+          prop="county"
+        ></el-table-column>
+        <el-table-column v-if="userInfo.roleId < 2 "
+          label="所在市"
+          prop="city"
+        ></el-table-column>
         <el-table-column
           label="评审规划时间"
           prop="gmtCreate"
