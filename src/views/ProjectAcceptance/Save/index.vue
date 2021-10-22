@@ -198,10 +198,22 @@ export default {
     // 计算等级
     computeGrade() {
       switch (true) {
-        case this.form.score < 60: this.form.grade = '不合格'; break;
-        case this.form.score < 70: this.form.grade = '合格'; break;
-        case this.form.score < 85: this.form.grade = '良好'; break;
-        default: this.form.grade = '优秀';
+        case this.form.score < 60: {
+          this.form.grade = '不合格';
+          this.form.status = 0;
+        } break;
+        case this.form.score < 70: {
+          this.form.grade = '合格';
+          this.form.status = 1;
+        } break;
+        case this.form.score < 85: {
+          this.form.grade = '良好';
+          this.form.status = 1;
+        } break;
+        default: {
+          this.form.grade = '优秀';
+          this.form.status = 1;
+        }
       }
     },
     onFileAdd(file, key) {

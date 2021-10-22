@@ -14,14 +14,14 @@
             <el-timeline-item
               v-for="item in processList"
               :key="item.id"
-              :icon="reviewStatusMap[item.lastStatus] === '通过'? 'el-icon-check':'el-icon-close'"
-              :type="reviewStatusMap[item.lastStatus] === '通过'? 'success':'danger'"
+              :icon="reviewStatusMap[item.lastStatus] === '通过' || item.score >= 60? 'el-icon-check':'el-icon-close'"
+              :type="reviewStatusMap[item.lastStatus] === '通过' || item.score >= 60? 'success':'danger'"
               size="large"
             >
               <div class="relative">
                 <div class="role">{{ roleMap[item.role] }}</div>
                 <div class="mb-4">
-                  <el-tag  :type="reviewStatusMap[item.lastStatus] === '不通过'? 'danger' : 'success'">{{ reviewStatusMap[item.lastStatus] }}</el-tag>
+                  <el-tag :type="reviewStatusMap[item.lastStatus] === '通过' || item.score >= 60? 'success' : 'danger'">{{ item.grade || reviewStatusMap[item.lastStatus]}}</el-tag>
                 </div>
                 <div class="mb-4">{{ item.gmtCreate }}</div>
                 <div class="text-gray-400 mb-2">验收意见</div>
@@ -66,6 +66,7 @@ export default {
         2002: "不通过",
         2003: "不通过",
         2004: "通过",
+        2005: "不合格",
         2999: "通过",
       },
       form: {},
