@@ -124,7 +124,7 @@ export default {
       id: "",
       type: "",
       typeMap: {
-        add: "新增",
+        add: "验收信息",
         edit: "修改",
         view: "查看",
         rectify: "整改",

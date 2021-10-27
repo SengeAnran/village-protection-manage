@@ -278,7 +278,7 @@ export default {
     },
     toVillage(scope) {
       this.$router.push(
-        `/villageApplication/villageDetail?id=${scope.data.id}`
+        `/villageApplication/villageDetail?id=${scope.data.id}&name=PlanAuditList&title=规划评审`
       );
     },
     toAuditSave(scope, type) {

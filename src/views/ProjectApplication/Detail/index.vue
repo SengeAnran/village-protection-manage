@@ -573,10 +573,33 @@ export default {
       },
     };
   },
+  beforeCreate() {
+    // if (this.$route.query.from && this.$route.query.from === 'ScheduleReportList') {
+    //   console.log(this.$route.matched);
+    //   this.$route.matched[1].otherRedirect = { name: this.$route.query.from };
+    //   this.$route.matched[1].meta.otherTitle = this.$route.query.name;
+    //   console.log(this.$route.matched[1]);
+    // } else {
+    //   this.$route.matched[1].otherRedirect = null;
+    //   this.$route.matched[1].meta.otherTitle = '';
+    // }
+  },
   created() {
     this.id = this.$route.query.id;
     this.getDetail();
   },
+  // beforeRouteEnter(to, from, next) {
+  //   console.log(to, from);
+  //   const routers = {
+  //     "/scheduleReport/index": true,
+  //   };
+  //   next((vm => {
+  //     if(routers[from.path]) {
+  //       vm.changeRoute();
+  //       // console.log(vm)
+  //     }
+  //   }))
+  // },
   methods: {
     //导出
     clickExport() {
@@ -586,6 +609,17 @@ export default {
         console.log(res)
         downloadWordFile(res,fileName)
       })
+    },
+    changeRoute() {
+      if (this.$route.query.from && this.$route.query.from === 'ScheduleReportList') {
+        console.log(this.$route.matched);
+        this.$route.matched[1].otherRedirect = { name: this.$route.query.from };
+        this.$route.matched[1].meta.otherTitle = this.$route.query.name;
+        console.log(this.$route.matched[1]);
+      } else {
+        this.$route.matched[1].otherRedirect = null;
+        this.$route.matched[1].meta.otherTitle = '';
+      }
     },
     async getDetail() {
       if (this.type === "add") {

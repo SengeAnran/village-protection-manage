@@ -260,6 +260,9 @@ export default {
   computed: {
     ...mapGetters(["declareType"]),
     ...mapGetters(["userInfo"]),
+    pageName() {
+      return this.userInfo.roleId === 3? '项目验收' : this.userInfo.roleId === 1? '绩效评价':'市级复核'
+    },
     modifyPermission() {
       const roleId = this.userInfo.roleId;
       return roleId === 3 ? 80002 : roleId === 2 ? 10202 : 0;
@@ -338,11 +341,11 @@ export default {
     },
     toVillage(scope) {
       this.$router.push(
-        `/villageApplication/villageDetail?id=${scope.data.id}`
+        `/villageApplication/villageDetail?id=${scope.data.id}&name=ProjectAcceptanceList&title=${this.pageName}`
       );
     },
     toProject(scope) {
-      this.$router.push(`/projectApplication/detail?id=${scope.data.id}`);
+      this.$router.push(`/projectApplication/detail?id=${scope.data.id}&name=ProjectAcceptanceList&title=${this.pageName}`);
     },
     toAuditSave(scope, type) {
       this.$router.push(

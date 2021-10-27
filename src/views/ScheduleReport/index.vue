@@ -224,6 +224,12 @@ export default {
   },
   computed: {
     ...mapGetters(["userInfo"]),
+    pageName() {
+      return this.userInfo.roleId === 3? '进度上报' : '进度监管'
+    }
+  },
+  mounted() {
+    console.log(this.userInfo)
   },
   methods: {
     // 导出
@@ -242,7 +248,7 @@ export default {
       const { projectId } = row.data;
       this.$router.push({
         name: "ProjectApplicationDetail",
-        query: { id: projectId },
+        query: { id: projectId, name: "ScheduleReportList", title: this.pageName },
       });
     },
     // 历史详情

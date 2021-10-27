@@ -7,7 +7,7 @@
           class="no-redirect"
           >{{ item.meta.title }}</span
         >
-        <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
+        <a v-else @click.prevent="handleLink(item)">{{ item.meta.otherTitle || item.meta.title }}</a>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
@@ -51,8 +51,11 @@ export default {
       return toPath(params);
     },
     handleLink(item) {
-      const { redirect, path, name } = item;
-      if (redirect) {
+      const { otherRedirect, redirect, path, name } = item;
+      if (otherRedirect) {
+        this.$router.push(otherRedirect);
+        return;
+      } else if (redirect) {
         if (redirect === this.$route.path) return;
         this.$router.push(redirect);
         return;

@@ -62,11 +62,32 @@ router.beforeEach((to, from, next) => {
         next("/");
         return;
       }
+      const toPath = {
+        "/projectApplication/detail": true,
+        "/villageApplication/villageDetail": true,
+      };
+      const fromPath = {
+        "/projectApplication/detail": {
+          "/scheduleReport/index": true,
+          "/projectAcceptance/index": true,
+        },
+        "/villageApplication/villageDetail": {
+          "/planAudit/index": true,
+          "/projectAcceptance/index": true,
+        },
+      };
+      if (toPath[to.path] && fromPath[to.path][from.path]) {
+        to.matched[1].otherRedirect = { name: to.query.name };
+        to.matched[1].meta.otherTitle = to.query.title;
+      } else if (toPath[to.path]) {
+        to.matched[1].otherRedirect = '';
+        to.matched[1].meta.otherTitle = '';
+      }
+      console.log(to.path, from.path)
       next();
     }
   }
 });
-
 /**
  * @param {Array} list 路由初始列表
  * @param {Boolean} isRoot 是否为根路由
