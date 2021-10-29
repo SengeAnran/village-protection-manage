@@ -13,12 +13,14 @@
         :model="form"
         label-width="80px"
       >
-        <el-form-item label="村庄地址" prop="villageId">
-          <p class="content">{{ form.address }}</p>
+        <el-form-item style="margin-bottom: 32px" class="villageAdress" label="村庄地址" prop="villageId">
+          <p class="content" style="height: 22px;font-size: 16px;font-weight: 400;color: #333333;line-height: 22px;">
+            {{ form.address }}
+          </p>
 <!--          <p class="content">{{ form.address }}{{ form.villageName }}</p>-->
         </el-form-item>
 
-        <h4 class="block-tit">重点村古建筑调查表</h4>
+        <h4 class="block-tit" style="margin-bottom: 20px">重点村古建筑调查表</h4>
         <div class="input-item-wrp">
           <el-form-item label="当年户籍人口（人）" prop="population">
             <p class="content">{{ form.population }}</p>
@@ -43,7 +45,7 @@
           </el-form-item>
         </div>
 
-        <h4 class="block-tit">古建筑数量</h4>
+        <h4 class="block-tit" style="margin-bottom: 20px">古建筑数量</h4>
         <div class="total-wrp"><span>总数：</span>{{ total }} 个</div>
         <div class="input-item-wrp">
           <el-form-item
@@ -184,9 +186,21 @@ export default {
 .form {
   max-width: 1600px;
   padding-left: 8px;
+  .villageAdress {
+    ::v-deep .el-form-item__label {
+      color: #999;
+      font-size: 16px;
+    }
+
+  }
   .block-tit {
     margin-top: 18px;
     margin-bottom: 2px;
+    font-size: 18px;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    color: #333333;
+    line-height: 25px
   }
 
   .input {

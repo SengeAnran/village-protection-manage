@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-top: 14px">
     <!--搜索-->
     <div v-if="!hideSearch" class="search">
       <!--搜索插槽-->
@@ -22,6 +22,7 @@
       >
       <slot name="crudAction"></slot>
       <el-button
+        icon="el-icon-delete"
         v-if="selection && multipleDelete"
         v-permission="permissionDelete"
         :disabled="selections.length === 0"
@@ -39,6 +40,11 @@
     <el-table
       v-if="!hideTable"
       class="table"
+      header-row-style="font-size: 14px;
+      font-family: PingFangSC-Medium, PingFang SC;
+      font-weight: 500;
+      color: #333333;
+      line-height: 22px;"
       v-loading="loading"
       :data="items"
       @selection-change="selectionChange"
@@ -542,6 +548,7 @@ export default {
 
 <style lang="scss" scoped>
 .search {
+  box-sizing: border-box;
   margin-bottom: 10px;
   > * {
     margin-right: 15px;

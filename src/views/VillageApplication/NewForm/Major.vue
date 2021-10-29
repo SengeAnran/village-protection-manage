@@ -238,8 +238,8 @@ export default {
   max-width: 1600px;
   padding-left: 8px;
   .block-tit {
-    margin-top: 14px;
-    margin-bottom: 2px;
+    margin-top: 32px;
+    margin-bottom: 20px;
   }
 
   .input {

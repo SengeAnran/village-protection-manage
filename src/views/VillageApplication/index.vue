@@ -112,7 +112,7 @@
             class="mr-3"
             @command="newApplications"
           >
-            <el-button type="primary"> 新建申报 </el-button>
+            <el-button type="primary" icon="el-icon-plus"> 新建申报 </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
                 v-for="(item, i) in declareTypeOpt"

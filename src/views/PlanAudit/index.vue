@@ -60,8 +60,8 @@
         </div>
       </template>
 
-      <template v-slot:export>
-        <el-button class="export-button" @click="clickExport">导出</el-button>
+      <template v-slot:crudAction>
+        <el-button type="primary" icon="el-icon-upload2" class="export-button" @click="clickExport">导出</el-button>
       </template>
 
       <template v-slot:table>
@@ -408,7 +408,7 @@ export default {
   }
 }
 .export-button{
-  float: right;
+  //float: right;
 }
 ::v-deep .table-action {
   > * {
