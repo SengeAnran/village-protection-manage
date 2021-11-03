@@ -284,7 +284,7 @@ export default {
     },
     // 可修改
     _canModify(status, roleId) {
-      return roleId === 3 && status === 2001;
+      return roleId === 3 && (status === 2001 || status === 2002 || status === 2003);
     },
     // 可删除
     _canDelete(status, roleId) {
