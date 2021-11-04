@@ -165,6 +165,7 @@
               <el-input
                 class="input"
                 v-model="form1.companyMobile"
+                maxlength="11"
                 placeholder="请输入"
               />
             </el-form-item>
