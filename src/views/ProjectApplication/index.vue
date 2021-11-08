@@ -116,6 +116,17 @@
         </div>
         <div
           class="inline"
+        >
+          <el-divider direction="vertical"></el-divider>
+          <el-link
+            type="primary"
+            v-if="actionControl('审核详情', scope.data.projectStatus)"
+            @click="toAuditDetail(scope)"
+          >审核详情</el-link
+          >
+        </div>
+        <div
+          class="inline"
           v-if="actionControl('审核', scope.data.projectStatus)"
           v-permission="50002"
         >
@@ -124,6 +135,24 @@
         </div>
       </template>
     </Crud>
+    <el-dialog
+      title="审核"
+      :visible.sync="dialogVisible"
+      width="600px"
+      :before-close="handleClose">
+      <div style="margin-bottom: 24px">{{ tips }}</div>
+      <div style="margin-bottom: 12px">请填写审核意见：</div>
+      <el-input
+        type="textarea"
+        :rows="8"
+        placeholder="请输入内容"
+        v-model="textarea">
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="onConfirm(0)">不通过</el-button>
+    <el-button type="primary" @click="onConfirm(1)">通过</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -164,6 +193,10 @@ export default {
         30002: "扩建",
         30003: "开发利用",
       },
+      tips: "",
+      dialogVisible: false,
+      dialogId: "",
+      textarea: "",
     };
   },
   computed: {
@@ -177,15 +210,17 @@ export default {
       详情: () => true,
       修改: (status) => this._canModify(status, 3),
       删除: (status) => this._canDelete(status, 3), // 没有删除接口
-      审核详情: (status) => this._canViewDeclare(status, 3),
+      审核详情: (status) => this._canViewDeclare(status),
     };
     this.SHIJI_ACTION = {
       详情: () => true,
       审核: (status) => this._canDeclare(status, 2),
+      审核详情: (status) => this._canViewDeclare(status),
     };
     this.ADMIN_ACTION = {
       详情: () => true,
       审核: (status) => this._canDeclare(status, 1),
+      审核详情: (status) => this._canViewDeclare(status),
     };
   },
 
@@ -217,6 +252,9 @@ export default {
         query: { id },
       });
     },
+    toAuditDetail(scope) {
+      this.$router.push(`/projectApplication/verify/detail?id=${scope.data.id}`);
+    },
     // 删除
     goDelete(id) {
       this.$confirm("是否删除该条数据？", "提示", {
@@ -230,29 +268,36 @@ export default {
       });
     },
     verify(scope) {
-      const tips =
+      this.tips =
         this.userInfo.roleId === 1
           ? "是否通过该项目审核？"
           : "是否通过该项目审核，若审核通过则项目提交至省级。";
-      this.$confirm(tips, "审核", {
-        confirmButtonText: "通过",
-        cancelButtonText: "不通过",
-        distinguishCancelAndClose: true,
-      })
-        .then(async (action) => {
-          this.submit(action, scope);
-        })
-        .catch(async (action) => {
-          if (action === "cancel") {
-            this.submit(action, scope);
-          }
-        });
+      this.textarea = "";
+      this.dialogId = scope.data.id;
+      this.dialogVisible = true;
+      // this.$confirm(tips, "审核", {
+      //   confirmButtonText: "通过",
+      //   cancelButtonText: "不通过",
+      //   distinguishCancelAndClose: true,
+      // })
+      //   .then(async (action) => {
+      //     this.submit(action, scope);
+      //   })
+      //   .catch(async (action) => {
+      //     if (action === "cancel") {
+      //       this.submit(action, scope);
+      //     }
+      //   });
     },
-    async submit(action, scope) {
-      let status = action === "confirm" ? 1 : 0;
+    onConfirm(status) {
+      this.submit(status);
+      this.dialogVisible = false;
+    },
+    async submit (status) {
       await verifyProject({
-        id: scope.data.id,
+        id: this.dialogId,
         status,
+        remark: this.textarea,
       });
       this.$notify.success("操作成功");
       this.$refs.crud.getItems();
@@ -293,8 +338,8 @@ export default {
       );
     },
     // 审核详情
-    _canViewDeclare(status, roleId) {
-      return roleId === 3 && status > 2001;
+    _canViewDeclare(status) {
+      return status > 2001;
     },
     // 可审核
     _canDeclare(status, roleId) {

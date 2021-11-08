@@ -43,10 +43,24 @@
                 ></el-input-number>
               </template>
             </el-table-column>
-            <el-table-column label="审核" width="186">
+            <el-table-column label="审核" width="236">
               <template slot-scope="scope">
                 <el-radio v-model="scope.row.status" label="1">通过</el-radio>
                 <el-radio v-model="scope.row.status" label="0">不通过</el-radio>
+                <el-link
+                  v-if="form.detail[scope.$index].opinion"
+                  @click="addDetails(scope)"
+                  type="primary"
+                >
+                  修改
+                </el-link>
+                <el-link
+                  v-else
+                  @click="addDetails(scope)"
+                  type="primary"
+                >
+                  填写
+                </el-link>
               </template>
             </el-table-column>
           </el-table>
@@ -59,6 +73,23 @@
         </div>
       </el-form>
     </div>
+    <el-dialog
+      title="审核"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose">
+      <div style="margin-bottom: 12px">请填写审核意见：</div>
+      <el-input
+        type="textarea"
+        :rows="8"
+        placeholder="请输入内容"
+        v-model="textarea">
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="onConfirm">确 定</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -72,6 +103,9 @@ export default {
   data() {
     return {
       id: 0,
+      dialogVisible: false,
+      dialogIndex: null,
+      textarea: '',
       form: {
         declareYear: "",
         declareType: "",
@@ -109,6 +143,7 @@ export default {
               ...item,
               sortNum: i + 1,
               status: "",
+              opinion: "",
             };
           }) || [];
       });
@@ -117,7 +152,22 @@ export default {
     goDetail(row) {
       this.$router.push({ name: "villageDetail", query: { id: row.id } });
     },
-
+    addDetails(scope) {
+      this.dialogIndex = scope.$index;
+      this.textarea = this.form.detail[scope.$index].opinion ? this.form.detail[scope.$index].opinion : '';
+      this.dialogVisible = true;
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(() => {
+          done();
+        })
+        .catch(() => {});
+    },
+    onConfirm() {
+      this.form.detail[this.dialogIndex].opinion = this.textarea;
+      this.dialogVisible = false;
+    },
     validateForm() {
       // 判断审核
       const isAudit = this.checkAudit();
@@ -165,6 +215,7 @@ export default {
           id: item.id,
           status: item.status,
           sortNum: item.sortNum,
+          opinion: item.opinion,
         };
       });
 

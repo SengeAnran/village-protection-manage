@@ -246,6 +246,18 @@ export const defaultRoutes = [
         },
         component: () => import("@/views/ProjectApplication/Detail"),
       },
+      {
+        path: "/projectApplication/verify/detail",
+        name: "ProjectApplicationVerifyDetail",
+        hidden: true,
+        meta: {
+          title: "审核详情",
+          noCache: true,
+          activeMenu: "/projectApplication/index",
+          // menuIds: [40002, 50001],
+        },
+        component: () => import("@/views/ProjectApplication/VerifyDetail"),
+      },
     ],
   },
   // 进度上报 / 进度监管

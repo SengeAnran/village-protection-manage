@@ -30,6 +30,7 @@
         >
       </template>
     </el-table-column>
+    <el-table-column v-if="!hiddenDeclareResult && userInfo.roleId > 1" prop="cityOpinion" label="审核意见"></el-table-column>
     <el-table-column
       v-if="!hiddenDeclareResult"
       :label="userInfo.roleId > 1 ? '省级审核结果' : '审核结果'"
@@ -63,6 +64,7 @@
         >
       </template>
     </el-table-column>
+    <el-table-column prop="provinceOpinion" label="审核意见"> </el-table-column>
     <el-table-column label="操作" v-if="!(hiddenEdit && hiddenDetail)">
       <template slot-scope="scope">
         <div v-if="!hiddenEdit">
