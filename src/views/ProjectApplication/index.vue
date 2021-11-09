@@ -115,12 +115,12 @@
           </el-link>
         </div>
         <div
+          v-if="actionControl('审核详情', scope.data.projectStatus)"
           class="inline"
         >
           <el-divider direction="vertical"></el-divider>
           <el-link
             type="primary"
-            v-if="actionControl('审核详情', scope.data.projectStatus)"
             @click="toAuditDetail(scope)"
           >审核详情</el-link
           >

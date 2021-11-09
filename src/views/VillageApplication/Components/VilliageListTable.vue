@@ -4,7 +4,7 @@
     <el-table-column prop="address" label="村庄所在乡镇"> </el-table-column>
     <el-table-column prop="villageName" label="村庄名称"> </el-table-column>
     <el-table-column
-      v-if="!hiddenDeclareResult && userInfo.roleId > 1"
+      v-if="!hiddenDeclareResult"
       label="市级审核结果"
       align="center"
     >
@@ -30,10 +30,14 @@
         >
       </template>
     </el-table-column>
-    <el-table-column v-if="!hiddenDeclareResult && userInfo.roleId > 1" prop="cityOpinion" label="审核意见"></el-table-column>
+    <el-table-column v-if="!hiddenDeclareResult" label="审核意见">
+      <template slot-scope="scope">
+        {{scope.row.cityOpinion|| '— —'}}
+      </template>
+    </el-table-column>
     <el-table-column
       v-if="!hiddenDeclareResult"
-      :label="userInfo.roleId > 1 ? '省级审核结果' : '审核结果'"
+      label="省级审核结果"
       align="center"
     >
       <template slot-scope="scope">
@@ -64,7 +68,11 @@
         >
       </template>
     </el-table-column>
-    <el-table-column prop="provinceOpinion" label="审核意见"> </el-table-column>
+    <el-table-column v-if="!hiddenDeclareResult" label="审核意见">
+      <template slot-scope="scope">
+        {{scope.row.provinceOpinion|| '— —'}}
+      </template>
+    </el-table-column>
     <el-table-column label="操作" v-if="!(hiddenEdit && hiddenDetail)">
       <template slot-scope="scope">
         <div v-if="!hiddenEdit">

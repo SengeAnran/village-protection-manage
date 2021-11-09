@@ -2,7 +2,11 @@
   <div class="block">
     <transition name="fade-transform" mode="out-in">
       <div v-if="!showForm" key="list">
-        <RouterBack>一般村申报</RouterBack>
+        <h3 class="text-gray-800 mb-8 router-back" @click="onCancel">
+          <i class="el-icon-arrow-left"></i>
+          一般村申报
+        </h3>
+<!--        <RouterBack>一般村申报</RouterBack>-->
         <el-form
           style="padding-left: 14px"
           class="form"
@@ -120,6 +124,9 @@ export default {
     }
   },
   methods: {
+    addckick() {
+      console.log("点击了");
+    },
     init() {
       getVillageDetail({ id: this.id }).then((res) => {
         this.form.detail = res || [];

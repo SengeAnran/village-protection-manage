@@ -2,7 +2,13 @@
   <div class="block">
     <transition name="fade-transform" mode="out-in">
       <div v-if="!showForm" key="list">
-        <RouterBack>重点村申报</RouterBack>
+<!--        <div @click="onCancel">-->
+<!--          <RouterBack>重点村申报</RouterBack>-->
+<!--        </div>-->
+        <h3 class="text-gray-800 mb-8 router-back" @click="onCancel">
+          <i class="el-icon-arrow-left"></i>
+          重点村申报
+        </h3>
         <el-form
           style="padding-left: 14px"
           class="form"
