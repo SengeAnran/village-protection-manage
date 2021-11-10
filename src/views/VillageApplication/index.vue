@@ -328,7 +328,7 @@ export default {
       return false;
     },
 
-    // 修改、删除
+    // 修改、删除 *******
     _canModify(declareStatus, roleId) {
       return roleId === 3 && declareStatus === 2001;
     },
