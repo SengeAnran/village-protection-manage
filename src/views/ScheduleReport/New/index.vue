@@ -307,11 +307,33 @@ export default {
   computed: {
     total() {
       const { provinceFee, cityFee, countryFee, communityFee } = this.form;
+      let sq1,sq2,sq3,sq4,m;
+      try {
+        sq1 = provinceFee.toString().split(".")[1].length;
+      } catch (e) {
+        sq1 = 0;
+      }
+      try {
+        sq2 = cityFee.toString().split(".")[1].length;
+      } catch (e) {
+        sq2 = 0;
+      }
+      try {
+        sq3= countryFee.toString().split(".")[1].length;
+      } catch (e) {
+        sq3 = 0;
+      }
+      try {
+        sq4 = communityFee.toString().split(".")[1].length;
+      } catch (e) {
+        sq4 = 0;
+      }
+      m = Math.pow(10, Math.max(sq1, sq2, sq3, sq4))
       return (
-        Number(provinceFee) +
-        Number(cityFee) +
-        Number(countryFee) +
-        Number(communityFee)
+        (Number(provinceFee) * m +
+        Number(cityFee) * m +
+        Number(countryFee) * m +
+        Number(communityFee) * m) /m
       );
     },
   },
