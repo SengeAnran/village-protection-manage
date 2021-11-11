@@ -58,7 +58,8 @@
           :rules="rule.input"
         >
           <el-input
-            v-model="form.villageNum"
+            v-model.number="form.villageNum"
+            oninput ="value=value.replace(/[^\d]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
@@ -68,7 +69,8 @@
           :rules="rule.input"
         >
           <el-input
-            v-model="form.oldBuildingNum"
+            v-model.number="form.oldBuildingNum"
+            oninput ="value=value.replace(/[^\d]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
@@ -78,10 +80,11 @@
         <el-form-item
           label="村内古道修复改造（公里）"
           prop="roadRepairNum"
-          :rules="rule.input"
+          :rules="rule.inputNumber"
         >
           <el-input
             v-model="form.roadRepairNum"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
@@ -91,7 +94,8 @@
           :rules="rule.input"
         >
           <el-input
-            v-model="form.addNum"
+            v-model.number="form.addNum"
+            oninput ="value=value.replace(/[^\d]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
@@ -101,30 +105,33 @@
         <el-form-item
           label="顶瓦修补面积（㎡）"
           prop="tileRepairArea"
-          :rules="rule.input"
+          :rules="rule.inputNumber"
         >
           <el-input
             v-model="form.tileRepairArea"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
         <el-form-item
           label="墙体加固面积（㎡）"
           prop="wallRepairArea"
-          :rules="rule.input"
+          :rules="rule.inputNumber"
         >
           <el-input
             v-model="form.wallRepairArea"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
         <el-form-item
           label="立面改造面积（㎡）"
           prop="faceReformArea"
-          :rules="rule.input"
+          :rules="rule.inputNumber"
         >
           <el-input
             v-model="form.faceReformArea"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
@@ -134,17 +141,19 @@
           :rules="rule.input"
         >
           <el-input
-            v-model="form.componentRepairQuantity"
+            v-model.number="form.componentRepairQuantity"
+            oninput ="value=value.replace(/[^\d]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
         <el-form-item
           label="异地迁入面积（㎡）"
           prop="moveInArea"
-          :rules="rule.input"
+          :rules="rule.inputNumber"
         >
           <el-input
             v-model="form.moveInArea"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
@@ -154,30 +163,33 @@
         <el-form-item
           label="立面改造面积（㎡）"
           prop="clashFaceReformArea"
-          :rules="rule.input"
+          :rules="rule.inputNumber"
         >
           <el-input
             v-model="form.clashFaceReformArea"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
         <el-form-item
           label="结构降层面积（㎡）"
           prop="structureArea"
-          :rules="rule.input"
+          :rules="rule.inputNumber"
         >
           <el-input
             v-model="form.structureArea"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
         <el-form-item
           label="整体拆除面积（㎡）"
           prop="demolishArea"
-          :rules="rule.input"
+          :rules="rule.inputNumber"
         >
           <el-input
             v-model="form.demolishArea"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
@@ -187,10 +199,11 @@
         <el-form-item
           label="用地面积（亩）"
           prop="landUseArea"
-          :rules="rule.input"
+          :rules="rule.inputNumber"
         >
           <el-input
             v-model="form.landUseArea"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
@@ -200,7 +213,8 @@
           :rules="rule.input"
         >
           <el-input
-            v-model="form.placementFamilyNum"
+            v-model.number="form.placementFamilyNum"
+            oninput ="value=value.replace(/[^\d]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
@@ -210,40 +224,67 @@
         <el-form-item
           label="省级资金（万元）"
           prop="provinceFee"
-          :rules="rule.input"
+          :rules="rule.inputNumber"
         >
           <el-input
             v-model="form.provinceFee"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
         <el-form-item
           label="市级资金（万元）"
           prop="cityFee"
-          :rules="rule.input"
+          :rules="rule.inputNumber"
         >
           <el-input
             v-model="form.cityFee"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
+            placeholder="请输入数字，如：10"
+          ></el-input>
+        </el-form-item>
+<!--        ************************************            -->
+        <el-form-item
+          label="县（市、区）级资金（万元）"
+          prop="countryCity"
+          :rules="rule.inputNumber"
+        >
+          <el-input
+            v-model="form.countryCity"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
         <el-form-item
-          label="乡镇、村集体资金（万元）"
+          label="乡镇资金（万元）"
           prop="countryFee"
-          :rules="rule.input"
+          :rules="rule.inputNumber"
         >
           <el-input
             v-model="form.countryFee"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
         <el-form-item
-          label="社会资金（万元）"
+          label="村级资金（万元）"
           prop="communityFee"
-          :rules="rule.input"
+          :rules="rule.inputNumber"
         >
           <el-input
             v-model="form.communityFee"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
+            placeholder="请输入数字，如：10"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="其他投入（万元）"
+          prop="otherFee"
+          :rules="rule.inputNumber"
+        >
+          <el-input
+            v-model="form.otherFee"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入数字，如：10"
           ></el-input>
         </el-form-item>
@@ -296,8 +337,10 @@ export default {
         placementFamilyNum: "", //安置户数
         provinceFee: "", // 省级资金（万元）
         cityFee: "", // 市级资金（万元）
+        countryCity: "", // 县（市、区）级资金（万元）
         countryFee: "", // 乡镇、村集体资金（万元）
-        communityFee: "", //社会资金（万元）
+        communityFee: "", //村级资金（万元）
+        otherFee: "", //其他投入（万元）
 
         villageNum: "", // 在建省重点村、一般村（个）
         oldBuildingNum: "", // 古建筑数量
@@ -306,8 +349,8 @@ export default {
   },
   computed: {
     total() {
-      const { provinceFee, cityFee, countryFee, communityFee } = this.form;
-      let sq1,sq2,sq3,sq4,m;
+      const { provinceFee, cityFee, countryCity,  countryFee, communityFee, otherFee } = this.form;
+      let sq1,sq2,sq3,sq4,sq5,sq6,m;
       try {
         sq1 = provinceFee.toString().split(".")[1].length;
       } catch (e) {
@@ -328,11 +371,23 @@ export default {
       } catch (e) {
         sq4 = 0;
       }
-      m = Math.pow(10, Math.max(sq1, sq2, sq3, sq4))
+      try {
+        sq5 = countryCity.toString().split(".")[1].length;
+      } catch (e) {
+        sq5 = 0;
+      }
+      try {
+        sq6 = otherFee.toString().split(".")[1].length;
+      } catch (e) {
+        sq6 = 0;
+      }
+      m = Math.pow(10, Math.max(sq1, sq2, sq3, sq4, sq5, sq6))
       return (
         (Number(provinceFee) * m +
         Number(cityFee) * m +
         Number(countryFee) * m +
+        Number(countryCity) * m +
+        Number(otherFee) * m +
         Number(communityFee) * m) /m
       );
     },

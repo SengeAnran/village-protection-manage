@@ -89,11 +89,17 @@
         <el-form-item label="市级资金（万元）">
           <p>{{ form.cityFee }}</p>
         </el-form-item>
-        <el-form-item label="乡镇、村集体资金（万元）">
+        <el-form-item label="县（市、区）级资金（万元）">
+          <p>{{ form.countryCity }}</p>
+        </el-form-item>
+        <el-form-item label="乡镇资金（万元）">
           <p>{{ form.countryFee }}</p>
         </el-form-item>
-        <el-form-item label="社会资金（万元）">
+        <el-form-item label="村级资金（万元）">
           <p>{{ form.communityFee }}</p>
+        </el-form-item>
+        <el-form-item label="其他投入（万元）">
+          <p>{{ form.otherFee }}</p>
         </el-form-item>
       </div>
 
@@ -137,8 +143,10 @@ export default {
         placementFamilyNum: "", //安置户数
         provinceFee: "", // 省级资金（万元）
         cityFee: "", // 市级资金（万元）
+        countryCity: "", // 县（市、区）级资金（万元）
         countryFee: "", // 乡镇、村集体资金（万元）
         communityFee: "", //社会资金（万元）
+        otherFee: "", //其他投入（万元）
 
         villageNum: "", // 在建省重点村、一般村（个）
         oldBuildingNum: "", // 古建筑数量
@@ -147,12 +155,46 @@ export default {
   },
   computed: {
     total() {
-      const { provinceFee, cityFee, countryFee, communityFee } = this.form;
+      const { provinceFee, cityFee, countryCity,  countryFee, communityFee, otherFee } = this.form;
+      let sq1,sq2,sq3,sq4,sq5,sq6,m;
+      try {
+        sq1 = provinceFee.toString().split(".")[1].length;
+      } catch (e) {
+        sq1 = 0;
+      }
+      try {
+        sq2 = cityFee.toString().split(".")[1].length;
+      } catch (e) {
+        sq2 = 0;
+      }
+      try {
+        sq3 = countryFee.toString().split(".")[1].length;
+      } catch (e) {
+        sq3 = 0;
+      }
+      try {
+        sq4 = communityFee.toString().split(".")[1].length;
+      } catch (e) {
+        sq4 = 0;
+      }
+      try {
+        sq5 = countryCity.toString().split(".")[1].length;
+      } catch (e) {
+        sq5 = 0;
+      }
+      try {
+        sq6 = otherFee.toString().split(".")[1].length;
+      } catch (e) {
+        sq6 = 0;
+      }
+      m = Math.pow(10, Math.max(sq1, sq2, sq3, sq4, sq5, sq6))
       return (
-        Number(provinceFee) +
-        Number(cityFee) +
-        Number(countryFee) +
-        Number(communityFee)
+        (Number(provinceFee) * m +
+          Number(cityFee) * m +
+          Number(countryFee) * m +
+          Number(countryCity) * m +
+          Number(otherFee) * m +
+          Number(communityFee) * m) /m
       );
     },
   },

@@ -6,6 +6,15 @@ const mobile = (rule, value, callback) => {
     callback(new Error("手机号格式不正确"));
   }
 };
+const number = (rule, value, callback) =>{
+  if(!value){
+    callback(new Error("填写不能为空"))
+  }else if(value.indexOf(".") != -1 && value.split('.').length > 2){
+    callback(new Error("请输入正确格式的数字")) //防止输入多个小数点
+  }else {
+    callback();
+  }
+};
 const email = (rule, value, callback) => {
   const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
   if (reg.test(value)) {
@@ -37,6 +46,7 @@ export default {
     return {
       rule: {
         input: { required: true, message: "请输入", trigger: "blur" },
+        inputNumber: [{ type: 'string',required: true,trigger: 'blur', validator:number},] ,
         upload: {
           required: true,
           validator: upload,

@@ -146,7 +146,7 @@
             <div>
               <el-form-item
                 class="inline-block"
-                label="申请省级财政（万元）："
+                label="省级资金（万元）："
                 :rules="rule.input"
                 prop="provinceFee"
               >
@@ -154,7 +154,7 @@
               </el-form-item>
               <el-form-item
                 class="inline-block"
-                label="申请市级财政（万元）："
+                label="市级资金（万元）："
                 :rules="rule.input"
                 prop="cityFee"
               >
@@ -162,7 +162,7 @@
               </el-form-item>
               <el-form-item
                 class="inline-block"
-                label="申请县级及县以下财政（万元）："
+                label="县（市、区）级资金（万元）："
                 :rules="rule.input"
                 prop="countryFee"
               >
@@ -172,19 +172,19 @@
             <div>
               <el-form-item
                 class="inline-block"
-                label="村自筹资金（万元）："
-                :rules="rule.input"
-                prop="villageFee"
-              >
-                <p class="input">{{ form1.villageFee }}万元</p>
-              </el-form-item>
-              <el-form-item
-                class="inline-block"
-                label="银行贷款（万元）："
+                label="乡镇资金（万元）："
                 :rules="rule.input"
                 prop="bankFee"
               >
                 <p class="input">{{ form1.bankFee }}万元</p>
+              </el-form-item>
+              <el-form-item
+                class="inline-block"
+                label="村级资金（万元）："
+                :rules="rule.input"
+                prop="villageFee"
+              >
+                <p class="input">{{ form1.villageFee }}万元</p>
               </el-form-item>
               <el-form-item
                 class="inline-block"
@@ -519,7 +519,7 @@ export default {
         cityFee: undefined,
         countryFee: undefined,
         villageFee: undefined,
-        bankFee: undefined,
+          bankFee: undefined, // 银行资金改为乡镇资金
         otherFee: undefined,
         imagesArr: [],
       },

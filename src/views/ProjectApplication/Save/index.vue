@@ -175,7 +175,7 @@
             <div>
               <el-form-item
                 class="inline-block"
-                label="申请省级财政（万元）："
+                label="省级资金（万元）："
                 :rules="rule.input"
                 prop="provinceFee"
               >
@@ -189,7 +189,7 @@
               </el-form-item>
               <el-form-item
                 class="inline-block"
-                label="申请市级财政（万元）："
+                label="市级资金（万元）："
                 :rules="rule.input"
                 prop="cityFee"
               >
@@ -203,7 +203,7 @@
               </el-form-item>
               <el-form-item
                 class="inline-block"
-                label="申请县级及县以下财政（万元）："
+                label="县（市、区）级资金（万元）："
                 :rules="rule.input"
                 prop="countryFee"
               >
@@ -219,13 +219,13 @@
             <div>
               <el-form-item
                 class="inline-block"
-                label="村自筹资金（万元）："
+                label="乡镇资金（万元）："
                 :rules="rule.input"
-                prop="villageFee"
+                prop="bankFee"
               >
                 <el-input-number
                   class="input"
-                  v-model="form1.villageFee"
+                  v-model="form1.bankFee"
                   placeholder="请输入"
                   :controls="false"
                   :min="0"
@@ -233,13 +233,13 @@
               </el-form-item>
               <el-form-item
                 class="inline-block"
-                label="银行贷款（万元）："
+                label="村级资金（万元）："
                 :rules="rule.input"
-                prop="bankFee"
+                prop="villageFee"
               >
                 <el-input-number
                   class="input"
-                  v-model="form1.bankFee"
+                  v-model="form1.villageFee"
                   placeholder="请输入"
                   :controls="false"
                   :min="0"
@@ -756,7 +756,7 @@ export default {
         cityFee: undefined,
         countryFee: undefined,
         villageFee: undefined,
-        bankFee: undefined,
+        bankFee: undefined, // 11.11银行资金改为乡镇资金
         otherFee: undefined,
         imagesArr: [],
       },
