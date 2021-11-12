@@ -45,22 +45,25 @@
             </el-table-column>
             <el-table-column label="审核" width="236">
               <template slot-scope="scope">
-                <el-radio v-model="scope.row.status" label="1">通过</el-radio>
-                <el-radio v-model="scope.row.status" label="0">不通过</el-radio>
-                <el-link
-                  v-if="form.detail[scope.$index].opinion"
-                  @click="addDetails(scope)"
-                  type="primary"
-                >
-                  修改
-                </el-link>
-                <el-link
-                  v-else
-                  @click="addDetails(scope)"
-                  type="primary"
-                >
-                  填写
-                </el-link>
+                <span v-if="!(scope.row.cityVerify === 0)">
+                  <el-radio v-model="scope.row.status" label="1">通过</el-radio>
+                  <el-radio v-model="scope.row.status" label="0">不通过</el-radio>
+                  <el-link
+                    v-if="form.detail[scope.$index].opinion"
+                    @click="addDetails(scope)"
+                    type="primary"
+                  >
+                    修改
+                  </el-link>
+                  <el-link
+                    v-else
+                    @click="addDetails(scope)"
+                    type="primary"
+                  >
+                    填写
+                  </el-link>
+                </span>
+                <span v-else>市级审核不通过</span>
               </template>
             </el-table-column>
           </el-table>
@@ -185,7 +188,8 @@ export default {
 
     checkAudit() {
       const rst = this.form.detail.findIndex((item) => {
-        return item.status === "";
+        console.log(item);
+        return (item.status === "" && item.cityVerify === 1);
       });
       if (rst !== -1) {
         this.$message.error("请审核完成后再提交");

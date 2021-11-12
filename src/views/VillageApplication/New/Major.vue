@@ -117,12 +117,16 @@ export default {
           return date.getFullYear() > new Date().getFullYear();
         },
       },
+      Refill: false,
     };
   },
 
   created() {
-    const { id, declareYear } = this.$route.query;
+    const { id, declareYear, Refill } = this.$route.query;
     if (id && declareYear) {
+      if (Refill) {
+        this.Refill = Refill;
+      }
       this.id = id;
       this.form.declareYear = String(declareYear);
       this.init();
@@ -130,7 +134,7 @@ export default {
   },
   methods: {
     init() {
-      getVillageDetail({ id: this.id }).then((res) => {
+      getVillageDetail({ id: this.id, unPassFlag: this.Refill }).then((res) => {
         this.form.detail = res || [];
       });
     },
@@ -185,7 +189,7 @@ export default {
         declareYear: Number(this.form.declareYear),
         detail: this.form.detail,
       };
-      if (this.id) {
+      if (this.id && !this.Refill) {
         params.id = this.id;
         updateVillageItem(params).then(() => {
           this.$notify.success("修改成功");

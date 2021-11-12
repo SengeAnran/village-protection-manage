@@ -20,6 +20,7 @@
         </div>
         <el-form-item label="村庄名单：">
           <VilliageListTable
+            :declareYear="form.declareYear"
             :hiddenDetail="true"
             :hiddenEdit="true"
             :hiddenDeclareResult="false"
@@ -58,7 +59,7 @@ export default {
   },
   methods: {
     getVillageDetail() {
-      getVillageDetail({ id: this.id }).then((res) => {
+      getVillageDetail({ id: this.id, unPassFlag: false }).then((res) => {
         this.form.detail = res || [];
       });
     },

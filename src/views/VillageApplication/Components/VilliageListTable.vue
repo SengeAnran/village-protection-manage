@@ -57,15 +57,22 @@
           type="danger"
           >不通过</el-link
         >
-        <el-link
-          v-if="
+        <span v-if="scope.row.cityVerify === 0">
+          <el-link
+          >— —</el-link
+          >
+        </span>
+        <span v-else>
+          <el-link
+            v-if="
             !scope.row.provinceVerify &&
             typeof scope.row.provinceVerify !== 'number'
           "
-          :underline="false"
-          type="warning"
+            :underline="false"
+            type="warning"
           >未审核</el-link
-        >
+          >
+        </span>
       </template>
     </el-table-column>
     <el-table-column v-if="!hiddenDeclareResult" label="审核意见">
@@ -80,7 +87,7 @@
             type="primary"
             @click="$emit('editForm', { data: scope.row, index: scope.$index })"
           >
-            申报详情
+            编辑
           </el-link>
           <el-divider direction="vertical"></el-divider>
           <el-link type="danger" @click="removeItem(scope.$index, scope.row)"
@@ -94,10 +101,28 @@
         </div>
       </template>
     </el-table-column>
+<!--    重新填报操作 -->
+    <el-table-column label="操作" v-if="(hiddenEdit && hiddenDetail) && userInfo.roleId === 3">
+      <template slot-scope="scope">
+<!--        <div>-->
+<!--          <el-divider direction="vertical"></el-divider>-->
+<!--          <el-link type="danger" @click="removeItem(scope.$index, scope.row)"-->
+<!--            >删除</el-link-->
+<!--          >-->
+<!--        </div>-->
+        <div v-if="scope.row.cityVerify === 0 || scope.row.provinceVerify === 0">
+          <el-link type="primary" @click="edit(scope.row)"
+            >重新申报</el-link
+          >
+        </div>
+        <div v-else>— —</div>
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 <script>
 import { mapGetters } from "vuex";
+import {VILLAGE_LIST_ROUTER_NAME} from "../constants";
 export default {
   props: {
     data: {
@@ -108,6 +133,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    declareYear: {
+      type: Number,
+      default: null,
+    },
     hiddenEdit: {
       type: Boolean,
       default: true,
@@ -116,6 +145,11 @@ export default {
       type: Boolean,
       default: true,
     },
+  },
+  data() {
+    return {
+      refill: false,
+    };
   },
   computed: {
     ...mapGetters(["userInfo"]),
@@ -127,6 +161,15 @@ export default {
       }).then(() => {
         this.$emit("remove", index);
       })
+    },
+    // 重新申报
+    edit(data) {
+      console.log(data);
+      const { villageDeclarationId, declareType } = data;
+      this.$router.push({
+        name: VILLAGE_LIST_ROUTER_NAME[declareType],
+        query: { id: villageDeclarationId, declareYear: this.declareYear, Refill: true },
+      });
     },
   },
 };

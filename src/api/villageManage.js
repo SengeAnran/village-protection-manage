@@ -52,7 +52,7 @@ export const updateVillageItem = (data) => {
 export const getVillageDetail = (params) => {
   return axios.request({
     method: "GET",
-    url: apiHost + "/villageDeclaration/detail/" + params.id,
+    url: apiHost + "/villageDeclaration/detail",
     params,
   });
 };

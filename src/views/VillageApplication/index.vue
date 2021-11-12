@@ -285,6 +285,7 @@ export default {
     },
     // 修改
     edit(data) {
+      console.log(data);
       const { id, declareYear, declareType } = data;
       this.$router.push({
         name: VILLAGE_LIST_ROUTER_NAME[declareType],
