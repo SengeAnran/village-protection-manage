@@ -187,10 +187,18 @@ export default {
     },
 
     checkAudit() {
-      const rst = this.form.detail.findIndex((item) => {
-        console.log(item);
-        return (item.status === "" && item.cityVerify === 1);
-      });
+      let rst;
+      // console.log(this.userInfo.roleId,111);
+      if (this.userInfo.roleId === 1) {
+        rst = this.form.detail.findIndex((item) => {
+          return (item.status === "" && item.cityVerify === 1);
+        });
+      } else {
+        rst = this.form.detail.findIndex((item) => {
+          return (item.status === "");
+        });
+      }
+      console.log(rst);
       if (rst !== -1) {
         this.$message.error("请审核完成后再提交");
         return false;
