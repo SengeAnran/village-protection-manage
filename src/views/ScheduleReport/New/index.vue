@@ -41,28 +41,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-      </div>
-      <div class="input-item-wrp" v-if="declareTime">
-        <el-form-item label="总投资">
-          <p>{{ declareAmount }} 万元</p>
-        </el-form-item>
-        <el-form-item label="申报日期">
-          <p>{{ declareTime.slice(0, 10) }}</p>
-        </el-form-item>
-      </div>
-      <h4 class="block-tit">基本情况</h4>
-      <div class="input-item-wrp">
-        <el-form-item
-          label="在建省重点村、一般村（个）"
-          prop="villageNum"
-          :rules="rule.input"
-        >
-          <el-input
-            v-model.number="form.villageNum"
-            oninput ="value=value.replace(/[^\d]/g,'')"
-            placeholder="请输入数字，如：10"
-          ></el-input>
-        </el-form-item>
         <el-form-item
           label="古建筑数量（幢）"
           prop="oldBuildingNum"
@@ -75,6 +53,39 @@
           ></el-input>
         </el-form-item>
       </div>
+      <div class="input-item-wrp" v-if="declareTime">
+        <el-form-item label="总投资">
+          <p>{{ declareAmount }} 万元</p>
+        </el-form-item>
+        <el-form-item label="申报日期">
+          <p>{{ declareTime.slice(0, 10) }}</p>
+        </el-form-item>
+      </div>
+<!--      <h4 class="block-tit">基本情况</h4>-->
+<!--      <div class="input-item-wrp">-->
+<!--        <el-form-item-->
+<!--          label="在建省重点村、一般村（个）"-->
+<!--          prop="villageNum"-->
+<!--          :rules="rule.input"-->
+<!--        >-->
+<!--          <el-input-->
+<!--            v-model.number="form.villageNum"-->
+<!--            oninput ="value=value.replace(/[^\d]/g,'')"-->
+<!--            placeholder="请输入数字，如：10"-->
+<!--          ></el-input>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item-->
+<!--          label="古建筑数量（幢）"-->
+<!--          prop="oldBuildingNum"-->
+<!--          :rules="rule.input"-->
+<!--        >-->
+<!--          <el-input-->
+<!--            v-model.number="form.oldBuildingNum"-->
+<!--            oninput ="value=value.replace(/[^\d]/g,'')"-->
+<!--            placeholder="请输入数字，如：10"-->
+<!--          ></el-input>-->
+<!--        </el-form-item>-->
+<!--      </div>-->
       <h4 class="block-tit">当季度进展情况</h4>
       <div class="input-item-wrp">
         <el-form-item

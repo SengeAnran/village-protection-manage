@@ -17,6 +17,9 @@
         <el-form-item label="项目所在地">
           <p>{{ form.address }}</p>
         </el-form-item>
+        <el-form-item label="古建筑数量（幢）">
+          <p>{{ form.oldBuildingNum }}</p>
+        </el-form-item>
         <el-form-item label="总投资：">
           <p>{{ form.declareAmount }} 万元</p>
         </el-form-item>
@@ -24,15 +27,15 @@
           <p>{{ form.declareTime.slice(0, 10) }}</p>
         </el-form-item>
       </div>
-      <h4 class="block-tit">基本情况</h4>
-      <div class="input-item-wrp">
-        <el-form-item label="在建省重点村、一般村（个）">
-          <p>{{ form.villageNum }}</p>
-        </el-form-item>
-        <el-form-item label="古建筑数量（幢）">
-          <p>{{ form.oldBuildingNum }}</p>
-        </el-form-item>
-      </div>
+<!--      <h4 class="block-tit">基本情况</h4>-->
+<!--      <div class="input-item-wrp">-->
+<!--        <el-form-item label="在建省重点村、一般村（个）">-->
+<!--          <p>{{ form.villageNum }}</p>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="古建筑数量（幢）">-->
+<!--          <p>{{ form.oldBuildingNum }}</p>-->
+<!--        </el-form-item>-->
+<!--      </div>-->
       <h4 class="block-tit">当季度进展情况</h4>
       <div class="input-item-wrp">
         <el-form-item label="村内古道修复改造（公里）">
