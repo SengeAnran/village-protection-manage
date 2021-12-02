@@ -137,6 +137,11 @@
               <p>{{ declareType[scope.row.declareType] }}</p>
             </template>
           </el-table-column>
+          <el-table-column label="村庄名称" prop="villageName">
+            <template slot-scope="scope">
+              <p>{{ scope.row.villageName }}</p>
+            </template>
+          </el-table-column>
           <el-table-column v-if="roleId < 3" label="申报县" prop="gmtCreate">
             <template slot-scope="scope">
               <p>{{ scope.row.county }}</p>

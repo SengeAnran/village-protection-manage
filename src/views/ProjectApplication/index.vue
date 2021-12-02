@@ -73,11 +73,11 @@
           </div>
         </div>
       </template>
-
-      <template v-slot:crudAction v-if="userInfo.roleId === 3">
-        <el-button type="primary" v-permission="40001" @click="goAdd"
+      <template v-slot:crudAction >
+        <el-button v-if="userInfo.roleId === 3" type="primary" v-permission="40001" @click="goAdd"
           >新建申报
         </el-button>
+        <el-button type="primary" icon="el-icon-upload2" class="export-button" @click="clickExport">导出</el-button>
       </template>
 
       <template v-slot:table>
@@ -162,7 +162,9 @@ import {
   getProjectList,
   verifyProject,
   deleteProject,
+  pogressExport,
 } from "@/api/projectDeclare";
+import { downloadFile } from "@/utils/data"
 
 export default {
   data() {
@@ -349,6 +351,23 @@ export default {
         return status === 2004;
       }
       return;
+    },
+    clickExport() {
+      const params = {
+        address: this.query.address,
+        years: this.query.years,
+        projectType: this.query.projectType,
+        projectStatus: this.query.projectStatus,
+      }
+      let fileName;
+      if(this.query.years) {
+        fileName = this.query.years + '年度项目清单'
+      } else {
+        fileName = '项目清单'
+      }
+      pogressExport(params).then(res => {
+        downloadFile(res,fileName)
+      })
     },
   },
 };

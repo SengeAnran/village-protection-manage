@@ -121,7 +121,7 @@
           <div
             class="inline"
             v-if="actionControl('审核', scope.data.reviewStatus)"
-            v-permission="30002"
+            v-permission="30003"
           >
             <el-divider direction="vertical"></el-divider>
             <el-link type="primary" @click="openDialog(scope)">审核</el-link>
@@ -293,15 +293,15 @@ export default {
       );
     },
     openDialog(scope) {
-      if( this.userInfo.roleId === 1 ) {
-        this.goReview(scope)
+      if (this.userInfo.roleId === 1) {
+        this.goReview(scope);
       } else {
         this.form.id = scope.data.id;
         this.showDialog = true;
       }
     },
     goReview(scope) {
-      console.log(scope)
+      console.log(scope);
       this.$router.push(`/planAudit/review?id=${scope.data.id}`);
     },
     resetForm() {

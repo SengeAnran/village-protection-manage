@@ -67,12 +67,23 @@ export const deleteProject = (data) => {
   });
 };
 
+//
+// // 导出
+// export const pogressExport = (params) => {
+//   return axios.request({
+//     method: "get",
+//     url: apiHost + "/projectDeclare/exportExcelList" + params.id,
+//     responseType: "blob"
+//   });
+// };
+
 
 // 导出
 export const pogressExport = (params) => {
   return axios.request({
     method: "get",
-    url: apiHost + "/projectDeclare/detailExport/" + params.id,
+    url: apiHost + "/projectDeclare/exportExcelList",
+    params,
     responseType: "blob"
   });
 };

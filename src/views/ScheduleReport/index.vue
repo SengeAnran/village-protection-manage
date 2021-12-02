@@ -234,7 +234,11 @@ export default {
   methods: {
     // 导出
     clickExport() {
-      exportList().then(res => {
+      const params = {
+        address: this.query.address,
+        years: this.query.years,
+      };
+      exportList(params).then(res => {
         downloadFile(res,'重点项目最新进度')
       })
     },
