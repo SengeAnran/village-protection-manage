@@ -25,6 +25,7 @@
           v-model="query.address"
           style="width: 200px"
           placeholder="请输入"
+          :maxlength="50"
           clearable
         ></el-input>
       </template>
@@ -59,6 +60,7 @@
         <el-form-item label="村名" prop="villageName" :rules="rule.input">
           <el-input
             v-model="form.villageName"
+            :maxlength="50"
             style="width: 300px"
             placeholder="请输入"
           />

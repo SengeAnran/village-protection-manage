@@ -25,6 +25,7 @@
               <el-input
                 v-model="query.address"
                 style="width: 200px"
+                :maxlength="50"
                 placeholder="请输入"
                 clearable
               ></el-input>

@@ -54,6 +54,7 @@
               v-model="query.address"
               style="width: 200px"
               placeholder="请输入"
+              :maxlength="50"
               clearable
             ></el-input>
           </div>

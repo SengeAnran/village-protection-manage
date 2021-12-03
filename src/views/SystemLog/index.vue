@@ -27,6 +27,7 @@
           v-model="query.name"
           style="width: 200px;"
           placeholder="请输入关键字"
+          :maxlength="50"
           clearable
         ></el-input>
       </template>

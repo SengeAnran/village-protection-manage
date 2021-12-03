@@ -93,6 +93,7 @@
               <el-input
                 class="input"
                 v-model="form1.projectManager"
+                :maxlength="50"
                 placeholder="请输入"
               />
             </el-form-item>
@@ -111,6 +112,7 @@
             <el-form-item
               class="inline-block"
               label="项目主管部门："
+              :maxlength="50"
               :rules="rule.input"
               prop="departmentName"
             >
@@ -153,6 +155,7 @@
               <el-input
                 class="input"
                 v-model="form1.constructionCompanyName"
+                :maxlength="50"
                 placeholder="请输入"
               />
             </el-form-item>

@@ -20,6 +20,7 @@
             <el-input
               class="input"
               v-model="form.companyName"
+              :maxlength="50"
               placeholder="请输入设计公司全称"
             />
           </el-form-item>
@@ -32,6 +33,7 @@
             <el-input
               class="input"
               v-model="form.qualification"
+              :maxlength="50"
               placeholder="请输入"
             />
           </el-form-item>
@@ -44,6 +46,7 @@
             <el-input
               class="input"
               v-model="form.projectManager"
+              :maxlength="50"
               placeholder="请输入"
             />
           </el-form-item>

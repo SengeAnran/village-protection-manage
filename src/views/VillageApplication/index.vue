@@ -60,6 +60,7 @@
               <el-input
                 style="width: 200px"
                 v-model="query.createBy"
+                :maxlength="50"
                 placeholder="请输入村庄名称"
               ></el-input>
             </div>

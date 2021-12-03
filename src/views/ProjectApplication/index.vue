@@ -23,6 +23,7 @@
             <el-input
               style="width: 200px"
               v-model="query.address"
+              :maxlength="50"
               placeholder="请输入项目所在地"
             ></el-input>
           </div>
