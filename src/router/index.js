@@ -31,8 +31,8 @@ router.beforeEach((to, from, next) => {
       store.dispatch("user/getRouteList").then(() => {
         const list = lodash.cloneDeep(defaultRoutes);
         const asyncRoutes = getAsyncRoutes(list, true);
-        store.commit("user/SET_ROUTE_LIST", asyncRoutes);
-        router.addRoutes([
+        store.commit("user/SET_ROUTE_LIST", asyncRoutes); // 存储routeList
+        router.addRoutes([ // 动态添加更多的路由规则。参数必须是一个符合 routes 选项要求的数组。
           {
             path: "/",
             name: "Index",

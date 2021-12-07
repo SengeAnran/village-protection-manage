@@ -809,6 +809,7 @@ export default {
   },
   computed: {
     totalFee() {
+      // const { provinceFee } = this.form1;
       const countFee = [
         "provinceFee",
         "cityFee",
@@ -817,10 +818,19 @@ export default {
         "bankFee",
         "otherFee",
       ];
-      const total = countFee.reduce((pre, next) => {
-        return Number(pre || 0) + Number(this.form1[next] || 0);
+      // console.log(countFee);
+      const arrLength = countFee.map((item) => { // 获得小数位位数数组
+        if (this.form1[item]) {
+          return this.form1[item].toString().length !== parseInt(this.form1[item]).toString().length? this.form1[item].toString().split('.')[1].length : 0;
+        } else {
+          return 0;
+        }
+      });
+      const m = Math.pow(10, Math.max(...arrLength)); // 获得最大小数位位数
+      const total = countFee.reduce((pre, next) => { // array.reduce(function(total, currentValue, currentIndex, arr), initialValue)
+        return Number(pre || 0) + Number(this.form1[next] || 0) * m;
       }, 0);
-      return isNaN(total) ? "--" : total;
+      return isNaN(total) ? "--" : total / m;
     },
   },
   created() {
