@@ -59,26 +59,100 @@
 
 <!--        <div v-if="form.declareType !== 1001">-->
         <div>
-          <h4 class="block-tit">推荐村简介</h4>
+          <h4 class="block-tit" style="margin-bottom: 20px">推荐村简介</h4>
           <div class="input-item-wrp">
             <el-form-item label="推荐村简介" prop="introduction">
               <p class="content">{{ form.introduction }}</p>
             </el-form-item>
           </div>
-          <h4 class="block-tit">村庄图片</h4>
+          <h4 class="block-tit" style="margin-bottom: 20px">村庄图片</h4>
           <el-form-item label="村庄图片" prop="villagePicturesArr">
             <ViewImg :data="form.villagePicturesFiles" />
           </el-form-item>
         </div>
+        <div v-if="!verifyKey">
+          <h4 class="block-tit" style="margin-bottom: 20px">市级审核详情</h4>
+          <div class="status">通过</div>
+          <div class="opinion">请填写审核意见</div>
+          <p></p>
+        </div>
+        <div v-if="roleId < 3 && verifyKey">
+          <h4 class="block-tit" style="margin-bottom: 20px" v-html="roleId === 2 ? '审核' : '省级审核'"></h4>
+          <el-form>
+            <el-form-item label="">
+              <el-radio v-model="status" label="1">通过</el-radio>
+              <el-radio v-model="status" label="0">不通过</el-radio>
+            </el-form-item>
+          </el-form>
+          <!--      <div style="margin-bottom: 24px">{{ tips }}</div>-->
+          <div class="opinion">请填写审核意见</div>
+          <el-input
+            type="textarea"
+            :rows="8"
+            placeholder="请输入"
+            v-model="textarea">
+          </el-input>
+          <div class="bottom-button">
+            <el-button
+              @click="$router.back()"
+            >
+              取消
+            </el-button>
+            <el-button type="primary" @click="onConfirm()" v-html="roleId === 2 ? '确定' : '提交'"></el-button>
+          </div>
+        </div>
       </el-form>
+<!--      <div class="bottom-button">-->
+<!--        <el-button-->
+<!--          @click="$router.back()"-->
+<!--        >-->
+<!--            返回-->
+<!--        </el-button>-->
+<!--        <el-button-->
+<!--          v-if="verifyKey"-->
+<!--          type="primary"-->
+<!--          @click="verify()"-->
+<!--        >-->
+<!--          审核-->
+<!--        </el-button>-->
+<!--      </div>-->
     </div>
+    <el-dialog
+      title="审核"
+      :visible.sync="dialogVisible"
+      width="600px"
+    >
+      <el-form>
+        <el-form-item label="">
+          <el-radio v-model="status" label="1">通过</el-radio>
+          <el-radio v-model="status" label="0">不通过</el-radio>
+        </el-form-item>
+        <el-form-item label="">
+          <div class="opinion">请填写审核意见</div>
+          <el-input
+            type="textarea"
+            :rows="8"
+            placeholder="请输入内容"
+            v-model="textarea">
+          </el-input>
+        </el-form-item>
+      </el-form>
+<!--      <div style="margin-bottom: 24px">{{ tips }}</div>-->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="onConfirm()">取消</el-button>
+        <el-button type="primary" @click="onConfirm()">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 import rule from "@/mixins/rule";
 import { HISTORY_BUILDINGS } from "../constants";
-import { getVillageItemDetail, getvillageDetailExport } from "@/api/villageManage";
+import { getVillageItemDetail, getvillageDetailExport,
+  // verify,
+} from "@/api/villageManage";
 import { downloadFile } from "@/utils/data"
+import {mapGetters} from "vuex";
 
 export default {
   mixins: [rule],
@@ -129,6 +203,13 @@ export default {
       },
 
       total: 0,
+
+      tips: "",
+      dialogVisible: false,
+      dialogId: "",
+      textarea: "",
+      status: null,
+      verifyKey: false,
     };
   },
   watch: {
@@ -136,6 +217,13 @@ export default {
       if (val === "edit") {
         this.form = this.data;
       }
+    },
+  },
+  computed: {
+    ...mapGetters(["userInfo"]),
+    roleId() {
+      console.log(this.userInfo.roleId);
+      return this.userInfo.roleId;
     },
   },
   created() {
@@ -146,7 +234,16 @@ export default {
   },
   methods: {
     init() {
-      const { id } = this.$route.query;
+      const { id, verifyKey, verifyDetail } = this.$route.query;
+      if (verifyKey) {
+        this.verifyKey = verifyKey;
+      }
+      if (verifyDetail) {
+        console.log(verifyDetail);
+        this.textarea = verifyDetail.opinion;
+        this.status = verifyDetail.status;
+        console.log(this.textarea);
+      }
       if (!id) return;
       getVillageItemDetail({ id }).then((res) => {
         this.form = res;
@@ -170,6 +267,58 @@ export default {
         case 1 : return '是，省级';
         case 2 : return '是，国家级';
         default: return ''
+      }
+    },
+    verify() {
+      // this.tips = "请填写审核意见";
+        // this.userInfo.roleId === 1
+        //   ? "是否通过该项目审核？"
+        //   : "是否通过该项目审核，若审核通过则项目提交至省级。";
+      // this.textarea = "";
+      this.dialogId = this.$route.query.id;
+      this.dialogVisible = true;
+
+    },
+    onConfirm() {
+      if (this.status === "0" || this.status === "1") {
+        this.dialogId = this.$route.query.id;
+        this.submit();
+        // this.dialogVisible = false;
+      } else {
+        this.$notify.error("请选择通过或不通过");
+      }
+    },
+    async submit() {
+      // console.log(status);
+      // this.$emit('endVerify',{ status: status, id:this.dialogId, opinion: this.textarea })
+      // await verify({
+      //   id: this.dialogId,
+      //   status,
+      //   opinion: this.textarea,
+      //   // remark: this.textarea,
+      // });
+      if (this.roleId === 2) {
+        this.$notify.success("操作成功");
+        // this.$router.back();
+        this.$router.push({
+          name: "audit",
+          query: {
+            verifyDetail: {
+              status: this.status,
+              id: this.dialogId,
+              opinion: this.textarea,
+            },
+          },
+        });
+      } else {
+        await verify({
+          id: this.dialogId,
+          status,
+          opinion: this.textarea,
+          // remark: this.textarea,
+        });
+        this.$notify.success("操作成功");
+        this.$router.back();
       }
     },
   },
@@ -235,5 +384,18 @@ export default {
     color: #333333;
     line-height: 22px;
   }
+  .opinion {
+    font-size: 16px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #999999;
+    line-height: 22px;
+    margin-bottom: 16px;
+  }
+  .bottom-button {
+    padding: 32px 0px 20px;
+    text-align: right;
+  }
 }
+
 </style>

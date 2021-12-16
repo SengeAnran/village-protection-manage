@@ -40,6 +40,7 @@
     <el-table
       v-if="!hideTable"
       class="table"
+      :height="tableHeight"
       header-row-style="font-size: 14px;
       font-family: PingFangSC-Medium, PingFang SC;
       font-weight: 500;
@@ -56,7 +57,7 @@
         align="center"
         fixed="left"
       ></el-table-column>
-      <el-table-column label="序号" width="80" align="center" fixed="left">
+      <el-table-column :label="order ? '推荐次序':'序号'" width="80" align="center" fixed="left">
         <template slot-scope="scope">
           {{ scope.$index + 1 + (page - 1) * size }}
         </template>
@@ -105,6 +106,33 @@
               type="danger"
               @click.native="deleteItem(scope.row)"
               >删除</el-link
+            >
+            <el-link
+              v-if="moveUp"
+              type="primary"
+              @click.native="moveUpItem(scope.row, scope.$index)"
+            >上移</el-link
+            >
+            <el-divider v-if="moveUp" direction="vertical"></el-divider>
+            <el-link
+              v-if="moveDown"
+              type="primary"
+              @click.native="moveDownItem(scope.row, scope.$index)"
+            >下移</el-link
+            >
+            <el-divider v-if="moveDown" direction="vertical"></el-divider>
+            <el-link
+              v-if="moveTop"
+              type="primary"
+              @click.native="moveTopItem(scope.row, scope.$index)"
+            >置顶</el-link
+            >
+            <el-divider v-if="moveTop" direction="vertical"></el-divider>
+            <el-link
+              v-if="virtualDelete"
+              type="danger"
+              @click.native="virtualDeleteItem(scope.row, scope.$index)"
+            >移除</el-link
             >
             <slot name="tableEdit" :data="scope.row"></slot>
             <!--          <el-button-->
@@ -190,6 +218,11 @@ export default {
       default: "",
     },
     // 表格是否开启多选模式
+    tableHeight: {
+      type: String,
+      default: '',
+    },
+    // 表格是否开启多选模式
     selection: {
       type: Boolean,
       default: false,
@@ -228,6 +261,10 @@ export default {
     },
     // 删除前方法，返回新的data值
     beforeDeleteMethod: {
+      type: Function,
+    },
+    // 提交数据方法
+    submitSortMethod: {
       type: Function,
     },
     // 数据id key
@@ -315,6 +352,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    // 虚拟删除按钮
+    virtualDelete: {
+      type: Boolean,
+      default: false,
+    },
     // 隐藏表单确定按钮
     hideSave: {
       type: Boolean,
@@ -344,6 +386,26 @@ export default {
     labelWidth: {
       type: String,
       default: "95px",
+    },
+    // 推荐次序
+    order: {
+      type: Boolean,
+      default: false,
+    },
+    // 上移
+    moveUp: {
+      type: Boolean,
+      default: false,
+    },
+    // 下移
+    moveDown: {
+      type: Boolean,
+      default: false,
+    },
+    // 置顶
+    moveTop: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -402,7 +464,7 @@ export default {
       this.loading = true;
       try {
         if (this.customGetMethod) {
-          this.customGetMethod(params);
+          this.items = await this.customGetMethod({...query});
         } else {
           const res = await this.getMethod(params);
           this.items = res.content;
@@ -480,6 +542,27 @@ export default {
         }
       });
     },
+    // 虚拟删除
+    async virtualDeleteItem(item, index) {
+      this.$confirm("是否移除该条数据？", "提示", {
+        type: "warning",
+      }).then(async () => {
+        console.log(item, index)
+        this.items.splice(index, 1);
+        // this.loading = true;
+        // try {
+        //   let data = [item[this.idKey]];
+        //   if (this.beforeDeleteMethod) {
+        //     data = this.beforeDeleteMethod(item);
+        //   }
+        //   await this.deleteMethod(data);
+        //   this.$notify.success("删除成功");
+        //   await this.getItems();
+        // } finally {
+        //   this.loading = false;
+        // }
+      });
+    },
     // 批量删除
     async deleteMultiple() {
       this.$confirm("是否批量删除所选数据？", "提示", {
@@ -495,6 +578,50 @@ export default {
           this.loading = false;
         }
       });
+    },
+    // 上移
+    moveUpItem(data, index) {
+      console.log(data, index);
+      if(index !== 0) {
+        this.items.splice(index, 1);
+        this.items.splice(index - 1, 0, data);
+      }
+
+      // console.log(this.form.detail);
+
+    },
+    // 下移
+    moveDownItem(data, index) {
+      // if (index !== )
+      this.items.splice(index, 1);
+      this.items.splice(index + 1, 0, data);
+    },
+    // 置顶
+    moveTopItem(data, index) {
+      this.items.splice(index, 1);
+      this.items.splice(0, 0, data);
+    },
+    // 提交排序
+    async submitSort() {
+      const { items } = this;
+      const data = items.map((item, index) => {
+        return {
+          id: item.id,
+          citySortNum: index + 1, // 加排序序号 从0开始
+        };
+      });
+      this.loading = true;
+      try {
+        await this.submitSortMethod(data);
+        this.$emit('submitSuccess')
+        this.$message({
+          message: "提交成功！",
+          type: "success",
+        });
+        this.loading = false;
+      } finally {
+        this.loading = false;
+      }
     },
     // 保存
     async saveItem() {

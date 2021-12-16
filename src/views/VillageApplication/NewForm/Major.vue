@@ -7,7 +7,7 @@
       :model="form"
       label-width="80px"
     >
-      <h3 class="text-gray-800 text-2xl mb-8">新建申报</h3>
+      <h3 class="text-gray-800 text-2xl mb-8">编辑/修改申报</h3>
 
       <el-form-item label="村庄地址" prop="villageId" :rules="rule.select">
         <VillageAddressSelect

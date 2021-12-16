@@ -93,6 +93,18 @@
           <el-link type="danger" @click="removeItem(scope.$index, scope.row)"
             >删除</el-link
           >
+          <el-divider direction="vertical"></el-divider>
+          <el-link
+            type="primary"
+            @click="$emit('moveUp', { data: scope.row, index: scope.$index })"
+            >上移</el-link
+          >
+          <el-divider direction="vertical"></el-divider>
+          <el-link
+            type="primary"
+            @click="$emit('moveDown', { data: scope.row, index: scope.$index });"
+            >下移</el-link
+          >
         </div>
         <div v-if="!hiddenDetail">
           <el-link type="primary" @click="$emit('goDetail', scope.row)"

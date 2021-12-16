@@ -7,6 +7,7 @@ export default {
   namespaced: true,
   state: {
     declareList: { ...declareList },
+    auditList: [],
   },
   mutations: {
     changeDeclareList(state, param) {
@@ -14,6 +15,12 @@ export default {
     },
     resetDeclareList(state) {
       state.declareList = { ...declareList };
+    },
+    changeAuditList(state, param) {
+      state.auditList = param;
+    },
+    resetAuditList(state) {
+      state.auditList = [];
     },
   },
 };

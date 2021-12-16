@@ -32,6 +32,8 @@
               :hiddenDetail="true"
               @remove="removeListItem"
               @editForm="editListItem"
+              @moveUp="moveUpItem"
+              @moveDown="moveDownItem"
             />
           </el-form-item>
           <el-button
@@ -168,6 +170,17 @@ export default {
       this.editData = data;
       this.showForm = true;
     },
+    moveUpItem({ data, index }) {
+      console.log(index);
+      this.form.detail.splice(index, 1);
+      this.form.detail.splice(index - 1, 0, data);
+      console.log(this.form.detail);
+
+    },
+    moveDownItem({ data, index }) {
+      this.form.detail.splice(index, 1);
+      this.form.detail.splice(index + 1, 0, data);
+    },
 
     onCancel() {
       if (this.form.detail && this.form.detail.length !== 0) {
@@ -185,7 +198,12 @@ export default {
       const params = {
         declareType,
         declareYear: Number(this.form.declareYear),
-        detail: this.form.detail,
+        detail: this.form.detail.map((item, index) => {
+          return {
+            ...item,
+            countrySortNum: index + 1, // 加排序序号 从0开始
+          };
+        }),
       };
       if (this.id && !this.Refill) {
         params.id = this.id;

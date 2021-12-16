@@ -11,6 +11,40 @@ export const getVillageArea = (params) => {
     params,
   });
 };
+// 查询申报批次和类型
+export const queryTypeDeclaration = (params) => {
+  return axios.request({
+    method: "GET",
+    url: apiHost + "/villageDeclaration/queryTypeDeclaration",
+    params,
+  });
+};
+
+// 查询批次信息
+export const queryBatchInfo = (data) => {
+  return axios.request({
+    method: "POST",
+    url: apiHost + "/villageDeclaration/queryBatchInfo",
+    data,
+  });
+};
+// 村庄推荐排序审核
+export const recVerify = (data) => {
+  return axios.request({
+    method: "POST",
+    url: apiHost + "/villageDeclaration/recVerify",
+    data,
+  });
+};
+
+// 村庄推荐排序列表
+export const getRecVillages = (params) => {
+  return axios.request({
+    method: "get",
+    url: apiHost + "/villageDeclaration/recVillages",
+    params,
+  });
+};
 
 // 村庄申报列表
 export const getVillageList = (params) => {

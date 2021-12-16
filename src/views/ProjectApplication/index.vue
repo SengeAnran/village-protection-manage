@@ -150,9 +150,9 @@
         v-model="textarea">
       </el-input>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="onConfirm(0)">不通过</el-button>
-    <el-button type="primary" @click="onConfirm(1)">通过</el-button>
-  </span>
+        <el-button @click="onConfirm(0)">不通过</el-button>
+        <el-button type="primary" @click="onConfirm(1)">通过</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>

@@ -25,43 +25,72 @@
             </el-table-column>
             <el-table-column prop="villageName" label="村庄名称">
             </el-table-column>
-            <el-table-column label="详情">
-              <template slot-scope="scope">
-                <el-link type="primary" @click="goDetail(scope.row)">
-                  详情
-                </el-link>
-              </template>
-            </el-table-column>
-            <el-table-column label="排序" v-if="userInfo.roleId === 2">
-              <template slot-scope="scope">
-                <el-input-number
-                  style="width: 70px"
-                  v-model="scope.row.sortNum"
-                  controls-position="right"
-                  :min="1"
-                  :step="1"
-                ></el-input-number>
-              </template>
-            </el-table-column>
+<!--            <el-table-column label="详情">-->
+<!--              <template slot-scope="scope">-->
+<!--                <el-link type="primary" @click="goDetail(scope.row)">-->
+<!--                  详情-->
+<!--                </el-link>-->
+<!--              </template>-->
+<!--            </el-table-column>-->
+<!--            <el-table-column label="排序" v-if="userInfo.roleId === 2">-->
+<!--              <template slot-scope="scope">-->
+<!--                <el-input-number-->
+<!--                  style="width: 70px"-->
+<!--                  v-model="scope.row.sortNum"-->
+<!--                  controls-position="right"-->
+<!--                  :min="1"-->
+<!--                  :step="1"-->
+<!--                ></el-input-number>-->
+<!--              </template>-->
+<!--            </el-table-column>-->
+<!--            <el-table-column label="审核" width="236">-->
+<!--              <template slot-scope="scope">-->
+<!--                <span v-if="!(scope.row.cityVerify === 0)">-->
+<!--                  <el-radio v-model="scope.row.status" label="1">通过</el-radio>-->
+<!--                  <el-radio v-model="scope.row.status" label="0">不通过</el-radio>-->
+<!--                  <el-link-->
+<!--                    v-if="form.detail[scope.$index].opinion"-->
+<!--                    @click="addDetails(scope)"-->
+<!--                    type="primary"-->
+<!--                  >-->
+<!--                    修改-->
+<!--                  </el-link>-->
+<!--                  <el-link-->
+<!--                    v-else-->
+<!--                    @click="addDetails(scope)"-->
+<!--                    type="primary"-->
+<!--                  >-->
+<!--                    填写-->
+<!--                  </el-link>-->
+<!--                </span>-->
+<!--                <span v-else>市级审核不通过</span>-->
+<!--              </template>-->
+<!--            </el-table-column>-->
             <el-table-column label="审核" width="236">
               <template slot-scope="scope">
                 <span v-if="!(scope.row.cityVerify === 0)">
-                  <el-radio v-model="scope.row.status" label="1">通过</el-radio>
-                  <el-radio v-model="scope.row.status" label="0">不通过</el-radio>
+<!--                  <el-radio v-model="scope.row.status" label="1">通过</el-radio>-->
+<!--                  <el-radio v-model="scope.row.status" label="0">不通过</el-radio>-->
                   <el-link
-                    v-if="form.detail[scope.$index].opinion"
-                    @click="addDetails(scope)"
+                    @click="goDetail(scope.row)"
                     type="primary"
+                    v-html="scope.row.verifyed ? '重新审核' : '审核'"
                   >
-                    修改
                   </el-link>
-                  <el-link
-                    v-else
-                    @click="addDetails(scope)"
-                    type="primary"
-                  >
-                    填写
-                  </el-link>
+<!--                  <el-link-->
+<!--                    v-if="form.detail[scope.$index].opinion"-->
+<!--                    @click="addDetails(scope)"-->
+<!--                    type="primary"-->
+<!--                  >-->
+<!--                    修改-->
+<!--                  </el-link>-->
+<!--                  <el-link-->
+<!--                    v-else-->
+<!--                    @click="addDetails(scope)"-->
+<!--                    type="primary"-->
+<!--                  >-->
+<!--                    填写-->
+<!--                  </el-link>-->
                 </span>
                 <span v-else>市级审核不通过</span>
               </template>
@@ -89,14 +118,14 @@
         v-model="textarea">
       </el-input>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="onConfirm">确 定</el-button>
-  </span>
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onConfirm">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 import rule from "@/mixins/rule";
 import { getVillageDetail, verify } from "@/api/villageManage";
 
@@ -116,10 +145,11 @@ export default {
       },
 
       showDetail: false,
+      verifyDetail: {},
     };
   },
   computed: {
-    ...mapState("villageMange", ["declareList"]),
+    ...mapState("villageMange", ["declareList", "auditList"]), // mapState 辅助函数帮助我们生成计算属性
     ...mapGetters(["userInfo"]),
   },
   mounted() {
@@ -133,27 +163,52 @@ export default {
         this.$router.replace({ name: "VillageApplyList" });
         return;
       }
-
       this.getVillageDetail();
     }
   },
   methods: {
-    getVillageDetail() {
-      getVillageDetail({ id: this.id }).then((res) => {
+    ...mapMutations("villageMange", ["changeAuditList", "resetAuditList"]),
+    async getVillageDetail() {
+      if (this.auditList && this.auditList.length > 0) {
+        this.form.detail = this.auditList;
+      } else {
+        const res = await getVillageDetail({ id: this.id });
         this.form.detail =
-          res.map((item, i) => {
+          res.map((item) => {
             return {
               ...item,
-              sortNum: i + 1,
+              verifyed: false,
               status: "",
               opinion: "",
             };
           }) || [];
-      });
+      }
+      if (this.$route.query.verifyDetail) {
+        this.verifyDetail = this.$route.query.verifyDetail;
+        console.log(this.verifyDetail);
+        this.form.detail.forEach((item) => {
+          if (item.id === this.verifyDetail.id) {
+            item.verifyed = true;
+            item.opinion = this.verifyDetail.opinion;
+            item.status = this.verifyDetail.status;
+          }
+        });
+        const detail = this.form.detail;
+        this.changeAuditList(detail);
+      }
     },
 
     goDetail(row) {
-      this.$router.push({ name: "villageDetail", query: { id: row.id } });
+      if (row.verifyed) {
+        const verifyDetail = {
+          opinion: row.opinion,
+          status: row.status,
+        };
+        this.$router.push({ name: "villageDetail", query: { id: row.id, verifyKey: true, verifyDetail } });
+      } else {
+        this.$router.push({ name: "villageDetail", query: { id: row.id, verifyKey: true } });
+      }
+
     },
     addDetails(scope) {
       this.dialogIndex = scope.$index;
@@ -175,9 +230,9 @@ export default {
       // 判断审核
       const isAudit = this.checkAudit();
       // 判断排序
-      const isSort = this.checkSort();
+      // const isSort = this.checkSort();
       // 提交
-      if (isAudit && isSort) {
+      if (isAudit) {
         this.$myConfirm({
           content: "是否确认提交",
         }).then(() => {
@@ -226,12 +281,13 @@ export default {
         return {
           id: item.id,
           status: item.status,
-          sortNum: item.sortNum,
+          // sortNum: item.sortNum,
           opinion: item.opinion,
         };
       });
 
       verify(params).then(() => {
+        this.resetAuditList();
         this.$router.push({ name: "VillageApplyList" });
       });
     },
