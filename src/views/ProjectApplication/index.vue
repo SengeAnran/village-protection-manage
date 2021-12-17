@@ -94,7 +94,7 @@
       </template>
 
       <template v-slot:tableAction="scope">
-        <el-link type="primary" @click="goDetail(scope.data.id)">
+        <el-link type="primary" @click="goDetail(scope.data.id, scope.data.projectStatus)">
           详情
         </el-link>
         <div
@@ -243,11 +243,19 @@ export default {
         path: "/projectApplication/save?type=add",
       });
     },
-    goDetail(id) {
-      this.$router.push({
-        name: "ProjectApplicationDetail",
-        query: { id },
-      });
+    goDetail(id, status) {
+      if (this.actionControl('审核', status)){
+        this.$router.push({
+          name: "ProjectApplicationDetail",
+          query: { id, verifyKey: true },
+        });
+      } else {
+        this.$router.push({
+          name: "ProjectApplicationDetail",
+          query: { id },
+        });
+      }
+
     },
     goModify(id) {
       this.$router.push({

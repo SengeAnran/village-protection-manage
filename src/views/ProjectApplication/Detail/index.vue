@@ -488,6 +488,31 @@
           </div>
         </el-form>
       </div>
+      <div v-if="roleId < 3 && verifyKey">
+        <h4 class="block-tit" style="margin-bottom: 20px" v-html="roleId === 2 ? '审核' : '省级审核'"></h4>
+        <el-form>
+          <el-form-item label="">
+            <el-radio v-model="status" label="1">通过</el-radio>
+            <el-radio v-model="status" label="0">不通过</el-radio>
+          </el-form-item>
+        </el-form>
+        <!--      <div style="margin-bottom: 24px">{{ tips }}</div>-->
+        <div class="opinion">请填写审核意见</div>
+        <el-input
+          type="textarea"
+          :rows="8"
+          placeholder="请输入"
+          v-model="textarea">
+        </el-input>
+        <div class="bottom-button">
+          <el-button
+            @click="$router.back()"
+          >
+            取消
+          </el-button>
+          <el-button type="primary" @click="onConfirm()" v-html="roleId === 2 ? '确定' : '提交'"></el-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -495,8 +520,9 @@
 <script>
 import rule from "@/mixins/rule";
 import _ from "lodash";
-import { getProjectDetail, pogressExport } from "@/api/projectDeclare";
+import { getProjectDetail, verifyProject, pogressExport } from "@/api/projectDeclare";
 import { downloadWordFile } from "@/utils/data"
+import {mapGetters} from "vuex";
 
 export default {
   mixins: [rule],
@@ -571,7 +597,20 @@ export default {
         2004: "市级审核通过，待省级审核",
         2999: "审核通过",
       },
+
+
+      dialogId: "",
+      textarea: "",
+      status: null,
+      verifyKey: false,
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"]),
+    roleId() {
+      console.log(this.userInfo.roleId);
+      return this.userInfo.roleId;
+    },
   },
   beforeCreate() {
     // if (this.$route.query.from && this.$route.query.from === 'ScheduleReportList') {
@@ -586,6 +625,10 @@ export default {
   },
   created() {
     this.id = this.$route.query.id;
+    const { verifyKey } = this.$route.query;
+    if (verifyKey) {
+      this.verifyKey = verifyKey;
+    }
     this.getDetail();
   },
   // beforeRouteEnter(to, from, next) {
@@ -632,6 +675,24 @@ export default {
       this.form1.years = this.form1.years.toString();
       this.form1.imagesArr = _.cloneDeep(this.detail.baseInfo.imagesFilesList);
     },
+    onConfirm() {
+      if (this.status === "0" || this.status === "1") {
+        this.dialogId = this.$route.query.id;
+        this.submit();
+        // this.dialogVisible = false;
+      } else {
+        this.$notify.error("请选择通过或不通过");
+      }
+    },
+    async submit() {
+      await verifyProject({
+        id: this.dialogId,
+        status: this.status,
+        remark: this.textarea,
+      });
+      this.$notify.success("操作成功");
+      this.$router.back();
+    },
   },
 };
 </script>
@@ -651,5 +712,32 @@ export default {
 }
 ::v-deep .el-input-number .el-input__inner {
   text-align: left;
+}
+.content {
+  font-size: 16px;
+  color: #333333;
+  line-height: 22px;
+}
+.status {
+  margin-bottom: 20px;
+}
+.opinion {
+  font-size: 16px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #999999;
+  line-height: 22px;
+  margin-bottom: 16px;
+}
+.opinion-content {
+  font-size: 16px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #333333;
+  line-height: 22px;
+}
+.bottom-button {
+  padding: 32px 0px 20px;
+  text-align: right;
 }
 </style>

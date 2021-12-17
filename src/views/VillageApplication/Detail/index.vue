@@ -70,11 +70,25 @@
             <ViewImg :data="form.villagePicturesFiles" />
           </el-form-item>
         </div>
-        <div v-if="!verifyKey">
+        <div v-if="form.cityVerify === 1 || form.cityVerify === 0">
           <h4 class="block-tit" style="margin-bottom: 20px">市级审核详情</h4>
-          <div class="status">通过</div>
-          <div class="opinion">请填写审核意见</div>
-          <p></p>
+          <div
+            class="status"
+            :style="{ color: form.cityVerify === 1 ? '#15BE50' : '#D40000' }"
+            v-html="form.cityVerify === 1 ? '通过' : '不通过'"
+          ></div>
+          <div class="opinion">审核意见</div>
+          <p class="opinion-content">{{ form.cityOpinion }}</p>
+        </div>
+        <div v-if="form.provinceVerify === 1 || form.provinceVerify === 0">
+          <h4 class="block-tit" style="margin-bottom: 20px">省级审核详情</h4>
+          <div
+            class="status"
+            :style="{ color: form.provinceVerify === 1 ? '#15BE50' : '#D40000' }"
+            v-html="form.provinceVerify === 1 ? '通过' : '不通过'"
+          ></div>
+          <div class="opinion">审核意见</div>
+          <p>{{ form.provinceOpinion }}</p>
         </div>
         <div v-if="roleId < 3 && verifyKey">
           <h4 class="block-tit" style="margin-bottom: 20px" v-html="roleId === 2 ? '审核' : '省级审核'"></h4>
@@ -149,7 +163,7 @@
 import rule from "@/mixins/rule";
 import { HISTORY_BUILDINGS } from "../constants";
 import { getVillageItemDetail, getvillageDetailExport,
-  // verify,
+  provinceVerify,
 } from "@/api/villageManage";
 import { downloadFile } from "@/utils/data"
 import {mapGetters} from "vuex";
@@ -311,7 +325,7 @@ export default {
           },
         });
       } else {
-        await verify({
+        await provinceVerify({
           id: this.dialogId,
           status,
           opinion: this.textarea,
@@ -384,6 +398,9 @@ export default {
     color: #333333;
     line-height: 22px;
   }
+  .status {
+    margin-bottom: 20px;
+  }
   .opinion {
     font-size: 16px;
     font-family: PingFangSC-Regular, PingFang SC;
@@ -391,6 +408,13 @@ export default {
     color: #999999;
     line-height: 22px;
     margin-bottom: 16px;
+  }
+  .opinion-content {
+    font-size: 16px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #333333;
+    line-height: 22px;
   }
   .bottom-button {
     padding: 32px 0px 20px;

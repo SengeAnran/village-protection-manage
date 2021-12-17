@@ -75,8 +75,8 @@
               <div class="tip-title">排序提示</div>
               <div class="tip-content">当前正在申报的
                 <span>{{ batchInfo.pici }}</span>个批次中，有
-                <span>{{ batchInfo.import }}</span>个重点村、
-                <span>{{ batchInfo.general }}</span>
+                <span>{{ batchInfo.import || 0}}</span>个重点村、
+                <span>{{ batchInfo.general || 0 }}</span>
                 个一般村申报已审核通过，您需要分批次排序后提交至省级审核。
               </div>
               <div class="tip-button">
@@ -112,16 +112,16 @@
               v-permission="10003"
             >
               <el-link @click="edit(scope.data)" type="primary"> 修改 </el-link>
-              <el-divider direction="vertical"></el-divider>
+<!--              <el-divider direction="vertical"></el-divider>-->
             </div>
-            <el-link
-              @click="deleteItem(scope.data.id)"
-              v-if="actionControl('删除', scope.data.declareStatus)"
-              type="danger"
-              v-permission="10003"
-            >
-              删除
-            </el-link>
+<!--            <el-link-->
+<!--              @click="deleteItem(scope.data.id)"-->
+<!--              v-if="actionControl('删除', scope.data.declareStatus)"-->
+<!--              type="danger"-->
+<!--              v-permission="10003"-->
+<!--            >-->
+<!--              删除-->
+<!--            </el-link>-->
           </div>
         </template>
 
@@ -492,16 +492,18 @@ export default {
     },
     // 审核
     goAudit(scope) {
-      const { id, declareYear, declareType } = scope.data;
+      const { id, declareYear, declareType, detailId } = scope.data;
       console.log( scope.data);
-
+      // if (this.roleId === 1) {
+      //   id = detailId
+      // }
       this.changeDeclareList({ id, declareYear, declareType });
       if (this.roleId === 2) {
         this.$router.push({
           name: "audit",
         });
       } else {
-        this.$router.push({ name: "villageDetail", query: { id: id, verifyKey: true } });
+        this.$router.push({ name: "villageDetail", query: { id: detailId, verifyKey: true } });
       }
     },
     // 修改
