@@ -87,10 +87,10 @@
         </template>
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
-            <el-link type="primary" @click="goDeclareRouter(scope)">
+            <el-link v-if="roleId !== 1" type="primary" @click="goDeclareRouter(scope)" >
               申报详情
             </el-link>
-            <el-divider direction="vertical"></el-divider>
+            <el-divider v-if="roleId !== 1" direction="vertical"></el-divider>
             <el-link
               @click="goAuditResult(scope)"
               v-if="actionControl('审核详情', scope.data.declareStatus)"
@@ -484,11 +484,15 @@ export default {
     },
     // 审核详情
     goAuditResult(scope) {
-      const { id, declareYear, declareType } = scope.data;
-      this.$router.push({
-        name: "auditList",
-        query: { id, declareYear, declareType: DECLEAR_TYPE[declareType] },
-      });
+      const { id, declareYear, declareType, detailId } = scope.data;
+      if (this.roleId !== 1) {
+        this.$router.push({
+          name: "auditList",
+          query: { id, declareYear, declareType: DECLEAR_TYPE[declareType] },
+        });
+      } else {
+        this.$router.push({ name: "villageDetail", query: { id: detailId, goVerify: true } });
+      }
     },
     // 审核
     goAudit(scope) {

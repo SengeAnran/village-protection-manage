@@ -70,7 +70,7 @@
             <ViewImg :data="form.villagePicturesFiles" />
           </el-form-item>
         </div>
-        <div v-if="form.cityVerify === 1 || form.cityVerify === 0">
+        <div v-if="form.cityVerify === 1 || form.cityVerify === 0" >
           <h4 class="block-tit" style="margin-bottom: 20px">市级审核详情</h4>
           <div
             class="status"
@@ -115,6 +115,7 @@
             <el-button type="primary" @click="onConfirm()" v-html="roleId === 2 ? '确定' : '提交'"></el-button>
           </div>
         </div>
+        <div id="verify"></div>
       </el-form>
 <!--      <div class="bottom-button">-->
 <!--        <el-button-->
@@ -245,10 +246,11 @@ export default {
   },
   mounted() {
     this.init();
+
   },
   methods: {
     init() {
-      const { id, verifyKey, verifyDetail } = this.$route.query;
+      const { id, verifyKey, verifyDetail, goVerify } = this.$route.query;
       if (verifyKey) {
         this.verifyKey = verifyKey;
       }
@@ -263,6 +265,11 @@ export default {
         this.form = res;
 
         this.total = this.countTotal();
+        if (goVerify) {
+          // setTimeout(() => {
+          //   this.$el.querySelector("#verify").scrollIntoView();
+          // },10)
+        }
       });
     },
     async clickExport() {
@@ -327,7 +334,7 @@ export default {
       } else {
         await provinceVerify({
           id: this.dialogId,
-          status,
+          status: this.status,
           opinion: this.textarea,
           // remark: this.textarea,
         });
