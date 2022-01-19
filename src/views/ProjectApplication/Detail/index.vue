@@ -444,7 +444,7 @@
           <div>
             <el-form-item
               class="inline-block"
-              label="用地面积（0-15亩）："
+              label="用地面积（0-100亩）："
               :rules="rule.input"
               prop="landUseArea"
             >

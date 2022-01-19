@@ -17,6 +17,11 @@ export const DECLEAR_STATUS = {
   2004: "省级未审核",
   2999: "省级已审核",
 };
+// 省级审核状态码
+export const PRO_DECLEAR_STATUS = {
+  2004: "省级未审核",
+  2999: "省级已审核",
+};
 
 // 古建筑村落年代
 export const VILLAGE_AGE = [

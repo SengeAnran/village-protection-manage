@@ -635,7 +635,7 @@
           <div>
             <el-form-item
               class="inline-block"
-              label="用地面积（0-15亩）："
+              label="用地面积（0-100亩）："
               :rules="rule.input"
               prop="landUseArea"
             >
@@ -645,7 +645,7 @@
                 placeholder="请输入"
                 :controls="false"
                 :min="0"
-                :max="15"
+                :max="100"
               />
             </el-form-item>
             <el-form-item

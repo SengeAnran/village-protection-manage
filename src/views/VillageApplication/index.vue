@@ -292,7 +292,7 @@ import { queryBatchInfo, queryTypeDeclaration, getRecVillages, getVillageList, d
 import {
   DECLEAR_TYPE,
   DECLEAR_STATUS,
-  VILLAGE_LIST_ROUTER_NAME,
+  VILLAGE_LIST_ROUTER_NAME, PRO_DECLEAR_STATUS,
 } from "./constants";
 import {recVerify} from "../../api/villageManage";
 
@@ -359,7 +359,12 @@ export default {
     this.declareStatus = DECLEAR_STATUS;
     this.declareTypeOpt = this.normalizeSelectOptions(DECLEAR_TYPE);
     this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(this.normalizeSelectOptions(DECLEAR_TYPE));
-    this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(DECLEAR_STATUS));
+    if (this.roleId !== 1) {
+      this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(DECLEAR_STATUS));
+    } else {
+      this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(PRO_DECLEAR_STATUS));
+    }
+
 
     this.XIANJI_ACTION = {
       申报详情: () => true,

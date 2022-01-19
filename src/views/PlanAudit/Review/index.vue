@@ -62,20 +62,20 @@
               @remove="onFileRemove($event, 'suggestionFilesArr')"
             />
           </el-form-item>
-          <p class="ml-4 mb-2">政府批复附件</p>
-          <el-form-item
-            label="上传政府批复附件："
-            :rules="rule.upload"
-            prop="approvalFilesArr"
-          >
-            <UploadFile
-              tip="支持格式：.doc, .docx,.pdf"
-              accept=".doc,.docx,.pdf"
-              :data="form.approvalFilesArr"
-              @add="onFileAdd($event, 'approvalFilesArr')"
-              @remove="onFileRemove($event, 'approvalFilesArr')"
-            />
-          </el-form-item>
+<!--          <p class="ml-4 mb-2">政府批复附件</p>-->
+<!--          <el-form-item-->
+<!--            label="上传政府批复附件："-->
+<!--            :rules="rule.upload"-->
+<!--            prop="approvalFilesArr"-->
+<!--          >-->
+<!--            <UploadFile-->
+<!--              tip="支持格式：.doc, .docx,.pdf"-->
+<!--              accept=".doc,.docx,.pdf"-->
+<!--              :data="form.approvalFilesArr"-->
+<!--              @add="onFileAdd($event, 'approvalFilesArr')"-->
+<!--              @remove="onFileRemove($event, 'approvalFilesArr')"-->
+<!--            />-->
+<!--          </el-form-item>-->
           <div class="text-center">
             <el-button plain @click="$router.back()">取消</el-button>
             <el-button type="primary" @click="submit">提交</el-button>

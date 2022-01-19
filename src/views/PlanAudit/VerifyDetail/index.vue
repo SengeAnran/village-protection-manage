@@ -38,19 +38,21 @@
                   <el-tag :type="reviewStatusMap[item.lastStatus] === '通过' || item.score >= 60? 'success' : 'danger'">{{ reviewStatusMap[item.lastStatus] || item.grade }}</el-tag>
                 </div>
                 <div class="mb-4">{{ item.gmtCreate }}</div>
+                <div class="text-gray-400 mb-4" v-if="item.role === 6003">分数</div>
+                <div class="mb-4" v-if="item.role === 6003">{{ item.score }}</div>
                 <div class="text-gray-400 mb-4">审核意见</div>
                 <div class="mb-4">{{ item.remark || item.suggestion }}</div>
                 <div v-if="item.score >= 0">
-                  <div class="text-gray-400 mb-2">审核附件</div>
-                  <div class="mb-4">
-                    <ViewFile
-                      :data="item.approvalFilesList"
-                      v-if="item.approvalFilesList && item.approvalFilesList.length"
-                    />
-                    <p v-else>--</p>
-                  </div>
-                  <div class="text-gray-400 mb-2">政府批复附件</div>
-                  <div class="mb-4">
+<!--                  <div class="text-gray-400 mb-2">审核附件</div>-->
+<!--                  <div class="mb-4">-->
+<!--                    <ViewFile-->
+<!--                      :data="item.approvalFilesList"-->
+<!--                      v-if="item.approvalFilesList && item.approvalFilesList.length"-->
+<!--                    />-->
+<!--                    <p v-else>&#45;&#45;</p>-->
+<!--                  </div>-->
+                  <div class="text-gray-400 mb-2" v-if="roleMap[item.role] === '省级'">审核意见附件</div>
+                  <div class="mb-4" v-if="roleMap[item.role] === '省级'">
                     <ViewFile
                       :data="item.suggestionFilesList"
                       v-if="item.suggestionFilesList && item.suggestionFilesList.length"
