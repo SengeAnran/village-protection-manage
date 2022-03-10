@@ -45,6 +45,7 @@ module.exports = {
       },
       "/apiProxy": {
         target: "http://172.16.24.248:8280/", // 测试环境
+        // target: "http://172.16.27.121:8280/", // 其他版本测试环境
         changeOrigin: true,
         pathRewrite: (path) => path.replace("/apiProxy", ""),
       },
