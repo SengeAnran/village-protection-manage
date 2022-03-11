@@ -76,7 +76,7 @@ export default {
             type: "PASSWORD",
           }).then((res) => {
             setToken(res.token);
-            this.$router.push("/").catch(() => {});
+            this.$router.push("/home").catch(() => {});
           });
         } else {
           return false;

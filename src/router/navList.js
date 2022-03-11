@@ -16,9 +16,15 @@ export const constantRoutes = [
     path: "/login",
     component: () => import("@/views/Login"),
   },
+  {
+    name: "home",
+    path: "/home",
+    component: () => import("@/home"),
+  },
 ];
 
 export const defaultRoutes = [
+  // 历史文化
   // 村庄申报 / 村庄审核
   {
     path: "/villageApplication",
@@ -460,4 +466,8 @@ export const defaultRoutes = [
       menuIds: [201],
     },
   },
+
+
+
+
 ];
