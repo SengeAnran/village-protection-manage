@@ -5,6 +5,7 @@
     </div>
     <div class="block">
       <RouterBack>详情</RouterBack>
+      <div class="box-title">申报详情</div>
       <el-form
         style="padding-left: 14px"
         ref="form"
@@ -13,63 +14,104 @@
         :model="form"
         label-width="80px"
       >
-        <el-form-item style="margin-bottom: 32px" class="villageAdress" label="村庄地址" prop="villageId">
-          <p class="content" style="height: 22px;font-size: 16px;font-weight: 400;color: #333333;line-height: 22px;">
-            {{ form.address }}
-          </p>
-<!--          <p class="content">{{ form.address }}{{ form.villageName }}</p>-->
-        </el-form-item>
-
-        <h4 class="block-tit" style="margin-bottom: 20px">重点村古建筑调查表</h4>
         <div class="input-item-wrp">
-          <el-form-item label="当年户籍人口（人）" prop="population">
+          <el-form-item label="创建村名称" prop="population">
             <p class="content">{{ form.population }}</p>
           </el-form-item>
-          <el-form-item label="当年村集体经济收入（万元）" prop="income">
+          <el-form-item label="推荐次序" prop="income">
             <p class="content">{{ form.income }}</p>
           </el-form-item>
-          <el-form-item label="古建筑村落年代" prop="villageAge">
+          <el-form-item label="申报批次" prop="villageAge">
             <p class="content">{{ form.villageAge }}</p>
           </el-form-item>
-          <el-form-item label="当年常住人口（人）" prop="resPopulation">
+          <el-form-item label="创建周期" prop="resPopulation">
             <p class="content">{{ form.resPopulation }}</p>
           </el-form-item>
-          <el-form-item label="是否历史文化名村">
+          <el-form-item label="领办领导">
             <p class="content">{{ conversionLeve(form.isFamous) }}</p>
           </el-form-item>
-          <el-form-item label="是否一般村">
+          <el-form-item label="建设单位">
             <p class="content">{{ (form.isGeneral && "是") || "否" }}</p>
           </el-form-item>
-          <el-form-item label="是否传统村">
+          <el-form-item label="联系人">
             <p class="content">{{ conversionLeve(form.isTradition)}}</p>
           </el-form-item>
-        </div>
-
-        <h4 class="block-tit" style="margin-bottom: 20px">古建筑数量</h4>
-        <div class="total-wrp"><span>总数：</span>{{ total }} 个</div>
-        <div class="input-item-wrp">
-          <el-form-item
-            :label="item.label"
-            v-for="(item, i) in historyBuildings"
-            :key="i"
-          >
-            <p class="content">{{ form[item.value] }}</p>
+          <el-form-item label="联系方式" prop="resPopulation">
+            <p class="content">{{ form.resPopulation }}</p>
+          </el-form-item>
+          <el-form-item label="户籍人口数（万人）" prop="resPopulation">
+            <p class="content">{{ form.resPopulation }}</p>
+          </el-form-item>
+          <el-form-item label="常住人口数（万人）" prop="resPopulation">
+            <p class="content">{{ form.resPopulation }}</p>
+          </el-form-item>
+          <el-form-item label="计划总投资（万元）" prop="resPopulation">
+            <p class="content">{{ form.resPopulation }}</p>
+          </el-form-item>
+          <el-form-item label="村级集体经济年经营性收入（万元）" prop="resPopulation">
+            <p class="content">{{ form.resPopulation }}</p>
+          </el-form-item>
+          <el-form-item label="村庄属性：" prop="resPopulation">
+            <p class="content">{{ form.resPopulation }}</p>
           </el-form-item>
         </div>
-
-<!--        <div v-if="form.declareType !== 1001">-->
         <div>
-          <h4 class="block-tit" style="margin-bottom: 20px">推荐村简介</h4>
           <div class="input-item-wrp">
-            <el-form-item label="推荐村简介" prop="introduction">
+            <el-form-item label="基本情况" prop="introduction">
               <p class="content">{{ form.introduction }}</p>
             </el-form-item>
           </div>
-          <h4 class="block-tit" style="margin-bottom: 20px">村庄图片</h4>
-          <el-form-item label="村庄图片" prop="villagePicturesArr">
-            <ViewImg :data="form.villagePicturesFiles" />
+          <div class="input-item-wrp">
+            <el-form-item label="村民代表会议（村民会议）关于未来乡村建设方案决议情况" prop="introduction">
+              <p class="content">{{ form.introduction }}</p>
+            </el-form-item>
+          </div>
+          <div class="input-item-wrp">
+            <el-form-item label="村民代表会议（村民会议）关于未来乡村建设方案决议情况" prop="introduction">
+              <p class="content">{{ form.introduction }}</p>
+            </el-form-item>
+          </div>
+          <div class="input-item-wrp">
+            <el-form-item label="乡、镇（街道）人民政府（办事处）意见" prop="introduction">
+              <p class="content">{{ form.introduction }}</p>
+            </el-form-item>
+          </div>
+          <div class="input-item-wrp">
+            <el-form-item label="县（市、区）部门审核意见" prop="introduction">
+              <p class="content">{{ form.introduction }}</p>
+            </el-form-item>
+          </div>
+          <div class="input-item-wrp">
+            <el-form-item label="县（市、区）人民政府意见" prop="introduction">
+              <p class="content">{{ form.introduction }}</p>
+            </el-form-item>
+          </div>
+        </div>
+        <h4 class="block-tit">未来乡村创建项目备案表</h4>
+        <div class="input-item-wrp">
+          <el-form-item label="负责人" prop="resPopulation">
+            <p class="content">{{ form.resPopulation }}</p>
+          </el-form-item>
+          <el-form-item label="联系电话" prop="resPopulation">
+            <p class="content">{{ form.resPopulation }}</p>
+          </el-form-item>
+          <el-form-item label="审核人" prop="resPopulation">
+            <p class="content">{{ form.resPopulation }}</p>
           </el-form-item>
         </div>
+        <el-form-item>
+          <VilliageListTable
+            :data="form.detail"
+            :hiddenEdit="false"
+            :hiddenDetail="true"
+            @remove="removeListItem"
+            @editForm="editListItem"
+            @moveUp="moveUpItem"
+            @moveDown="moveDownItem"
+          />
+        </el-form-item>
+
+        <div class="box-title">审核详情</div>
         <div v-if="form.cityVerify === 1 || form.cityVerify === 0" >
           <h4 class="block-tit" style="margin-bottom: 20px">市级审核详情</h4>
           <div
@@ -161,11 +203,12 @@
   </div>
 </template>
 <script>
+import VilliageListTable from "../Components/VilliageListTable";
 import rule from "@/mixins/rule";
 import { HISTORY_BUILDINGS } from "../constants";
 import { getVillageItemDetail, getvillageDetailExport,
   provinceVerify,
-} from "@/api/villageManage";
+} from "@/api2/villageManage";
 import { downloadFile } from "@/utils/data"
 import {mapGetters} from "vuex";
 
@@ -181,17 +224,20 @@ export default {
       default: () => {},
     },
   },
+  components: {
+    VilliageListTable,
+  },
   data() {
     return {
       form: {
         villageId: "", //村庄地址
-        population: "", // 人口数量
-        income: "", //当年集体收入（万元）
+        population: "sss", // 人口数量
+        income: "ss", //当年集体收入（万元）
         villageAge: "", //古建筑村落年代
         isFamous: "", //是否历史文化名村 0：否，1：省级，2：国家级
         // famousGrade: "", // 历史文化名村级别
         isGeneral: "", //是否一般村
-        resPopulation: "", // 当年常住人口
+        resPopulation: "XXX", // 当年常住人口
         isTradition: "", // 是否传统村 0：否，1：省级，2：国家级
         // traditionGrade: "", // 传统村级别
 
@@ -212,7 +258,7 @@ export default {
         modernBuildingNum: "", //近现代建筑数量
         featureNum: "", //特色建材数量
 
-        introduction: "", //introduction
+        introduction: "XXXX", //introduction
         villagePicturesArr: [], //图片数组
         villagePicturesFiles: [], // 编辑表单时图片回显
       },
@@ -353,6 +399,17 @@ export default {
     float: right;
   }
 }
+.box-title {
+  height: 40px;
+  background: #F5FAFF;
+  line-height: 40px;
+  font-size: 18px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #333333;
+  padding-left: 20px;
+  margin-bottom: 13px;
+}
 .form {
   max-width: 1600px;
   padding-left: 8px;
@@ -391,7 +448,7 @@ export default {
     margin-bottom: 18px;
 
     ::v-deep .el-form-item {
-      width: 31%;
+      width: 40%;
       flex-shrink: 0;
       margin-right: 20px;
       .el-form-item__label {

@@ -128,15 +128,17 @@
           </el-col>
         </el-row>
       </div>
-
-      <h4 class="block-tit">一般村古建筑调查表</h4>
-
-      <VillageBaseForm class="input-item-wrp" :form="form" />
-      <VillageHistoryBuildingForm class="input-item-wrp" :form="form" />
-      <h4 class="block-tit">推荐村简介</h4>
+      <el-form-item label="村庄属性（可多选）：" prop="villageId">
+        <el-checkbox-group v-model="form.checkList">
+          <el-checkbox label="县域风貌样板区内"></el-checkbox>
+          <el-checkbox label="3A级景区村庄"></el-checkbox>
+          <el-checkbox label="驻乡镇村规划师规划村庄"></el-checkbox>
+          <el-checkbox label="下山移民新村"></el-checkbox>>
+        </el-checkbox-group>
+      </el-form-item>
       <div>
         <el-form-item
-          label="推荐村简介"
+          label="基本情况"
           prop="introduction"
           :rules="rule.input"
         >
@@ -144,46 +146,199 @@
             style="width: 42%"
             type="textarea"
             :rows="5"
-            placeholder="请输入"
-            maxlength="2000"
+            placeholder="请输入创建村基本情况"
+            maxlength="300"
             show-word-limit
             v-model="form.introduction"
           >
           </el-input>
-          <p style="width: 42%; color: #999" class="py-4 leading-5">
-            要求：1、标题简炼，特色鲜明；2、简介内容包含村庄基本概况、古建状况、人文底蕴；3、文字精炼、彰显其历史文化价值和保护利用价值这两个价值的必要性。
+          <p style="width: 42%; color: #FF6B00" class="py-4 leading-5">
+            <i class="el-icon-warning"></i>要求：简述创建村基本情况、优劣势、必要性和创建目标定位等情况，要求300字以内。
           </p>
         </el-form-item>
+        <el-form-item
+          label="村民代表会议（村民会议）关于未来乡村建设方案决议情况"
+          prop="introduction"
+          :rules="rule.input"
+        >
+          <el-input
+            style="width: 42%"
+            type="textarea"
+            :rows="5"
+            placeholder="请输入村民代表会议（村民会议）关于未来乡村建设方案决议情况"
+            maxlength="300"
+            show-word-limit
+            v-model="form.introduction"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item
+          label="乡、镇（街道）人民政府（办事处）意见"
+          prop="introduction"
+          :rules="rule.input"
+        >
+          <el-input
+            style="width: 42%"
+            type="textarea"
+            :rows="5"
+            placeholder="请输入乡、镇（街道）人民政府（办事处）意见"
+            maxlength="300"
+            show-word-limit
+            v-model="form.introduction"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item
+          label="县（市、区）部门审核意见"
+          prop="introduction"
+          :rules="rule.input"
+        >
+          <el-input
+            style="width: 42%"
+            type="textarea"
+            :rows="5"
+            placeholder="请输入乡、镇（街道）人民政府（办事处）意见"
+            maxlength="300"
+            show-word-limit
+            v-model="form.introduction"
+          >
+          </el-input>
+        </el-form-item>
 
-        <!--        <h4 class="block-tit">村庄图片</h4>-->
-        <el-form-item label="村庄图片" prop="villagePicturesArr" :rules="imgRule">
-          <p style="color: #ff6b00" class="py-3">
-            <i class="el-icon-warning"></i>
-            需要上传1张以上图片。
-          </p>
-          <UploadImg
-            :data="imageList"
-            @add="onImageAdd"
-            @remove="onImageRemove"
+        <el-form-item
+          label="县（市、区）人民政府意见"
+          prop="introduction"
+          :rules="rule.input"
+        >
+          <el-input
+            style="width: 42%"
+            type="textarea"
+            :rows="5"
+            placeholder="请输入乡、镇（街道）人民政府（办事处）意见"
+            maxlength="300"
+            show-word-limit
+            v-model="form.introduction"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item
+          label="上传附件："
+          :rules="rule.upload"
+          prop="processFilesArr"
+        >
+          <UploadFile
+            tip="支持格式：.doc, .docx, .pdf"
+            accept=".doc,.docx,.pdf"
+            :data="form.processFilesArr"
+            @add="onFileAdd($event, 'processFilesArr')"
+            @remove="onFileRemove($event, 'processFilesArr')"
           />
         </el-form-item>
 
-        <el-dialog :visible.sync="dialogVisible">
-          <img width="100%" :src="dialogImageUrl" alt="" />
-        </el-dialog>
+        <h4 class="block-tit">未来乡村创建项目备案表</h4>
+        <div class="detail-top">
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="填表人" prop="villageId" :rules="rule.inputNumber">
+                <el-input
+                  v-model.number="form.population"
+                  placeholder="请输入填表人"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="联系电话" prop="villageId" :rules="rule.inputNumber">
+                <el-input
+                  v-model.number="form.population"
+                  placeholder="请输入联系电话"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="审核人" prop="villageId" :rules="rule.inputNumber">
+                <el-input
+                  v-model.number="form.population"
+                  placeholder="请输入审核人"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </div>
+
+        <el-form-item label="" prop="detail" :rules="listRules">
+          <VilliageListTable
+            :data="form.detail"
+            :hiddenEdit="false"
+            :hiddenDetail="true"
+            @remove="removeListItem"
+            @editForm="editListItem"
+            @moveUp="moveUpItem"
+            @moveDown="moveDownItem"
+          />
+        </el-form-item>
+        <el-button
+          class="add-wrp"
+          plain
+          size="small"
+          @click="dialogVisible = true"
+        >
+          <i class="el-icon-plus"></i> 添加
+        </el-button>
       </div>
     </el-form>
     <div>
       <el-button @click="$emit('close')">取消</el-button>
       <el-button type="primary" @click="validateForm">提交</el-button>
     </div>
+    <el-dialog
+      title="添加"
+      :visible.sync="dialogVisible"
+      width="600px"
+      :before-close="handleClose">
+      <el-form ref="form" :model="projectForm" label-width="140px">
+        <el-form-item label="项目名称：">
+          <el-input v-model="projectForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="建设单位：">
+          <el-input v-model="projectForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="建设地点：">
+          <el-input v-model="projectForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="建设内容和规模：">
+          <el-input v-model="projectForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="进度安排：">
+          <el-input v-model="projectForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="用地情况：">
+          <el-input v-model="projectForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="投资额（万元）：">
+          <el-input v-model="projectForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="运行维护管理安排：">
+          <el-input v-model="projectForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="备注：">
+          <el-input v-model="projectForm.name"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">确定</el-button>
+          <el-button @click="dialogVisible = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 <script>
+import VilliageListTable from "../Components/VilliageListTable";
+
+
 import rule from "@/mixins/rule";
 import VillageAddressSelect from "../Components/VillageAddressSelect";
-import VillageBaseForm from "../Components/VillageBaseForm";
-import VillageHistoryBuildingForm from "../Components/VillageHistoryBuildingForm";
 
 import { VILLAGE_LIST_ROUTER_NAME, HISTORY_BUILDINGS } from "../constants";
 const imgs = (rule, value, callback) => {
@@ -196,9 +351,8 @@ const imgs = (rule, value, callback) => {
 export default {
   mixins: [rule],
   components: {
+    VilliageListTable,
     VillageAddressSelect,
-    VillageBaseForm,
-    VillageHistoryBuildingForm,
   },
   props: {
     type: {
@@ -213,6 +367,10 @@ export default {
   data() {
     return {
       form: {
+        checkList: [],
+        processFilesArr: [], // 附件
+        detail: [],
+
         villageId: "", //村庄地址
         population: "", // 人口数量
         income: "", //当年集体收入（万元）
@@ -244,7 +402,10 @@ export default {
         villagePicturesArr: [], //图片数组
         villagePicturesFiles: [], // 编辑表单时图片回显
       },
-
+      dialogVisible: false,
+      projectForm: {
+        name: "",
+      },
       parentRouteName: VILLAGE_LIST_ROUTER_NAME[1001],
       imgRule: { required: true, validator: imgs, trigger: "change" },
     };
@@ -271,6 +432,57 @@ export default {
     }
   },
   methods: {
+    onFileAdd(file, key) {
+      this.form[key].push(file);
+    },
+    onFileRemove(file, key) {
+      const index = this.form[key].findIndex((item) => {
+        return item.uid === file.uid || item.filePath === file.url;
+      });
+      if (index !== -1) {
+        this.form[key].splice(index, 1);
+      }
+    },
+    addListItem(params) {
+      if (this.editType === "add") {
+        this.form.detail.push(params);
+        this.showForm = false;
+      } else if (this.editType === "edit") {
+        this.form.detail.splice(this.editIndex, 1, params);
+        this.showForm = false;
+      }
+    },
+
+    removeListItem(index) {
+      this.form.detail.splice(index, 1);
+    },
+
+    editListItem({ data, index }) {
+      this.editType = "edit";
+      this.editIndex = index;
+      this.editData = data;
+      this.showForm = true;
+    },
+    moveUpItem({ data, index }) {
+      // console.log(index);
+      this.form.detail.splice(index, 1);
+      this.form.detail.splice(index - 1, 0, data);
+      // console.log(this.form.detail);
+
+    },
+    moveDownItem({ data, index }) {
+      this.form.detail.splice(index, 1);
+      this.form.detail.splice(index + 1, 0, data);
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(() => {
+          done();
+        })
+        .catch(() => {});
+    },
+
+
     validateForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
@@ -328,6 +540,15 @@ export default {
       max-width: 240px;
     }
   }
+  .add-wrp {
+    width: 90%;
+    margin-bottom: 150px;
+    .el-icon-plus {
+      font-size: 16px;
+    }
+  }
+
+
   .block-tit {
     margin-top: 32px;
     margin-bottom: 20px;

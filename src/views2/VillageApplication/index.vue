@@ -78,7 +78,8 @@
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
             <el-link v-if="roleId !== 1" type="primary" @click="goDeclareRouter(scope)" >
-              申报详情
+<!--              申报详情-->
+              详情
             </el-link>
             <el-divider v-if="roleId !== 1" direction="vertical"></el-divider>
             <el-link
@@ -86,7 +87,7 @@
               v-if="actionControl('审核详情', scope.data.declareStatus)"
               type="primary"
             >
-              审核详情
+              详情
             </el-link>
             <el-link
               @click="goAudit(scope)"
@@ -226,16 +227,6 @@
       >
         <template v-slot:search>
           <div class="inline-flex mb-6 pl-0">
-<!--            <div class="search-item">-->
-<!--              <span class="label">申报批次：</span>-->
-<!--              <el-date-picker-->
-<!--                v-model="dialogQuery.declareYear"-->
-<!--                type="year"-->
-<!--                placeholder="选择年"-->
-<!--                value-format="yyyy"-->
-<!--              >-->
-<!--              </el-date-picker>-->
-<!--            </div>-->
             <div class="search-item">
               <span class="label">申报批次：</span>
               <el-select v-model="dialogQuery.declareYear" placeholder="请选择">
@@ -482,7 +473,7 @@ export default {
 
       this.changeDeclareList({ id, declareYear, declareType });
       this.$router.push({
-        name: "declareList",
+        name: "villageDetails",
       });
     },
     // 审核详情
@@ -490,29 +481,22 @@ export default {
       const { id, declareYear, declareType, detailId } = scope.data;
       if (this.roleId !== 1) {
         this.$router.push({
-          name: "auditList",
+          name: "villageDetails",
           query: { id, declareYear, declareType: DECLEAR_TYPE[declareType] },
         });
       } else {
-        this.$router.push({ name: "villageDetail", query: { id: detailId, goVerify: true } });
+        this.$router.push({ name: "villageDetails", query: { id: detailId, goVerify: true } });
       }
     },
     // 审核
     goAudit(scope) {
       const { id, declareYear, declareType, detailId } = scope.data;
       console.log( scope.data);
-      // if (this.roleId === 1) {
-      //   id = detailId
-      // }
       this.changeDeclareList({ id, declareYear, declareType });
-      if (this.roleId === 2) {
-        this.$router.push({
-          name: "audit",
-        });
-      } else {
-        this.$router.push({ name: "villageDetail", query: { id: detailId, verifyKey: true } });
-      }
+      this.$router.push({ name: "villageDetails", query: { id: detailId, verifyKey: true } });
     },
+
+
     // 修改
     edit(data) {
       console.log(data);

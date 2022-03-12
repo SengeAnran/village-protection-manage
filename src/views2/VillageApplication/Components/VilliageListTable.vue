@@ -1,88 +1,31 @@
 <template>
-  <el-table class="table" :data="data" style="width: 45%">
+  <el-table class="table" :data="data" style="width: 90%">
     <el-table-column label="序号" type="index"> </el-table-column>
-    <el-table-column prop="address" label="村庄所在乡镇"> </el-table-column>
-    <el-table-column prop="villageName" label="村庄名称"> </el-table-column>
-    <el-table-column
-      v-if="!hiddenDeclareResult"
-      label="市级审核结果"
-      align="center"
-    >
+    <el-table-column prop="address" label="项目名称"> </el-table-column>
+    <el-table-column prop="address" label="建设单位"> </el-table-column>
+    <el-table-column prop="address" label="建设地点"> </el-table-column>
+    <el-table-column prop="address" label="建设内容和规模"> </el-table-column>
+    <el-table-column prop="address" label="进度安排"> </el-table-column>
+    <el-table-column prop="address" label="用地情况"> </el-table-column>
+    <el-table-column prop="address" label="投资额（万元）"> </el-table-column>
+    <el-table-column prop="villageName" label="运行维护管理安排"> </el-table-column>
+    <el-table-column prop="villageName" label="备注"> </el-table-column>
+    <el-table-column prop="villageName" label="运行维护管理安排"> </el-table-column>
+    <el-table-column label="操作">
       <template slot-scope="scope">
-        <el-link v-if="scope.row.cityVerify" :underline="false" type="success"
-          >通过</el-link
-        >
-        <el-link
-          v-if="
-            !scope.row.cityVerify && typeof scope.row.cityVerify === 'number'
-          "
-          :underline="false"
-          type="danger"
-          >不通过</el-link
-        >
-        <el-link
-          v-if="
-            !scope.row.cityVerify && typeof scope.row.cityVerify !== 'number'
-          "
-          :underline="false"
-          type="warning"
-          >未审核</el-link
-        >
-      </template>
-    </el-table-column>
-    <el-table-column v-if="!hiddenDeclareResult" label="审核意见">
-      <template slot-scope="scope">
-        {{scope.row.cityOpinion|| '— —'}}
-      </template>
-    </el-table-column>
-    <el-table-column
-      v-if="!hiddenDeclareResult"
-      label="省级审核结果"
-      align="center"
-    >
-      <template slot-scope="scope">
-        <el-link
-          link
-          v-if="scope.row.provinceVerify"
-          :underline="false"
-          type="success"
-          >通过</el-link
-        >
-        <el-link
-          v-if="
-            !scope.row.provinceVerify &&
-            typeof scope.row.provinceVerify === 'number'
-          "
-          :underline="false"
-          type="danger"
-          >不通过</el-link
-        >
-        <span v-if="scope.row.cityVerify === 0">
+        <div>
           <el-link
-          >— —</el-link
+            type="primary"
+            @click="$emit('moveUp', { data: scope.row, index: scope.$index })"
+          >上移</el-link
           >
-        </span>
-        <span v-else>
+          <el-divider direction="vertical"></el-divider>
           <el-link
-            v-if="
-            !scope.row.provinceVerify &&
-            typeof scope.row.provinceVerify !== 'number'
-          "
-            :underline="false"
-            type="warning"
-          >未审核</el-link
+            type="primary"
+            @click="$emit('moveDown', { data: scope.row, index: scope.$index });"
+          >下移</el-link
           >
-        </span>
-      </template>
-    </el-table-column>
-    <el-table-column v-if="!hiddenDeclareResult" label="审核意见">
-      <template slot-scope="scope">
-        {{scope.row.provinceOpinion|| '— —'}}
-      </template>
-    </el-table-column>
-    <el-table-column label="操作" v-if="!(hiddenEdit && hiddenDetail)">
-      <template slot-scope="scope">
-        <div v-if="!hiddenEdit">
+          <el-divider direction="vertical"></el-divider>
           <el-link
             type="primary"
             @click="$emit('editForm', { data: scope.row, index: scope.$index })"
@@ -93,48 +36,13 @@
           <el-link type="danger" @click="removeItem(scope.$index, scope.row)"
             >删除</el-link
           >
-          <el-divider direction="vertical"></el-divider>
-          <el-link
-            type="primary"
-            @click="$emit('moveUp', { data: scope.row, index: scope.$index })"
-            >上移</el-link
-          >
-          <el-divider direction="vertical"></el-divider>
-          <el-link
-            type="primary"
-            @click="$emit('moveDown', { data: scope.row, index: scope.$index });"
-            >下移</el-link
-          >
         </div>
-        <div v-if="!hiddenDetail">
-          <el-link type="primary" @click="$emit('goDetail', scope.row)"
-            >详情</el-link
-          >
-        </div>
-      </template>
-    </el-table-column>
-<!--    重新填报操作 -->
-    <el-table-column label="操作" v-if="(hiddenEdit && hiddenDetail) && userInfo.roleId === 3">
-      <template slot-scope="scope">
-<!--        <div>-->
-<!--          <el-divider direction="vertical"></el-divider>-->
-<!--          <el-link type="danger" @click="removeItem(scope.$index, scope.row)"-->
-<!--            >删除</el-link-->
-<!--          >-->
-<!--        </div>-->
-        <div v-if="scope.row.cityVerify === 0 || scope.row.provinceVerify === 0">
-          <el-link type="primary" @click="edit(scope.row)"
-            >重新申报</el-link
-          >
-        </div>
-        <div v-else>— —</div>
       </template>
     </el-table-column>
   </el-table>
 </template>
 <script>
 import { mapGetters } from "vuex";
-import {VILLAGE_LIST_ROUTER_NAME} from "../constants";
 export default {
   props: {
     data: {
@@ -169,19 +77,10 @@ export default {
   methods: {
     removeItem(index) {
       this.$myConfirm({
-        content: "确认删除该村庄申报数据？"
+        content: "确认删除该数据？"
       }).then(() => {
         this.$emit("remove", index);
       })
-    },
-    // 重新申报
-    edit(data) {
-      console.log(data);
-      const { villageDeclarationId, declareType } = data;
-      this.$router.push({
-        name: VILLAGE_LIST_ROUTER_NAME[declareType],
-        query: { id: villageDeclarationId, declareYear: this.declareYear, Refill: true },
-      });
     },
   },
 };
