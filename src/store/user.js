@@ -1,12 +1,20 @@
-import { pwdLogin, logout, getUserInfo, getUserPermission } from "@/api/user";
+import { pwdLogin, logout, getUserInfo, getUserPermission, getUserPermission2 } from "@/api/user";
 // import { removeToken } from "@/utils/auth";
 import { handleLoginOut } from "@/utils/auth";
 // import config from "@/utils/config";
-
+const systemTitleType = {
+  1: "历史文化村落保护管理应用",
+  2: "浙江省未来乡村建设服务平台",
+  3: "跟着节气游乡村管理后台",
+};
 export default {
+
   namespaced: true,
   state: {
     token: "",
+    roleSystemType: window.localStorage.getItem("roleSystemType") || 1, // 1: 历史文化， 2：未来乡村
+    changeSystem: false, //
+    systemTitle: "浙江省未来乡村建设服务平台",
     roleList: [], // 角色列表
     userInfo: {}, // 用户信息
     hasGetRoute: false, // 是否获取过路由信息
@@ -17,6 +25,18 @@ export default {
     setToken(state, value) {
       state.token = value;
     },
+    SET_SYSTEM_TIME(state, payload) {
+      console.log(state.roleSystemType, payload);
+      if (state.roleSystemType !== payload) {
+        state.changeSystem = true;
+      }
+      window.localStorage.setItem("roleSystemType", payload);
+      state.systemTitle = systemTitleType[payload];
+      state.roleSystemType = payload;
+    },
+    // SET_END_CHANGE_ROLE(state) {
+    //   state.changeRole = false;
+    // },
     SET_ROLE_LIST(state, payload) {
       state.roleList = payload;
     },
@@ -27,6 +47,8 @@ export default {
       state.routeList = data;
       // 修改路由获取状态
       state.hasGetRoute = true;
+      // 角色目录列表获取结束
+      state.changeSystem = false;
     },
     SET_PERMISSION_LIST(state, data) {
       state.permissionList = data;
@@ -61,14 +83,23 @@ export default {
         });
       });
     },
-    getRouteList({ commit }) {
+    getRouteList({ commit }, params) {
       return new Promise((resolve) => {
         getUserInfo().then((res1) => {
           commit("SET_USER_INFO", res1 || {});
-          getUserPermission().then((data) => {
-            commit("SET_PERMISSION_LIST", data || []);
-            resolve();
-          });
+          console.log(params);
+          if (params === 2) {
+            getUserPermission2().then((data) => {
+              commit("SET_PERMISSION_LIST", data || []);
+              resolve();
+            });
+          } else {
+            getUserPermission().then((data) => {
+              commit("SET_PERMISSION_LIST", data || []);
+              resolve();
+            });
+          }
+
         });
       });
     },

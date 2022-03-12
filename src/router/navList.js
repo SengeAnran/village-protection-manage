@@ -466,8 +466,124 @@ export const defaultRoutes = [
       menuIds: [201],
     },
   },
+];
 
 
-
-
+export const defaultRoutes2 = [
+  // 未来乡村
+  // 村庄申报 / 村庄审核
+  {
+    path: "/villageApplication2",
+    component: BlankRouteNode,
+    name: "VillageApplication2",
+    redirect: {
+      name: "VillageApplyList",
+    },
+    meta: {
+      menuIds: [100, 200],
+      title: "村庄申报1",
+      hideChild: true,
+      icon: "cunzhuangshenbao",
+    },
+    children: [
+      {
+        path: "/villageApplication2/index",
+        name: "VillageApplyList",
+        meta: {
+          icon: "cunzhuangshenbao",
+          menuIds: [10002, 20001],
+        },
+        component: () => import("@/views2/VillageApplication/index.vue"),
+      },
+      {
+        path: "/villageApplication2/new",
+        name: "newApplication",
+        hidden: true,
+        meta: {
+          activeMenu: "/villageApplication2/index",
+          menuIds: [10001],
+        },
+        component: () => import("@/views2/VillageApplication/New/index.vue"),
+      },
+      // {
+      //   path: "/villageApplication2/newOrdinary",
+      //   name: "newOrdinaryApplication",
+      //   hidden: true,
+      //   meta: {
+      //     activeMenu: "/villageApplication2/index",
+      //     title: "一般村申报",
+      //     menuIds: [10001],
+      //   },
+      //   component: () => import("@/views2/VillageApplication/New/Ordinary.vue"),
+      // },
+      // {
+      //   path: "/villageApplication2/newMajor",
+      //   name: "newMajorApplication",
+      //   hidden: true,
+      //   meta: {
+      //     activeMenu: "/villageApplication2/index",
+      //     title: "重点村申报",
+      //     menuIds: [10001],
+      //   },
+      //   component: () => import("@/views2/VillageApplication/New/Major.vue"),
+      // },
+      // {
+      //   path: "/villageApplication2/newPromote",
+      //   name: "newPromoteApplication",
+      //   hidden: true,
+      //   meta: {
+      //     activeMenu: "/villageApplication2/index",
+      //     title: "提升申报",
+      //     menuIds: [10001],
+      //   },
+      //   component: () => import("@/views2/VillageApplication/New/Promote.vue"),
+      // },
+      {
+        path: "/villageApplication2/declareList",
+        name: "declareList",
+        hidden: true,
+        meta: {
+          activeMenu: "/villageApplication2/index",
+          title: "申报详情",
+          menuIds: [10002, 20001],
+        },
+        component: () =>
+          import("@/views2/VillageApplication/DeclareList/index.vue"),
+      },
+      {
+        path: "/villageApplication2/AuditList",
+        name: "auditList",
+        hidden: true,
+        meta: {
+          activeMenu: "/villageApplication2/index",
+          title: "审核详情",
+          menuIds: [10002, 20001],
+        },
+        component: () =>
+          import("@/views2/VillageApplication/AuditList/index.vue"),
+      },
+      {
+        path: "/villageApplication2/Audit",
+        name: "audit",
+        hidden: true,
+        meta: {
+          activeMenu: "/villageApplication2/index",
+          title: "审核",
+          menuIds: [20002],
+        },
+        component: () => import("@/views2/VillageApplication/Audit/index.vue"),
+      },
+      {
+        path: "villageDetail",
+        name: "villageDetail",
+        hidden: true,
+        meta: {
+          activeMenu: "/villageApplication2/index",
+          title: "详情",
+          menuIds: [10002, 20001],
+        },
+        component: () => import("@/views2/VillageApplication/Detail/index.vue"),
+      },
+    ],
+  },
 ];

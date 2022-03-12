@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import { constantRoutes, defaultRoutes } from "./navList";
+import { constantRoutes, defaultRoutes, defaultRoutes2 } from "./navList";
 import { getToken } from "@/utils/auth";
 import lodash from "lodash";
 import store from "@/store";
@@ -26,14 +26,19 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     console.log(to);
-    if (to.fullPath === "/") {
+    if (to.fullPath === "/" || to.redirectedFrom === "/" || !store.getters.hasGetRoute) {
       // 根据token获取用户信息
-      if (!store.getters.hasGetRoute) {
+      console.log(store.getters.changeSystem);
+      console.log(store.getters.changeSystem || !store.getters.hasGetRoute);
+      if (store.getters.changeSystem || !store.getters.hasGetRoute) { // 切换用户 或无目录
         // 如果没有获取路由信息，先获取路由信息而后跳转
-        store.dispatch("user/getRouteList").then(() => {
-          const list = lodash.cloneDeep(defaultRoutes);
+        const roleSystemType = store.getters.roleSystemType; // 系统类型
+        store.dispatch("user/getRouteList", roleSystemType).then(() => {
+          const list = lodash.cloneDeep(roleSystemType === 2? defaultRoutes2 : defaultRoutes);
+          console.log(list);
           const asyncRoutes = getAsyncRoutes(list, true);
           store.commit("user/SET_ROUTE_LIST", asyncRoutes); // 存储routeList
+          console.log(router);
           router.addRoutes([ // 动态添加更多的路由规则。参数必须是一个符合 routes 选项要求的数组。
             {
               path: "/",
@@ -45,15 +50,19 @@ router.beforeEach((to, from, next) => {
               children: asyncRoutes,
             },
           ]);
-
+          console.log(router);
           router.addRoutes([
             {
               path: "*",
               redirect: "/404",
             },
           ]);
+          // if (to.fullPath === "/villageApplication/index" && roleSystemType === 2) {
+          //   next("/villageApplication2");
+          //   return;
+          // }
           if (to.fullPath === "/login") {
-            next("/");
+            next("/home");
             return;
           }
           // 如果直接使用 next() 刷新后会一直白屏
@@ -61,7 +70,7 @@ router.beforeEach((to, from, next) => {
         });
       } else {
         if (to.fullPath === "/login") {
-          next("/");
+          next("/home");
           return;
         }
         const toPath = {
@@ -90,66 +99,93 @@ router.beforeEach((to, from, next) => {
       }
     }
     // 根据token获取用户信息
-    if (!store.getters.hasGetRoute) {
-      // 如果没有获取路由信息，先获取路由信息而后跳转
-      store.dispatch("user/getRouteList").then(() => {
-        const list = lodash.cloneDeep(defaultRoutes);
-        const asyncRoutes = getAsyncRoutes(list, true);
-        store.commit("user/SET_ROUTE_LIST", asyncRoutes); // 存储routeList
-        router.addRoutes([ // 动态添加更多的路由规则。参数必须是一个符合 routes 选项要求的数组。
-          {
-            path: "/",
-            name: "Index",
-            component: () => import("@/layout"),
-            redirect: {
-              name: asyncRoutes.length ? asyncRoutes[0].name : "",
-            },
-            children: asyncRoutes,
-          },
-        ]);
-
-        router.addRoutes([
-          {
-            path: "*",
-            redirect: "/404",
-          },
-        ]);
-        if (to.fullPath === "/login") {
-          next("/");
-          return;
-        }
-        // 如果直接使用 next() 刷新后会一直白屏
-        next({ ...to, replace: true });
-      });
-    } else {
-      if (to.fullPath === "/login") {
-        next("/");
-        return;
-      }
-      const toPath = {
-        "/projectApplication/detail": true,
-        "/villageApplication/villageDetail": true,
-      };
-      const fromPath = {
-        "/projectApplication/detail": {
-          "/scheduleReport/index": true,
-          "/projectAcceptance/index": true,
-        },
-        "/villageApplication/villageDetail": {
-          "/planAudit/index": true,
-          "/projectAcceptance/index": true,
-        },
-      };
-      if (toPath[to.path] && fromPath[to.path][from.path]) {
-        to.matched[1].otherRedirect = { name: to.query.name };
-        to.matched[1].meta.otherTitle = to.query.title;
-      } else if (toPath[to.path]) {
-        to.matched[1].otherRedirect = '';
-        to.matched[1].meta.otherTitle = '';
-      }
-      console.log(to.path, from.path)
-      next();
+    // if (!store.getters.hasGetRoute) {
+    //   // 如果没有获取路由信息，先获取路由信息而后跳转
+    //   // store.dispatch("user/getRouteList").then(() => {
+    //   //   const list = lodash.cloneDeep(defaultRoutes);
+    //   //   const asyncRoutes = getAsyncRoutes(list, true);
+    //   //   store.commit("user/SET_ROUTE_LIST", asyncRoutes); // 存储routeList
+    //   //   router.addRoutes([ // 动态添加更多的路由规则。参数必须是一个符合 routes 选项要求的数组。
+    //   //     {
+    //   //       path: "/",
+    //   //       name: "Index",
+    //   //       component: () => import("@/layout"),
+    //   //       redirect: {
+    //   //         name: asyncRoutes.length ? asyncRoutes[0].name : "",
+    //   //       },
+    //   //       children: asyncRoutes,
+    //   //     },
+    //   //   ]);
+    //   //
+    //   //   router.addRoutes([
+    //   //     {
+    //   //       path: "*",
+    //   //       redirect: "/404",
+    //   //     },
+    //   //   ]);
+    //   //   if (to.fullPath === "/login") {
+    //   //     next("/home");
+    //   //     return;
+    //   //   }
+    //   //   // 如果直接使用 next() 刷新后会一直白屏
+    //   //   next({ ...to, replace: true });
+    //   // });
+    // } else {
+    //   if (to.fullPath === "/login") {
+    //     next("/home");
+    //     return;
+    //   }
+    //   const toPath = {
+    //     "/projectApplication/detail": true,
+    //     "/villageApplication/villageDetail": true,
+    //   };
+    //   const fromPath = {
+    //     "/projectApplication/detail": {
+    //       "/scheduleReport/index": true,
+    //       "/projectAcceptance/index": true,
+    //     },
+    //     "/villageApplication/villageDetail": {
+    //       "/planAudit/index": true,
+    //       "/projectAcceptance/index": true,
+    //     },
+    //   };
+    //   if (toPath[to.path] && fromPath[to.path][from.path]) {
+    //     to.matched[1].otherRedirect = { name: to.query.name };
+    //     to.matched[1].meta.otherTitle = to.query.title;
+    //   } else if (toPath[to.path]) {
+    //     to.matched[1].otherRedirect = '';
+    //     to.matched[1].meta.otherTitle = '';
+    //   }
+    //   console.log(to.path, from.path)
+    //   next();
+    // }
+    if (to.fullPath === "/login") {
+      next("/home");
+      return;
     }
+    const toPath = {
+      "/projectApplication/detail": true,
+      "/villageApplication/villageDetail": true,
+    };
+    const fromPath = {
+      "/projectApplication/detail": {
+        "/scheduleReport/index": true,
+        "/projectAcceptance/index": true,
+      },
+      "/villageApplication/villageDetail": {
+        "/planAudit/index": true,
+        "/projectAcceptance/index": true,
+      },
+    };
+    if (toPath[to.path] && fromPath[to.path][from.path]) {
+      to.matched[1].otherRedirect = { name: to.query.name };
+      to.matched[1].meta.otherTitle = to.query.title;
+    } else if (toPath[to.path]) {
+      to.matched[1].otherRedirect = '';
+      to.matched[1].meta.otherTitle = '';
+    }
+    console.log(to.path, from.path)
+    next();
   }
 });
 /**

@@ -16,6 +16,9 @@ const store = new Vuex.Store({
     projectAcceptance,
   },
   getters: {
+    systemTitle: (state) => state.user.systemTitle,
+    roleSystemType: (state) => state.user.roleSystemType,
+    changeSystem: (state) => state.user.changeSystem,
     hasGetRoute: (state) => state.user.hasGetRoute,
     userInfo: (state) => state.user.userInfo,
     permissionList: (state) => state.user.permissionList,

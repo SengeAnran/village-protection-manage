@@ -1,0 +1,361 @@
+<template>
+  <div>
+    <el-form
+      ref="form"
+      class="form"
+      label-position="top"
+      :model="form"
+      label-width="80px"
+    >
+      <h3 class="text-gray-800 text-2xl mb-8">新建申报</h3>
+      <div class="detail-top">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <div class="mb-8">
+              <el-form-item label="创建村名称" prop="villageId" :rules="rule.select">
+                <VillageAddressSelect
+                  v-model="form.villageId"
+                  @change="changeAddress"
+                />
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="推荐次序" prop="villageId" :rules="rule.inputNumber">
+              <el-input
+                v-model.number="form.population"
+                placeholder="请输入推荐次序"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="申报批次" prop="villageId" :rules="rule.inputNumber">
+              <el-input
+                v-model.number="form.population"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="创建周期" prop="villageId" :rules="rule.inputNumber">
+              计划从
+              <el-date-picker
+                v-model="form.population"
+                type="month"
+                placeholder="选择月">
+              </el-date-picker>
+              至
+              <el-date-picker
+                v-model="form.population"
+                type="month"
+                placeholder="选择月">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="领办领导" prop="villageId" :rules="rule.inputNumber">
+              <el-input
+                v-model.number="form.population"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="建设单位" prop="villageId" :rules="rule.inputNumber">
+              <el-input
+                v-model.number="form.population"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="联系人" prop="villageId" :rules="rule.inputNumber">
+              <el-input
+                v-model.number="form.population"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="联系方式" prop="villageId" :rules="rule.inputNumber">
+              <el-input
+                v-model.number="form.population"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="户籍人口数（万人）" prop="villageId" :rules="rule.inputNumber">
+              <el-input
+                v-model.number="form.population"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="常住人口数（万人）" prop="villageId" :rules="rule.inputNumber">
+              <el-input
+                v-model.number="form.population"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="计划总投资（万元）" prop="villageId" :rules="rule.inputNumber">
+              <el-input
+                v-model.number="form.population"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="村级集体经济年经营性收入（万元）" prop="villageId" :rules="rule.inputNumber">
+              <el-input
+                v-model.number="form.population"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </div>
+
+      <h4 class="block-tit">一般村古建筑调查表</h4>
+
+      <VillageBaseForm class="input-item-wrp" :form="form" />
+      <VillageHistoryBuildingForm class="input-item-wrp" :form="form" />
+      <h4 class="block-tit">推荐村简介</h4>
+      <div>
+        <el-form-item
+          label="推荐村简介"
+          prop="introduction"
+          :rules="rule.input"
+        >
+          <el-input
+            style="width: 42%"
+            type="textarea"
+            :rows="5"
+            placeholder="请输入"
+            maxlength="2000"
+            show-word-limit
+            v-model="form.introduction"
+          >
+          </el-input>
+          <p style="width: 42%; color: #999" class="py-4 leading-5">
+            要求：1、标题简炼，特色鲜明；2、简介内容包含村庄基本概况、古建状况、人文底蕴；3、文字精炼、彰显其历史文化价值和保护利用价值这两个价值的必要性。
+          </p>
+        </el-form-item>
+
+        <!--        <h4 class="block-tit">村庄图片</h4>-->
+        <el-form-item label="村庄图片" prop="villagePicturesArr" :rules="imgRule">
+          <p style="color: #ff6b00" class="py-3">
+            <i class="el-icon-warning"></i>
+            需要上传1张以上图片。
+          </p>
+          <UploadImg
+            :data="imageList"
+            @add="onImageAdd"
+            @remove="onImageRemove"
+          />
+        </el-form-item>
+
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="dialogImageUrl" alt="" />
+        </el-dialog>
+      </div>
+    </el-form>
+    <div>
+      <el-button @click="$emit('close')">取消</el-button>
+      <el-button type="primary" @click="validateForm">提交</el-button>
+    </div>
+  </div>
+</template>
+<script>
+import rule from "@/mixins/rule";
+import VillageAddressSelect from "../Components/VillageAddressSelect";
+import VillageBaseForm from "../Components/VillageBaseForm";
+import VillageHistoryBuildingForm from "../Components/VillageHistoryBuildingForm";
+
+import { VILLAGE_LIST_ROUTER_NAME, HISTORY_BUILDINGS } from "../constants";
+const imgs = (rule, value, callback) => {
+  if (value.length < 1) {
+    callback(new Error("需要上传1张以上图片"));
+  } else {
+    callback();
+  }
+};
+export default {
+  mixins: [rule],
+  components: {
+    VillageAddressSelect,
+    VillageBaseForm,
+    VillageHistoryBuildingForm,
+  },
+  props: {
+    type: {
+      type: String,
+      default: "add",
+    },
+    data: {
+      type: Object,
+      default: () => {},
+    },
+  },
+  data() {
+    return {
+      form: {
+        villageId: "", //村庄地址
+        population: "", // 人口数量
+        income: "", //当年集体收入（万元）
+        villageAge: "", //古建筑村落年代
+        isFamous: "", //是否历史文化名村  0：否，1：省级，2：国家级
+        isGeneral: "", //是否一般村
+        resPopulation: "", // 当年常住人口
+        isTradition: "", // 是否传统村 0：否，1：省级，2：国家级
+
+        houseNum: "", //古民宅数量
+        hallNum: "", //古祠堂数量
+        stageNum: "", //古戏台数量
+        archNum: "", //古牌坊数量
+        bridgeNum: "", //古桥数量
+        roadNum: "", //古道数量
+        canalNum: "", //古渠数量
+        barrageNum: "", //古堰坝数量
+        wellNum: "", //古井泉数量
+        streetNum: "", // 古街巷数量
+        guildNum: "", //古会馆数量
+        castleNum: "", //古城堡数量
+        towerNum: "", //古塔数量
+        templeNum: "", //古寺数量
+        modernBuildingNum: "", //近现代建筑数量
+        featureNum: "", //特色建材数量
+        other: "", //其他
+
+        introduction: "", //introduction
+        villagePicturesArr: [], //图片数组
+        villagePicturesFiles: [], // 编辑表单时图片回显
+      },
+
+      parentRouteName: VILLAGE_LIST_ROUTER_NAME[1001],
+      imgRule: { required: true, validator: imgs, trigger: "change" },
+    };
+  },
+  computed: {
+    total() {
+      return HISTORY_BUILDINGS.reduce((pre, next) => {
+        return pre + this.form[next.value];
+      }, 0);
+    },
+  },
+  watch: {
+    type(val) {
+      if (val === "edit") {
+        this.form = this.data;
+        this.imageList = [...this.data.villagePicturesFiles];
+      }
+    },
+  },
+  mounted() {
+    if (this.type === "edit") {
+      this.form = this.data;
+      this.imageList = [...this.data.villagePicturesFiles];
+    }
+  },
+  methods: {
+    validateForm() {
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          this.submit(this.form);
+        } else {
+          return false;
+        }
+      });
+    },
+
+    // 新增申报item
+    submit(params) {
+      this.$emit("add", params);
+    },
+
+    // 选择村庄地址
+    changeAddress(val) {
+      const { village, parent } = val;
+      this.form.villageName = village.areaName;
+      this.form.address = parent.areaName;
+    },
+
+    onImageAdd(res) {
+      if (!this.form.villagePicturesArr) {
+        this.form.villagePicturesArr = [];
+      }
+      if (!this.form.villagePicturesFiles) {
+        this.form.villagePicturesFiles = [];
+      }
+      this.form.villagePicturesArr.push(res.fileId);
+      this.form.villagePicturesFiles.push(res);
+
+      this.$refs.form.validateField("villagePicturesArr");
+    },
+    onImageRemove(res) {
+      const index = this.form.villagePicturesFiles.findIndex((list) => {
+        return list.uid === res.uid || list.filePath === res.url;
+      });
+
+      if (index !== -1) {
+        this.form.villagePicturesArr.splice(index, 1);
+        this.form.villagePicturesFiles.splice(index, 1);
+      }
+      this.$refs.form.validateField("villagePicturesArr");
+    },
+  },
+};
+</script>
+<style lang="scss" scoped>
+.form {
+  max-width: 1600px;
+  padding-left: 8px;
+  .detail-top {
+    .el-input {
+      max-width: 240px;
+    }
+  }
+  .block-tit {
+    margin-top: 32px;
+    margin-bottom: 20px;
+  }
+  .total-wrp {
+    color: #333333;
+    & span {
+      color: #606266;
+      line-height: 40px;
+      padding: 0 2px 0 0;
+    }
+  }
+  .input {
+    width: 31%;
+    flex-shrink: 0;
+  }
+  .input-item-wrp {
+    display: flex;
+    flex-wrap: wrap;
+
+    ::v-deep .el-form-item {
+      width: 31%;
+      flex-shrink: 0;
+      margin-right: 20px;
+      .el-form-item__label {
+        font-size: 16px;
+      }
+    }
+  }
+}
+</style>

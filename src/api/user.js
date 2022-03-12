@@ -1,6 +1,6 @@
 import axios from "@/utils/request";
 import config from "@/utils/config";
-const { apiHost } = config;
+const { apiHost, apiHost2 } = config;
 
 export const pwdLogin = (data) => {
   return axios.request({
@@ -42,9 +42,14 @@ export const getUserInfo = () => {
   return axios.get(`${apiHost}/user/info`);
 };
 
-// 获取当前用户菜单权限
+// 获取当前用户菜单权限 历史文化
 export const getUserPermission = () => {
   return axios.get(`${apiHost}/user/menus`);
+};
+
+// 获取当前用户菜单权限 未来乡村
+export const getUserPermission2 = () => {
+  return axios.get(`${apiHost2}/user/menus`);
 };
 
 // 根据父级部门id 获取部门列表

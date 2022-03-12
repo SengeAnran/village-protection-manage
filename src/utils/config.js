@@ -6,7 +6,8 @@ const proConfig = {
 };
 
 const devConfig = {
-  apiHost: "/apiProxy",
+  apiHost: "/apiProxy", // 历史文化
+  apiHost2: "/apiFun", // 未来乡村
   loginPath: window.location.origin,
   routerBase: "/",
 };
