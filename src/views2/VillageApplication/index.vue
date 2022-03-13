@@ -474,6 +474,7 @@ export default {
       this.changeDeclareList({ id, declareYear, declareType });
       this.$router.push({
         name: "villageDetails",
+        query: { id: id, goVerify: true }
       });
     },
     // 审核详情

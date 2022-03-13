@@ -95,7 +95,7 @@ export const getVillageDetail = (params) => {
 export const getVillageItemDetail = (params) => {
   return axios.request({
     method: "GET",
-    url: apiHost2 + "/villageDeclaration/villageDetail/" + params.id,
+    url: apiHost2 + "/villageDeclaration/detail",
     params,
   });
 };

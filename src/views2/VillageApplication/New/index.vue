@@ -21,9 +21,9 @@
             </div>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="推荐次序" prop="villageId" :rules="rule.inputNumber">
+            <el-form-item label="推荐次序" prop="countrySortNum" :rules="rule.inputNumber">
               <el-input
-                v-model.number="form.population"
+                v-model.number="form.countrySortNum"
                 placeholder="请输入推荐次序"
               ></el-input>
             </el-form-item>
@@ -31,61 +31,45 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="申报批次" prop="villageId" :rules="rule.inputNumber">
+            <el-form-item label="申报批次" prop="declarationBatch" :rules="rule.input">
               <el-input
-                v-model.number="form.population"
+                v-model="form.declarationBatch"
                 placeholder="请输入"
               ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="创建周期" prop="villageId" :rules="rule.inputNumber">
+            <el-form-item label="创建周期" prop="startTime" :rules="rule.date">
               计划从
               <el-date-picker
-                v-model="form.population"
+                v-model="form.startTime"
                 type="month"
-                placeholder="选择月">
+                placeholder="选择月"
+                value-format="yyyy-MM-DD HH:mm:ss">
               </el-date-picker>
               至
               <el-date-picker
-                v-model="form.population"
+                v-model="form.endTime"
                 type="month"
-                placeholder="选择月">
+                placeholder="选择月"
+                value-format="yyyy-MM-DD HH:mm:ss">
               </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="领办领导" prop="villageId" :rules="rule.inputNumber">
+            <el-form-item label="领办领导" prop="leader" :rules="rule.input">
               <el-input
-                v-model.number="form.population"
+                v-model="form.leader"
                 placeholder="请输入"
               ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="建设单位" prop="villageId" :rules="rule.inputNumber">
+            <el-form-item label="建设单位" prop="construct" :rules="rule.input">
               <el-input
-                v-model.number="form.population"
-                placeholder="请输入"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="联系人" prop="villageId" :rules="rule.inputNumber">
-              <el-input
-                v-model.number="form.population"
-                placeholder="请输入"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="联系方式" prop="villageId" :rules="rule.inputNumber">
-              <el-input
-                v-model.number="form.population"
+                v-model="form.construct"
                 placeholder="请输入"
               ></el-input>
             </el-form-item>
@@ -93,17 +77,17 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="户籍人口数（万人）" prop="villageId" :rules="rule.inputNumber">
+            <el-form-item label="联系人" prop="contactPerson" :rules="rule.input">
               <el-input
-                v-model.number="form.population"
+                v-model="form.contactPerson"
                 placeholder="请输入"
               ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="常住人口数（万人）" prop="villageId" :rules="rule.inputNumber">
+            <el-form-item label="联系方式" prop="phone" :rules="rule.mobile">
               <el-input
-                v-model.number="form.population"
+                v-model.number="form.phone"
                 placeholder="请输入"
               ></el-input>
             </el-form-item>
@@ -111,17 +95,35 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="计划总投资（万元）" prop="villageId" :rules="rule.inputNumber">
+            <el-form-item label="户籍人口数（万人）" prop="huNum" :rules="rule.inputNumber">
               <el-input
-                v-model.number="form.population"
+                v-model.number="form.huNum"
                 placeholder="请输入"
               ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="村级集体经济年经营性收入（万元）" prop="villageId" :rules="rule.inputNumber">
+            <el-form-item label="常住人口数（万人）" prop="personNum" :rules="rule.inputNumber">
               <el-input
-                v-model.number="form.population"
+                v-model.number="form.personNum"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="计划总投资（万元）" prop="investNum" :rules="rule.inputNumber">
+              <el-input
+                v-model.number="form.investNum"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="村级集体经济年经营性收入（万元）" prop="incomeNum" :rules="rule.inputNumber">
+              <el-input
+                v-model.number="form.incomeNum"
                 placeholder="请输入"
               ></el-input>
             </el-form-item>
@@ -129,8 +131,8 @@
         </el-row>
       </div>
       <el-form-item label="村庄属性（可多选）：" prop="villageId">
-        <el-checkbox-group v-model="form.checkList">
-          <el-checkbox label="县域风貌样板区内"></el-checkbox>
+        <el-checkbox-group v-model="form.villageProperty">
+          <el-checkbox label="县域风貌样板区内">县域风貌样板区内</el-checkbox>
           <el-checkbox label="3A级景区村庄"></el-checkbox>
           <el-checkbox label="驻乡镇村规划师规划村庄"></el-checkbox>
           <el-checkbox label="下山移民新村"></el-checkbox>>
@@ -139,7 +141,7 @@
       <div>
         <el-form-item
           label="基本情况"
-          prop="introduction"
+          prop="basicText"
           :rules="rule.input"
         >
           <el-input
@@ -149,7 +151,7 @@
             placeholder="请输入创建村基本情况"
             maxlength="300"
             show-word-limit
-            v-model="form.introduction"
+            v-model="form.basicText"
           >
           </el-input>
           <p style="width: 42%; color: #FF6B00" class="py-4 leading-5">
@@ -158,7 +160,7 @@
         </el-form-item>
         <el-form-item
           label="村民代表会议（村民会议）关于未来乡村建设方案决议情况"
-          prop="introduction"
+          prop="meetingText"
           :rules="rule.input"
         >
           <el-input
@@ -166,15 +168,13 @@
             type="textarea"
             :rows="5"
             placeholder="请输入村民代表会议（村民会议）关于未来乡村建设方案决议情况"
-            maxlength="300"
-            show-word-limit
-            v-model="form.introduction"
+            v-model="form.meetingText"
           >
           </el-input>
         </el-form-item>
         <el-form-item
           label="乡、镇（街道）人民政府（办事处）意见"
-          prop="introduction"
+          prop="townText"
           :rules="rule.input"
         >
           <el-input
@@ -182,15 +182,13 @@
             type="textarea"
             :rows="5"
             placeholder="请输入乡、镇（街道）人民政府（办事处）意见"
-            maxlength="300"
-            show-word-limit
-            v-model="form.introduction"
+            v-model="form.townText"
           >
           </el-input>
         </el-form-item>
         <el-form-item
           label="县（市、区）部门审核意见"
-          prop="introduction"
+          prop="departmentText"
           :rules="rule.input"
         >
           <el-input
@@ -198,16 +196,14 @@
             type="textarea"
             :rows="5"
             placeholder="请输入乡、镇（街道）人民政府（办事处）意见"
-            maxlength="300"
-            show-word-limit
-            v-model="form.introduction"
+            v-model="form.departmentText"
           >
           </el-input>
         </el-form-item>
 
         <el-form-item
           label="县（市、区）人民政府意见"
-          prop="introduction"
+          prop="governmentText"
           :rules="rule.input"
         >
           <el-input
@@ -215,9 +211,7 @@
             type="textarea"
             :rows="5"
             placeholder="请输入乡、镇（街道）人民政府（办事处）意见"
-            maxlength="300"
-            show-word-limit
-            v-model="form.introduction"
+            v-model="form.governmentText"
           >
           </el-input>
         </el-form-item>
@@ -226,6 +220,9 @@
           :rules="rule.upload"
           prop="processFilesArr"
         >
+          <p style="width: 42%; color: #FF6B00" class="py-4 leading-5">
+            <i class="el-icon-warning"></i>请上传以上内容的盖章扫描件
+          </p>
           <UploadFile
             tip="支持格式：.doc, .docx, .pdf"
             accept=".doc,.docx,.pdf"
@@ -239,17 +236,17 @@
         <div class="detail-top">
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="填表人" prop="villageId" :rules="rule.inputNumber">
+              <el-form-item label="填表人" prop="projectFilingPerson" :rules="rule.input">
                 <el-input
-                  v-model.number="form.population"
+                  v-model="form.projectFilingPerson"
                   placeholder="请输入填表人"
                 ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="联系电话" prop="villageId" :rules="rule.inputNumber">
+              <el-form-item label="联系电话" prop="projectFilingPhone" :rules="rule.mobile">
                 <el-input
-                  v-model.number="form.population"
+                  v-model.number="form.projectFilingPhone"
                   placeholder="请输入联系电话"
                 ></el-input>
               </el-form-item>
@@ -257,9 +254,9 @@
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="审核人" prop="villageId" :rules="rule.inputNumber">
+              <el-form-item label="审核人" prop="projectFilingAudit" :rules="rule.input">
                 <el-input
-                  v-model.number="form.population"
+                  v-model="form.projectFilingAudit"
                   placeholder="请输入审核人"
                 ></el-input>
               </el-form-item>
@@ -267,9 +264,9 @@
           </el-row>
         </div>
 
-        <el-form-item label="" prop="detail" :rules="listRules">
+        <el-form-item label="" prop="projects" :rules="listRules">
           <VilliageListTable
-            :data="form.detail"
+            :data="form.projects"
             :hiddenEdit="false"
             :hiddenDetail="true"
             @remove="removeListItem"
@@ -296,38 +293,38 @@
       title="添加"
       :visible.sync="dialogVisible"
       width="600px"
-      :before-close="handleClose">
-      <el-form ref="form" :model="projectForm" label-width="140px">
+      @close="resetForm">
+      <el-form ref="projectForm" :model="projectForm" label-width="140px">
         <el-form-item label="项目名称：">
-          <el-input v-model="projectForm.name"></el-input>
+          <el-input v-model="projectForm.projectName"></el-input>
         </el-form-item>
         <el-form-item label="建设单位：">
-          <el-input v-model="projectForm.name"></el-input>
+          <el-input v-model="projectForm.constructUnit"></el-input>
         </el-form-item>
         <el-form-item label="建设地点：">
-          <el-input v-model="projectForm.name"></el-input>
+          <el-input v-model="projectForm.constructAddress"></el-input>
         </el-form-item>
         <el-form-item label="建设内容和规模：">
-          <el-input v-model="projectForm.name"></el-input>
+          <el-input v-model="projectForm.constructDetail"></el-input>
         </el-form-item>
         <el-form-item label="进度安排：">
-          <el-input v-model="projectForm.name"></el-input>
+          <el-input v-model="projectForm.schedule"></el-input>
         </el-form-item>
         <el-form-item label="用地情况：">
-          <el-input v-model="projectForm.name"></el-input>
+          <el-input v-model="projectForm.landUse"></el-input>
         </el-form-item>
         <el-form-item label="投资额（万元）：">
-          <el-input v-model="projectForm.name"></el-input>
+          <el-input v-model.number="projectForm.investmentAmount"></el-input>
         </el-form-item>
         <el-form-item label="运行维护管理安排：">
-          <el-input v-model="projectForm.name"></el-input>
+          <el-input v-model="projectForm.arrangements"></el-input>
         </el-form-item>
         <el-form-item label="备注：">
-          <el-input v-model="projectForm.name"></el-input>
+          <el-input v-model="projectForm.remark"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">确定</el-button>
-          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button @click="resetForm">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -341,11 +338,19 @@ import rule from "@/mixins/rule";
 import VillageAddressSelect from "../Components/VillageAddressSelect";
 
 import { VILLAGE_LIST_ROUTER_NAME, HISTORY_BUILDINGS } from "../constants";
+import { villageDeclaration } from '@/api2/villageManage'
 const imgs = (rule, value, callback) => {
   if (value.length < 1) {
     callback(new Error("需要上传1张以上图片"));
   } else {
     callback();
+  }
+};
+const tableList = (rule, value, callback) => {
+  if (value.length) {
+    callback();
+  } else {
+    callback(new Error("请添加项目"));
   }
 };
 export default {
@@ -367,45 +372,51 @@ export default {
   data() {
     return {
       form: {
-        checkList: [],
         processFilesArr: [], // 附件
-        detail: [],
-
+        villageName: "", //村庄地址
+        town: "", //村庄地址
         villageId: "", //村庄地址
-        population: "", // 人口数量
-        income: "", //当年集体收入（万元）
-        villageAge: "", //古建筑村落年代
-        isFamous: "", //是否历史文化名村  0：否，1：省级，2：国家级
-        isGeneral: "", //是否一般村
-        resPopulation: "", // 当年常住人口
-        isTradition: "", // 是否传统村 0：否，1：省级，2：国家级
+        countrySortNum: "", //推荐次序
+        declarationBatch: "", //申报批次
+        startTime: "", //创建周期 开始
+        endTime: "", //创建周期 结束
+        leader: "", //领办领导
+        construct: "", //建设单位
+        contactPerson: "", // 联系人
+        phone: "", //联系方式
+        huNum: "", //户籍人口数（万人）
+        personNum: "", //常住人口数（万人）
+        investNum: "", //计划总投资（万元）
+        incomeNum: "", //村级集体经济年经营性收入（万元）
 
-        houseNum: "", //古民宅数量
-        hallNum: "", //古祠堂数量
-        stageNum: "", //古戏台数量
-        archNum: "", //古牌坊数量
-        bridgeNum: "", //古桥数量
-        roadNum: "", //古道数量
-        canalNum: "", //古渠数量
-        barrageNum: "", //古堰坝数量
-        wellNum: "", //古井泉数量
-        streetNum: "", // 古街巷数量
-        guildNum: "", //古会馆数量
-        castleNum: "", //古城堡数量
-        towerNum: "", //古塔数量
-        templeNum: "", //古寺数量
-        modernBuildingNum: "", //近现代建筑数量
-        featureNum: "", //特色建材数量
-        other: "", //其他
+        villageProperty: [], //村庄属性（可多选）
 
-        introduction: "", //introduction
-        villagePicturesArr: [], //图片数组
-        villagePicturesFiles: [], // 编辑表单时图片回显
+        basicText: "", //基本情况
+        meetingText: "", //村民代表会议（村民会议）关于未来乡村建设方案决议情况
+        townText: "", //乡、镇（街道）人民政府（办事处）意见
+        departmentText: "", //县（市、区）部门审核意见
+        governmentText: "", //县（市、区）人民政府意见
+        projectFilingPerson: "", //填表人
+        projectFilingPhone: "", //联系电话
+        projectFilingAudit: "", //审核人
+        projects: [], //项目列表
       },
       dialogVisible: false,
-      projectForm: {
-        name: "",
+      projectForm: { // 项目表单
+        projectName: "", // 项目名称
+        constructUnit: "", // 建设单位
+        constructAddress: "", // 建设地点
+        constructDetail: "", // 建设内容和规模
+        schedule: "", // 进度安排
+        landUse: "", // 用地情况
+        investmentAmount: "", // 投资额（万元）
+        arrangements: "", // 运行维护管理安排
+        remark: "", // 备注
       },
+      editIndex: "",
+      editProjectForm: false, // 编辑表格
+      listRules: { required: true, validator: tableList, trigger: "blur" },
+
       parentRouteName: VILLAGE_LIST_ROUTER_NAME[1001],
       imgRule: { required: true, validator: imgs, trigger: "change" },
     };
@@ -443,6 +454,31 @@ export default {
         this.form[key].splice(index, 1);
       }
     },
+    // 添加 项目
+    onSubmit() {
+      if (!this.editProjectForm) {
+        this.form.projects.push(this.projectForm);
+      } else {
+        this.editProjectForm = false;
+      }
+      this.resetForm();
+    },
+    resetForm() {
+      this.projectForm = { // 项目表单
+        projectName: "", // 项目名称
+        construct: "", // 建设单位
+        constructAddress: "", // 建设地点
+        constructDetail: "", // 建设内容和规模
+        schedule: "", // 进度安排
+        landUse: "", // 用地情况
+        investmentAmount: "", // 投资额（万元）
+        arrangements: "", // 运行维护管理安排
+        remark: "", // 备注
+      };
+      this.$refs.projectForm.resetFields();
+      this.dialogVisible = false;
+    },
+
     addListItem(params) {
       if (this.editType === "add") {
         this.form.detail.push(params);
@@ -454,25 +490,25 @@ export default {
     },
 
     removeListItem(index) {
-      this.form.detail.splice(index, 1);
+      this.form.projects.splice(index, 1);
     },
 
     editListItem({ data, index }) {
-      this.editType = "edit";
+      this.editProjectForm = true;
       this.editIndex = index;
-      this.editData = data;
-      this.showForm = true;
+      this.projectForm = data;
+      this.dialogVisible = true;
     },
     moveUpItem({ data, index }) {
       // console.log(index);
-      this.form.detail.splice(index, 1);
-      this.form.detail.splice(index - 1, 0, data);
+      this.form.projects.splice(index, 1);
+      this.form.projects.splice(index - 1, 0, data);
       // console.log(this.form.detail);
 
     },
     moveDownItem({ data, index }) {
-      this.form.detail.splice(index, 1);
-      this.form.detail.splice(index + 1, 0, data);
+      this.form.projects.splice(index, 1);
+      this.form.projects.splice(index + 1, 0, data);
     },
     handleClose(done) {
       this.$confirm('确认关闭？')
@@ -486,6 +522,8 @@ export default {
     validateForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
+          this.form.annexIds = this.form.processFilesArr.map(i => i.fileId).toString();
+          console.log(this.form.annexIds);
           this.submit(this.form);
         } else {
           return false;
@@ -494,15 +532,23 @@ export default {
     },
 
     // 新增申报item
-    submit(params) {
-      this.$emit("add", params);
+    async submit(params) {
+      console.log(params);
+      await villageDeclaration(params);
+      this.$message({
+        message: '添加成功！',
+        type: 'success'
+      });
+      this.$router.back();
+
     },
 
     // 选择村庄地址
     changeAddress(val) {
       const { village, parent } = val;
+      console.log(village, parent);
       this.form.villageName = village.areaName;
-      this.form.address = parent.areaName;
+      this.form.town = parent.areaName;
     },
 
     onImageAdd(res) {

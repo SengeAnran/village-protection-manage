@@ -43,6 +43,7 @@ export default {
   margin-bottom: 15px;
   border-radius: 8px;
   background-color: #fff;
+  position: relative;
 }
 </style>
 

@@ -9,7 +9,7 @@ const mobile = (rule, value, callback) => {
 const number = (rule, value, callback) =>{
   if(!value){
     callback(new Error("填写不能为空"))
-  }else if(value.indexOf(".") != -1 && value.split('.').length > 2){
+  }else if(typeof value === String && value.indexOf(".") !== -1 && value.split('.').length > 2){
     callback(new Error("请输入正确格式的数字")) //防止输入多个小数点
   }else {
     callback();

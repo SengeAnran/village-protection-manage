@@ -1,17 +1,16 @@
 <template>
   <el-table class="table" :data="data" style="width: 90%">
     <el-table-column label="序号" type="index"> </el-table-column>
-    <el-table-column prop="address" label="项目名称"> </el-table-column>
-    <el-table-column prop="address" label="建设单位"> </el-table-column>
-    <el-table-column prop="address" label="建设地点"> </el-table-column>
-    <el-table-column prop="address" label="建设内容和规模"> </el-table-column>
-    <el-table-column prop="address" label="进度安排"> </el-table-column>
-    <el-table-column prop="address" label="用地情况"> </el-table-column>
-    <el-table-column prop="address" label="投资额（万元）"> </el-table-column>
-    <el-table-column prop="villageName" label="运行维护管理安排"> </el-table-column>
-    <el-table-column prop="villageName" label="备注"> </el-table-column>
-    <el-table-column prop="villageName" label="运行维护管理安排"> </el-table-column>
-    <el-table-column label="操作">
+    <el-table-column prop="projectName" label="项目名称"> </el-table-column>
+    <el-table-column prop="constructUnit" label="建设单位"> </el-table-column>
+    <el-table-column prop="constructAddress" label="建设地点"> </el-table-column>
+    <el-table-column prop="constructDetail" label="建设内容和规模"> </el-table-column>
+    <el-table-column prop="schedule" label="进度安排"> </el-table-column>
+    <el-table-column prop="landUse" label="用地情况"> </el-table-column>
+    <el-table-column prop="investmentAmount" label="投资额（万元）"> </el-table-column>
+    <el-table-column prop="arrangements" label="运行维护管理安排"> </el-table-column>
+    <el-table-column prop="remark" label="备注"> </el-table-column>
+    <el-table-column v-if="!hiddenOperation" label="操作" min-width="150px">
       <template slot-scope="scope">
         <div>
           <el-link
@@ -48,6 +47,10 @@ export default {
     data: {
       type: Array,
       default: () => [],
+    },
+    hiddenOperation: { // 隐藏操作栏
+      type: Boolean,
+      default: false,
     },
     hiddenDetail: {
       type: Boolean,
