@@ -11,6 +11,8 @@
         id-key="id"
         actionWidth="180px"
         :multiple-delete="userInfo.roleId === 3"
+        showExport
+        :export-method="exportMethod"
         :hideAdd="true"
         :hideEdit="true"
         :hideView="true"
@@ -77,65 +79,49 @@
         </template>
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
-            <el-link v-if="roleId !== 1" type="primary" @click="goDeclareRouter(scope)" >
-<!--              申报详情-->
-              详情
-            </el-link>
-            <el-divider v-if="roleId !== 1" direction="vertical"></el-divider>
+<!--            <el-link v-if="roleId !== 1" type="primary" @click="goDeclareRouter(scope)" >-->
+<!--&lt;!&ndash;              申报详情&ndash;&gt;-->
+<!--              详情-->
+<!--            </el-link>-->
+<!--            <el-divider v-if="roleId !== 1" direction="vertical"></el-divider>-->
             <el-link
               @click="goAuditResult(scope)"
-              v-if="actionControl('审核详情', scope.data.declareStatus)"
+              v-if="actionControl('详情', scope.data.finalStatus)"
               type="primary"
             >
               详情
             </el-link>
+<!--            <el-divider v-if="roleId !== 1" direction="vertical"></el-divider>-->
             <el-link
               @click="goAudit(scope)"
-              v-if="actionControl('审核', scope.data.declareStatus)"
-              v-permission="20002"
+              v-if="actionControl('审核', scope.data.finalStatus)"
               type="primary"
             >
               审核
             </el-link>
+            <el-divider v-if="actionControl('修改', scope.data.finalStatus)" direction="vertical"></el-divider>
             <div
               style="display: inline-block"
-              v-if="actionControl('修改', scope.data.declareStatus)"
+              v-if="actionControl('修改', scope.data.finalStatus)"
               v-permission="10003"
             >
               <el-link @click="edit(scope.data)" type="primary"> 修改 </el-link>
 <!--              <el-divider direction="vertical"></el-divider>-->
             </div>
-<!--            <el-link-->
-<!--              @click="deleteItem(scope.data.id)"-->
-<!--              v-if="actionControl('删除', scope.data.declareStatus)"-->
-<!--              type="danger"-->
-<!--              v-permission="10003"-->
-<!--            >-->
-<!--              删除-->
-<!--            </el-link>-->
+            <el-divider v-if="actionControl('删除', scope.data.finalStatus)" direction="vertical"></el-divider>
+            <el-link
+              @click="deleteItem(scope.data.id)"
+              v-if="actionControl('删除', scope.data.finalStatus)"
+              type="danger"
+              v-permission="10004"
+            >
+              删除
+            </el-link>
           </div>
         </template>
 
         <template v-slot:crudAction>
           <el-button v-permission="10001" type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报 </el-button>
-<!--          <el-dropdown-->
-<!--            v-permission="10001"-->
-<!--            class="mr-3"-->
-<!--            @command="newApplications"-->
-<!--          >-->
-<!--            <el-button type="primary" icon="el-icon-plus"> 新建申报 </el-button>-->
-<!--            <el-dropdown-menu slot="dropdown">-->
-<!--              <el-dropdown-item-->
-<!--                v-for="(item, i) in declareTypeOpt"-->
-<!--                :key="item.value"-->
-<!--                :divided="i !== 0"-->
-<!--                size="small"-->
-<!--                :command="item.value"-->
-<!--              >-->
-<!--                {{ item.label }}-->
-<!--              </el-dropdown-item>-->
-<!--            </el-dropdown-menu>-->
-<!--          </el-dropdown>-->
         </template>
 
         <template v-slot:table>
@@ -279,9 +265,10 @@ import { queryBatchInfo, queryTypeDeclaration, getRecVillages, getVillageList, d
 import {
   DECLEAR_TYPE,
   DECLEAR_STATUS,
-  VILLAGE_LIST_ROUTER_NAME, PRO_DECLEAR_STATUS,
+  PRO_DECLEAR_STATUS,
 } from "./constants";
 import {recVerify} from "../../api/villageManage";
+import {getvillagesExport} from "../../api2/villageManage";
 
 export default {
   data() {
@@ -323,6 +310,7 @@ export default {
       ],
       getMethod: getVillageList,
       deleteMethod: deleteVillageItem,
+      exportMethod: getvillagesExport,
 
       dialogVisible: false,
       submitSortMethod: recVerify,
@@ -344,33 +332,31 @@ export default {
     this.declareType = DECLEAR_TYPE;
     this.declareStatus = DECLEAR_STATUS;
     this.declareTypeOpt = this.normalizeSelectOptions(DECLEAR_TYPE);
-    this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(this.normalizeSelectOptions(DECLEAR_TYPE));
+    // this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(this.normalizeSelectOptions(DECLEAR_TYPE));
     if (this.roleId !== 1) {
       this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(DECLEAR_STATUS));
     } else {
       this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(PRO_DECLEAR_STATUS));
     }
+    this.getBatchInfo();
 
 
     this.XIANJI_ACTION = {
-      申报详情: () => true,
       修改: (declareStatus) => this._canModify(declareStatus, 3),
       删除: (declareStatus) => this._canModify(declareStatus, 3),
-      审核详情: (declareStatus) => this._canViewDeclare(declareStatus, 3),
+      详情: (declareStatus) => this._canViewDeclare(declareStatus, 3),
     };
     this.SHIJI_ACTION = {
-      申报详情: () => true,
       审核: (declareStatus) => this._canDeclare(declareStatus, 2),
-      审核详情: (declareStatus) => this._canViewDeclare(declareStatus, 3),
+      详情: (declareStatus) => this._canViewDeclare(declareStatus, 2),
     };
     this.ADMIN_ACTION = {
-      申报详情: () => true,
       审核: (declareStatus) => this._canDeclare(declareStatus, 1),
-      审核详情: (declareStatus) => this._canViewDeclare(declareStatus, 1),
+      详情: (declareStatus) => this._canViewDeclare(declareStatus, 1),
     };
   },
   mounted() {
-    this.lookUp();
+    // this.lookUp();
 
   },
   methods: {
@@ -394,11 +380,21 @@ export default {
       this.$router.push({ name: "newApplication" });
     },
     lookUp() {
-      console.log('222222');
       if (this.roleId === 2) {
         this.getTypeDeclaration();
         this.queryBatchInfo();
       }
+    },
+    // 批次
+    async getBatchInfo() {
+      const res = await queryBatchInfo();
+      const opt = res.map(i => {
+        return {
+          label: i,
+          value: i,
+        }
+      });
+      this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(opt);
     },
     // 查询申报批次和类型
     async getTypeDeclaration() {
@@ -467,44 +463,43 @@ export default {
       return res;
 
     },
-    // 申报详情
-    goDeclareRouter(scope) {
-      const { id, declareYear, declareType } = scope.data;
-
-      this.changeDeclareList({ id, declareYear, declareType });
-      this.$router.push({
-        name: "villageDetails",
-        query: { id: id, goVerify: true }
-      });
-    },
+    // // 申报详情
+    // goDeclareRouter(scope) {
+    //   const { id, declareYear, finalStatus } = scope.data;
+    //
+    //   this.changeDeclareList({ id, declareYear, finalStatus });
+    //   this.$router.push({
+    //     name: "villageDetails",
+    //     query: { id: id, goVerify: false }
+    //   });
+    // },
     // 审核详情
     goAuditResult(scope) {
-      const { id, declareYear, declareType, detailId } = scope.data;
-      if (this.roleId !== 1) {
-        this.$router.push({
-          name: "villageDetails",
-          query: { id, declareYear, declareType: DECLEAR_TYPE[declareType] },
-        });
-      } else {
-        this.$router.push({ name: "villageDetails", query: { id: detailId, goVerify: true } });
-      }
+      const { id } = scope.data;
+      // if (this.roleId === 2) {
+      //   this.$router.push({
+      //     name: "villageDetails",
+      //     query: { id, declareYear, finalStatus: DECLEAR_TYPE[finalStatus] },
+      //   });
+      // } else {
+      //   this.$router.push({ name: "villageDetails", query: { id: detailId, goVerify: true } });
+      // }
+      this.$router.push({ name: "villageDetails", query: { id: id } })
     },
     // 审核
     goAudit(scope) {
-      const { id, declareYear, declareType, detailId } = scope.data;
-      console.log( scope.data);
-      this.changeDeclareList({ id, declareYear, declareType });
-      this.$router.push({ name: "villageDetails", query: { id: detailId, verifyKey: true } });
+      const { id } = scope.data;
+      this.$router.push({ name: "villageDetails", query: { id: id } })
     },
 
 
     // 修改
     edit(data) {
       console.log(data);
-      const { id, declareYear, declareType } = data;
+      const { id } = data;
       this.$router.push({
-        name: VILLAGE_LIST_ROUTER_NAME[declareType],
-        query: { id, declareYear },
+        name: "newApplication",
+        query: { id },
       });
     },
     // 删除
@@ -525,18 +520,18 @@ export default {
      * @param {Number} declareStatus 审核状态码
      */
     actionControl(actionName, declareStatus) {
-      if (this.roleId === 3) {
+      if (this.roleId === 3) { // 县级
         return (
           this.XIANJI_ACTION[actionName] &&
           this.XIANJI_ACTION[actionName](declareStatus)
         );
       } else if (this.roleId === 2) {
-        return (
+        return ( // 市级
           this.SHIJI_ACTION[actionName] &&
           this.SHIJI_ACTION[actionName](declareStatus)
         );
       } else if (this.roleId === 1) {
-        return (
+        return ( // 省
           this.ADMIN_ACTION[actionName] &&
           this.ADMIN_ACTION[actionName](declareStatus)
         );
@@ -546,25 +541,25 @@ export default {
 
     // 修改、删除 *******
     _canModify(declareStatus, roleId) {
-      return roleId === 3 && declareStatus === 2001;
+      return roleId === 3 && (declareStatus === 0 || declareStatus === 1 || declareStatus === 3);
     },
     // 审核详情
     _canViewDeclare(declareStatus, roleId) {
       if (roleId === 3) {
-        return declareStatus !== 2001;
+        return true;
       } else if (roleId === 2) {
-        return declareStatus === 2004 || declareStatus === 2999;
+        return declareStatus !== 0;
       } else if (roleId === 1) {
-        return declareStatus === 2999;
+        return declareStatus !== 2;
       }
       return false;
     },
     // 审核
     _canDeclare(declareStatus, roleId) {
       if (roleId === 2) {
-        return !(declareStatus === 2004 || declareStatus === 2999);
+        return (declareStatus === 0);
       } else if (roleId === 1) {
-        return !(declareStatus === 2999);
+        return (declareStatus === 2);
       }
       return false;
     },

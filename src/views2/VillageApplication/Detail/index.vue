@@ -7,7 +7,8 @@
       <RouterBack>详情</RouterBack>
       <div class="box-title">申报详情</div>
       <div class="examine-result">
-        <img src="../imgs/pass.png" alt="">
+        <img v-if="finalStatus === 4" src="../imgs/pass.png" alt="">
+        <img v-if="finalStatus === 1" src="../imgs/reject.png" alt="">
       </div>
       <el-form
         style="padding-left: 14px"
@@ -91,11 +92,11 @@
           </div>
           <div class="input-item-wrp">
             <el-form-item label="附件：" prop="introduction">
-              <p class="content fu-file">
-                <a href="#">
+              <p class="content fu-file" v-for="(item, index) in form.annexFiles" :key="index">
+                <a :href="item.filePath">
                   <i class="el-icon-link"></i>
                   <span>
-                    {{ form.introduction }}
+                    {{ item.fileName }}
                   </span>
                 </a>
               </p>
@@ -130,56 +131,10 @@
             hiddenOperation
           />
         </el-form-item>
-
-<!--        <div v-if="form.cityVerify === 1 || form.cityVerify === 0" >-->
-<!--          <h4 class="block-tit" style="margin-bottom: 20px">市级审核详情</h4>-->
-<!--          <div-->
-<!--            class="status"-->
-<!--            :style="{ color: form.cityVerify === 1 ? '#15BE50' : '#D40000' }"-->
-<!--            v-html="form.cityVerify === 1 ? '通过' : '不通过'"-->
-<!--          ></div>-->
-<!--          <div class="opinion">审核意见</div>-->
-<!--          <p class="opinion-content">{{ form.cityOpinion }}</p>-->
-<!--        </div>-->
-<!--        <div v-if="form.provinceVerify === 1 || form.provinceVerify === 0">-->
-<!--          <h4 class="block-tit" style="margin-bottom: 20px">省级审核详情</h4>-->
-<!--          <div-->
-<!--            class="status"-->
-<!--            :style="{ color: form.provinceVerify === 1 ? '#15BE50' : '#D40000' }"-->
-<!--            v-html="form.provinceVerify === 1 ? '通过' : '不通过'"-->
-<!--          ></div>-->
-<!--          <div class="opinion">审核意见</div>-->
-<!--          <p>{{ form.provinceOpinion }}</p>-->
-<!--        </div>-->
-<!--        <div v-if="roleId < 3 && verifyKey">-->
-<!--          <h4 class="block-tit" style="margin-bottom: 20px" v-html="roleId === 2 ? '审核' : '省级审核'"></h4>-->
-<!--          <el-form>-->
-<!--            <el-form-item label="">-->
-<!--              <el-radio v-model="status" label="1">通过</el-radio>-->
-<!--              <el-radio v-model="status" label="0">不通过</el-radio>-->
-<!--            </el-form-item>-->
-<!--          </el-form>-->
-<!--          &lt;!&ndash;      <div style="margin-bottom: 24px">{{ tips }}</div>&ndash;&gt;-->
-<!--          <div class="opinion">请填写审核意见</div>-->
-<!--          <el-input-->
-<!--            type="textarea"-->
-<!--            :rows="8"-->
-<!--            placeholder="请输入"-->
-<!--            v-model="textarea">-->
-<!--          </el-input>-->
-<!--          <div class="bottom-button">-->
-<!--            <el-button-->
-<!--              @click="$router.back()"-->
-<!--            >-->
-<!--              取消-->
-<!--            </el-button>-->
-<!--            <el-button type="primary" @click="onConfirm()" v-html="roleId === 2 ? '确定' : '提交'"></el-button>-->
-<!--          </div>-->
-<!--        </div>-->
         <div id="verify"></div>
       </el-form>
       <!--        审核详情-->
-      <div>
+      <div v-if="finalStatus > 0">
         <div class="box-title">审核详情</div>
         <el-form
           style="padding-left: 14px"
@@ -194,21 +149,21 @@
             <div class="examine-title">设市区比选意见</div>
             <div class="input-item-wrp">
               <el-form-item label="审核结果" prop="introduction">
-                <p class="content">{{ form.introduction }}</p>
+                <p class="content">{{ verifyRes(form.cityVerify) }}</p>
               </el-form-item>
             </div>
             <div class="input-item-wrp">
               <el-form-item label="审核意见" prop="introduction">
-                <p class="content">{{ form.introduction }}</p>
+                <p class="content">{{ form.cityOpinion }}</p>
               </el-form-item>
             </div>
             <div class="input-item-wrp">
               <el-form-item label="审核意见附件" prop="introduction">
-                <p class="content fu-file">
-                  <a href="#">
+                <p class="content fu-file" v-for="(item, index) in form.cityAuditFile" :key="index">
+                  <a :href="item.filePath">
                     <i class="el-icon-link"></i>
                     <span>
-                    {{ form.introduction }}
+                    {{ item.fileName }}
                   </span>
                   </a>
                 </p>
@@ -216,30 +171,30 @@
             </div>
             <div class="input-item-wrp">
               <el-form-item label="审核时间" prop="introduction">
-                <p class="content">{{ form.introduction }}</p>
+                <p class="content">{{ form.cityAuditTime }}</p>
               </el-form-item>
             </div>
           </div>
 <!--          省级审核结果-->
-          <div class="examine-item">
+          <div v-if="finalStatus > 2" class="examine-item">
             <div class="examine-title">省级审核详情</div>
             <div class="input-item-wrp">
               <el-form-item label="审核结果" prop="introduction">
-                <p class="content">{{ form.introduction }}</p>
+                <p class="content">{{ verifyRes(form.provinceVerify) }}</p>
               </el-form-item>
             </div>
             <div class="input-item-wrp">
               <el-form-item label="审核意见" prop="introduction">
-                <p class="content">{{ form.introduction }}</p>
+                <p class="content">{{ form.provinceOpinion }}</p>
               </el-form-item>
             </div>
             <div class="input-item-wrp">
               <el-form-item label="审核意见附件" prop="introduction">
-                <p class="content fu-file">
-                  <a href="#">
+                <p class="content fu-file" v-for="(item, index) in form.provinceAuditFile" :key="index">
+                  <a :href="item.filePath">
                     <i class="el-icon-link"></i>
                     <span>
-                    {{ form.introduction }}
+                    {{ item.fileName }}
                   </span>
                   </a>
                 </p>
@@ -247,15 +202,15 @@
             </div>
             <div class="input-item-wrp">
               <el-form-item label="审核时间" prop="introduction">
-                <p class="content">{{ form.introduction }}</p>
+                <p class="content">{{ form.provinceAuditTime }}</p>
               </el-form-item>
             </div>
           </div>
         </el-form>
       </div>
-      <div v-if="userInfo.roleId !== 3">
+      <div v-if="(userInfo.roleId === 2 && finalStatus ===0) ||(userInfo.roleId === 1 && finalStatus ===2)">
 <!--      <div>-->
-        <div class="box-title" v-text="userInfo.roleId === 1? '设市区比选意见':'审核'"></div>
+        <div class="box-title" v-text="userInfo.roleId === 1? '审核':'设市区比选意见'"></div>
         <el-form
           style="padding-left: 14px"
           ref="reviewForm"
@@ -264,7 +219,7 @@
           :model="reviewForm"
           label-width="80px"
         >
-          <el-form-item label="审核结果" prop="status" :rules="rule.inputNumber">
+          <el-form-item label="审核结果" prop="status" :rules="rule.select">
             <el-radio-group v-model="reviewForm.status">
               <el-radio :label="1">通过</el-radio>
               <el-radio :label="0">不通过</el-radio>
@@ -368,6 +323,7 @@ export default {
         opinion: '',
         processFilesArr: [],
       },
+      finalStatus: null,
       total: 0,
 
       tips: "",
@@ -388,7 +344,6 @@ export default {
   computed: {
     ...mapGetters(["userInfo", "declareType"]),
     roleId() {
-      console.log(this.userInfo.roleId);
       return this.userInfo.roleId;
     },
   },
@@ -436,6 +391,7 @@ export default {
       if (!id) return;
       getVillageItemDetail({ id }).then((res) => {
         this.form = res;
+        this.finalStatus = res.finalStatus;
         console.log(res);
         this.total = this.countTotal();
         if (goVerify) {
@@ -448,18 +404,17 @@ export default {
     async clickExport() {
       const { id } = this.$route.query;
       const res = await getvillageDetailExport({id})
-      downloadFile(res,'古建筑村落调查表')
+      downloadFile(res, "浙江省未来乡村创建申报表", "application/msword")
     },
     countTotal() {
       return HISTORY_BUILDINGS.reduce((pre, next) => {
         return pre + this.form[next.value];
       }, 0);
     },
-    conversionLeve(index) {
+    verifyRes(index) {
       switch (index) {
-        case 0 : return '否';
-        case 1 : return '是，省级';
-        case 2 : return '是，国家级';
+        case 0 : return '不通过';
+        case 1 : return '通过';
         default: return ''
       }
     },
@@ -493,7 +448,7 @@ export default {
         verifyType: this.roleId === 2 ? 1 : 2, //1:市级审核，2：省级审核
       });
       this.$notify.success("操作成功");
-      // this.$router.back();
+      this.$router.back();
     },
   },
 };

@@ -11,10 +11,11 @@ export function addAllOption(arr) {
  * @desc 文件导出
  * @param {Blob} blobData 文件数据
  * @param {String} fileName 文件名称
+ * @param {String} type 导出数据类型
  */
 
-export function downloadFile(blobData, fileName) {
-  let blob = new Blob([blobData.data], { type: "application/vnd.ms-excel" });
+export function downloadFile(blobData, fileName, type) {
+  let blob = new Blob([blobData.data], { type: type || "application/vnd.ms-excel" });
   const reader = new FileReader();
   reader.onload = function() {
     try {

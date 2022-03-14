@@ -132,7 +132,7 @@
       </div>
       <el-form-item label="村庄属性（可多选）：" prop="villageId">
         <el-checkbox-group v-model="form.villageProperty">
-          <el-checkbox label="县域风貌样板区内">县域风貌样板区内</el-checkbox>
+          <el-checkbox label="县域风貌样板区内"></el-checkbox>
           <el-checkbox label="3A级景区村庄"></el-checkbox>
           <el-checkbox label="驻乡镇村规划师规划村庄"></el-checkbox>
           <el-checkbox label="下山移民新村"></el-checkbox>>
@@ -338,7 +338,8 @@ import rule from "@/mixins/rule";
 import VillageAddressSelect from "../Components/VillageAddressSelect";
 
 import { VILLAGE_LIST_ROUTER_NAME, HISTORY_BUILDINGS } from "../constants";
-import { villageDeclaration } from '@/api2/villageManage'
+import { villageDeclaration, getVillageItemDetail } from '@/api2/villageManage'
+import {updateVillageItem} from "../../../api2/villageManage";
 const imgs = (rule, value, callback) => {
   if (value.length < 1) {
     callback(new Error("需要上传1张以上图片"));
@@ -360,10 +361,6 @@ export default {
     VillageAddressSelect,
   },
   props: {
-    type: {
-      type: String,
-      default: "add",
-    },
     data: {
       type: Object,
       default: () => {},
@@ -401,6 +398,7 @@ export default {
         projectFilingAudit: "", //审核人
         projects: [], //项目列表
       },
+      type: "add",
       dialogVisible: false,
       projectForm: { // 项目表单
         projectName: "", // 项目名称
@@ -429,20 +427,32 @@ export default {
     },
   },
   watch: {
-    type(val) {
-      if (val === "edit") {
-        this.form = this.data;
-        this.imageList = [...this.data.villagePicturesFiles];
-      }
-    },
   },
   mounted() {
-    if (this.type === "edit") {
-      this.form = this.data;
-      this.imageList = [...this.data.villagePicturesFiles];
-    }
+    // if (this.type === "edit") {
+    //   this.form = this.data;
+    //   this.imageList = [...this.data.villagePicturesFiles];
+    // }
+    this.getDetail();
   },
   methods: {
+    getDetail() {
+      const { id } = this.$route.query;
+      if (!id) return;
+      this.type = "edit";
+      getVillageItemDetail({ id }).then((res) => {
+        this.form = res;
+        this.form.processFilesArr = [];
+        this.finalStatus = res.finalStatus;
+        console.log(res);
+        this.total = this.countTotal();
+        if (goVerify) {
+          // setTimeout(() => {
+          //   this.$el.querySelector("#verify").scrollIntoView();
+          // },10)
+        }
+      });
+    },
     onFileAdd(file, key) {
       this.form[key].push(file);
     },
@@ -524,7 +534,12 @@ export default {
         if (valid) {
           this.form.annexIds = this.form.processFilesArr.map(i => i.fileId).toString();
           console.log(this.form.annexIds);
-          this.submit(this.form);
+          if (this.type === "edit") {
+            // this.form.id = this.$route.query.id;
+            this.update(this.form);
+          } else {
+            this.submit(this.form);
+          }
         } else {
           return false;
         }
@@ -537,6 +552,17 @@ export default {
       await villageDeclaration(params);
       this.$message({
         message: '添加成功！',
+        type: 'success'
+      });
+      this.$router.back();
+
+    },
+    // 修改item
+    async update(params) {
+      console.log(params);
+      await updateVillageItem(params);
+      this.$message({
+        message: '修改成功！',
         type: 'success'
       });
       this.$router.back();

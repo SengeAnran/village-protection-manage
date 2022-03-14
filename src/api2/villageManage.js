@@ -118,6 +118,7 @@ export const verify = (data) => {
   });
 };
 
+
 // 可申请提升的村庄列表
 export const getCanPromoteList = (params) => {
   return axios.request({
@@ -132,6 +133,15 @@ export const getvillageDetailExport = (params) => {
     method: "GET",
     url: apiHost2 + "/villageDeclaration/villageDetailExport/" + params.id,
     params,
+    responseType: "blob"
+  });
+};
+// 导出村庄详情
+export const getvillagesExport = (data) => {
+  return axios.request({
+    method: "post",
+    url: apiHost2 + "/villageDeclaration/export/list",
+    data,
     responseType: "blob"
   });
 };

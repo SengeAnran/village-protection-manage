@@ -2,11 +2,15 @@
   <div class="header-wrp">
     <h2 class="title">{{ systemTitle }}</h2>
     <div class="right-menu">
+      <span class="go-home" @click="$router.push('/home')">
+         <img src="@/assets/imgs/go_home.png" alt="">
+      </span>
       <Notify style="margin-right: 20px" />
       <el-dropdown
         class="avatar-container right-menu-item hover-effect"
         trigger="click"
       >
+
         <div class="avatar-wrapper">
           <img
             class="user-avatar"
@@ -101,7 +105,9 @@ export default {
     height: 100%;
     display: flex;
     align-items: center;
-
+    .go-home {
+      cursor: pointer;
+    }
     &:focus {
       outline: none;
     }

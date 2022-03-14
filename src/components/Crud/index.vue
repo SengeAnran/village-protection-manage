@@ -22,6 +22,14 @@
       >
       <slot name="crudAction"></slot>
       <el-button
+        icon="el-icon-download"
+        v-if="showExport"
+        type="primary"
+        plain
+        @click="exportDatas"
+      >导出</el-button
+      >
+      <el-button
         icon="el-icon-delete"
         v-if="selection && multipleDelete"
         v-permission="permissionDelete"
@@ -199,6 +207,7 @@
 
 <script>
 import _ from "lodash";
+import { downloadFile } from "@/utils/data"
 
 export default {
   props: {
@@ -245,6 +254,10 @@ export default {
     },
     // 删除数据方法
     deleteMethod: {
+      type: Function,
+    },
+    // 导出数据方法
+    exportMethod: {
       type: Function,
     },
     // 获取数据后方法（items重新赋值等处理）
@@ -304,6 +317,11 @@ export default {
     },
     // 隐藏新增按钮
     hideAdd: {
+      type: Boolean,
+      default: false,
+    },
+    // 导出
+    showExport: {
       type: Boolean,
       default: false,
     },
@@ -561,6 +579,28 @@ export default {
         // } finally {
         //   this.loading = false;
         // }
+      });
+    },
+    // 导出
+    async exportDatas() {
+      this.$confirm("是否批量导出所选数据？", "提示", {
+        type: "warning",
+      }).then(async () => {
+        this.loading = true;
+        const { page, size, query } = this;
+        try {
+          const data = {
+            ...query,
+            pageNum: page,
+            pageSize: size,
+            ids: this.selections.map((item) => item[this.idKey]),
+          }
+          const res = await this.exportMethod(data);
+          downloadFile(res, "浙江省未来乡村申报汇总");
+          this.$notify.success("导出成功");
+        } finally {
+          this.loading = false;
+        }
       });
     },
     // 批量删除
