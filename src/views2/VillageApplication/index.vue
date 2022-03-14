@@ -1,6 +1,6 @@
 <template>
   <div class="village-manage block">
-    <div v-if="$route.name === 'VillageApplyList'">
+    <div v-if="$route.name === 'VillageApplyList2'">
       <div class="text-lg mb-4">申报列表</div>
       <Crud
         ref="crud"

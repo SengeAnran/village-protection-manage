@@ -477,7 +477,7 @@ export const defaultRoutes2 = [
     component: BlankRouteNode,
     name: "VillageApplication2",
     redirect: {
-      name: "VillageApplyList",
+      name: "VillageApplyList2",
     },
     meta: {
       menuIds: [100, 200],
@@ -488,7 +488,7 @@ export const defaultRoutes2 = [
     children: [
       {
         path: "/villageApplication2/index",
-        name: "VillageApplyList",
+        name: "VillageApplyList2",
         meta: {
           icon: "cunzhuangshenbao",
           menuIds: [10002, 20001],

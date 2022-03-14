@@ -57,6 +57,9 @@ export default {
       return !this.sidebar.opened;
     },
   },
+  mounted() {
+    console.log(this.routeList);
+  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");

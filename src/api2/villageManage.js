@@ -100,16 +100,16 @@ export const getVillageItemDetail = (params) => {
   });
 };
 
-// 省级 申报审核
-export const provinceVerify = (data) => {
-  return axios.request({
-    method: "POST",
-    url: apiHost2 + "/villageDeclaration/provinceVerify",
-    data,
-  });
-};
+// // 省级 申报审核
+// export const provinceVerify = (data) => {
+//   return axios.request({
+//     method: "POST",
+//     url: apiHost2 + "/villageDeclaration/provinceVerify",
+//     data,
+//   });
+// };
 
-// 市级 申报审核
+// 市级/省级 申报审核
 export const verify = (data) => {
   return axios.request({
     method: "POST",

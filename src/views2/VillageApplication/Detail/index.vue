@@ -258,21 +258,21 @@
         <div class="box-title" v-text="userInfo.roleId === 1? '设市区比选意见':'审核'"></div>
         <el-form
           style="padding-left: 14px"
-          ref="form"
+          ref="reviewForm"
           class="form"
           label-position="top"
-          :model="form"
+          :model="reviewForm"
           label-width="80px"
         >
-          <el-form-item label="审核结果" prop="population" :rules="rule.inputNumber">
-            <el-radio-group v-model="form.population">
-              <el-radio :label="3">通过</el-radio>
-              <el-radio :label="6">不通过</el-radio>
+          <el-form-item label="审核结果" prop="status" :rules="rule.inputNumber">
+            <el-radio-group v-model="reviewForm.status">
+              <el-radio :label="1">通过</el-radio>
+              <el-radio :label="0">不通过</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item
             label="请填写审核意见"
-            prop="introduction"
+            prop="opinion"
             :rules="rule.input"
           >
             <el-input
@@ -280,7 +280,7 @@
               type="textarea"
               :rows="5"
               placeholder="请输入审核意见"
-              v-model="form.introduction"
+              v-model="reviewForm.opinion"
             >
             </el-input>
           </el-form-item>
@@ -292,7 +292,7 @@
             <UploadFile
               tip="支持格式：.doc, .docx, .pdf"
               accept=".doc,.docx,.pdf"
-              :data="form.processFilesArr"
+              :data="reviewForm.processFilesArr"
               @add="onFileAdd($event, 'processFilesArr')"
               @remove="onFileRemove($event, 'processFilesArr')"
             />
@@ -304,32 +304,6 @@
         </el-form>
       </div>
     </div>
-    <el-dialog
-      title="审核"
-      :visible.sync="dialogVisible"
-      width="600px"
-    >
-      <el-form>
-        <el-form-item label="">
-          <el-radio v-model="status" label="1">通过</el-radio>
-          <el-radio v-model="status" label="0">不通过</el-radio>
-        </el-form-item>
-        <el-form-item label="">
-          <div class="opinion">请填写审核意见</div>
-          <el-input
-            type="textarea"
-            :rows="8"
-            placeholder="请输入内容"
-            v-model="textarea">
-          </el-input>
-        </el-form-item>
-      </el-form>
-<!--      <div style="margin-bottom: 24px">{{ tips }}</div>-->
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="onConfirm()">取消</el-button>
-        <el-button type="primary" @click="onConfirm()">确定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -337,10 +311,10 @@ import VilliageListTable from "../Components/VilliageListTable";
 import rule from "@/mixins/rule";
 import { HISTORY_BUILDINGS } from "../constants";
 import { getVillageItemDetail, getvillageDetailExport,
-  provinceVerify,
+   verify,
 } from "@/api2/villageManage";
 import { downloadFile } from "@/utils/data"
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   mixins: [rule],
@@ -389,7 +363,11 @@ export default {
         projectFilingAudit: "", //审核人
         projects: [], //项目列表
       },
-
+      reviewForm: {
+        status: null,
+        opinion: '',
+        processFilesArr: [],
+      },
       total: 0,
 
       tips: "",
@@ -423,20 +401,20 @@ export default {
   },
   methods: {
     onFileAdd(file, key) {
-      this.form[key].push(file);
+      this.reviewForm[key].push(file);
     },
     onFileRemove(file, key) {
-      const index = this.form[key].findIndex((item) => {
+      const index = this.reviewForm[key].findIndex((item) => {
         return item.uid === file.uid || item.filePath === file.url;
       });
       if (index !== -1) {
-        this.form[key].splice(index, 1);
+        this.reviewForm[key].splice(index, 1);
       }
     },
     validateForm() {
-      this.$refs["form"].validate((valid) => {
+      this.$refs["reviewForm"].validate((valid) => {
         if (valid) {
-          this.submit(this.form);
+          this.submit();
         } else {
           return false;
         }
@@ -505,37 +483,17 @@ export default {
       }
     },
     async submit() {
-      // console.log(status);
-      // this.$emit('endVerify',{ status: status, id:this.dialogId, opinion: this.textarea })
-      // await verify({
-      //   id: this.dialogId,
-      //   status,
-      //   opinion: this.textarea,
-      //   // remark: this.textarea,
-      // });
-      if (this.roleId === 2) {
-        this.$notify.success("操作成功");
-        // this.$router.back();
-        this.$router.push({
-          name: "audit",
-          query: {
-            verifyDetail: {
-              status: this.status,
-              id: this.dialogId,
-              opinion: this.textarea,
-            },
-          },
-        });
-      } else {
-        await provinceVerify({
-          id: this.dialogId,
-          status: this.status,
-          opinion: this.textarea,
-          // remark: this.textarea,
-        });
-        this.$notify.success("操作成功");
-        this.$router.back();
-      }
+      console.log(this.reviewForm.processFilesArr);
+      const { id } = this.$route.query;
+      await verify({
+        id: id, // 村庄id
+        fileId: this.reviewForm.processFilesArr.map(i => i.fileId).toString(), // 审核意见附件id
+        status: this.reviewForm.status, // 审核状态 通过:1 不通过:0
+        opinion: this.reviewForm.opinion, // 审核意见
+        verifyType: this.roleId === 2 ? 1 : 2, //1:市级审核，2：省级审核
+      });
+      this.$notify.success("操作成功");
+      // this.$router.back();
     },
   },
 };
