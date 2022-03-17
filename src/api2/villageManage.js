@@ -67,8 +67,8 @@ export const villageDeclaration = (data) => {
 // 删除
 export const deleteVillageItem = (data) => {
   return axios.request({
-    method: "DELETE",
-    url: apiHost2 + "/villageDeclaration",
+    method: "POST",
+    url: apiHost2 + "/villageDeclaration/delete/Batch",
     data,
   });
 };

@@ -134,12 +134,12 @@
 <!--              <p>{{ declareType[scope.row.declareType] }}</p>-->
 <!--            </template>-->
 <!--          </el-table-column>-->
-          <el-table-column v-if="roleId ===1" label="推荐次序" align="center" width="100" prop="citySortNum">
-            <template slot-scope="scope">
-              <p>{{ scope.row.citySortNum }}</p>
-            </template>
-          </el-table-column>
-          <el-table-column v-if="roleId > 1" label="推荐次序" align="center" width="100" prop="countrySortNum">
+<!--          <el-table-column v-if="roleId ===1" label="推荐次序" align="center" width="100" prop="citySortNum">-->
+<!--            <template slot-scope="scope">-->
+<!--              <p>{{ scope.row.citySortNum }}</p>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+          <el-table-column label="推荐次序" align="center" width="100" prop="countrySortNum">
             <template slot-scope="scope">
               <p>{{ scope.row.countrySortNum }}</p>
             </template>
@@ -151,7 +151,7 @@
           </el-table-column>
           <el-table-column v-if="roleId < 3" label="申报县" prop="gmtCreate">
             <template slot-scope="scope">
-              <p>{{ scope.row.county }}</p>
+              <p>{{ scope.row.country }}</p>
             </template>
           </el-table-column>
           <el-table-column v-if="roleId < 2" label="申报市" prop="gmtCreate">
@@ -165,7 +165,7 @@
           ></el-table-column>
           <el-table-column label="申报时间" prop="gmtCreate">
             <template slot-scope="scope">
-              <p>{{ scope.row.gmtCreate.slice(0, 11) }}</p>
+              <p>{{ scope.row.gmtCreate }}</p>
             </template>
           </el-table-column>
           <el-table-column label="状态" prop="finalStatus">
@@ -174,7 +174,7 @@
               <p>
                 <i
                   class="status"
-                  :class="{ active: scope.row.finalStatus === 3 }"
+                  :class="{ active: scope.row.finalStatus === 4 }"
                 ></i>
                 {{ declareStatus[scope.row.finalStatus] }}
               </p>
@@ -265,7 +265,7 @@ import { queryBatchInfo, queryTypeDeclaration, getRecVillages, getVillageList, d
 import {
   DECLEAR_TYPE,
   DECLEAR_STATUS,
-  PRO_DECLEAR_STATUS,
+  // PRO_DECLEAR_STATUS,
 } from "./constants";
 import {recVerify} from "../../api/villageManage";
 import {getvillagesExport} from "../../api2/villageManage";
@@ -333,11 +333,12 @@ export default {
     this.declareStatus = DECLEAR_STATUS;
     this.declareTypeOpt = this.normalizeSelectOptions(DECLEAR_TYPE);
     // this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(this.normalizeSelectOptions(DECLEAR_TYPE));
-    if (this.roleId !== 1) {
-      this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(DECLEAR_STATUS));
-    } else {
-      this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(PRO_DECLEAR_STATUS));
-    }
+    this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(DECLEAR_STATUS));
+    // if (this.roleId !== 1) {
+    //   this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(DECLEAR_STATUS));
+    // } else {
+    //   this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(PRO_DECLEAR_STATUS));
+    // }
     this.getBatchInfo();
 
 

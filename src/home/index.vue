@@ -1,25 +1,26 @@
 <template>
   <div class="home">
-    <div class="item" @click="goSystem(3)">
-      <div class="img">
-        <img src="./imgs/bg_img_01.png" alt="">
-      </div>
-      <div class="title">跟着节气游乡村管理后台</div>
-      <div class="name">— 浙江省未来乡村建设服务平台 —</div>
-    </div>
     <div class="item" @click="goSystem(2)">
       <div class="img">
         <img src="./imgs/bg_img_02.png" alt="">
       </div>
-      <div class="title">浙江省未来乡村建设服务平台</div>
+      <div class="title">未来乡村建设工作台</div>
     </div>
     <div  class="item" @click="goSystem(1)">
       <div class="img">
         <img src="./imgs/bg_img_03.png" alt="">
       </div>
       <div class="title">历史文化村落保护管理应用</div>
-      <div class="name">— 浙江省未来乡村建设服务平台 —</div>
+<!--      <div class="name">— 浙江省未来乡村建设服务平台 —</div>-->
     </div>
+    <div class="item" @click="goSystem(3)">
+      <div class="img">
+        <img src="./imgs/bg_img_01.png" alt="">
+      </div>
+      <div class="title">跟着节气游乡村管理后台</div>
+<!--      <div class="name">— 浙江省未来乡村建设服务平台 —</div>-->
+    </div>
+
   </div>
 </template>
 
@@ -101,7 +102,6 @@ export default {
       ]);
       console.log(type);
       if (roleSystemType === 2) {
-        console.log('2222222');
         this.$router.push("/villageApplication2/index");
       } else {
         this.$router.push("/villageApplication/index");

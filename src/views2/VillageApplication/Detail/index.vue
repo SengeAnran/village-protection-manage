@@ -8,6 +8,7 @@
       <div class="box-title">申报详情</div>
       <div class="examine-result">
         <img v-if="finalStatus === 4" src="../imgs/pass.png" alt="">
+        <img v-if="finalStatus === 3" src="../imgs/pro_reject.png" alt="">
         <img v-if="finalStatus === 1" src="../imgs/reject.png" alt="">
       </div>
       <el-form
@@ -20,7 +21,7 @@
       >
         <div class="input-item-wrp">
           <el-form-item label="创建村名称" prop="villageId">
-            <p class="content">{{ form.villageId }}</p>
+            <p class="content">{{ form.town }}{{ form.villageName }}</p>
           </el-form-item>
           <el-form-item label="推荐次序" prop="countrySortNum">
             <p class="content">{{ form.countrySortNum }}</p>
@@ -92,22 +93,17 @@
           </div>
           <div class="input-item-wrp">
             <el-form-item label="附件：" prop="introduction">
-              <p class="content fu-file" v-for="(item, index) in form.annexFiles" :key="index">
-                <a :href="item.filePath">
-                  <i class="el-icon-link"></i>
-                  <span>
+              <div v-if="form.annexFiles && form.annexFiles.length > 0">
+                <p class="content fu-file" v-for="(item, index) in form.annexFiles" :key="index">
+                  <a :href="item.filePath">
+                    <i class="el-icon-link"></i>
+                    <span>
                     {{ item.fileName }}
                   </span>
-                </a>
-              </p>
-              <p class="content fu-file">
-              <a href="#">
-                <i class="el-icon-link"></i>
-                <span>
-                    {{ form.introduction }}
-                  </span>
-              </a>
-            </p>
+                  </a>
+                </p>
+              </div>
+
             </el-form-item>
           </div>
         </div>
@@ -159,11 +155,21 @@
             </div>
             <div class="input-item-wrp">
               <el-form-item label="审核意见附件" prop="introduction">
-                <p class="content fu-file" v-for="(item, index) in form.cityAuditFile" :key="index">
-                  <a :href="item.filePath">
+<!--                <div v-if="form.cityAuditFile && form.cityAuditFile.length > 0">-->
+<!--                  <p class="content fu-file" v-for="(item, index) in form.cityAuditFile" :key="index">-->
+<!--                    <a :href="item.filePath">-->
+<!--                      <i class="el-icon-link"></i>-->
+<!--                      <span>-->
+<!--                    {{ item.fileName }}-->
+<!--                  </span>-->
+<!--                    </a>-->
+<!--                  </p>-->
+<!--                </div>-->
+                <p class="content fu-file" v-if="form.cityAuditFile">
+                  <a :href="form.cityAuditFile.filePath">
                     <i class="el-icon-link"></i>
                     <span>
-                    {{ item.fileName }}
+                    {{ form.cityAuditFile.fileName }}
                   </span>
                   </a>
                 </p>
@@ -190,11 +196,19 @@
             </div>
             <div class="input-item-wrp">
               <el-form-item label="审核意见附件" prop="introduction">
-                <p class="content fu-file" v-for="(item, index) in form.provinceAuditFile" :key="index">
-                  <a :href="item.filePath">
+<!--                <p class="content fu-file" v-for="(item, index) in form.provinceAuditFile" :key="index">-->
+<!--                  <a :href="item.filePath">-->
+<!--                    <i class="el-icon-link"></i>-->
+<!--                    <span>-->
+<!--                    {{ item.fileName }}-->
+<!--                  </span>-->
+<!--                  </a>-->
+<!--                </p>-->
+                <p class="content fu-file" v-if="form.provinceAuditFile">
+                  <a :href="form.provinceAuditFile.filePath">
                     <i class="el-icon-link"></i>
                     <span>
-                    {{ item.fileName }}
+                    {{ form.provinceAuditFile.fileName }}
                   </span>
                   </a>
                 </p>
@@ -235,16 +249,17 @@
               type="textarea"
               :rows="5"
               placeholder="请输入审核意见"
+              maxlength="300"
+              show-word-limit
               v-model="reviewForm.opinion"
             >
             </el-input>
           </el-form-item>
           <el-form-item
             label="审核意见附件"
-            :rules="rule.upload"
             prop="processFilesArr"
           >
-            <UploadFile
+            <UploadFile2
               tip="支持格式：.doc, .docx, .pdf"
               accept=".doc,.docx,.pdf"
               :data="reviewForm.processFilesArr"
@@ -252,7 +267,7 @@
               @remove="onFileRemove($event, 'processFilesArr')"
             />
           </el-form-item>
-          <el-form-item>
+          <el-form-item style="text-align: center">
             <el-button  @click="$router.back()">取消</el-button>
             <el-button type="primary"  @click="validateForm">确定</el-button>
           </el-form-item>
@@ -290,6 +305,8 @@ export default {
     return {
       form: {
         annexFiles: [], // 附件
+        cityAuditFile: [], // 附件
+        provinceAuditFile: [], // 附件
         villageName: "", //村庄地址
         town: "", //村庄地址
         villageId: "", //村庄地址
@@ -378,7 +395,7 @@ export default {
 
 
     init() {
-      const { id, verifyKey, verifyDetail, goVerify } = this.$route.query;
+      const { id, verifyKey, verifyDetail } = this.$route.query;
       if (verifyKey) {
         this.verifyKey = verifyKey;
       }
@@ -393,12 +410,6 @@ export default {
         this.form = res;
         this.finalStatus = res.finalStatus;
         console.log(res);
-        this.total = this.countTotal();
-        if (goVerify) {
-          // setTimeout(() => {
-          //   this.$el.querySelector("#verify").scrollIntoView();
-          // },10)
-        }
       });
     },
     async clickExport() {

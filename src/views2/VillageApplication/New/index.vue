@@ -25,6 +25,7 @@
               <el-input
                 v-model.number="form.countrySortNum"
                 placeholder="请输入推荐次序"
+                maxlength="8"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -35,6 +36,7 @@
               <el-input
                 v-model="form.declarationBatch"
                 placeholder="请输入"
+                maxlength="20"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -63,6 +65,7 @@
               <el-input
                 v-model="form.leader"
                 placeholder="请输入"
+                maxlength="20"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -71,6 +74,7 @@
               <el-input
                 v-model="form.construct"
                 placeholder="请输入"
+                maxlength="20"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -81,6 +85,7 @@
               <el-input
                 v-model="form.contactPerson"
                 placeholder="请输入"
+                maxlength="20"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -97,16 +102,18 @@
           <el-col :span="12">
             <el-form-item label="户籍人口数（万人）" prop="huNum" :rules="rule.inputNumber">
               <el-input
-                v-model.number="form.huNum"
+                v-model="form.huNum"
                 placeholder="请输入"
+                maxlength="8"
               ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="常住人口数（万人）" prop="personNum" :rules="rule.inputNumber">
               <el-input
-                v-model.number="form.personNum"
+                v-model="form.personNum"
                 placeholder="请输入"
+                maxlength="8"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -115,16 +122,18 @@
           <el-col :span="12">
             <el-form-item label="计划总投资（万元）" prop="investNum" :rules="rule.inputNumber">
               <el-input
-                v-model.number="form.investNum"
+                v-model="form.investNum"
                 placeholder="请输入"
+                maxlength="8"
               ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="村级集体经济年经营性收入（万元）" prop="incomeNum" :rules="rule.inputNumber">
               <el-input
-                v-model.number="form.incomeNum"
+                v-model="form.incomeNum"
                 placeholder="请输入"
+                maxlength="8"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -168,6 +177,8 @@
             type="textarea"
             :rows="5"
             placeholder="请输入村民代表会议（村民会议）关于未来乡村建设方案决议情况"
+            maxlength="300"
+            show-word-limit
             v-model="form.meetingText"
           >
           </el-input>
@@ -182,6 +193,8 @@
             type="textarea"
             :rows="5"
             placeholder="请输入乡、镇（街道）人民政府（办事处）意见"
+            maxlength="300"
+            show-word-limit
             v-model="form.townText"
           >
           </el-input>
@@ -196,6 +209,8 @@
             type="textarea"
             :rows="5"
             placeholder="请输入乡、镇（街道）人民政府（办事处）意见"
+            maxlength="300"
+            show-word-limit
             v-model="form.departmentText"
           >
           </el-input>
@@ -211,6 +226,8 @@
             type="textarea"
             :rows="5"
             placeholder="请输入乡、镇（街道）人民政府（办事处）意见"
+            maxlength="300"
+            show-word-limit
             v-model="form.governmentText"
           >
           </el-input>
@@ -218,17 +235,17 @@
         <el-form-item
           label="上传附件："
           :rules="rule.upload"
-          prop="processFilesArr"
+          prop="annexFiles"
         >
           <p style="width: 42%; color: #FF6B00" class="py-4 leading-5">
             <i class="el-icon-warning"></i>请上传以上内容的盖章扫描件
           </p>
-          <UploadFile
+          <UploadFile2
             tip="支持格式：.doc, .docx, .pdf"
             accept=".doc,.docx,.pdf"
-            :data="form.processFilesArr"
-            @add="onFileAdd($event, 'processFilesArr')"
-            @remove="onFileRemove($event, 'processFilesArr')"
+            :data="form.annexFiles"
+            @add="onFileAdd($event, 'annexFiles')"
+            @remove="onFileRemove($event, 'annexFiles')"
           />
         </el-form-item>
 
@@ -240,6 +257,7 @@
                 <el-input
                   v-model="form.projectFilingPerson"
                   placeholder="请输入填表人"
+                  maxlength="20"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -258,6 +276,7 @@
                 <el-input
                   v-model="form.projectFilingAudit"
                   placeholder="请输入审核人"
+                  maxlength="20"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -286,7 +305,7 @@
       </div>
     </el-form>
     <div>
-      <el-button @click="$emit('close')">取消</el-button>
+      <el-button @click="$router.back()">取消</el-button>
       <el-button type="primary" @click="validateForm">提交</el-button>
     </div>
     <el-dialog
@@ -296,33 +315,33 @@
       @close="resetForm">
       <el-form ref="projectForm" :model="projectForm" label-width="140px">
         <el-form-item label="项目名称：">
-          <el-input v-model="projectForm.projectName"></el-input>
+          <el-input v-model="projectForm.projectName" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="建设单位：">
-          <el-input v-model="projectForm.constructUnit"></el-input>
+          <el-input v-model="projectForm.constructUnit" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="建设地点：">
-          <el-input v-model="projectForm.constructAddress"></el-input>
+          <el-input v-model="projectForm.constructAddress" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="建设内容和规模：">
-          <el-input v-model="projectForm.constructDetail"></el-input>
+          <el-input v-model="projectForm.constructDetail" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="进度安排：">
-          <el-input v-model="projectForm.schedule"></el-input>
+          <el-input v-model="projectForm.schedule" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="用地情况：">
-          <el-input v-model="projectForm.landUse"></el-input>
+          <el-input v-model="projectForm.landUse" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="投资额（万元）：">
-          <el-input v-model.number="projectForm.investmentAmount"></el-input>
+          <el-input v-model="projectForm.investmentAmount" maxlength="8"></el-input>
         </el-form-item>
         <el-form-item label="运行维护管理安排：">
-          <el-input v-model="projectForm.arrangements"></el-input>
+          <el-input v-model="projectForm.arrangements" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="备注：">
-          <el-input v-model="projectForm.remark"></el-input>
+          <el-input v-model="projectForm.remark" maxlength="20"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item >
           <el-button type="primary" @click="onSubmit">确定</el-button>
           <el-button @click="resetForm">取消</el-button>
         </el-form-item>
@@ -369,7 +388,7 @@ export default {
   data() {
     return {
       form: {
-        processFilesArr: [], // 附件
+        annexFiles: [], // 附件
         villageName: "", //村庄地址
         town: "", //村庄地址
         villageId: "", //村庄地址
@@ -442,7 +461,7 @@ export default {
       this.type = "edit";
       getVillageItemDetail({ id }).then((res) => {
         this.form = res;
-        this.form.processFilesArr = [];
+        // this.form.annexFiles = [];
         this.finalStatus = res.finalStatus;
         console.log(res);
         this.total = this.countTotal();
@@ -532,7 +551,7 @@ export default {
     validateForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          this.form.annexIds = this.form.processFilesArr.map(i => i.fileId).toString();
+          this.form.annexIds = this.form.annexFiles.map(i => i.fileId).toString();
           console.log(this.form.annexIds);
           if (this.type === "edit") {
             // this.form.id = this.$route.query.id;
@@ -624,6 +643,7 @@ export default {
   .block-tit {
     margin-top: 32px;
     margin-bottom: 20px;
+    font-size: 18px;
   }
   .total-wrp {
     color: #333333;
