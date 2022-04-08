@@ -64,8 +64,9 @@ const getAsyncRoutes = (list, isRoot) => {
 import store from "@/store";
 import { mapMutations, mapGetters } from "vuex";
 import lodash from "lodash";
-import { defaultRoutes, defaultRoutes2 } from "../router/navList";
+// import { defaultRoutes, defaultRoutes2 } from "../router/navList";
 import router from "../router";
+import { routeType } from "../utils/routeType";
 export default {
   name: "index",
   methods: {
@@ -77,7 +78,8 @@ export default {
       // console.log(store.getters.changeSystem || !store.getters.hasGetRoute);
       const roleSystemType = this.roleSystemType; // 系统类型
       await this.$store.dispatch("user/getRouteList", roleSystemType);
-      const list = lodash.cloneDeep(roleSystemType === 2? defaultRoutes2 : defaultRoutes);
+      console.log(routeType[roleSystemType]);
+      const list = lodash.cloneDeep(routeType[roleSystemType]);
       console.log(list);
       const asyncRoutes = getAsyncRoutes(list, true);
       console.log(asyncRoutes);
@@ -101,11 +103,17 @@ export default {
         },
       ]);
       console.log(type);
-      if (roleSystemType === 2) {
-        this.$router.push("/villageApplication2/index");
-      } else {
-        this.$router.push("/villageApplication/index");
+      switch (roleSystemType) {
+        case 1: this.$router.push("/villageApplication/index"); break;
+        case 2: this.$router.push("/villageApplication2/index"); break;
+        case 3: this.$router.push("/neighborhoodMutualAid/index"); break;
+        default: this.$router.push("/villageApplication/index");
       }
+      // if (roleSystemType === 2) {
+      //   this.$router.push("/villageApplication2/index");
+      // } else {
+      //   this.$router.push("/villageApplication/index");
+      // }
       // if (this.changeSystem || !this.hasGetRoute) { // 切换用户 或无目录
       //   // 如果没有获取路由信息，先获取路由信息而后跳转
       //

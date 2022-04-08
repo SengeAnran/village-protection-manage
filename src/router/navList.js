@@ -519,3 +519,84 @@ export const defaultRoutes2 = [
     ],
   },
 ];
+export const defaultRoutes3 = [
+  // 未来乡村微信小程序
+  // 邻里互助
+  {
+    path: "/neighborhoodMutualAid",
+    component: BlankRouteNode,
+    name: "NeighborhoodMutualAid",
+    redirect: {
+      name: "NeighborhoodMutualAidList",
+    },
+    meta: {
+      menuIds: [100, 200],
+      title: "邻里互助",
+      hideChild: true,
+      icon: "cunzhuangshenbao",
+    },
+    children: [
+      {
+        path: "/neighborhoodMutualAid/index",
+        name: "NeighborhoodMutualAidList",
+        meta: {
+          icon: "cunzhuangshenbao",
+          menuIds: [10002, 20001],
+        },
+        component: () => import("@/views3/NeighborhoodMutualAid/index.vue"),
+      },
+    ],
+  },
+  // 场馆预约
+  {
+    path: "/venueReservation",
+    component: BlankRouteNode,
+    name: "VenueReservation",
+    redirect: {
+      name: "VenueReservationList",
+    },
+    meta: {
+      menuIds: [100, 200],
+      title: "场馆预约",
+      hideChild: true,
+      icon: "cunzhuangshenbao",
+    },
+    children: [
+      {
+        path: "/venueReservation/index",
+        name: "VenueReservationList",
+        meta: {
+          icon: "cunzhuangshenbao",
+          menuIds: [10002, 20001],
+        },
+        component: () => import("@/views3/VenueReservation/index.vue"),
+      },
+    ],
+  },
+  // 网上议事
+  {
+    path: "/onlineMeeting",
+    component: BlankRouteNode,
+    name: "OnlineMeeting",
+    redirect: {
+      name: "OnlineMeetingList",
+    },
+    meta: {
+      menuIds: [100, 200],
+      title: "网上议事",
+      hideChild: true,
+      icon: "cunzhuangshenbao",
+    },
+    children: [
+      {
+        path: "/onlineMeeting/index",
+        name: "OnlineMeetingList",
+        meta: {
+          icon: "cunzhuangshenbao",
+          menuIds: [10002, 20001],
+        },
+        component: () => import("@/views3/OnlineMeeting/index.vue"),
+      },
+    ],
+  },
+];

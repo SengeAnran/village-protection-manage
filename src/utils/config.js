@@ -8,6 +8,7 @@ const proConfig = {
 const devConfig = {
   apiHost: "/apiProxy", // 历史文化
   apiHost2: "/apiFun", // 未来乡村
+  apiHost3: "/apiWX", // 未来乡村微信小程序
   loginPath: window.location.origin,
   routerBase: "/",
 };
