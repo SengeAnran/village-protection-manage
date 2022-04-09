@@ -571,6 +571,27 @@ export const defaultRoutes3 = [
         },
         component: () => import("@/views3/VenueReservation/index.vue"),
       },
+      {
+        path: "/venueReservation/new",
+        name: "newVenueReservation",
+        hidden: true,
+        meta: {
+          activeMenu: "/venueReservation/index",
+          menuIds: [10001],
+        },
+        component: () => import("@/views3/VenueReservation/New/index.vue"),
+      },
+      {
+        path: "/venueReservation/detail",
+        name: "venueReservationDetails",
+        hidden: true,
+        meta: {
+          activeMenu: "/venueReservation/index",
+          title: "详情",
+          menuIds: [10002, 20001],
+        },
+        component: () => import("@/views3/VenueReservation/Detail/index.vue"),
+      },
     ],
   },
   // 网上议事

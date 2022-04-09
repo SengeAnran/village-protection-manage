@@ -52,6 +52,8 @@ export const getUserPermission2 = () => {
   return axios.get(`${apiHost2}/user/menus`);
 };
 
+
+
 // 根据父级部门id 获取部门列表
 export const getDepListById = (params) => {
   return axios.get(`${apiHost}/user/getDepByPid`, { params });

@@ -202,6 +202,7 @@ router.beforeEach((to, from, next) => {
 const getAsyncRoutes = (list, isRoot) => {
   const permissionList = store.getters.permissionList;
   const permissionIds = permissionList.map((item) => item.menuId);
+  console.log(list);
   return list.filter((item) => {
     const menuIds = item.meta && item.meta.menuIds;
     // 没有设置权限id 或者权限id为空数组，则默认为有访问权限

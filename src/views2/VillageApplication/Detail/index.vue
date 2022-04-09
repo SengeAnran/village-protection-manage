@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  class="block">
     <div class="clearfix export">
       <el-button class="export-button" @click="clickExport">导出</el-button>
     </div>

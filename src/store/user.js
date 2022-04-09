@@ -1,11 +1,14 @@
-import { pwdLogin, logout, getUserInfo, getUserPermission, getUserPermission2 } from "@/api/user";
+import { pwdLogin, logout, getUserInfo, getUserPermission, getUserPermission2
+} from "@/api/user";
+// import { getUserPermission3 } from "@/api3/user";
 // import { removeToken } from "@/utils/auth";
 import { handleLoginOut } from "@/utils/auth";
 // import config from "@/utils/config";
 const systemTitleType = {
   1: "历史文化村落保护管理应用",
   2: "浙江省未来乡村建设服务平台",
-  3: "跟着节气游乡村管理后台",
+  3: "未来乡村小程序管理后台",
+  4: "跟着节气游乡村管理后台",
 };
 export default {
 
@@ -88,18 +91,43 @@ export default {
         getUserInfo().then((res1) => {
           commit("SET_USER_INFO", res1 || {});
           console.log(params);
-          if (params === 2) {
-            getUserPermission2().then((data) => {
-              commit("SET_PERMISSION_LIST", data || []);
-              resolve();
-            });
-          } else {
-            getUserPermission().then((data) => {
-              commit("SET_PERMISSION_LIST", data || []);
-              resolve();
-            });
+          switch (params) {
+            case 1: {
+              getUserPermission().then((data) => {
+                commit("SET_PERMISSION_LIST", data || []);
+                resolve();
+              });
+            } break;
+            case 2: {
+              getUserPermission2().then((data) => {
+                commit("SET_PERMISSION_LIST", data || []);
+                resolve();
+              });
+            } break;
+            case 3: {
+              getUserPermission().then((data) => {
+                commit("SET_PERMISSION_LIST", data || []);
+                resolve();
+              });
+            } break;
+            default: {
+              getUserPermission().then((data) => {
+                commit("SET_PERMISSION_LIST", data || []);
+                resolve();
+              });
+            }
           }
-
+          // if (params === 2) {
+          //   getUserPermission2().then((data) => {
+          //     commit("SET_PERMISSION_LIST", data || []);
+          //     resolve();
+          //   });
+          // } else {
+          //   getUserPermission().then((data) => {
+          //     commit("SET_PERMISSION_LIST", data || []);
+          //     resolve();
+          //   });
+          // }
         });
       });
     },

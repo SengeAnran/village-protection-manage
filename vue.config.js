@@ -51,11 +51,14 @@ module.exports = {
         pathRewrite: (path) => path.replace("/apiProxy", ""),
       },
       "/apiFun": { // 未来乡村
-        // target: "http://172.16.24.248:8280/", // 测试环境1
         target: "http://172.16.27.121:8280/", // 测试环境
-        // target: "http://172.16.27.121:8280/", // 其他版本测试环境
         changeOrigin: true,
         pathRewrite: (path) => path.replace("/apiFun", ""),
+      },
+      "/apiWX": { // 未来乡村小程序
+        target: "http://172.16.27.121:5000/", // 测试环境
+        changeOrigin: true,
+        pathRewrite: (path) => path.replace("/apiWX", ""),
       },
     },
   },
