@@ -27,7 +27,7 @@
         type="primary"
         plain
         @click="exportDatas"
-      >导出</el-button
+        >导出</el-button
       >
       <el-button
         icon="el-icon-delete"
@@ -48,12 +48,14 @@
     <el-table
       v-if="!hideTable"
       class="table"
-      :height="tableHeight"
-      header-row-style="font-size: 14px;
-      font-family: PingFangSC-Medium, PingFang SC;
-      font-weight: 500;
-      color: #333333;
-      line-height: 22px;"
+      :height="tableHeight || null"
+      :header-row-style="{
+        fontSize: '14px',
+        fontFamily: 'PingFangSC-Medium, PingFang SC',
+        fontWeight: 500,
+        color: ' #333333',
+        lineHeight: '22px',
+      }"
       v-loading="loading"
       :data="items"
       @selection-change="selectionChange"
@@ -65,7 +67,12 @@
         align="center"
         fixed="left"
       ></el-table-column>
-      <el-table-column :label="order ? '推荐次序':'序号'" width="80" align="center" fixed="left">
+      <el-table-column
+        :label="order ? '推荐次序' : '序号'"
+        width="80"
+        align="center"
+        fixed="left"
+      >
         <template slot-scope="scope">
           {{ scope.$index + 1 + (page - 1) * size }}
         </template>
@@ -119,28 +126,28 @@
               v-if="moveUp"
               type="primary"
               @click.native="moveUpItem(scope.row, scope.$index)"
-            >上移</el-link
+              >上移</el-link
             >
             <el-divider v-if="moveUp" direction="vertical"></el-divider>
             <el-link
               v-if="moveDown"
               type="primary"
               @click.native="moveDownItem(scope.row, scope.$index)"
-            >下移</el-link
+              >下移</el-link
             >
             <el-divider v-if="moveDown" direction="vertical"></el-divider>
             <el-link
               v-if="moveTop"
               type="primary"
               @click.native="moveTopItem(scope.row, scope.$index)"
-            >置顶</el-link
+              >置顶</el-link
             >
             <el-divider v-if="moveTop" direction="vertical"></el-divider>
             <el-link
               v-if="virtualDelete"
               type="danger"
               @click.native="virtualDeleteItem(scope.row, scope.$index)"
-            >移除</el-link
+              >移除</el-link
             >
             <slot name="tableEdit" :data="scope.row"></slot>
             <!--          <el-button-->
@@ -207,7 +214,7 @@
 
 <script>
 import _ from "lodash";
-import { downloadFile } from "@/utils/data"
+import { downloadFile } from "@/utils/data";
 
 export default {
   props: {
@@ -229,7 +236,7 @@ export default {
     // 表格是否开启多选模式
     tableHeight: {
       type: String,
-      default: '',
+      default: "",
     },
     // 表格是否开启多选模式
     selection: {
@@ -482,7 +489,7 @@ export default {
       this.loading = true;
       try {
         if (this.customGetMethod) {
-          this.items = await this.customGetMethod({...query});
+          this.items = await this.customGetMethod({ ...query });
         } else {
           const res = await this.getMethod(params);
           this.items = res.content;
@@ -490,7 +497,7 @@ export default {
         }
         this.loading = false;
         this.afterGetMethod && this.afterGetMethod();
-        this.$emit('changeData')
+        this.$emit("changeData");
       } finally {
         this.loading = false;
       }
@@ -508,6 +515,7 @@ export default {
         this.page = 1;
         this.getItems();
       });
+      this.$emit("resetForm");
     },
     // 打开弹窗
     openDialog() {
@@ -519,7 +527,7 @@ export default {
     },
     // 新增
     addItem() {
-      if(this.addPath) {
+      if (this.addPath) {
         this.$router.push(this.addPath);
       } else {
         this.updateForm(_.cloneDeep(this.defaultForm));
@@ -565,7 +573,7 @@ export default {
       this.$confirm("是否移除该条数据？", "提示", {
         type: "warning",
       }).then(async () => {
-        console.log(item, index)
+        console.log(item, index);
         this.items.splice(index, 1);
         // this.loading = true;
         // try {
@@ -594,7 +602,7 @@ export default {
             pageNum: page,
             pageSize: size,
             ids: this.selections.map((item) => item[this.idKey]),
-          }
+          };
           const res = await this.exportMethod(data);
           downloadFile(res, "浙江省未来乡村申报汇总");
           this.$notify.success("导出成功");
@@ -622,13 +630,12 @@ export default {
     // 上移
     moveUpItem(data, index) {
       console.log(data, index);
-      if(index !== 0) {
+      if (index !== 0) {
         this.items.splice(index, 1);
         this.items.splice(index - 1, 0, data);
       }
 
       // console.log(this.form.detail);
-
     },
     // 下移
     moveDownItem(data, index) {
@@ -653,7 +660,7 @@ export default {
       this.loading = true;
       try {
         await this.submitSortMethod(data);
-        this.$emit('submitSuccess')
+        this.$emit("submitSuccess");
         this.$message({
           message: "提交成功！",
           type: "success",
@@ -665,7 +672,7 @@ export default {
     },
     // 保存
     async saveItem() {
-      console.log('点击了');
+      console.log("点击了");
       this.$refs.form.validate(async (valid) => {
         if (valid) {
           try {
