@@ -1,6 +1,6 @@
 import { pwdLogin, logout, getUserInfo, getUserPermission, getUserPermission2
 } from "@/api/user";
-// import { getUserPermission3 } from "@/api3/user";
+import { getUserPermission3 } from "@/api3/user";
 // import { removeToken } from "@/utils/auth";
 import { handleLoginOut } from "@/utils/auth";
 // import config from "@/utils/config";
@@ -35,6 +35,7 @@ export default {
       }
       window.localStorage.setItem("roleSystemType", payload);
       state.systemTitle = systemTitleType[payload];
+      console.log('systemTitle',  state.systemTitle);
       state.roleSystemType = payload;
     },
     // SET_END_CHANGE_ROLE(state) {
@@ -105,7 +106,7 @@ export default {
               });
             } break;
             case 3: {
-              getUserPermission().then((data) => {
+              getUserPermission3().then((data) => {
                 commit("SET_PERMISSION_LIST", data || []);
                 resolve();
               });

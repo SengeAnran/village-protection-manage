@@ -530,7 +530,7 @@ export const defaultRoutes3 = [
       name: "NeighborhoodMutualAidList",
     },
     meta: {
-      menuIds: [100, 200],
+      menuIds: [100],
       title: "邻里互助",
       hideChild: true,
       icon: "cunzhuangshenbao",
@@ -541,7 +541,6 @@ export const defaultRoutes3 = [
         name: "NeighborhoodMutualAidList",
         meta: {
           icon: "cunzhuangshenbao",
-          menuIds: [10002, 20001],
         },
         component: () => import("@/views3/NeighborhoodMutualAid/index.vue"),
       },
@@ -556,7 +555,7 @@ export const defaultRoutes3 = [
       name: "VenueReservationList",
     },
     meta: {
-      menuIds: [100, 200],
+      menuIds: [101],
       title: "场馆预约",
       hideChild: true,
       icon: "cunzhuangshenbao",
@@ -567,7 +566,7 @@ export const defaultRoutes3 = [
         name: "VenueReservationList",
         meta: {
           icon: "cunzhuangshenbao",
-          menuIds: [10002, 20001],
+          menuIds: [10101],
         },
         component: () => import("@/views3/VenueReservation/index.vue"),
       },
@@ -577,7 +576,7 @@ export const defaultRoutes3 = [
         hidden: true,
         meta: {
           activeMenu: "/venueReservation/index",
-          menuIds: [10001],
+          // menuIds: [10001],
         },
         component: () => import("@/views3/VenueReservation/New/index.vue"),
       },
@@ -588,7 +587,7 @@ export const defaultRoutes3 = [
         meta: {
           activeMenu: "/venueReservation/index",
           title: "详情",
-          menuIds: [10002, 20001],
+          // menuIds: [10002, 20001],
         },
         component: () => import("@/views3/VenueReservation/Detail/index.vue"),
       },
@@ -603,7 +602,7 @@ export const defaultRoutes3 = [
       name: "OnlineMeetingList",
     },
     meta: {
-      menuIds: [100, 200],
+      menuIds: [102],
       title: "网上议事",
       hideChild: true,
       icon: "cunzhuangshenbao",
@@ -614,7 +613,7 @@ export const defaultRoutes3 = [
         name: "OnlineMeetingList",
         meta: {
           icon: "cunzhuangshenbao",
-          menuIds: [10002, 20001],
+          // menuIds: [10002, 20001],
         },
         component: () => import("@/views3/OnlineMeeting/index.vue"),
       },

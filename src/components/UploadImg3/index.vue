@@ -46,6 +46,7 @@
 import { uploadFile3 } from "@/api/common.js";
 
 export default {
+  name: 'UploadImg3',
   props: {
     data: {
       type: Array,

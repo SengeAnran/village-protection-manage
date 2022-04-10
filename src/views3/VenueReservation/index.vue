@@ -22,7 +22,7 @@
 <!--              <span class="label">村庄名称：</span>-->
               <el-input
                 style="width: 200px"
-                v-model="query.villageName"
+                v-model="query.address"
                 :maxlength="50"
                 placeholder="请输入礼堂名称/地址"
               ></el-input>

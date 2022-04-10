@@ -22,7 +22,7 @@ export const getChildArea = (params) => {
 export const getVenueList = (data) => {
   return axios.request({
     method: "POST",
-    url: apiHost3 + "/api/applet/venue/app/list",
+    url: apiHost3 + "/api/admin/venue/admin/list",
     data,
   });
 };
