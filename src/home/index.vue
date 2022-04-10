@@ -1,24 +1,12 @@
 <template>
   <div class="home">
-    <div class="item" @click="goSystem(2)">
-      <div class="img">
-        <img src="./imgs/bg_img_02.png" alt="">
+    <div class="box">
+      <div class="item" v-for="(item, index) in dataList" :key="index" @click="goSystem(item.type, item.path)">
+        <div class="img">
+          <img :src="item.iconURL" alt="">
+        </div>
+        <div class="title">{{ item.name }}</div>
       </div>
-      <div class="title">未来乡村建设工作台</div>
-    </div>
-    <div  class="item" @click="goSystem(1)">
-      <div class="img">
-        <img src="./imgs/bg_img_03.png" alt="">
-      </div>
-      <div class="title">历史文化村落保护管理应用</div>
-<!--      <div class="name">— 浙江省未来乡村建设服务平台 —</div>-->
-    </div>
-    <div class="item" @click="goSystem(3)">
-      <div class="img">
-        <img src="./imgs/bg_img_01.png" alt="">
-      </div>
-      <div class="title">跟着节气游乡村管理后台</div>
-<!--      <div class="name">— 浙江省未来乡村建设服务平台 —</div>-->
     </div>
 
   </div>
@@ -69,9 +57,52 @@ import router from "../router";
 import { routeType } from "../utils/routeType";
 export default {
   name: "index",
+  data() {
+    return {
+      dataList: [
+        {
+          name: "未来乡村建设工作台",
+          iconURL: require("./imgs/icon_01.png"),
+          path: "/villageApplication2/index",
+          type: 2,
+        },
+        {
+          name: "历史文化村落保护管理应用",
+          iconURL:  require("./imgs/icon_02.png"),
+          path: "/villageApplication/index",
+          type: 1,
+        },
+        {
+          name: "跟着节气游乡村管理后台",
+          iconURL:  require("./imgs/icon_02.png"),
+          path: "",
+          type: 1,
+        },
+        {
+          name: "未来乡村小程序管理后台",
+          iconURL:  require("./imgs/icon_03.png"),
+          path: "/neighborhoodMutualAid/index",
+          type: 3,
+        },
+        // {
+        //   name: "",
+        //   iconURL: "",
+        //   path: "",
+        //   type: 1,
+        // },
+        // {
+        //   name: "",
+        //   iconURL: "",
+        //   path: "",
+        //   type: 1,
+        // },
+
+      ]
+    }
+  },
   methods: {
     ...mapMutations("user", ["SET_SYSTEM_TIME"]),
-    async goSystem(type) {
+    async goSystem(type, path) {
       this.SET_SYSTEM_TIME(type);
       window.localStorage.setItem("systemType", type);
       console.log('this.changeSystem',this.changeSystem);
@@ -103,21 +134,15 @@ export default {
         },
       ]);
       console.log(type);
-      switch (roleSystemType) {
-        case 1: this.$router.push("/villageApplication/index"); break;
-        case 2: this.$router.push("/villageApplication2/index"); break;
-        case 3: this.$router.push("/neighborhoodMutualAid/index"); break;
-        default: this.$router.push("/villageApplication/index");
+      console.log(!path, path);
+      if (!path) {
+        this.$message({
+          message: "该功能还未上线，请等待！",
+          type: "warning",
+        });
+        return;
       }
-      // if (roleSystemType === 2) {
-      //   this.$router.push("/villageApplication2/index");
-      // } else {
-      //   this.$router.push("/villageApplication/index");
-      // }
-      // if (this.changeSystem || !this.hasGetRoute) { // 切换用户 或无目录
-      //   // 如果没有获取路由信息，先获取路由信息而后跳转
-      //
-      // }
+      this.$router.push(path);
     },
   },
   computed: {
@@ -128,47 +153,64 @@ export default {
 
 <style lang="scss" scoped>
 .home {
+  position: relative;
   width: 100%;
   height: 100vh;
   background: url(../assets/imgs/home.png) no-repeat left center;
   background-size: cover;
-  display: flex;
+
   align-items: center;
-  justify-content: space-around;
-  .item {
-    cursor: pointer;
-    text-align: center;
-    width: 360px;
-    height: 266px;
-    background: rgba(81, 126, 168, 0.4);
-    box-shadow: 0px 4px 8px 0px rgba(25, 64, 102, 0.4);
-    border-radius: 20px;
-    border: 4px solid #C0E0FF;
-    .img{
-      height: 160px;
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: none;
+
+  .box {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 1040px;
+    display: flex;
+    flex-wrap: wrap;
+    .item {
+      cursor: pointer;
+      text-align: center;
+      width: 280px;
+      height: 178px;
+      margin-right: 100px;
+      margin-top: 40px;
+      margin-bottom: 40px;
+      background: rgba(69, 130, 187, 0.2);
+      box-shadow: 0px 4px 8px 0px rgba(25, 64, 102, 0.4);
+      border-radius: 20px;
+      border: 2px solid #C0E0FF;
+      .img{
+        height: 90px;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: none;
+        }
+      }
+      .title {
+        font-size: 20px;
+        font-family: PingFangSC-Semibold, PingFang SC;
+        font-weight: 600;
+        color: #FFFFFF;
+        line-height: 28px;
+        letter-spacing: 1px
+      }
+      .name {
+        margin-top: 16px;
+        font-size: 16px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #FFFFFF;
+        line-height: 22px;
+        letter-spacing: 1px;
       }
     }
-    .title {
-      font-size: 24px;
-      font-family: PingFangSC-Semibold, PingFang SC;
-      font-weight: 600;
-      color: #FFFFFF;
-      line-height: 33px;
-      letter-spacing: 2px;
-    }
-    .name {
-      margin-top: 16px;
-      font-size: 16px;
-      font-family: PingFangSC-Regular, PingFang SC;
-      font-weight: 400;
-      color: #FFFFFF;
-      line-height: 22px;
-      letter-spacing: 1px;
+    .item:nth-child(3n) {
+      margin-right: 0;
     }
   }
+
 }
 </style>
