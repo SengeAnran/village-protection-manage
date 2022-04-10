@@ -12,7 +12,7 @@ const { apiHost3 } = config;
 export const getUserPermission3 = (params) => {
   return axios.request({
     method: "GET",
-    url: apiHost3 + "/api/admin/user/getDepByPid",
+    url: apiHost3 + "/api/admin/user/menus",
     params,
   });
 };

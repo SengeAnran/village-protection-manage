@@ -2,7 +2,22 @@
 import axios from "@/utils/request";
 import config from "@/utils/config";
 const { apiHost3 } = config;
-
+// 省市县镇村五级联动
+export const getVillageArea = (params) => {
+  return axios.request({
+    method: "GET",
+    url: apiHost3 + "/api/admin/dropList/area",
+    params,
+  });
+};
+// 查询子节点
+export const getChildArea = (params) => {
+  return axios.request({
+    method: "GET",
+    url: apiHost3 + "/api/admin/dropList/sonAreas",
+    params,
+  });
+};
 // 获取场馆列表
 export const getVenueList = (data) => {
   return axios.request({
@@ -21,11 +36,10 @@ export const addVenue = (data) => {
   });
 };
 // 删除场馆
-export const deleteVenue = (data) => {
+export const deleteVenue = (params) => {
   return axios.request({
-    method: "POST",
-    url: apiHost3 + "/villageDeclaration",
-    data,
+    method: "GET",
+    url: apiHost3 + "/api/admin/venue/admin/delete/" + params.id,
   });
 };
 // 获取场馆详情
@@ -36,10 +50,10 @@ export const getVenueDetail = (params) => {
   });
 };
 // 修改场馆详情
-export const modifyVenueDetail = (params) => {
+export const modifyVenueDetail = (data) => {
   return axios.request({
-    method: "GET",
-    url: apiHost3 + "/api/admin/venue/admin/update/" + params.id,
-    params,
+    method: "POST",
+    url: apiHost3 + "/api/admin/venue/admin/update",
+    data,
   });
 };

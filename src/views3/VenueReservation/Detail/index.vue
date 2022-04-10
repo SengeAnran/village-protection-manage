@@ -11,40 +11,32 @@
     >
       <div class="input-item-wrp">
         <el-form-item label="地址" prop="villageId">
-          <p class="content">{{ form.town }}{{ form.villageName }}</p>
+          <p class="content">{{ form.address }}{{ form.town }}{{ form.villageName }}</p>
         </el-form-item>
         <el-form-item label="场馆名称" prop="countrySortNum">
-          <p class="content">{{ form.countrySortNum }}</p>
+          <p class="content">{{ form.auditoriumName }}</p>
         </el-form-item>
         <el-form-item label="开放时间" prop="resPopulation">
-          <p class="content">{{ form.startTime.slice(0,7) }} 至 {{ form.endTime.slice(0,7) }}</p>
+          <p class="content">{{ form.openTime }}</p>
         </el-form-item>
         <el-form-item label="联系电话" prop="resPopulation">
-          <p class="content">{{ form.phone }}</p>
+          <p class="content">{{ form.contactNumber }}</p>
         </el-form-item>
       </div>
       <div>
-        <div class="input-item-wrp">
+        <div class="input-item-wrp2">
           <el-form-item label="场馆介绍" prop="introduction">
-            <p class="content">{{ form.basicText }}</p>
+            <p class="content">{{ form.introduce }}</p>
           </el-form-item>
         </div>
-        <div class="input-item-wrp">
-          <el-form-item label="照片：" prop="introduction">
-            <div v-if="form.annexFiles && form.annexFiles.length > 0">
-              <p class="content fu-file" v-for="(item, index) in form.annexFiles" :key="index">
-                <a :href="item.filePath">
-                  <i class="el-icon-link"></i>
-                  <span>
-                    {{ item.fileName }}
-                  </span>
-                </a>
-              </p>
-            </div>
-
+        <div class="input-item-wrp2">
+          <el-form-item label="照片:" prop="villagePicturesArr">
+            <ViewImg :data="villagePicturesFiles" />
           </el-form-item>
         </div>
       </div>
+
+
     </el-form>
     <div class="bottom-btns">
       <el-button @click="$router.back()">返回</el-button>
@@ -55,7 +47,7 @@
 
 <script>
 
-import { getVillageItemDetail } from "@/api2/villageManage";
+import { getVenueDetail } from "@/api3/venueReservation";
 import { mapGetters } from "vuex";
 
 export default {
@@ -64,51 +56,16 @@ export default {
   data() {
     return {
       form: {
-        annexFiles: [], // 附件
-        cityAuditFile: [], // 附件
-        provinceAuditFile: [], // 附件
-        villageName: "", //村庄地址
-        town: "", //村庄地址
-        villageId: "", //村庄地址
-        countrySortNum: "", //推荐次序
-        declarationBatch: "", //申报批次
-        startTime: "", //创建周期 开始
-        endTime: "", //创建周期 结束
-        leader: "", //领办领导
-        construct: "", //建设单位
-        contactPerson: "", // 联系人
-        phone: "", //联系方式
-        huNum: "", //户籍人口数（万人）
-        personNum: "", //常住人口数（万人）
-        investNum: "", //计划总投资（万元）
-        incomeNum: "", //村级集体经济年经营性收入（万元）
-
-        villageProperty: [], //村庄属性（可多选）
-
-        basicText: "", //基本情况
-        meetingText: "", //村民代表会议（村民会议）关于未来乡村建设方案决议情况
-        townText: "", //乡、镇（街道）人民政府（办事处）意见
-        departmentText: "", //县（市、区）部门审核意见
-        governmentText: "", //县（市、区）人民政府意见
-        projectFilingPerson: "", //填表人
-        projectFilingPhone: "", //联系电话
-        projectFilingAudit: "", //审核人
-        projects: [], //项目列表
+        address: "", //地址
+        auditoriumName: "", //场馆名称
+        openTime: "", //开放时间
+        contactNumber: "", //联系电话
+        introduce: "", //场馆介绍
+        picturesArr: [],
+        picturesFiles: [],
+        photoId: "",
       },
-      reviewForm: {
-        status: null,
-        opinion: '',
-        processFilesArr: [],
-      },
-      finalStatus: null,
-      total: 0,
-
-      tips: "",
-      dialogVisible: false,
-      dialogId: "",
-      textarea: "",
-      status: null,
-      verifyKey: false,
+      villagePicturesFiles: [],
     };
   },
   watch: {
@@ -128,9 +85,13 @@ export default {
     init() {
       const { id  } = this.$route.query;
       if (!id) return;
-      getVillageItemDetail({ id }).then((res) => {
+      getVenueDetail({ id }).then((res) => {
         this.form = res;
-        this.finalStatus = res.finalStatus;
+        this.villagePicturesFiles = res.photoId.split(",").map(i => {
+          return {
+            filePath: i,
+          }
+        })
         console.log(res);
       });
     },
@@ -215,6 +176,21 @@ export default {
 
     ::v-deep .el-form-item {
       width: 40%;
+      flex-shrink: 0;
+      margin-right: 20px;
+      .el-form-item__label {
+        color: #999;
+        font-size: 16px;
+      }
+    }
+  }
+  .input-item-wrp2 {
+    display: flex;
+    flex-wrap: wrap;
+    //margin-bottom: 18px;
+
+    ::v-deep .el-form-item {
+      width: 80%;
       flex-shrink: 0;
       margin-right: 20px;
       .el-form-item__label {
