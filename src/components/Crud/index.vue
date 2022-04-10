@@ -515,6 +515,7 @@ export default {
         this.page = 1;
         this.getItems();
       });
+      this.$emit("resetForm");
     },
     // 打开弹窗
     openDialog() {
