@@ -15,6 +15,7 @@
         :permission-add="0"
         :permission-edit="0"
         :permission-delete="0"
+        idKey="id"
       >
         <template v-slot:search>
           <div class="inline-flex mb-6 pl-0">
@@ -54,7 +55,7 @@
         </template>
 
         <template v-slot:crudAction>
-          <el-button v-permission="10001" type="primary" icon="el-icon-plus" @click="newOne"> 新增 </el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="newOne"> 新增 </el-button>
         </template>
 
         <template v-slot:table>
