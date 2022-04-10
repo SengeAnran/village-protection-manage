@@ -1,6 +1,6 @@
 import { pwdLogin, logout, getUserInfo, getUserPermission, getUserPermission2
 } from "@/api/user";
-import { getUserPermission3 } from "@/api3/user";
+// import { getUserPermission3 } from "@/api3/user";
 // import { removeToken } from "@/utils/auth";
 import { handleLoginOut } from "@/utils/auth";
 // import config from "@/utils/config";
@@ -105,7 +105,7 @@ export default {
               });
             } break;
             case 3: {
-              getUserPermission3().then((data) => {
+              getUserPermission().then((data) => {
                 commit("SET_PERMISSION_LIST", data || []);
                 resolve();
               });
