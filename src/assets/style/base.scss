@@ -5,3 +5,10 @@ html, body {
 svg {
   display: inline-block;
 }
+.clearFloat:before,.clearFloat:after {
+  content: "";
+  display: table;
+}
+.clearFloat:after {
+  clear: both;
+}

@@ -11,7 +11,7 @@
   </el-cascader>
 </template>
 <script>
-import { getVillageArea } from "@/api/villageManage";
+import { getVillageArea } from "@/api2/villageManage";
 export default {
   props: {
     value: String,

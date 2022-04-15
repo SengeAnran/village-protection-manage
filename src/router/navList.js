@@ -533,7 +533,7 @@ export const defaultRoutes3 = [
       menuIds: [100],
       title: "邻里互助",
       hideChild: true,
-      icon: "cunzhuangshenbao",
+      icon: "linlihuzhu",
     },
     children: [
       {
@@ -558,7 +558,7 @@ export const defaultRoutes3 = [
       menuIds: [101],
       title: "场馆预约",
       hideChild: true,
-      icon: "cunzhuangshenbao",
+      icon: "changguanyuyue",
     },
     children: [
       {
@@ -605,7 +605,7 @@ export const defaultRoutes3 = [
       menuIds: [102],
       title: "网上议事",
       hideChild: true,
-      icon: "cunzhuangshenbao",
+      icon: "wangshangyishi",
     },
     children: [
       {
@@ -616,6 +616,28 @@ export const defaultRoutes3 = [
           // menuIds: [10002, 20001],
         },
         component: () => import("@/views3/OnlineMeeting/index.vue"),
+      },
+      {
+        path: "/onlineMeeting/new",
+        name: "newOnlineMeeting",
+        hidden: true,
+        meta: {
+          activeMenu: "/onlineMeeting/index",
+          title: "发起议事",
+          // menuIds: [10001],
+        },
+        component: () => import("@/views3/OnlineMeeting/New/index.vue"),
+      },
+      {
+        path: "/onlineMeeting/detail",
+        name: "onlineMeetingDetails",
+        hidden: true,
+        meta: {
+          activeMenu: "/onlineMeeting/index",
+          title: "详情",
+          // menuIds: [10002, 20001],
+        },
+        component: () => import("@/views3/OnlineMeeting/Detail/index.vue"),
       },
     ],
   },

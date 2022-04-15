@@ -8,7 +8,6 @@
         <div class="title">{{ item.name }}</div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -172,17 +171,17 @@ export default {
     .item {
       cursor: pointer;
       text-align: center;
-      width: 280px;
-      height: 178px;
-      margin-right: 100px;
+      margin-right: 40px;
       margin-top: 40px;
       margin-bottom: 40px;
+      width: 230px;
+      height: 172px;
       background: rgba(69, 130, 187, 0.2);
       box-shadow: 0px 4px 8px 0px rgba(25, 64, 102, 0.4);
       border-radius: 20px;
       border: 2px solid #C0E0FF;
       .img{
-        height: 90px;
+        height: 92px;
         img {
           width: 100%;
           height: 100%;
@@ -190,12 +189,12 @@ export default {
         }
       }
       .title {
-        font-size: 20px;
+        font-size: 18px;
         font-family: PingFangSC-Semibold, PingFang SC;
         font-weight: 600;
         color: #FFFFFF;
-        line-height: 28px;
-        letter-spacing: 1px
+        line-height: 25px;
+        letter-spacing: 1px;
       }
       .name {
         margin-top: 16px;
@@ -207,7 +206,12 @@ export default {
         letter-spacing: 1px;
       }
     }
-    .item:nth-child(3n) {
+    .item:hover {
+      border: 4px solid #C0E0FF;
+      background: rgba(125, 178, 227, 0.4);
+      box-shadow: 0px 8px 12px 0px rgba(25, 64, 102, 0.6);
+    }
+    .item:nth-child(4n) {
       margin-right: 0;
     }
   }
