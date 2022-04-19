@@ -8,7 +8,7 @@
       >切换登录方式</el-button
     >
     <div class="desc-wrp">
-      <h2 class="title">历史文化村落保护管理应用</h2>
+<!--      <h2 class="title">历史文化村落保护管理应用</h2>-->
       <h2 class="title">未来乡村建设工作台</h2>
       <img
         class="village-img"

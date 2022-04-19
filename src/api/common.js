@@ -16,6 +16,7 @@ export const uploadFile2 = (data) => {
     data,
   });
 };
+
 export const uploadFile3 = (data) => {
   return axios.request({
     method: "post",
