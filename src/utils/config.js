@@ -9,8 +9,8 @@ const devConfig = {
   apiHost: "/apiProxy", // 历史文化
   apiHost2: "/apiFun", // 未来乡村
   apiHost3: "/apiWX", // 未来乡村微信小程序
-  loginPath: window.location.origin,
-  routerBase: "/",
+  loginPath: window.location.origin + "/admin",
+  routerBase: "/admin",
 };
 
 const config = process.env.VUE_APP_ENV === "production" ? proConfig : devConfig;
