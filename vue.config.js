@@ -4,11 +4,11 @@ function resolve(dir) {
 }
 const name = "历史文化村落保护管理应用";
 
-const publicPath = process.env.VUE_APP_ENV === "production" ? "/lswhcl" : "/";
+const publicPath = process.env.VUE_APP_ENV === "production" ? "/lswhcl" : "/admin";
 module.exports = {
   publicPath,
   productionSourceMap: false,
-
+  lintOnSave: false,
   css: {
     loaderOptions: {
       scss: {
