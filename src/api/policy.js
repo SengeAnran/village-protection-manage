@@ -8,6 +8,7 @@ export const getList = (params) => {
     method: "get",
     url: apiHost + "/policyFile",
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 // 新增
@@ -16,6 +17,7 @@ export const createPolicy = (data) => {
     method: "post",
     url: apiHost + "/policyFile",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 

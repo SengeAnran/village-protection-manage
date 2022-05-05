@@ -8,6 +8,7 @@ export const getAcceptanceList = (params) => {
     method: "get",
     url: apiHost + "/acceptanceInfo",
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -15,6 +16,7 @@ export const getAcceptanceDetail = (id) => {
   return axios.request({
     method: "get",
     url: apiHost + "/acceptanceInfo/detail/" + id,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -24,6 +26,7 @@ export const verify = (data) => {
     method: "post",
     url: apiHost + "/acceptanceInfo/verify",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -33,6 +36,7 @@ export const verifyByCounty = (data) => {
     method: "post",
     url: apiHost + "/acceptanceInfo",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -42,6 +46,7 @@ export const addRectify = (data) => {
     method: "post",
     url: apiHost + "/acceptanceInfo/addRectify",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -53,6 +58,7 @@ export const getRectificationInfo = (params) => {
       apiHost +
       `/acceptanceInfo/rectification/${params.id}/${params.declareType}`,
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 // 整改详情(新)
@@ -61,6 +67,7 @@ export const getRectifyDetail = (params) => {
     method: "GET",
     url: apiHost + "/acceptanceInfo/rectifyDetail",
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -70,6 +77,7 @@ export const getAcceptanceInfo = (params) => {
     method: "GET",
     url: apiHost + "/acceptanceInfo/projectDetail/" + params.id,
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 // 导出
@@ -78,6 +86,7 @@ export const exportList = (params) => {
     method: "GET",
     url: apiHost + "/acceptanceInfo/projectAssessExport",
     params,
-    responseType: "blob"
+    responseType: "blob",
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };

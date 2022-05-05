@@ -8,6 +8,7 @@ export const getProjectList = (params) => {
     method: "get",
     url: apiHost + "/projectDeclare",
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -15,6 +16,7 @@ export const getProjectDetail = (id) => {
   return axios.request({
     method: "get",
     url: apiHost + "/projectDeclare/detail/" + id,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -23,6 +25,7 @@ export const createProject = (data) => {
     method: "post",
     url: apiHost + "/projectDeclare",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -31,6 +34,7 @@ export const modifyProject = (data) => {
     method: "put",
     url: apiHost + "/projectDeclare",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -40,6 +44,7 @@ export const verifyProject = (data) => {
     method: "post",
     url: apiHost + "/projectDeclare/verify",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 // 项目审核详情
@@ -47,6 +52,7 @@ export const verifyDetail = (id) => {
   return axios.request({
     method: "get",
     url: apiHost + "/projectDeclare/verifyDetail?id=" + id,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -55,6 +61,7 @@ export const getAddress = () => {
   return axios.request({
     method: "get",
     url: apiHost + "/projectDeclare/villageDetailList",
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -64,6 +71,7 @@ export const deleteProject = (data) => {
     method: "DELETE",
     url: apiHost + "/projectDeclare",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -84,6 +92,7 @@ export const pogressExport = (params) => {
     method: "get",
     url: apiHost + "/projectDeclare/exportExcelList",
     params,
-    responseType: "blob"
+    responseType: "blob",
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };

@@ -9,6 +9,7 @@ export const getArea = (params) => {
     method: "get",
     url: apiHost + "/dropList/area",
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -18,6 +19,7 @@ export const getHeritageType = (params) => {
     method: "get",
     url: apiHost + "/dropList/heritageType",
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -27,6 +29,7 @@ export const getSolarTerms = (params) => {
     method: "get",
     url: apiHost + "/dropList/solarTerms",
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -36,6 +39,7 @@ export const getVillageType = (params) => {
     method: "get",
     url: apiHost + "/dropList/villageType",
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -44,7 +48,8 @@ export const getLogType = (params) => {
   return axios.request({
     method: 'get',
     url: apiHost + '/systemLog/logType',
-    params
+    params,
+    // headers: { 'APPLICATION-ID': '3' },
   })
 }
 

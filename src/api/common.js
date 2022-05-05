@@ -7,6 +7,7 @@ export const uploadFile = (data) => {
     method: "post",
     url: apiHost + "/file/upload",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 export const uploadFile2 = (data) => {
@@ -14,6 +15,7 @@ export const uploadFile2 = (data) => {
     method: "post",
     url: apiHost2 + "/file/upload",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -22,6 +24,7 @@ export const uploadFile3 = (data) => {
     method: "post",
     url: apiHost3 + "/api/admin/custom/file/upload/single",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -29,6 +32,7 @@ export const downloadFile2 = (params) => {
   return axios.request({
     method: "get",
     url: apiHost2 + "/file/download/" + params.id,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -36,6 +40,7 @@ export const downloadFile = (params) => {
   return axios.request({
     method: "get",
     url: apiHost + "/file/download/" + params.id,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -44,5 +49,6 @@ export const deleteFile = (params) => {
     method: "get",
     url: apiHost + "/file",
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };

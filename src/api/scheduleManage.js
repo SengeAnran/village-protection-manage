@@ -9,6 +9,7 @@ export const getProjectProgress = (params) => {
     method: "GET",
     url: apiHost + "/projectProgress",
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -18,6 +19,7 @@ export const addProjectProgress = (data) => {
     method: "POST",
     url: apiHost + "/projectProgress",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -27,6 +29,7 @@ export const getProjectProgressAddress = (params) => {
     method: "GET",
     url: apiHost + "/projectProgress/address/" + params.years,
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -36,6 +39,7 @@ export const getProjectProgressYears = (params) => {
     method: "GET",
     url: apiHost + "/projectProgress/years",
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -45,6 +49,7 @@ export const getProjectInfo = (params) => {
     method: "GET",
     url: apiHost + "/projectProgress/queryProjectById/" + params.id,
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -54,6 +59,7 @@ export const getHistoryProgress = (params) => {
     method: "GET",
     url: apiHost + "/projectProgress/history/" + params.projectId,
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -63,6 +69,7 @@ export const getProjectDetail = (params) => {
     method: "GET",
     url: apiHost + "/projectProgress/projectDetail/" + params.id,
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -72,6 +79,7 @@ export const getScheduleDetail = (params) => {
     method: "GET",
     url: apiHost + "/projectProgress/pogressDetail/" + params.id,
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -81,6 +89,7 @@ export const setProjectDeadline = (data) => {
     method: "PUT",
     url: apiHost + "/projectProgress",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 

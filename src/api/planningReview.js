@@ -8,6 +8,7 @@ export const getPlanList = (params) => {
     method: "get",
     url: apiHost + "/planningReview",
     params,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -15,6 +16,7 @@ export const getPlanDetail = (id) => {
   return axios.request({
     method: "get",
     url: apiHost + "/planningReview/planReview/" + id,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -23,6 +25,7 @@ export const createPlan = (data) => {
     method: "post",
     url: apiHost + "/planningReview",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -31,6 +34,7 @@ export const modifyPlan = (data) => {
     method: "put",
     url: apiHost + "/planningReview",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -40,6 +44,7 @@ export const verifyPlan = (data) => {
     method: "post",
     url: apiHost + "/planningReview/verify",
     data,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -48,6 +53,7 @@ export const getProcess = (id) => {
   return axios.request({
     method: "get",
     url: apiHost + "/planningReview/process/" + id,
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -56,6 +62,7 @@ export const exportList = (params) => {
   return axios.request({
     method: "GET",
     url: apiHost + "/planningReview/export/?" + qs.stringify(params),
-    responseType: "blob"
+    responseType: "blob",
+    // headers: { 'APPLICATION-ID': '3' },
   });
 };

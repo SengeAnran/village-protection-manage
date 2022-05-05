@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="box">
-      <div class="item" v-for="(item, index) in dataList" :key="index" @click="goSystem(item.type, item.path)">
+      <div class="item" v-for="(item, index) in dataList" :key="index" @click="goSystem(item.type, item.path, item.url)">
         <div class="img">
           <img :src="item.iconURL" alt="" />
         </div>
@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import {getToken} from "@/utils/auth";
+
 const getAsyncRoutes = (list, isRoot) => {
   const permissionList = store.getters.permissionList;
   const permissionIds = permissionList.map((item) => item.menuId);
@@ -58,25 +60,27 @@ export default {
           name: '未来乡村建设工作台',
           iconURL: require('./imgs/icon_01.png'),
           path: '/villageApplication2/index',
-          type: 2,
+          type: 4,
         },
         {
           name: '历史文化村落保护管理应用',
           iconURL: require('./imgs/icon_02.png'),
           path: '/villageApplication/index',
-          type: 1,
+          type: 3,
         },
         {
           name: '跟着节气游乡村管理后台',
           iconURL: require('./imgs/icon_02.png'),
           path: '',
-          type: 1,
+          url: 'http://172.16.24.248:8182/',
+          type: 2,
         },
         {
           name: '未来乡村小程序管理后台',
           iconURL: require('./imgs/icon_03.png'),
-          path: '/neighborhoodMutualAid/index',
-          type: 3,
+          path: '',
+          url: 'https://wlxc.xscitydo.com:28080/admin/',
+          type: 1,
         },
         // {
         //   name: "",
@@ -95,7 +99,12 @@ export default {
   },
   methods: {
     ...mapMutations('user', ['SET_SYSTEM_TIME']),
-    async goSystem(type, path) {
+    async goSystem(type, path, url) {
+      if (!path && url) {
+        const token = getToken();
+        window.open(url + '?token=' + token,'_self');
+        return;
+      }
       this.SET_SYSTEM_TIME(type);
       window.localStorage.setItem('systemType', type);
       console.log('this.changeSystem', this.changeSystem);

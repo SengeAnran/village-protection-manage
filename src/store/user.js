@@ -1,24 +1,26 @@
-import { pwdLogin, logout, getUserInfo, getUserPermission, getUserPermission2 } from '@/api/user';
+import { pwdLogin, logout, getUserInfo, getUserCommonInfo, getUserPermission, getUserPermission2 } from '@/api/user';
 import { getUserPermission3 } from '@/api3/user';
 // import { removeToken } from "@/utils/auth";
 import { handleLoginOut } from '@/utils/auth';
 // import config from "@/utils/config";
 const systemTitleType = {
-  1: '历史文化村落保护管理应用',
-  2: '浙江省未来乡村建设服务平台',
-  3: '未来乡村小程序管理后台',
-  4: '跟着节气游乡村管理后台',
+  3: '历史文化村落保护管理应用',
+  4: '浙江省未来乡村建设服务平台',
+  1: '未来乡村小程序管理后台',
+  2: '跟着节气游乡村管理后台',
 };
 export default {
   namespaced: true,
   state: {
     token: '',
-    roleSystemType: window.localStorage.getItem('roleSystemType') || 1, // 1: 历史文化， 2：未来乡村
+    roleSystemType: window.localStorage.getItem('roleSystemType') || 4,
     changeSystem: false, //
     systemTitle: '浙江省未来乡村建设服务平台',
     roleList: [], // 角色列表
     userInfo: {}, // 用户信息
+    userCommonInfo: {}, // 用户基础信息
     hasGetRoute: false, // 是否获取过路由信息
+    hasGetUserCommonInfo: false, // 是否获取过用户基础信息
     permissionList: [], // 权限列表
     routeList: [], // 菜单列表
   },
@@ -45,6 +47,10 @@ export default {
     SET_USER_INFO(state, data) {
       state.userInfo = data || {};
     },
+    SET_USER_COMMON_INFO(state, data) {
+      state.userCommonInfo = data || {};
+      state.hasGetUserCommonInfo = true;
+    },
     SET_ROUTE_LIST(state, data) {
       state.routeList = data;
       // 修改路由获取状态
@@ -62,7 +68,18 @@ export default {
       return new Promise((resolve) => {
         pwdLogin(params).then((res) => {
           commit('setToken', res.token);
+          // getUserCommonInfo()
           resolve({ token: res.token });
+        });
+      });
+    },
+    // 密码登录
+    getUserCommonInfo({ commit }) {
+      return new Promise((resolve) => {
+        getUserCommonInfo().then((res) => {
+          commit('SET_USER_COMMON_INFO', res || {});
+          console.log('获取完用户基础信息');
+          resolve();
         });
       });
     },
@@ -87,11 +104,11 @@ export default {
     },
     getRouteList({ commit }, params) {
       return new Promise((resolve) => {
-        getUserInfo().then((res1) => {
+        getUserInfo(params).then((res1) => {
           commit('SET_USER_INFO', res1 || {});
           console.log(params);
           switch (params) {
-            case 1:
+            case 3:
               {
                 getUserPermission().then((data) => {
                   commit('SET_PERMISSION_LIST', data || []);
@@ -99,7 +116,7 @@ export default {
                 });
               }
               break;
-            case 2:
+            case 4:
               {
                 getUserPermission2().then((data) => {
                   commit('SET_PERMISSION_LIST', data || []);
@@ -107,7 +124,7 @@ export default {
                 });
               }
               break;
-            case 3:
+            case 1:
               {
                 getUserPermission3().then((data) => {
                   commit('SET_PERMISSION_LIST', data || []);

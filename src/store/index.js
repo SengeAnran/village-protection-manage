@@ -20,6 +20,7 @@ const store = new Vuex.Store({
     roleSystemType: (state) => state.user.roleSystemType,
     changeSystem: (state) => state.user.changeSystem,
     hasGetRoute: (state) => state.user.hasGetRoute,
+    hasGetUserCommonInfo: (state) => state.user.hasGetUserCommonInfo,
     userInfo: (state) => state.user.userInfo,
     permissionList: (state) => state.user.permissionList,
     routeList: (state) => state.user.routeList,

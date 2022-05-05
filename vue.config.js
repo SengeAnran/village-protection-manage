@@ -50,6 +50,7 @@ module.exports = {
         pathRewrite: (path) => path.replace('/apiProxy', ''),
         headers: {
           Connection: 'keep-alive',
+          'APPLICATION-ID': '3',
         },
       },
       '/apiFun': {
@@ -59,6 +60,7 @@ module.exports = {
         pathRewrite: (path) => path.replace('/apiFun', ''),
         headers: {
           Connection: 'keep-alive',
+          'APPLICATION-ID': '4',
         },
       },
       '/apiWX': {

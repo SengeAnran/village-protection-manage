@@ -38,15 +38,37 @@ export const unBind = (params) => {
   });
 };
 
-// 获取用户信息
-export const getUserInfo = () => {
+// 获取用户基础信息
+export const getUserCommonInfo = () => {
   // return axios.get(`${apiHost}/user/info`);
-  return axios.get(`${apiHost3}/api/user/user/info`);
+  return axios.get(`${apiHost3}/api/user/user/in`);
 };
+// 获取用户信息
+export const getUserInfo = (aplicationId) => {
+  // return axios.get(`${apiHost}/user/info`);
+  return axios.request({
+    method: "GET",
+    url: `${apiHost3}/api/user/user/info`,
+    headers: { 'APPLICATION-ID': `${aplicationId}` },
+  });
+};
+// // 获取用户信息
+// export const getUserInfo2 = () => {
+//   return axios.request({
+//     method: "GET",
+//     url: `${apiHost3}/api/user/user/info`,
+//     headers: { 'APPLICATION-ID': '4' },
+//   });
+// };
 
 // 获取当前用户菜单权限 历史文化
 export const getUserPermission = () => {
-  return axios.get(`${apiHost}/user/menus`);
+  // return axios.get(`${apiHost}/user/menus`);
+  return axios.request({
+    method: "GET",
+    url: `${apiHost3}/api/user/user/menus`,
+    headers: { 'APPLICATION-ID': '3' },
+  });
 };
 
 // 获取当前用户菜单权限 未来乡村
