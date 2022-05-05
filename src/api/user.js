@@ -1,16 +1,12 @@
 import axios from '@/utils/request';
 import config from '@/utils/config';
-const {
-  apiHost,
-  apiHost2,
-  apiHost3
-} = config;
+const { apiHost, apiHost2, apiHost3 } = config;
 
 export const pwdLogin = (data) => {
   return axios.request({
     method: 'post',
     // url: apiHost + '/login',
-    url: apiHost3 + "/api/user/login/pc",
+    url: apiHost3 + '/api/user/login/pc',
     data,
   });
 };
