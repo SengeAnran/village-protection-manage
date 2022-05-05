@@ -1,8 +1,8 @@
-import Cookies from "js-cookie";
-import config from "@/utils/config";
+import Cookies from 'js-cookie';
+import config from '@/utils/config';
 
-const TokenKey = "access_token";
-const LoginType = "login_env_type";
+const TokenKey = 'access_token';
+const LoginType = 'login_env_type';
 
 export function getToken() {
   return Cookies.get(TokenKey);
@@ -17,28 +17,21 @@ export function removeToken() {
 }
 
 export function getQueryToken(name, isHash) {
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+  var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
   var search = isHash ? window.location.hash : window.location.search;
   var r =
-    search.substr(1).match(reg) ||
-    window.location.href
-      .substr(window.location.href.lastIndexOf("?") + 1)
-      .match(reg);
+    search.substr(1).match(reg) || window.location.href.substr(window.location.href.lastIndexOf('?') + 1).match(reg);
   if (r != null) return decodeURI(r[2]);
   return null;
 }
 
 export function removeLocationSearch() {
-  window.history.replaceState(
-    {},
-    0,
-    location.href.replace(location.search, "")
-  );
+  window.history.replaceState({}, 0, location.href.replace(location.search, ''));
 }
 
 export function verifyAuth() {
   // 获取url search token
-  const token = getQueryToken("token");
+  const token = getQueryToken('token');
   if (token) {
     // 设置token
     setToken(token);
@@ -51,7 +44,7 @@ export function verifyAuth() {
  * @desc 设置loginType，区分登录入口  1. 三农：ext  2. 子系统：in
  */
 export function setLoginType(value) {
-  localStorage.setItem(LoginType, value || "");
+  localStorage.setItem(LoginType, value || '');
 }
 export function getLoginType() {
   return localStorage.getItem(LoginType);
@@ -64,7 +57,7 @@ export function removeLoginType() {
 export function getLoginPath() {
   const { sn_loginPath, loginPath } = config;
   const loginType = getLoginType();
-  return (loginType !== "in" && sn_loginPath) || loginPath;
+  return (loginType !== 'in' && sn_loginPath) || loginPath;
   // return (loginType !== "in" && loginPath) || sn_loginPath;
 }
 

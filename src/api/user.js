@@ -1,11 +1,16 @@
-import axios from "@/utils/request";
-import config from "@/utils/config";
-const { apiHost, apiHost2 } = config;
+import axios from '@/utils/request';
+import config from '@/utils/config';
+const {
+  apiHost,
+  apiHost2,
+  apiHost3
+} = config;
 
 export const pwdLogin = (data) => {
   return axios.request({
-    method: "post",
-    url: apiHost + "/login",
+    method: 'post',
+    // url: apiHost + '/login',
+    url: apiHost3 + "/api/user/login/pc",
     data,
   });
 };
@@ -13,8 +18,8 @@ export const pwdLogin = (data) => {
 // 浙政钉扫码登录
 export const QRCodeLogin = (data) => {
   return axios.request({
-    method: "post",
-    url: apiHost + "/loginByQrCode",
+    method: 'post',
+    url: apiHost + '/loginByQrCode',
     data,
   });
 };
@@ -22,8 +27,8 @@ export const QRCodeLogin = (data) => {
 // 登出
 export const logout = (data) => {
   return axios.request({
-    method: "post",
-    url: apiHost + "/logout?loginType=" + data,
+    method: 'post',
+    url: apiHost + '/logout?loginType=' + data,
   });
   // return axios.post(`${apiHost}/logout`);
 };
@@ -31,15 +36,16 @@ export const logout = (data) => {
 // 解除绑定
 export const unBind = (params) => {
   return axios.request({
-    method: "GET",
-    url: apiHost + "/user/unBind",
+    method: 'GET',
+    url: apiHost + '/user/unBind',
     params,
   });
 };
 
 // 获取用户信息
 export const getUserInfo = () => {
-  return axios.get(`${apiHost}/user/info`);
+  // return axios.get(`${apiHost}/user/info`);
+  return axios.get(`${apiHost3}/api/user/user/info`);
 };
 
 // 获取当前用户菜单权限 历史文化
@@ -51,8 +57,6 @@ export const getUserPermission = () => {
 export const getUserPermission2 = () => {
   return axios.get(`${apiHost2}/user/menus`);
 };
-
-
 
 // 根据父级部门id 获取部门列表
 export const getDepListById = (params) => {

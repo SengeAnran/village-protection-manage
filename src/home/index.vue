@@ -3,7 +3,7 @@
     <div class="box">
       <div class="item" v-for="(item, index) in dataList" :key="index" @click="goSystem(item.type, item.path)">
         <div class="img">
-          <img :src="item.iconURL" alt="">
+          <img :src="item.iconURL" alt="" />
         </div>
         <div class="title">{{ item.name }}</div>
       </div>
@@ -18,16 +18,11 @@ const getAsyncRoutes = (list, isRoot) => {
   return list.filter((item) => {
     const menuIds = item.meta && item.meta.menuIds;
     // 没有设置权限id 或者权限id为空数组，则默认为有访问权限
-    const hasPermit =
-      !menuIds ||
-      !menuIds.length ||
-      menuIds.find((it) => permissionIds.includes(it));
+    const hasPermit = !menuIds || !menuIds.length || menuIds.find((it) => permissionIds.includes(it));
     // 有访问权限
     if (hasPermit) {
       if (isRoot) {
-        const result = permissionList.find((item) =>
-          menuIds.includes(item.menuId)
-        );
+        const result = permissionList.find((item) => menuIds.includes(item.menuId));
         item.meta.title = result.menuName || item.meta.title;
       }
       // 有children
@@ -48,39 +43,39 @@ const getAsyncRoutes = (list, isRoot) => {
     // 没有访问权限则什么都不返回
   });
 };
-import store from "@/store";
-import { mapMutations, mapGetters } from "vuex";
-import lodash from "lodash";
+import store from '@/store';
+import { mapMutations, mapGetters } from 'vuex';
+import lodash from 'lodash';
 // import { defaultRoutes, defaultRoutes2 } from "../router/navList";
-import router from "../router";
-import { routeType } from "../utils/routeType";
+import router from '../router';
+import { routeType } from '../utils/routeType';
 export default {
-  name: "index",
+  name: 'index',
   data() {
     return {
       dataList: [
         {
-          name: "未来乡村建设工作台",
-          iconURL: require("./imgs/icon_01.png"),
-          path: "/villageApplication2/index",
+          name: '未来乡村建设工作台',
+          iconURL: require('./imgs/icon_01.png'),
+          path: '/villageApplication2/index',
           type: 2,
         },
         {
-          name: "历史文化村落保护管理应用",
-          iconURL:  require("./imgs/icon_02.png"),
-          path: "/villageApplication/index",
+          name: '历史文化村落保护管理应用',
+          iconURL: require('./imgs/icon_02.png'),
+          path: '/villageApplication/index',
           type: 1,
         },
         {
-          name: "跟着节气游乡村管理后台",
-          iconURL:  require("./imgs/icon_02.png"),
-          path: "",
+          name: '跟着节气游乡村管理后台',
+          iconURL: require('./imgs/icon_02.png'),
+          path: '',
           type: 1,
         },
         {
-          name: "未来乡村小程序管理后台",
-          iconURL:  require("./imgs/icon_03.png"),
-          path: "/neighborhoodMutualAid/index",
+          name: '未来乡村小程序管理后台',
+          iconURL: require('./imgs/icon_03.png'),
+          path: '/neighborhoodMutualAid/index',
           type: 3,
         },
         // {
@@ -95,32 +90,32 @@ export default {
         //   path: "",
         //   type: 1,
         // },
-
-      ]
-    }
+      ],
+    };
   },
   methods: {
-    ...mapMutations("user", ["SET_SYSTEM_TIME"]),
+    ...mapMutations('user', ['SET_SYSTEM_TIME']),
     async goSystem(type, path) {
       this.SET_SYSTEM_TIME(type);
-      window.localStorage.setItem("systemType", type);
-      console.log('this.changeSystem',this.changeSystem);
+      window.localStorage.setItem('systemType', type);
+      console.log('this.changeSystem', this.changeSystem);
       // console.log(store.getters.changeSystem || !store.getters.hasGetRoute);
       const roleSystemType = this.roleSystemType; // 系统类型
-      await this.$store.dispatch("user/getRouteList", roleSystemType);
+      await this.$store.dispatch('user/getRouteList', roleSystemType);
       console.log(routeType[roleSystemType]);
       const list = lodash.cloneDeep(routeType[roleSystemType]);
       console.log(list);
       const asyncRoutes = getAsyncRoutes(list, true);
       console.log(asyncRoutes);
-      this.$store.commit("user/SET_ROUTE_LIST", asyncRoutes); // 存储routeList
-      router.addRoutes([ // 动态添加更多的路由规则。参数必须是一个符合 routes 选项要求的数组。
+      this.$store.commit('user/SET_ROUTE_LIST', asyncRoutes); // 存储routeList
+      router.addRoutes([
+        // 动态添加更多的路由规则。参数必须是一个符合 routes 选项要求的数组。
         {
-          path: "/",
-          name: "Index",
-          component: () => import("@/layout"),
+          path: '/',
+          name: 'Index',
+          component: () => import('@/layout'),
           redirect: {
-            name: asyncRoutes.length ? asyncRoutes[0].name : "",
+            name: asyncRoutes.length ? asyncRoutes[0].name : '',
           },
           children: asyncRoutes,
         },
@@ -128,16 +123,16 @@ export default {
       console.log(router);
       router.addRoutes([
         {
-          path: "*",
-          redirect: "/404",
+          path: '*',
+          redirect: '/404',
         },
       ]);
       console.log(type);
       console.log(!path, path);
       if (!path) {
         this.$message({
-          message: "该功能还未上线，请等待！",
-          type: "warning",
+          message: '该功能还未上线，请等待！',
+          type: 'warning',
         });
         return;
       }
@@ -145,9 +140,9 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["hasGetRoute", "changeSystem", "roleSystemType"])
+    ...mapGetters(['hasGetRoute', 'changeSystem', 'roleSystemType']),
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -179,8 +174,8 @@ export default {
       background: rgba(69, 130, 187, 0.2);
       box-shadow: 0px 4px 8px 0px rgba(25, 64, 102, 0.4);
       border-radius: 20px;
-      border: 2px solid #C0E0FF;
-      .img{
+      border: 2px solid #c0e0ff;
+      .img {
         height: 92px;
         img {
           width: 100%;
@@ -192,7 +187,7 @@ export default {
         font-size: 18px;
         font-family: PingFangSC-Semibold, PingFang SC;
         font-weight: 600;
-        color: #FFFFFF;
+        color: #ffffff;
         line-height: 25px;
         letter-spacing: 1px;
       }
@@ -201,13 +196,13 @@ export default {
         font-size: 16px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        color: #FFFFFF;
+        color: #ffffff;
         line-height: 22px;
         letter-spacing: 1px;
       }
     }
     .item:hover {
-      border: 4px solid #C0E0FF;
+      border: 4px solid #c0e0ff;
       background: rgba(125, 178, 227, 0.4);
       box-shadow: 0px 8px 12px 0px rgba(25, 64, 102, 0.6);
     }
@@ -215,6 +210,5 @@ export default {
       margin-right: 0;
     }
   }
-
 }
 </style>

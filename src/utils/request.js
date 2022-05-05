@@ -1,7 +1,7 @@
-import axios from "axios";
-import { Message } from "element-ui";
-import config from "@/utils/config";
-import { getToken, removeToken } from "@/utils/auth";
+import axios from 'axios';
+import { Message } from 'element-ui';
+import config from '@/utils/config';
+import { getToken, removeToken } from '@/utils/auth';
 
 const option = {
   baseURL: config.requestBaseUrl,
@@ -19,9 +19,9 @@ service.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.log(error, "请求失败"); // for debug
+    console.log(error, '请求失败'); // for debug
     return Promise.reject(error);
-  }
+  },
 );
 
 service.interceptors.response.use(
@@ -37,23 +37,23 @@ service.interceptors.response.use(
 
     // 这里需要根据不同的项目后端接口封装情况做适当调整
     if (res.code === -1) {
-      Message.error((res && res.msg) || "未知异常！");
+      Message.error((res && res.msg) || '未知异常！');
       removeToken();
       window.location.href = config.loginPath;
     } else if (res.code !== 0) {
-      Message.error((res && res.msg) || "未知异常！");
-      return Promise.reject(new Error((res && res.msg) || "未知异常！"));
+      Message.error((res && res.msg) || '未知异常！');
+      return Promise.reject(new Error((res && res.msg) || '未知异常！'));
     } else {
       return res.data;
     }
   },
   (error) => {
     if (axios.isCancel(error)) {
-      console.log("Request canceled");
+      console.log('Request canceled');
       return null;
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default service;

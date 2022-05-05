@@ -1,23 +1,21 @@
-import { pwdLogin, logout, getUserInfo, getUserPermission, getUserPermission2
-} from "@/api/user";
-import { getUserPermission3 } from "@/api3/user";
+import { pwdLogin, logout, getUserInfo, getUserPermission, getUserPermission2 } from '@/api/user';
+import { getUserPermission3 } from '@/api3/user';
 // import { removeToken } from "@/utils/auth";
-import { handleLoginOut } from "@/utils/auth";
+import { handleLoginOut } from '@/utils/auth';
 // import config from "@/utils/config";
 const systemTitleType = {
-  1: "历史文化村落保护管理应用",
-  2: "浙江省未来乡村建设服务平台",
-  3: "未来乡村小程序管理后台",
-  4: "跟着节气游乡村管理后台",
+  1: '历史文化村落保护管理应用',
+  2: '浙江省未来乡村建设服务平台',
+  3: '未来乡村小程序管理后台',
+  4: '跟着节气游乡村管理后台',
 };
 export default {
-
   namespaced: true,
   state: {
-    token: "",
-    roleSystemType: window.localStorage.getItem("roleSystemType") || 1, // 1: 历史文化， 2：未来乡村
+    token: '',
+    roleSystemType: window.localStorage.getItem('roleSystemType') || 1, // 1: 历史文化， 2：未来乡村
     changeSystem: false, //
-    systemTitle: "浙江省未来乡村建设服务平台",
+    systemTitle: '浙江省未来乡村建设服务平台',
     roleList: [], // 角色列表
     userInfo: {}, // 用户信息
     hasGetRoute: false, // 是否获取过路由信息
@@ -33,9 +31,9 @@ export default {
       if (state.roleSystemType !== payload) {
         state.changeSystem = true;
       }
-      window.localStorage.setItem("roleSystemType", payload);
+      window.localStorage.setItem('roleSystemType', payload);
       state.systemTitle = systemTitleType[payload];
-      console.log('systemTitle',  state.systemTitle);
+      console.log('systemTitle', state.systemTitle);
       state.roleSystemType = payload;
     },
     // SET_END_CHANGE_ROLE(state) {
@@ -63,7 +61,7 @@ export default {
     login({ commit }, params) {
       return new Promise((resolve) => {
         pwdLogin(params).then((res) => {
-          commit("setToken", res.token);
+          commit('setToken', res.token);
           resolve({ token: res.token });
         });
       });
@@ -90,30 +88,36 @@ export default {
     getRouteList({ commit }, params) {
       return new Promise((resolve) => {
         getUserInfo().then((res1) => {
-          commit("SET_USER_INFO", res1 || {});
+          commit('SET_USER_INFO', res1 || {});
           console.log(params);
           switch (params) {
-            case 1: {
-              getUserPermission().then((data) => {
-                commit("SET_PERMISSION_LIST", data || []);
-                resolve();
-              });
-            } break;
-            case 2: {
-              getUserPermission2().then((data) => {
-                commit("SET_PERMISSION_LIST", data || []);
-                resolve();
-              });
-            } break;
-            case 3: {
-              getUserPermission3().then((data) => {
-                commit("SET_PERMISSION_LIST", data || []);
-                resolve();
-              });
-            } break;
+            case 1:
+              {
+                getUserPermission().then((data) => {
+                  commit('SET_PERMISSION_LIST', data || []);
+                  resolve();
+                });
+              }
+              break;
+            case 2:
+              {
+                getUserPermission2().then((data) => {
+                  commit('SET_PERMISSION_LIST', data || []);
+                  resolve();
+                });
+              }
+              break;
+            case 3:
+              {
+                getUserPermission3().then((data) => {
+                  commit('SET_PERMISSION_LIST', data || []);
+                  resolve();
+                });
+              }
+              break;
             default: {
               getUserPermission().then((data) => {
-                commit("SET_PERMISSION_LIST", data || []);
+                commit('SET_PERMISSION_LIST', data || []);
                 resolve();
               });
             }
