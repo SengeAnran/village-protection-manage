@@ -75,7 +75,7 @@
         </div>
       </template>
       <template v-slot:crudAction >
-        <el-button v-if="userInfo.roleId === 3" type="primary" v-permission="40001" @click="goAdd"
+        <el-button v-if="userInfo.roleId === 3" type="primary" v-permission="3960099" @click="goAdd"
           >新建申报
         </el-button>
         <el-button type="primary" icon="el-icon-upload2" class="export-button" @click="clickExport">导出</el-button>

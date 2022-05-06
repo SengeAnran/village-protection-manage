@@ -38,9 +38,9 @@ service.interceptors.response.use(
 
     // 这里需要根据不同的项目后端接口封装情况做适当调整
     if (res.code === -1) {
-      Message.error((res && res.msg) || '未知异常！');
-      removeToken();
-      window.location.href = config.loginPath;
+      // Message.error((res && res.msg) || '未知异常！');
+      // removeToken();
+      // window.location.href = config.loginPath;
     } else if (res.code !== 0) {
       Message.error((res && res.msg) || '未知异常！');
       return Promise.reject(new Error((res && res.msg) || '未知异常！'));

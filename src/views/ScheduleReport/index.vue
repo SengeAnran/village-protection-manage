@@ -83,7 +83,7 @@
           <el-button
             type="primary"
             v-if="userInfo.roleId === 3"
-            v-permission="60001"
+            v-permission="5940099"
             @click="$router.push({ name: 'NewSchedule' })"
             >上报
           </el-button>

@@ -1,5 +1,4 @@
-import { pwdLogin, logout, getUserInfo, getUserCommonInfo, getUserPermission, getUserPermission2 } from '@/api/user';
-import { getUserPermission3 } from '@/api3/user';
+import { pwdLogin, logout, getUserInfo, getUserCommonInfo, getUserPermission } from '@/api/user';
 // import { removeToken } from "@/utils/auth";
 import { handleLoginOut } from '@/utils/auth';
 // import config from "@/utils/config";
@@ -15,7 +14,7 @@ export default {
     token: '',
     roleSystemType: window.localStorage.getItem('roleSystemType') || 4,
     changeSystem: false, //
-    systemTitle: '浙江省未来乡村建设服务平台',
+    systemTitle: window.localStorage.getItem('systemTitle') || '历史文化村落保护管理应用',
     roleList: [], // 角色列表
     userInfo: {}, // 用户信息
     userCommonInfo: {}, // 用户基础信息
@@ -34,6 +33,7 @@ export default {
         state.changeSystem = true;
       }
       window.localStorage.setItem('roleSystemType', payload);
+      window.localStorage.setItem('systemTitle', systemTitleType[payload])
       state.systemTitle = systemTitleType[payload];
       console.log('systemTitle', state.systemTitle);
       state.roleSystemType = payload;
@@ -102,54 +102,16 @@ export default {
         });
       });
     },
+    // 获得目录
     getRouteList({ commit }, params) {
       return new Promise((resolve) => {
         getUserInfo(params).then((res1) => {
           commit('SET_USER_INFO', res1 || {});
           console.log(params);
-          switch (params) {
-            case 3:
-              {
-                getUserPermission().then((data) => {
-                  commit('SET_PERMISSION_LIST', data || []);
-                  resolve();
-                });
-              }
-              break;
-            case 4:
-              {
-                getUserPermission2().then((data) => {
-                  commit('SET_PERMISSION_LIST', data || []);
-                  resolve();
-                });
-              }
-              break;
-            case 1:
-              {
-                getUserPermission3().then((data) => {
-                  commit('SET_PERMISSION_LIST', data || []);
-                  resolve();
-                });
-              }
-              break;
-            default: {
-              getUserPermission().then((data) => {
-                commit('SET_PERMISSION_LIST', data || []);
-                resolve();
-              });
-            }
-          }
-          // if (params === 2) {
-          //   getUserPermission2().then((data) => {
-          //     commit("SET_PERMISSION_LIST", data || []);
-          //     resolve();
-          //   });
-          // } else {
-          //   getUserPermission().then((data) => {
-          //     commit("SET_PERMISSION_LIST", data || []);
-          //     resolve();
-          //   });
-          // }
+          getUserPermission(params).then((data) => {
+            commit('SET_PERMISSION_LIST', data || []);
+            resolve();
+          });
         });
       });
     },

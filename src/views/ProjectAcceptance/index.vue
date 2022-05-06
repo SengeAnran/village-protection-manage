@@ -29,7 +29,7 @@
       hide-view
       hide-delete
       :permission-add="0"
-      :permission-edit="80002"
+      :permission-edit="7920198"
       :permission-delete="0"
       action-width="270px"
     >
@@ -266,12 +266,12 @@ export default {
     },
     modifyPermission() {
       const roleId = this.userInfo.roleId;
-      return roleId === 3 ? 80002 : roleId === 2 ? 10202 : 0;
+      return roleId === 3 ? 7920198 : roleId === 2 ? 1009998 : 0;
     },
     auditPermission() {
       const roleId = this.userInfo.roleId;
       if (![1, 2, 3].includes(roleId)) return 0;
-      return roleId === 3 ? 80002 : roleId === 2 ? 10202 : 10302;
+      return roleId === 3 ? 7920198 : roleId === 2 ? 1009998 : 1019898;
     },
   },
   created() {

@@ -72,7 +72,7 @@ export default {
           name: '跟着节气游乡村管理后台',
           iconURL: require('./imgs/icon_02.png'),
           path: '',
-          url: 'http://172.16.24.248:8182/',
+          url: 'https://wlxc.xscitydo.com:28080/gzjqyxc/',
           type: 2,
         },
         {

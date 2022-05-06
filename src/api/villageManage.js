@@ -9,6 +9,7 @@ export const getVillageArea = (params) => {
     method: "GET",
     url: apiHost + "/villageDeclaration/area",
     params,
+    headers: { 'APPLICATION-ID': '3' },
   });
 };
 // 查询申报批次和类型
@@ -17,6 +18,7 @@ export const queryTypeDeclaration = (params) => {
     method: "GET",
     url: apiHost + "/villageDeclaration/queryTypeDeclaration",
     params,
+    headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -34,6 +36,7 @@ export const recVerify = (data) => {
     method: "POST",
     url: apiHost + "/villageDeclaration/recVerify",
     data,
+    headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -43,6 +46,7 @@ export const getRecVillages = (params) => {
     method: "get",
     url: apiHost + "/villageDeclaration/recVillages",
     params,
+    headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -52,6 +56,7 @@ export const getVillageList = (params) => {
     method: "GET",
     url: apiHost + "/villageDeclaration",
     params,
+    headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -61,6 +66,7 @@ export const villageDeclaration = (data) => {
     method: "POST",
     url: apiHost + "/villageDeclaration",
     data,
+    headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -70,6 +76,7 @@ export const deleteVillageItem = (data) => {
     method: "DELETE",
     url: apiHost + "/villageDeclaration",
     data,
+    headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -79,6 +86,7 @@ export const updateVillageItem = (data) => {
     method: "PUT",
     url: apiHost + "/villageDeclaration",
     data,
+    headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -97,6 +105,7 @@ export const getVillageItemDetail = (params) => {
     method: "GET",
     url: apiHost + "/villageDeclaration/villageDetail/" + params.id,
     params,
+    headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -115,6 +124,7 @@ export const verify = (data) => {
     method: "POST",
     url: apiHost + "/villageDeclaration/verify",
     data,
+    headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -124,6 +134,7 @@ export const getCanPromoteList = (params) => {
     method: "GET",
     url: apiHost + "/villageDeclaration/detailList",
     params,
+    headers: { 'APPLICATION-ID': '3' },
   });
 };
 // 导出村庄详情
@@ -132,6 +143,7 @@ export const getvillageDetailExport = (params) => {
     method: "GET",
     url: apiHost + "/villageDeclaration/villageDetailExport/" + params.id,
     params,
-    responseType: "blob"
+    responseType: "blob",
+    headers: { 'APPLICATION-ID': '3' },
   });
 };

@@ -12,7 +12,7 @@
       hide-delete
       selection
       :permission-add="0"
-      :permission-edit="30002"
+      :permission-edit="2970198"
       :permission-delete="0"
       :action-width="`${userInfo.roleId === 3 ? '240px' : '200px'}`"
       @selectionChange="selectionChange"
@@ -100,14 +100,14 @@
             <el-divider direction="vertical"></el-divider>
           </div>
           <el-link
-            v-permission="30002"
+            v-permission="2970198"
             type="primary"
             @click="toAuditSave(scope, 'add')"
             v-if="actionControl('评审', scope.data.reviewStatus)"
             >评审</el-link
           >
           <el-link
-            v-permission="30002"
+            v-permission="2970198"
             type="primary"
             v-if="actionControl('修改', scope.data.reviewStatus)"
             @click="toAuditSave(scope, 'edit')"
@@ -122,7 +122,7 @@
           <div
             class="inline"
             v-if="actionControl('审核', scope.data.reviewStatus)"
-            v-permission="30003"
+            v-permission="2970297"
           >
             <el-divider direction="vertical"></el-divider>
             <el-link type="primary" @click="openDialog(scope)">审核</el-link>
