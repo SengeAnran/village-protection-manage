@@ -480,7 +480,7 @@ export const defaultRoutes2 = [
       name: "VillageApplyList2",
     },
     meta: {
-      menuIds: [100, 200],
+      menuIds: [3300, 200],
       title: "村庄申报1",
       hideChild: true,
       icon: "cunzhuangshenbao",
@@ -491,7 +491,7 @@ export const defaultRoutes2 = [
         name: "VillageApplyList2",
         meta: {
           icon: "cunzhuangshenbao",
-          menuIds: [990099, 1980099],
+          menuIds: [330033, 330066],
         },
         component: () => import("@/views2/VillageApplication/index.vue"),
       },
@@ -501,7 +501,7 @@ export const defaultRoutes2 = [
         hidden: true,
         meta: {
           activeMenu: "/villageApplication2/index",
-          menuIds: [990099],
+          menuIds: [330033],
         },
         component: () => import("@/views2/VillageApplication/New/index.vue"),
       },
