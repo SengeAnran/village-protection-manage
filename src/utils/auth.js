@@ -28,20 +28,26 @@ export function getQueryToken(name, isHash) {
 export function removeLocationSearch() {
   window.history.replaceState({}, 0, location.href.replace(location.search, ''));
 }
-
+const systemTitleType = {
+  3: '历史文化村落保护管理应用',
+  4: '浙江省未来乡村建设服务平台',
+  1: '未来乡村小程序管理后台',
+  2: '跟着节气游乡村管理后台',
+};
 export function verifyAuth() {
   // 获取url search token
   const token = getQueryToken('token');
   const systemType = getQueryToken('applicationId');
   if (systemType) {
-    window.localStorage.setItem('systemType', systemType);
+    localStorage.setItem('systemType', systemType);
+    localStorage.setItem('systemTitle', systemTitleType[systemType])
     setLoginType('in');
   }
   if (token) {
     // 设置token
     setToken(token);
   }
-  // 移除链接中token
+  // 移除链接中token、applicationId
   removeLocationSearch();
 }
 

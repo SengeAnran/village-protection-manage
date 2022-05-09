@@ -12,7 +12,7 @@ export default {
   namespaced: true,
   state: {
     token: '',
-    roleSystemType: window.localStorage.getItem('roleSystemType') || 4,
+    roleSystemType: window.localStorage.getItem('systemType') || 4,
     changeSystem: false, //
     systemTitle: window.localStorage.getItem('systemTitle') || '历史文化村落保护管理应用',
     roleList: [], // 角色列表
@@ -32,7 +32,7 @@ export default {
       if (state.roleSystemType !== payload) {
         state.changeSystem = true;
       }
-      window.localStorage.setItem('roleSystemType', payload);
+      window.localStorage.setItem('systemType', payload);
       window.localStorage.setItem('systemTitle', systemTitleType[payload])
       state.systemTitle = systemTitleType[payload];
       console.log('systemTitle', state.systemTitle);
