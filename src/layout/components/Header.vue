@@ -85,7 +85,7 @@ export default {
     goHome() {
       // this.$router.push('/home');
       location.href = config.loginPath + 'home';
-    };
+    },
   },
 };
 </script>
