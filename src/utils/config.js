@@ -1,6 +1,7 @@
 const proConfig = {
   apiHost: '/api/lswhcl',
-  loginPath: window.location.origin + '/lswhcl',
+  // loginPath: window.location.origin + '/lswhcl',
+  loginPath: 'https://wlxc.xscitydo.com:28080/portal/',
   routerBase: '/lswhcl',
   sn_loginPath: 'https://szsn.zjagri.cn/sso/assets/szsnbg/login.html', //三农平台默认登录地址
 };
@@ -12,7 +13,8 @@ const devConfig = {
   // apiHost2: "http://172.16.27.121:8680", // 未来乡村
   apiHost3: '/apiWX', // 未来乡村微信小程序
   // apiHost3: "http://172.16.25.142:5000", // 未来乡村微信小程序
-  loginPath: window.location.origin + '/admin',
+  // loginPath: window.location.origin + '/admin',
+  loginPath: 'https://wlxc.xscitydo.com:28080/portal/',
   routerBase: '/admin',
 };
 

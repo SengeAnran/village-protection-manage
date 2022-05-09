@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import { constantRoutes } from "./navList";
 import { routeType } from "../utils/routeType";
-import { getToken } from "@/utils/auth";
+import { getToken, getLoginPath } from "@/utils/auth";
 import lodash from "lodash";
 import store from "@/store";
 import config from "@/utils/config";
@@ -21,14 +21,15 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const token = getToken();
   if (!token) {
-    if (to.fullPath === "/login") {
-      return next();
-    } else {
-      return next({ path: "/login", replace: true });
-    }
+    location.href = getLoginPath();
+    // if (to.fullPath === "/login") {
+    //   return next();
+    // } else {
+    //   return next({ path: "/login", replace: true });
+    // }
   } else {
     console.log(to);
-    if (!store.getters.hasGetUserCommonInfo) {
+    if (!store.getters.hasGetUserCommonInfo) { // 用户基础信息
       store.dispatch("user/getUserCommonInfo");
     }
     if (to.name === "home") { // 去home页面不用获取目录
@@ -39,7 +40,6 @@ router.beforeEach((to, from, next) => {
       const systemType = Number(window.localStorage.getItem("systemType"));
       console.log("systemType",systemType)
       store.dispatch("user/getRouteList", systemType).then(() => {
-        // const list = lodash.cloneDeep(systemType === 2? defaultRoutes2 : defaultRoutes);
         const list = lodash.cloneDeep(routeType[systemType]);
         const asyncRoutes = getAsyncRoutes(list, true);
         console.log(list, asyncRoutes);

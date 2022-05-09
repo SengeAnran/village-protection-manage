@@ -67,7 +67,7 @@
               <div class="tip-title">排序提示</div>
               <div class="tip-content">当前正在申报的
                 <span>{{ batchInfo.pici }}</span>个批次中，有
-                <span>{{ batchInfo.import || 0}}</span>个重点村、
+                <span>{{ batchInfo.import || 0 }}</span>个重点村、
                 <span>{{ batchInfo.general || 0 }}</span>
                 个一般村申报已审核通过，您需要分批次排序后提交至省级审核。
               </div>
@@ -79,11 +79,11 @@
         </template>
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
-<!--            <el-link v-if="roleId !== 1" type="primary" @click="goDeclareRouter(scope)" >-->
-<!--&lt;!&ndash;              申报详情&ndash;&gt;-->
-<!--              详情-->
-<!--            </el-link>-->
-<!--            <el-divider v-if="roleId !== 1" direction="vertical"></el-divider>-->
+            <!--            <el-link v-if="roleId !== 1" type="primary" @click="goDeclareRouter(scope)" >-->
+            <!--&lt;!&ndash;              申报详情&ndash;&gt;-->
+            <!--              详情-->
+            <!--            </el-link>-->
+            <!--            <el-divider v-if="roleId !== 1" direction="vertical"></el-divider>-->
             <el-link
               @click="goAuditResult(scope)"
               v-if="actionControl('详情', scope.data.finalStatus)"
@@ -91,7 +91,7 @@
             >
               详情
             </el-link>
-<!--            <el-divider v-if="roleId !== 1" direction="vertical"></el-divider>-->
+            <!--            <el-divider v-if="roleId !== 1" direction="vertical"></el-divider>-->
             <el-link
               @click="goAudit(scope)"
               v-if="actionControl('审核', scope.data.finalStatus)"
@@ -105,8 +105,8 @@
               v-if="actionControl('修改', scope.data.finalStatus)"
               v-permission="10003"
             >
-              <el-link @click="edit(scope.data)" type="primary"> 修改 </el-link>
-<!--              <el-divider direction="vertical"></el-divider>-->
+              <el-link @click="edit(scope.data)" type="primary"> 修改</el-link>
+              <!--              <el-divider direction="vertical"></el-divider>-->
             </div>
             <el-divider v-if="actionControl('删除', scope.data.finalStatus)" direction="vertical"></el-divider>
             <el-link
@@ -121,7 +121,7 @@
         </template>
 
         <template v-slot:crudAction>
-          <el-button v-permission="10001" type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报 </el-button>
+          <el-button v-permission="10001" type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报</el-button>
         </template>
 
         <template v-slot:table>
@@ -129,16 +129,16 @@
             label="申报批次"
             prop="declarationBatch"
           ></el-table-column>
-<!--          <el-table-column label="申报类型" prop="declareType">-->
-<!--            <template slot-scope="scope">-->
-<!--              <p>{{ declareType[scope.row.declareType] }}</p>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column v-if="roleId ===1" label="推荐次序" align="center" width="100" prop="citySortNum">-->
-<!--            <template slot-scope="scope">-->
-<!--              <p>{{ scope.row.citySortNum }}</p>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
+          <!--          <el-table-column label="申报类型" prop="declareType">-->
+          <!--            <template slot-scope="scope">-->
+          <!--              <p>{{ declareType[scope.row.declareType] }}</p>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
+          <!--          <el-table-column v-if="roleId ===1" label="推荐次序" align="center" width="100" prop="citySortNum">-->
+          <!--            <template slot-scope="scope">-->
+          <!--              <p>{{ scope.row.citySortNum }}</p>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
           <el-table-column label="推荐次序" align="center" width="100" prop="countrySortNum">
             <template slot-scope="scope">
               <p>{{ scope.row.countrySortNum }}</p>
@@ -169,7 +169,7 @@
             </template>
           </el-table-column>
           <el-table-column label="状态" prop="finalStatus">
-<!--            0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过-->
+            <!--            0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过-->
             <template slot-scope="scope">
               <p>
                 <i
@@ -260,14 +260,20 @@
   </div>
 </template>
 <script>
-import { mapMutations, mapGetters } from "vuex";
-import { queryBatchInfo, queryTypeDeclaration, getRecVillages, getVillageList, deleteVillageItem } from "@/api2/villageManage";
+import {mapMutations, mapGetters} from "vuex";
+import {
+  queryBatchInfo,
+  queryTypeDeclaration,
+  getRecVillages,
+  getVillageList,
+  deleteVillageItem
+} from "@/api2/villageManage";
 import {
   DECLEAR_TYPE,
   DECLEAR_STATUS,
   // PRO_DECLEAR_STATUS,
 } from "./constants";
-import {recVerify} from "../../api/villageManage";
+import {recVerify} from '../../api/villageManage';
 import {getvillagesExport} from "../../api2/villageManage";
 
 export default {
@@ -300,8 +306,7 @@ export default {
         //   label: "2021",
         // }
       ],
-      dialogDeclareTypeOpt2: [
-      ],
+      dialogDeclareTypeOpt2: [],
       declareStatusOpt: [
         {
           label: "全部",
@@ -378,7 +383,7 @@ export default {
     //   routerName && this.$router.push({ name: routerName });
     // },
     newApplications() {
-      this.$router.push({ name: "newApplication" });
+      this.$router.push({name: "newApplication"});
     },
     lookUp() {
       if (this.roleId === 2) {
@@ -409,7 +414,7 @@ export default {
               value: "1002",
             };
           } else {
-            return { label: "一般村", value: "1001" };
+            return {label: "一般村", value: "1001"};
           }
         });
         this.dialogQuery.declareType = this.dialogDeclareTypeOpt2[0].value;
@@ -435,7 +440,7 @@ export default {
       const res = await queryBatchInfo();
       if (res && res.pici) {
         this.batchInfo = res;
-        this.$confirm('审核已完成！\n'  +
+        this.$confirm('审核已完成！\n' +
           '您需要分批次排序后提交至省级审核。', '提示', {
           confirmButtonText: '前往排序',
           cancelButtonText: '暂不排序',
@@ -476,7 +481,7 @@ export default {
     // },
     // 审核详情
     goAuditResult(scope) {
-      const { id } = scope.data;
+      const {id} = scope.data;
       // if (this.roleId === 2) {
       //   this.$router.push({
       //     name: "villageDetails",
@@ -485,22 +490,22 @@ export default {
       // } else {
       //   this.$router.push({ name: "villageDetails", query: { id: detailId, goVerify: true } });
       // }
-      this.$router.push({ name: "villageDetails", query: { id: id } })
+      this.$router.push({name: "villageDetails", query: {id: id}})
     },
     // 审核
     goAudit(scope) {
-      const { id } = scope.data;
-      this.$router.push({ name: "villageDetails", query: { id: id } })
+      const {id} = scope.data;
+      this.$router.push({name: "villageDetails", query: {id: id}})
     },
 
 
     // 修改
     edit(data) {
       console.log(data);
-      const { id } = data;
+      const {id} = data;
       this.$router.push({
         name: "newApplication",
-        query: { id },
+        query: {id},
       });
     },
     // 删除
@@ -570,11 +575,13 @@ export default {
 <style lang="scss" scoped>
 .search-item {
   margin-right: 20px;
+
   .label {
     font-weight: 400;
     color: #333333;
   }
 }
+
 .status {
   display: inline-block;
   margin-right: 6px;
@@ -582,10 +589,12 @@ export default {
   height: 8px;
   border-radius: 100%;
   background: #ccc;
+
   &.active {
     background: #15be50;
   }
 }
+
 .tip {
   background: #EDF4FF;
   border: 1px solid #99CBF9;
@@ -593,14 +602,17 @@ export default {
   padding: 12px 16px;
   margin-bottom: 20px;
   display: flex;
+
   .tip-left {
     img {
       width: 16px;
       height: 16px;
       //background: #1492FF;
     }
+
     margin-right: 12px;
   }
+
   .tip-right {
     .tip-title {
       font-size: 16px;
@@ -610,6 +622,7 @@ export default {
       line-height: 22px;
       margin-bottom: 8px;
     }
+
     .tip-content {
       font-size: 14px;
       font-family: PingFangSC-Regular, PingFang SC;
@@ -617,10 +630,12 @@ export default {
       color: #666666;
       line-height: 22px;
       margin-bottom: 8px;
+
       span {
         color: #1492FF;
       }
     }
+
     .tip-button {
       font-size: 14px;
       font-family: PingFangSC-Regular, PingFang SC;

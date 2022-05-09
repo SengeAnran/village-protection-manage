@@ -3,7 +3,7 @@
     <div class="box">
       <div class="item" v-for="(item, index) in dataList" :key="index" @click="goSystem(item.type, item.path, item.url)">
         <div class="img">
-          <img :src="item.iconURL" alt="" />
+          <img :src="item.iconURL" alt=""/>
         </div>
         <div class="title">{{ item.name }}</div>
       </div>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import {getToken} from "@/utils/auth";
+import { getToken } from "@/utils/auth";
 
 const getAsyncRoutes = (list, isRoot) => {
   const permissionList = store.getters.permissionList;
@@ -46,11 +46,12 @@ const getAsyncRoutes = (list, isRoot) => {
   });
 };
 import store from '@/store';
-import { mapMutations, mapGetters } from 'vuex';
+import {mapMutations, mapGetters} from 'vuex';
 import lodash from 'lodash';
 // import { defaultRoutes, defaultRoutes2 } from "../router/navList";
 import router from '../router';
-import { routeType } from '../utils/routeType';
+import {routeType} from '../utils/routeType';
+
 export default {
   name: 'index',
   data() {
@@ -102,7 +103,7 @@ export default {
     async goSystem(type, path, url) {
       if (!path && url) {
         const token = getToken();
-        window.open(url + '?token=' + token,'_self');
+        window.open(url + '?token=' + token, '_self');
         return;
       }
       this.SET_SYSTEM_TIME(type);
@@ -172,6 +173,7 @@ export default {
     width: 1040px;
     display: flex;
     flex-wrap: wrap;
+
     .item {
       cursor: pointer;
       text-align: center;
@@ -184,14 +186,17 @@ export default {
       box-shadow: 0px 4px 8px 0px rgba(25, 64, 102, 0.4);
       border-radius: 20px;
       border: 2px solid #c0e0ff;
+
       .img {
         height: 92px;
+
         img {
           width: 100%;
           height: 100%;
           object-fit: none;
         }
       }
+
       .title {
         font-size: 18px;
         font-family: PingFangSC-Semibold, PingFang SC;
@@ -200,6 +205,7 @@ export default {
         line-height: 25px;
         letter-spacing: 1px;
       }
+
       .name {
         margin-top: 16px;
         font-size: 16px;
@@ -210,11 +216,13 @@ export default {
         letter-spacing: 1px;
       }
     }
+
     .item:hover {
       border: 4px solid #c0e0ff;
       background: rgba(125, 178, 227, 0.4);
       box-shadow: 0px 8px 12px 0px rgba(25, 64, 102, 0.6);
     }
+
     .item:nth-child(4n) {
       margin-right: 0;
     }

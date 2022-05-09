@@ -32,6 +32,11 @@ export function removeLocationSearch() {
 export function verifyAuth() {
   // 获取url search token
   const token = getQueryToken('token');
+  const systemType = getQueryToken('applicationId');
+  if (systemType) {
+    window.localStorage.setItem('systemType', systemType);
+    setLoginType('in');
+  }
   if (token) {
     // 设置token
     setToken(token);
@@ -57,12 +62,19 @@ export function removeLoginType() {
 export function getLoginPath() {
   const { sn_loginPath, loginPath } = config;
   const loginType = getLoginType();
-  return (loginType !== 'in' && sn_loginPath) || loginPath;
-  // return (loginType !== "in" && loginPath) || sn_loginPath;
+  let path = '';
+  if (loginType !== 'in' && sn_loginPath) {
+    path = sn_loginPath;
+  } else {
+    path = loginPath + 'login' + `?redirect_url=${encodeURIComponent(location.href)}&applicationId=${window.localStorage.getItem('systemType')}`;
+  }
+  return path;
+  // return (loginType !== 'in' && loginPath) || sn_loginPath;
 }
 
 export function handleLoginOut() {
   removeToken();
+  getLoginPath();
   location.href = getLoginPath();
   removeLoginType();
 }

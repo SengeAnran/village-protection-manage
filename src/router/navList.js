@@ -480,7 +480,7 @@ export const defaultRoutes2 = [
       name: "VillageApplyList2",
     },
     meta: {
-      menuIds: [3300, 200],
+      menuIds: [3300, 6600],
       title: "村庄申报1",
       hideChild: true,
       icon: "cunzhuangshenbao",
@@ -491,7 +491,7 @@ export const defaultRoutes2 = [
         name: "VillageApplyList2",
         meta: {
           icon: "cunzhuangshenbao",
-          menuIds: [330033, 330066],
+          menuIds: [330033, 330066, 660033],
         },
         component: () => import("@/views2/VillageApplication/index.vue"),
       },
