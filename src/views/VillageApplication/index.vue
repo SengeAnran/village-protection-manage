@@ -101,7 +101,7 @@
             <el-link
               @click="goAudit(scope)"
               v-if="actionControl('审核', scope.data.declareStatus)"
-              v-permission="1980198"
+              v-permission="320002"
               type="primary"
             >
               审核
@@ -127,7 +127,7 @@
 
         <template v-slot:crudAction>
           <el-dropdown
-            v-permission="990099"
+            v-permission="310001"
             class="mr-3"
             @command="newApplications"
           >

@@ -24,7 +24,6 @@ export const constantRoutes = [
 ];
 
 export const defaultRoutes = [
-  // 历史文化
   // 村庄申报 / 村庄审核
   {
     path: "/villageApplication",
@@ -34,7 +33,7 @@ export const defaultRoutes = [
       name: "VillageApplyList",
     },
     meta: {
-      menuIds: [9900, 19800],
+      menuIds: [3100, 3200],
       title: "村庄申报",
       hideChild: true,
       icon: "cunzhuangshenbao",
@@ -45,7 +44,7 @@ export const defaultRoutes = [
         name: "VillageApplyList",
         meta: {
           icon: "cunzhuangshenbao",
-          menuIds: [990099, 990198, 1980099],
+          menuIds: [310002, 320001],
         },
         component: () => import("@/views/VillageApplication/index.vue"),
       },
@@ -56,7 +55,7 @@ export const defaultRoutes = [
         meta: {
           activeMenu: "/villageApplication/index",
           title: "一般村申报",
-          menuIds: [990099],
+          menuIds: [310001],
         },
         component: () => import("@/views/VillageApplication/New/Ordinary.vue"),
       },
@@ -67,7 +66,7 @@ export const defaultRoutes = [
         meta: {
           activeMenu: "/villageApplication/index",
           title: "重点村申报",
-          menuIds: [990099],
+          menuIds: [310001],
         },
         component: () => import("@/views/VillageApplication/New/Major.vue"),
       },
@@ -78,7 +77,7 @@ export const defaultRoutes = [
         meta: {
           activeMenu: "/villageApplication/index",
           title: "提升申报",
-          menuIds: [990099],
+          menuIds: [310001],
         },
         component: () => import("@/views/VillageApplication/New/Promote.vue"),
       },
@@ -89,7 +88,7 @@ export const defaultRoutes = [
         meta: {
           activeMenu: "/villageApplication/index",
           title: "申报详情",
-          menuIds: [990099, 1980099],
+          menuIds: [310002, 320001],
         },
         component: () =>
           import("@/views/VillageApplication/DeclareList/index.vue"),
@@ -101,7 +100,7 @@ export const defaultRoutes = [
         meta: {
           activeMenu: "/villageApplication/index",
           title: "审核详情",
-          menuIds: [990099, 1980099],
+          menuIds: [310002, 320001],
         },
         component: () =>
           import("@/views/VillageApplication/AuditList/index.vue"),
@@ -113,7 +112,7 @@ export const defaultRoutes = [
         meta: {
           activeMenu: "/villageApplication/index",
           title: "审核",
-          menuIds: [1980198],
+          menuIds: [320002],
         },
         component: () => import("@/views/VillageApplication/Audit/index.vue"),
       },
@@ -124,7 +123,7 @@ export const defaultRoutes = [
         meta: {
           activeMenu: "/villageApplication/index",
           title: "详情",
-          menuIds: [990099, 1980099],
+          menuIds: [310002, 320001],
         },
         component: () => import("@/views/VillageApplication/Detail/index.vue"),
       },
@@ -139,7 +138,7 @@ export const defaultRoutes = [
       name: "PlanAuditList",
     },
     meta: {
-      menuIds: [29700],
+      menuIds: [3300],
       title: "规划评审",
       icon: "guihuapingshen",
       hideChild: true,
@@ -150,7 +149,7 @@ export const defaultRoutes = [
         name: "PlanAuditList",
         meta: {
           icon: "guihuapingshen",
-          menuIds: [2970099],
+          menuIds: [330001],
         },
         component: () => import("@/views/PlanAudit/index"),
       },
@@ -162,7 +161,7 @@ export const defaultRoutes = [
           title: "评审",
           noCache: true,
           activeMenu: "/planAudit/index",
-          menuIds: [2970198],
+          menuIds: [330002],
         },
         component: () => import("@/views/PlanAudit/Save"),
       },
@@ -174,7 +173,7 @@ export const defaultRoutes = [
           title: "评审详情",
           noCache: true,
           activeMenu: "/planAudit/index",
-          menuIds: [2970099],
+          menuIds: [330001],
         },
         component: () => import("@/views/PlanAudit/Detail"),
       },
@@ -186,7 +185,7 @@ export const defaultRoutes = [
           title: "审核详情",
           noCache: true,
           activeMenu: "/planAudit/index",
-          menuIds: [2970099],
+          menuIds: [330001],
         },
         component: () => import("@/views/PlanAudit/VerifyDetail"),
       },
@@ -198,7 +197,7 @@ export const defaultRoutes = [
           title: "评审",
           noCache: true,
           activeMenu: "/planAudit/index",
-          menuIds: [2970297],
+          menuIds: [330003],
         },
         component: () => import("@/views/PlanAudit/Review"),
       },
@@ -213,7 +212,7 @@ export const defaultRoutes = [
       name: "ProjectApplyList",
     },
     meta: {
-      menuIds: [39600, 49500],
+      menuIds: [3400, 3500],
       title: "项目申报",
       icon: "xiangmushenbao",
       hideChild: true,
@@ -224,7 +223,7 @@ export const defaultRoutes = [
         name: "ProjectApplyList",
         meta: {
           icon: "xiangmushenbao",
-          menuIds: [3960198, 4950099],
+          menuIds: [340002, 350001],
         },
         component: () => import("@/views/ProjectApplication/index.vue"),
       },
@@ -236,7 +235,7 @@ export const defaultRoutes = [
           title: "项目管理",
           noCache: true,
           activeMenu: "/projectApplication/index",
-          menuIds: [3960099, 3960297],
+          menuIds: [340001, 340003],
         },
         component: () => import("@/views/ProjectApplication/Save"),
       },
@@ -248,7 +247,7 @@ export const defaultRoutes = [
           title: "项目详情",
           noCache: true,
           activeMenu: "/projectApplication/index",
-          menuIds: [3960198, 4950099],
+          menuIds: [340002, 350001],
         },
         component: () => import("@/views/ProjectApplication/Detail"),
       },
@@ -260,7 +259,7 @@ export const defaultRoutes = [
           title: "审核详情",
           noCache: true,
           activeMenu: "/projectApplication/index",
-          // menuIds: [3960198, 4950099],
+          // menuIds: [40002, 50001],
         },
         component: () => import("@/views/ProjectApplication/VerifyDetail"),
       },
@@ -275,7 +274,7 @@ export const defaultRoutes = [
       name: "ScheduleReportList",
     },
     meta: {
-      menuIds: [59400, 69300],
+      menuIds: [3600, 3700],
       title: "进度上报",
       icon: "jindushangbao",
       hideChild: true,
@@ -286,7 +285,7 @@ export const defaultRoutes = [
         name: "ScheduleReportList",
         meta: {
           icon: "jindushangbao",
-          menuIds: [5940198, 6930099],
+          menuIds: [360002, 370001],
         },
         component: () => import("@/views/ScheduleReport/index"),
       },
@@ -298,7 +297,7 @@ export const defaultRoutes = [
           title: "上报",
           icon: "jindushangbao",
           activeMenu: "/scheduleReport/index",
-          menuIds: [5940099],
+          menuIds: [360001],
         },
         component: () => import("@/views/ScheduleReport/New/index.vue"),
       },
@@ -310,7 +309,7 @@ export const defaultRoutes = [
           title: "查看详情",
           icon: "jindushangbao",
           activeMenu: "/scheduleReport/index",
-          menuIds: [5940198, 6930099],
+          menuIds: [360002, 370001],
         },
         component: () => import("@/views/ScheduleReport/Detail/index.vue"),
       },
@@ -322,7 +321,7 @@ export const defaultRoutes = [
           title: "历史进度",
           icon: "jindushangbao",
           activeMenu: "/scheduleReport/index",
-          menuIds: [6930099],
+          menuIds: [370001],
         },
         component: () => import("@/views/ScheduleReport/History/index.vue"),
       },
@@ -337,7 +336,7 @@ export const defaultRoutes = [
       name: "ProjectAcceptanceList",
     },
     meta: {
-      menuIds: [79200, 10098, 10197],
+      menuIds: [3800, 3102, 3103],
       title: "项目验收",
       icon: "xiangmuyanshou",
       hideChild: true,
@@ -348,7 +347,7 @@ export const defaultRoutes = [
         name: "ProjectAcceptanceList",
         meta: {
           icon: "xiangmuyanshou",
-          menuIds: [7920099, 1009899, 1019799],
+          menuIds: [380001, 310201, 310301],
         },
         component: () => import("@/views/ProjectAcceptance/index"),
       },
@@ -360,7 +359,7 @@ export const defaultRoutes = [
           title: "验收",
           noCache: true,
           activeMenu: "/projectAcceptance/index",
-          menuIds: [7920198, 1009998, 1019898],
+          menuIds: [380002, 310202, 310302],
         },
         component: () => import("@/views/ProjectAcceptance/Save"),
       },
@@ -372,7 +371,7 @@ export const defaultRoutes = [
           title: "验收详情",
           noCache: true,
           activeMenu: "/projectAcceptance/index",
-          menuIds: [7920198, 1009899, 1019799],
+          menuIds: [380002, 310201, 310301],
         },
         component: () => import("@/views/ProjectAcceptance/VerifyDetail"),
       },
@@ -384,7 +383,7 @@ export const defaultRoutes = [
           title: "整改详情",
           noCache: true,
           activeMenu: "/projectAcceptance/index",
-          // menuIds: [7920198, 1009899, 1019799],
+          // menuIds: [80002, 10201, 10301],
         },
         component: () => import("@/views/ProjectAcceptance/RectificationDetails"),
       },
@@ -394,11 +393,11 @@ export const defaultRoutes = [
   {
     path: "/policyQuery",
     component: () => import("@/views/PolicyQuery/index.vue"),
-    name: "PolicyQuery",
+    neme: "PolicyQuery",
     meta: {
       title: "政策查询",
       icon: "zhengcechaxun",
-      menuIds: [990000],
+      menuIds: [310000],
     },
   },
   // 系统管理
@@ -412,7 +411,7 @@ export const defaultRoutes = [
     meta: {
       title: "系统管理",
       icon: "xitongguanli",
-      menuIds: [89100],
+      menuIds: [3900],
     },
     children: [
       {
@@ -420,7 +419,7 @@ export const defaultRoutes = [
         name: "InfoSetting",
         meta: {
           title: "信息库管理",
-          menuIds: [891099],
+          menuIds: [39001],
         },
         component: () => import("@/views/Setting/Info/index.vue"),
       },
@@ -429,7 +428,7 @@ export const defaultRoutes = [
         name: "Statistics",
         meta: {
           title: "数据统计",
-          menuIds: [891297],
+          menuIds: [39003],
         },
         component: () => import("@/views/Setting/Statistics/index.vue"),
       },
@@ -438,7 +437,7 @@ export const defaultRoutes = [
         name: "UserSetting",
         meta: {
           title: "用户管理",
-          menuIds: [891198],
+          menuIds: [39002],
         },
         component: () => import("@/views/Setting/User/index.vue"),
       },
@@ -451,7 +450,7 @@ export const defaultRoutes = [
     meta: {
       title: "系统日志",
       icon: "xitongrizhi",
-      menuIds: [9999],
+      menuIds: [3101],
     },
     component: () => import("@/views/SystemLog/index.vue"),
   },
@@ -463,7 +462,7 @@ export const defaultRoutes = [
     meta: {
       title: "政策文件管理",
       icon: "zhengcewenjianguanli",
-      menuIds: [19899],
+      menuIds: [3201],
     },
   },
 ];
@@ -480,7 +479,7 @@ export const defaultRoutes2 = [
       name: "VillageApplyList2",
     },
     meta: {
-      menuIds: [3300, 6600],
+      menuIds: [4100, 4200],
       title: "村庄申报1",
       hideChild: true,
       icon: "cunzhuangshenbao",
@@ -491,7 +490,7 @@ export const defaultRoutes2 = [
         name: "VillageApplyList2",
         meta: {
           icon: "cunzhuangshenbao",
-          menuIds: [330033, 330066, 660033],
+          menuIds: [],
         },
         component: () => import("@/views2/VillageApplication/index.vue"),
       },
@@ -501,7 +500,7 @@ export const defaultRoutes2 = [
         hidden: true,
         meta: {
           activeMenu: "/villageApplication2/index",
-          menuIds: [330033],
+          menuIds: [],
         },
         component: () => import("@/views2/VillageApplication/New/index.vue"),
       },
@@ -512,7 +511,7 @@ export const defaultRoutes2 = [
         meta: {
           activeMenu: "/villageApplication2/index",
           title: "详情",
-          menuIds: [990099, 1980099],
+          menuIds: [],
         },
         component: () => import("@/views2/VillageApplication/Detail/index.vue"),
       },

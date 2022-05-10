@@ -8,6 +8,14 @@ const systemTitleType = {
   1: '未来乡村小程序管理后台',
   2: '跟着节气游乡村管理后台',
 };
+const roleIdType = {
+  41: 1,
+  31: 1,
+  42: 2,
+  32: 2,
+  43: 3,
+  33: 3,
+};
 export default {
   namespaced: true,
   state: {
@@ -46,6 +54,9 @@ export default {
     },
     SET_USER_INFO(state, data) {
       state.userInfo = data || {};
+      if (data.roleId) {
+        state.userInfo.roleId = roleIdType[data.roleId];
+      }
     },
     SET_USER_COMMON_INFO(state, data) {
       state.userCommonInfo = data || {};

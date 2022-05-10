@@ -103,7 +103,6 @@
             <div
               style="display: inline-block"
               v-if="actionControl('修改', scope.data.finalStatus)"
-              v-permission="10003"
             >
               <el-link @click="edit(scope.data)" type="primary"> 修改</el-link>
               <!--              <el-divider direction="vertical"></el-divider>-->
@@ -113,7 +112,6 @@
               @click="deleteItem(scope.data.id)"
               v-if="actionControl('删除', scope.data.finalStatus)"
               type="danger"
-              v-permission="10004"
             >
               删除
             </el-link>
@@ -121,7 +119,7 @@
         </template>
 
         <template v-slot:crudAction>
-          <el-button v-permission="10001" type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报</el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报</el-button>
         </template>
 
         <template v-slot:table>
