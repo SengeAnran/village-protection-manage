@@ -119,7 +119,7 @@
         </template>
 
         <template v-slot:crudAction>
-          <el-button type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报</el-button>
+          <el-button v-if="roleId === 3" type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报</el-button>
         </template>
 
         <template v-slot:table>

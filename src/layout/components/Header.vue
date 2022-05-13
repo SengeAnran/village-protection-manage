@@ -4,7 +4,7 @@
     <div class="right-menu">
       <!--      <span class="go-home" @click="$router.push('/home')">-->
       <span class="go-home" @click="goHome">
-         <img src="@/assets/imgs/go_home.png" alt="">
+        <img src="@/assets/imgs/go_home.png" alt="">
       </span>
       <Notify style="margin-right: 20px"/>
       <el-dropdown

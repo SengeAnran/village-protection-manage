@@ -38,7 +38,7 @@ service.interceptors.response.use(
     if (res.code === 2001) {
       Message.error((res && res.msg) || '未知异常！');
       removeToken();
-      location.href = getLoginPath();
+      location.href = getLoginPath(true);
     } else if (res.code !== 0) {
       Message.error((res && res.msg) || '未知异常！');
       return Promise.reject(new Error((res && res.msg) || '未知异常！'));

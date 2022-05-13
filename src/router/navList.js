@@ -445,7 +445,7 @@ export const defaultRoutes = [
   },
   // 系统日志
   {
-    path: "/systçemLog",
+    path: "/systemLog",
     name: "systemLog",
     meta: {
       title: "系统日志",

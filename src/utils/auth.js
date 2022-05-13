@@ -65,22 +65,27 @@ export function removeLoginType() {
   localStorage.removeItem(LoginType);
 }
 // 根据平台入口判断退出路径
-export function getLoginPath() {
+export function getLoginPath(byToken) {
   const { sn_loginPath, loginPath } = config;
   const loginType = getLoginType();
   let path = '';
   if (loginType !== 'in' && sn_loginPath) {
     path = sn_loginPath;
   } else {
-    path = loginPath + 'login' + `?redirect_url=${encodeURIComponent(location.href)}&applicationId=${window.localStorage.getItem('systemType')}`;
+    if (byToken) { // token失效
+      path = loginPath + 'login' + `?redirect_url=${encodeURIComponent(location.href)}&applicationId=${window.localStorage.getItem('systemType')}`;
+    } else {
+      path = loginPath + 'login' + `?redirect_url=${encodeURIComponent(location.protocol + '//' + location.host + config.routerBase + '/')}&applicationId=${window.localStorage.getItem('systemType')}`;
+    }
+    // path = loginPath + 'login' + `?redirect_url=${encodeURIComponent(location.protocol + '/' + location.host + config.routerBase)}&applicationId=${window.localStorage.getItem('systemType')}`;
   }
   return path;
   // return (loginType !== 'in' && loginPath) || sn_loginPath;
 }
 
-export function handleLoginOut() {
+export function handleLoginOut(byToken) {
   removeToken();
   getLoginPath();
-  location.href = getLoginPath();
+  location.href = getLoginPath(byToken);
   removeLoginType();
 }
