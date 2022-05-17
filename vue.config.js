@@ -1,10 +1,12 @@
+// import config from './src/utils/config';
 const path = require('path');
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
 const name = '历史文化村落保护管理应用';
 
-const publicPath = process.env.VUE_APP_ENV === 'production' ? '/lswhcl' : '/v2/admin';
+const publicPath = process.env.VUE_APP_ENV === 'production' ? '/v2/admin' : '/v2/admin';
+// const publicPath = config.routerBase;
 module.exports = {
   publicPath,
   productionSourceMap: false,
