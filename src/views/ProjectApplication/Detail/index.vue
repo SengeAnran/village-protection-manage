@@ -520,7 +520,7 @@
 <script>
 import rule from "@/mixins/rule";
 import _ from "lodash";
-import { getProjectDetail, verifyProject, pogressExport } from "@/api/projectDeclare";
+import {getProjectDetail, verifyProject, pogressExportDetail} from "@/api/projectDeclare";
 import { downloadWordFile } from "@/utils/data"
 import {mapGetters} from "vuex";
 
@@ -648,7 +648,7 @@ export default {
     clickExport() {
       const { id } = this.$route.query;
       const fileName = '项目申报文本'
-      pogressExport({id}).then(res => {
+      pogressExportDetail({id}).then(res => {
         console.log(res)
         downloadWordFile(res,fileName)
       })

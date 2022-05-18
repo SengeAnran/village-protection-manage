@@ -77,7 +77,7 @@ export const deleteProject = (data) => {
 
 
 // 导出
-export const pogressExport = (params) => {
+export const pogressExportDetail = (params) => {
   return axios.request({
     method: "get",
     url: apiHost + "/projectDeclare/detailExport/" + params.id,
@@ -86,13 +86,13 @@ export const pogressExport = (params) => {
 };
 
 
-// // 导出
-// export const pogressExport = (params) => {
-//   return axios.request({
-//     method: "get",
-//     url: apiHost + "/projectDeclare/exportExcelList",
-//     params,
-//     responseType: "blob",
-//     // headers: { 'APPLICATION-ID': '3' },
-//   });
-// };
+// 导出
+export const pogressExport = (params) => {
+  return axios.request({
+    method: "get",
+    url: apiHost + "/projectDeclare/exportExcelList",
+    params,
+    responseType: "blob",
+    // headers: { 'APPLICATION-ID': '3' },
+  });
+};
