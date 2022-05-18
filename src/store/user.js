@@ -46,9 +46,9 @@ export default {
       console.log('systemTitle', state.systemTitle);
       state.roleSystemType = payload;
     },
-    // SET_END_CHANGE_ROLE(state) {
-    //   state.changeRole = false;
-    // },
+    SET_SYSTEM_TITLE(state, value) {
+      state.systemTitle = value;
+    },
     SET_ROLE_LIST(state, payload) {
       state.roleList = payload;
     },
@@ -118,6 +118,9 @@ export default {
       return new Promise((resolve) => {
         getUserInfo(params).then((res1) => {
           commit('SET_USER_INFO', res1 || {});
+          if (window.localStorage.getItem('systemTitle')) {
+            commit('SET_SYSTEM_TITLE', window.localStorage.getItem('systemTitle'));
+          }
           console.log(params);
           getUserPermission(params).then((data) => {
             commit('SET_PERMISSION_LIST', data || []);

@@ -40,7 +40,7 @@ export function verifyAuth() {
   const systemType = getQueryToken('applicationId');
   if (systemType) {
     localStorage.setItem('systemType', systemType);
-    localStorage.setItem('systemTitle', systemTitleType[systemType])
+    localStorage.setItem('systemTitle', systemTitleType[systemType]);
     setLoginType('in');
   }
   if (token) {

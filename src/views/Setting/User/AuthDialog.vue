@@ -202,7 +202,8 @@ export default {
       this.ruleForm.areaId = "";
       this.ruleForm.areaName = "";
       this.clearCascaderValue();
-      if (val === 1) {
+      // console.log(val)
+      if (val === 31 || val > 100) {
         this.ruleForm.areaId = "33";
         this.ruleForm.areaName = "浙江省";
         this.setCascaderValue("浙江省");
@@ -237,12 +238,15 @@ export default {
 
     /**
      * @desc 判断角色的区域权限
+     * @param {String} roleId 角色 31,32,33,34, 310, 311  省市县村
      * @param {String} roleId 角色 1,2,3,4  省市县村
      * @param {Number} level 级联层级  2,3,4,5  市县镇村
      */
     checkAreaAuth(roleId, level) {
-      if (roleId <= 3) {
-        return !(roleId + 1 > level);
+      if (roleId <= 33) {
+        return !((roleId + 1) % 10 > level);
+      } else if (roleId > 300) {
+        return true;
       }
       return false;
     },

@@ -48,6 +48,9 @@ export default {
       return this.userInfo.zzdName;
     },
   },
+  mounted() {
+    // this.initTitle();
+  },
   methods: {
     ...mapActions("user", ["logout"]),
     handleLogout() {
@@ -86,6 +89,11 @@ export default {
       // this.$router.push('/home');
       location.href = config.loginPath + 'home';
     },
+    // initTitle() {
+    //   if (localStorage.getItem('systemTitle')) {
+    //     this.SET_SYSTEM_TYPE(localStorage.getItem('systemTitle'));
+    //   }
+    // },
   },
 };
 </script>
