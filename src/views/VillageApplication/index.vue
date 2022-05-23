@@ -300,7 +300,7 @@ export default {
   data() {
     const date = new Date();
     const year = date.getFullYear().toString();
-    console.log(year);
+    //console.log(year);
 
     return {
       query: {

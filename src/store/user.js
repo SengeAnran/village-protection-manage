@@ -36,14 +36,14 @@ export default {
       state.token = value;
     },
     SET_SYSTEM_TIME(state, payload) {
-      console.log(state.roleSystemType, payload);
+      //console.log(state.roleSystemType, payload);
       if (state.roleSystemType !== payload) {
         state.changeSystem = true;
       }
       window.localStorage.setItem('systemType', payload);
       window.localStorage.setItem('systemTitle', systemTitleType[payload])
       state.systemTitle = systemTitleType[payload];
-      console.log('systemTitle', state.systemTitle);
+      //console.log('systemTitle', state.systemTitle);
       state.roleSystemType = payload;
     },
     SET_SYSTEM_TITLE(state, value) {
@@ -121,7 +121,7 @@ export default {
           if (window.localStorage.getItem('systemTitle')) {
             commit('SET_SYSTEM_TITLE', window.localStorage.getItem('systemTitle'));
           }
-          console.log(params);
+          //console.log(params);
           getUserPermission(params).then((data) => {
             commit('SET_PERMISSION_LIST', data || []);
             resolve();

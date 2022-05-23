@@ -5,7 +5,7 @@ function resolve(dir) {
 }
 const name = '历史文化村落保护管理应用';
 
-const publicPath = process.env.VUE_APP_ENV === 'production' ? '/v2/admin' : '/v2/admin';
+const publicPath = process.env.VUE_APP_ENV === 'production' ? '/v2/admin' : '/admin';
 // const publicPath = config.routerBase;
 module.exports = {
   publicPath,
@@ -45,32 +45,32 @@ module.exports = {
         target: 'http://jqy.zjagri.cn/', //生产环境
         changeOrigin: true,
       },
-      '/v2/apiProxy': {
+      '/apiProxy': {
         // 历史文化
         target: 'http://172.16.25.142:8280/', // 测试环境1
         changeOrigin: true,
-        pathRewrite: (path) => path.replace('/v2/apiProxy', ''),
+        pathRewrite: (path) => path.replace('/apiProxy', ''),
         headers: {
           Connection: 'keep-alive',
           'APPLICATION-ID': '3',
         },
       },
-      '/v2/apiFun': {
+      '/apiFun': {
         // 未来乡村
         // target: 'http://172.16.25.142:8680/', // 测试环境
         target: 'http://172.16.25.142:5000/', // 测试环境
         changeOrigin: true,
-        pathRewrite: (path) => path.replace('/v2/apiFun', ''),
+        pathRewrite: (path) => path.replace('/apiFun', ''),
         headers: {
           Connection: 'keep-alive',
           'APPLICATION-ID': '4',
         },
       },
-      '/v2/apiWX': {
+      '/apiWX': {
         // 未来乡村小程序
         target: 'http://172.16.25.142:5000/', // 测试环境
         changeOrigin: true,
-        pathRewrite: (path) => path.replace('/v2/apiWX', ''),
+        pathRewrite: (path) => path.replace('/apiWX', ''),
         headers: {
           Connection: 'keep-alive',
         },

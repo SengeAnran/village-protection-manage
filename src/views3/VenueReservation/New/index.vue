@@ -108,7 +108,7 @@ import VillageAddressSelect from "../Components/VillageAddressSelect";
 
 import { addVenue, getVenueDetail, modifyVenueDetail } from '@/api3/venueReservation'
 const imgs = (rule, value, callback) => {
-  console.log(value);
+  //console.log(value);
   if (value.length < 1) {
     callback(new Error("至少需要上传1张以上图片"));
   } else if (value.length > 4) {
@@ -177,7 +177,7 @@ export default {
         this.form.picturesFiles = this.imageList;
         this.placeholder = this.form.address;
         this.finalStatus = res.finalStatus;
-        console.log(res);
+        //console.log(res);
         this.total = this.countTotal();
       });
     },
@@ -186,9 +186,9 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           // this.form.annexIds = this.form.annexFiles.map(i => i.fileId).toString();
-          console.log(this.form.picturesFiles);
+          //console.log(this.form.picturesFiles);
           this.form.photoId = this.form.picturesFiles.map(i=> i.filePath).toString();
-          console.log(this.form);
+          //console.log(this.form);
           if (this.type === "edit") {
             this.form.id = this.$route.query.id;
             this.update(this.form);
@@ -203,7 +203,7 @@ export default {
 
     // 新增申报item
     async submit(params) {
-      console.log(params);
+      //console.log(params);
       await addVenue(params);
       this.$message({
         message: '添加成功！',
@@ -214,7 +214,7 @@ export default {
     },
     // 修改item
     async update(params) {
-      console.log(params);
+      //console.log(params);
       await modifyVenueDetail(params);
       this.$message({
         message: '修改成功！',
@@ -228,7 +228,7 @@ export default {
     changeAddress(val) {
       const { address } = val;
       // this.form.villageName = village.areaName;
-      console.log(address);
+      //console.log(address);
       this.form.address = address;
     },
 

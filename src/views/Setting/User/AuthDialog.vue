@@ -185,7 +185,7 @@ export default {
         roleId: this.ruleForm.roleId,
         userId: this.data.userId,
       };
-      console.log(params);
+      //console.log(params);
       editUser(params).then(() => {
         this.$message({
           type: "success",

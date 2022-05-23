@@ -125,7 +125,7 @@ export default {
       downloadFile(res, fileName )
     },
     changeData() {
-      console.log('change');
+      //console.log('change');
       this.chartQuery.declareType = this.query.declareType;
       this.chartQuery.declareYear = this.query.declareYear;
     },

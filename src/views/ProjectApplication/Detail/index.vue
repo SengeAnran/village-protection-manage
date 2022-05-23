@@ -608,7 +608,7 @@ export default {
   computed: {
     ...mapGetters(["userInfo"]),
     roleId() {
-      console.log(this.userInfo.roleId);
+      //console.log(this.userInfo.roleId);
       return this.userInfo.roleId;
     },
   },
@@ -649,16 +649,16 @@ export default {
       const { id } = this.$route.query;
       const fileName = '项目申报文本'
       pogressExportDetail({id}).then(res => {
-        console.log(res)
+        //console.log(res)
         downloadWordFile(res,fileName)
       })
     },
     changeRoute() {
       if (this.$route.query.from && this.$route.query.from === 'ScheduleReportList') {
-        console.log(this.$route.matched);
+        //console.log(this.$route.matched);
         this.$route.matched[1].otherRedirect = { name: this.$route.query.from };
         this.$route.matched[1].meta.otherTitle = this.$route.query.name;
-        console.log(this.$route.matched[1]);
+        //console.log(this.$route.matched[1]);
       } else {
         this.$route.matched[1].otherRedirect = null;
         this.$route.matched[1].meta.otherTitle = '';

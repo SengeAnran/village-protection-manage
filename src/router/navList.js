@@ -467,7 +467,6 @@ export const defaultRoutes = [
   },
 ];
 
-
 export const defaultRoutes2 = [
   // 未来乡村
   // 村庄申报 / 村庄审核
@@ -577,7 +576,6 @@ export const defaultRoutes2 = [
       },
     ],
   },
-
 ];
 export const defaultRoutes3 = [
   // 未来乡村微信小程序

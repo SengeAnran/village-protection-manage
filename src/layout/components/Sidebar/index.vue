@@ -58,7 +58,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.routeList);
+    //console.log(this.routeList);
   },
   methods: {
     toggleSideBar() {

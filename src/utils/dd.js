@@ -19,9 +19,9 @@ const QRLogin = function () {
     window.addEventListener("message", function (event) {
       const origin = event.origin;
       if (origin == "https://" + DOMAIN) {
-        console.log(event, event.data);
-        console.log(JSON.stringify(event.data));
-        console.log(JSON.stringify(event));
+        //console.log(event, event.data);
+        //console.log(JSON.stringify(event.data));
+        //console.log(JSON.stringify(event));
 
         const code = event.data.code;
         QRCodeLogin({ code }).then((res) => {

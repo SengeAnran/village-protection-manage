@@ -111,7 +111,7 @@ export default {
     },
     addFile(file, key) {
       this.form[key].push(file);
-      console.log(this.form[key]);
+      //console.log(this.form[key]);
     },
     removeFile(file, key) {
       let removeIndex;

@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     async uploadImg(info) {
-      console.log(info);
+      //console.log(info);
       const formData = new FormData();
       formData.append("file", info.file);
 
@@ -87,7 +87,7 @@ export default {
       this.disabled = false;
     },
     beforeImgUpload(file) {
-      console.log(file);
+      //console.log(file);
       const suffix = file.name.split(".").slice(-1)[0];
       const isFormat = this.accept === "*" ? true : this.accept.indexOf(suffix) >= 0;
       const isLimit = file.size / 1024 / 1024 < this.limitSize;

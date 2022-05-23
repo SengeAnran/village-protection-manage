@@ -57,7 +57,7 @@ export default {
 
     // 点击组织节点，获取该组织下用户信息
     handleNodeClick(data) {
-      console.log(data)
+      //console.log(data)
       this.activeDep = this.activeDep === data.areaId ? "" : data.areaId;
       this.$emit("changeArea", data);
     },

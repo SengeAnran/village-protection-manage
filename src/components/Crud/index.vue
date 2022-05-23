@@ -29,6 +29,7 @@
         @click="exportDatas"
         >导出</el-button
       >
+      <slot name="export"></slot>
       <el-button
         icon="el-icon-delete"
         v-if="selection && multipleDelete"
@@ -573,7 +574,7 @@ export default {
       this.$confirm("是否移除该条数据？", "提示", {
         type: "warning",
       }).then(async () => {
-        console.log(item, index);
+        //console.log(item, index);
         this.items.splice(index, 1);
         // this.loading = true;
         // try {
@@ -629,7 +630,7 @@ export default {
     },
     // 上移
     moveUpItem(data, index) {
-      console.log(data, index);
+      //console.log(data, index);
       if (index !== 0) {
         this.items.splice(index, 1);
         this.items.splice(index - 1, 0, data);
@@ -672,7 +673,7 @@ export default {
     },
     // 保存
     async saveItem() {
-      console.log("点击了");
+      //console.log("点击了");
       this.$refs.form.validate(async (valid) => {
         if (valid) {
           try {

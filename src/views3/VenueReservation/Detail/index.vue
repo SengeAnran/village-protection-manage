@@ -92,7 +92,7 @@ export default {
             filePath: i,
           }
         })
-        console.log(res);
+        //console.log(res);
       });
     },
     edit() {

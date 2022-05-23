@@ -108,15 +108,15 @@ export default {
       }
       this.SET_SYSTEM_TIME(type);
       window.localStorage.setItem('systemType', type);
-      console.log('this.changeSystem', this.changeSystem);
+      //console.log('this.changeSystem', this.changeSystem);
       // console.log(store.getters.changeSystem || !store.getters.hasGetRoute);
       const roleSystemType = this.roleSystemType; // 系统类型
       await this.$store.dispatch('user/getRouteList', roleSystemType);
-      console.log(routeType[roleSystemType]);
+      //console.log(routeType[roleSystemType]);
       const list = lodash.cloneDeep(routeType[roleSystemType]);
-      console.log(list);
+      //console.log(list);
       const asyncRoutes = getAsyncRoutes(list, true);
-      console.log(asyncRoutes);
+      //console.log(asyncRoutes);
       this.$store.commit('user/SET_ROUTE_LIST', asyncRoutes); // 存储routeList
       router.addRoutes([
         // 动态添加更多的路由规则。参数必须是一个符合 routes 选项要求的数组。

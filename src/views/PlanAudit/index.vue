@@ -251,12 +251,12 @@ export default {
       })
     },
     selectionChange(val) {
-      console.log(val);
+      //console.log(val);
       this.ids = [];
       val.forEach(item => {
         this.ids.push(item.id)
       });
-      console.log(this.ids);
+      //console.log(this.ids);
     },
     showVerify(status) {
       if (this.userInfo.roleId === 3) {
@@ -302,7 +302,7 @@ export default {
       }
     },
     goReview(scope) {
-      console.log(scope);
+      //console.log(scope);
       this.$router.push(`/planAudit/review?id=${scope.data.id}`);
     },
     resetForm() {

@@ -70,7 +70,7 @@ export default {
     query: {
       // immediate: true,
       handler(oldval, newval) {
-        console.log(oldval, newval);
+        //console.log(oldval, newval);
         this.fetchData();
       },
       deep: true,
@@ -91,7 +91,7 @@ export default {
         declareYear: Number(this.query.declareYear),
       }
       const data = await getEchartData(params);
-      console.log(data)
+      //console.log(data)
       this.chart.setOption(getOptions(data.distributionList));
     }
   },

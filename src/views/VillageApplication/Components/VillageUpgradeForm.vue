@@ -41,13 +41,13 @@ export default {
   },
   methods: {
     onImageAdd(res) {
-      console.log("add");
+      //console.log("add");
       this.imageList.push(res);
       this.form.villagePicturesArr.push(res.fileId);
       this.$refs.form.validateField("villagePicturesArr");
     },
     onImageRemove(res) {
-      console.log("remove");
+      //console.log("remove");
       const index = this.imageList.findIndex((list) => {
         return list.uid === res.uid || list.filePath === res.url;
       });

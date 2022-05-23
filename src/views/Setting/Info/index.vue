@@ -139,7 +139,7 @@ export default {
   },
   methods: {
     handleChange(value) {
-      console.log(value);
+      //console.log(value);
     },
     async getTree() {
       this.areaTree = await getAreaTree();
@@ -156,7 +156,7 @@ export default {
         villageName: scope.data.villageName,
         areaId: scope.data.areaId,
       };
-      console.log(this.form);
+      //console.log(this.form);
     },
     resetForm() {
       this.showDialog = false;

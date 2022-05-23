@@ -171,10 +171,10 @@ export default {
       this.showForm = true;
     },
     moveUpItem({ data, index }) {
-      console.log(index);
+      //console.log(index);
       this.form.detail.splice(index, 1);
       this.form.detail.splice(index - 1, 0, data);
-      console.log(this.form.detail);
+      //console.log(this.form.detail);
 
     },
     moveDownItem({ data, index }) {

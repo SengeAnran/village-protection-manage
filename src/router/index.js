@@ -28,21 +28,21 @@ router.beforeEach((to, from, next) => {
     //   return next({ path: "/login", replace: true });
     // }
   } else {
-    console.log(to);
+    //console.log(to);
     if (!store.getters.hasGetUserCommonInfo) { // 用户基础信息
       store.dispatch("user/getUserCommonInfo");
     }
     if (to.name === "home") { // 去home页面不用获取目录
-      console.log("to home");
+      //console.log("to home");
       return next();
     } else if (!store.getters.hasGetRoute) {
       // 如果没有获取路由信息，先获取路由信息而后跳转
       const systemType = Number(window.localStorage.getItem("systemType"));
-      console.log("systemType",systemType)
+      //console.log("systemType",systemType)
       store.dispatch("user/getRouteList", systemType).then(() => {
         const list = lodash.cloneDeep(routeType[systemType]);
         const asyncRoutes = getAsyncRoutes(list, true);
-        console.log(list, asyncRoutes);
+        //console.log(list, asyncRoutes);
         store.commit("user/SET_ROUTE_LIST", asyncRoutes); // 存储routeList
         router.addRoutes([ // 动态添加更多的路由规则。参数必须是一个符合 routes 选项要求的数组。
           {
@@ -95,7 +95,7 @@ router.beforeEach((to, from, next) => {
         to.matched[1].otherRedirect = '';
         to.matched[1].meta.otherTitle = '';
       }
-      console.log(to.path, from.path)
+      //console.log(to.path, from.path)
       next();
     }
   }
@@ -108,7 +108,7 @@ router.beforeEach((to, from, next) => {
 const getAsyncRoutes = (list, isRoot) => {
   const permissionList = store.getters.permissionList;
   const permissionIds = permissionList.map((item) => item.menuId);
-  console.log(list);
+  //console.log(list);
   return list.filter((item) => {
     const menuIds = item.meta && item.meta.menuIds;
     // 没有设置权限id 或者权限id为空数组，则默认为有访问权限

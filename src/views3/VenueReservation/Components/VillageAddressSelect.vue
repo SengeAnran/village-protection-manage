@@ -86,7 +86,7 @@ export default {
     //   });
     // },
     getCheckedNodes() {
-      console.log( this.$refs.cascader.getCheckedNodes());
+      //console.log( this.$refs.cascader.getCheckedNodes());
       const village = this.$refs.cascader.getCheckedNodes()[0];
       // const parent = village.parent;
       this.$emit("change", {
@@ -96,7 +96,7 @@ export default {
       });
     },
     getNodeAddressName(village) {
-      console.log(village);
+      //console.log(village);
       let addressArr = [];
       let node = village;
       while (node){

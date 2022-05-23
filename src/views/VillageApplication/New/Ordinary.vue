@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     addckick() {
-      console.log("点击了");
+      //console.log("点击了");
     },
     init() {
       getVillageDetail({ id: this.id, unPassFlag: this.Refill }).then((res) => {

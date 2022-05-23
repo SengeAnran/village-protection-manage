@@ -188,7 +188,7 @@ import VillageAddressSelect from "../Components/VillageAddressSelect";
 import { addOne } from "@/api3/OnlineMeeting.js";
 
 const imgs = (rule, value, callback) => {
-  console.log(value);
+  //console.log(value);
   if (value.length < 1) {
     callback(new Error("至少需要上传1张以上图片"));
   } else if (value.length > 4) {
@@ -277,9 +277,9 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           this.form.pics = this.form.pics.map(i => i.filePath);
-          console.log(this.form.picturesFiles);
+          //console.log(this.form.picturesFiles);
           this.form.participantUserIds = this.form.participantUser.map(i=> i.userId);
-          console.log(this.form);
+          //console.log(this.form);
           if (this.type === "edit") {
             this.form.id = this.$route.query.id;
             // this.update(this.form);
@@ -297,7 +297,7 @@ export default {
     },
     // 新增申报item
     async submit(params) {
-      console.log(params);
+      //console.log(params);
       await addOne(params);
       this.$message({
         message: '添加成功！',
@@ -307,7 +307,7 @@ export default {
     },
     // 修改item
     async update(params) {
-      console.log(params);
+      //console.log(params);
       await modifyVenueDetail(params);
       this.$message({
         message: '修改成功！',
@@ -320,7 +320,7 @@ export default {
     changeAddress(val) {
       const { address } = val;
       // this.form.villageName = village.areaName;
-      console.log(address);
+      //console.log(address);
       this.form.address = address;
     },
 

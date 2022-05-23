@@ -104,7 +104,7 @@ export default {
       });
     },
     edit(scope) {
-      console.log(scope);
+      //console.log(scope);
       this.$router.push({
         path: "/venueReservation/new",
         query: {

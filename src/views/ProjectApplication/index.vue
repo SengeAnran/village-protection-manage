@@ -208,7 +208,7 @@ export default {
 
   beforeMount() {
     this.statusOptions = this.basicOption.concat(this.normalizeSelectOptions(this.projectTypeMap));
-    console.log( this.statusOptions)
+    //console.log( this.statusOptions)
     this.XIANJI_ACTION = {
       详情: () => true,
       修改: (status) => this._canModify(status, 3),

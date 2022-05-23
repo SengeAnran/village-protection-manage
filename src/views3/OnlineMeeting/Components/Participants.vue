@@ -94,7 +94,7 @@ export default {
     changeAddress(val) {
       const { village } = val;
       // this.form.villageName = village.areaName;
-      console.log(village);
+      //console.log(village);
       this.query.areaId = village.value;
     },
     cancel() {
@@ -119,7 +119,7 @@ export default {
     },
     remove(tag, index) {
       this.dataList.push(...this.addNameList.splice(index, 1));
-      console.log('remove', tag);
+      //console.log('remove', tag);
     },
     onSubmit() {
       this.$emit("onSubmit", this.addNameList);

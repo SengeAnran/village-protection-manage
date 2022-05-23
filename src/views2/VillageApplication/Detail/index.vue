@@ -369,7 +369,7 @@ export default {
   },
   mounted() {
     this.init();
-    console.log(this.declareType);
+    //console.log(this.declareType);
   },
   methods: {
     onFileAdd(file, key) {
@@ -400,16 +400,16 @@ export default {
         this.verifyKey = verifyKey;
       }
       if (verifyDetail) {
-        console.log(verifyDetail);
+        //console.log(verifyDetail);
         this.textarea = verifyDetail.opinion;
         this.status = verifyDetail.status;
-        console.log(this.textarea);
+        //console.log(this.textarea);
       }
       if (!id) return;
       getVillageItemDetail({ id }).then((res) => {
         this.form = res;
         this.finalStatus = res.finalStatus;
-        console.log(res);
+        //console.log(res);
       });
     },
     async clickExport() {
@@ -449,7 +449,7 @@ export default {
       }
     },
     async submit() {
-      console.log(this.reviewForm.processFilesArr);
+      //console.log(this.reviewForm.processFilesArr);
       const { id } = this.$route.query;
       await verify({
         id: id, // 村庄id

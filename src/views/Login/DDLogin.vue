@@ -93,7 +93,7 @@ export default {
         zwddUserInfo: this.zwddUserInfo,
       };
       scanBinding(params).then((res) => {
-        console.log(res);
+        //console.log(res);
         if (res.code === "200") {
           this.loginSuccess(res);
         } else {
