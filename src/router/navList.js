@@ -517,6 +517,67 @@ export const defaultRoutes2 = [
       },
     ],
   },
+  // 验收评价
+  {
+    path: "/acceptanceEvaluation",
+    component: BlankRouteNode,
+    name: "AcceptanceEvaluation",
+    redirect: {
+      name: "AcceptanceEvaluationList",
+    },
+    meta: {
+      menuIds: [4100, 4200],
+      title: "验收评价",
+      hideChild: false,
+      icon: "cunzhuangshenbao",
+    },
+    children: [
+      {
+        path: "/acceptanceEvaluation/index",
+        name: "AcceptanceEvaluationList",
+        meta: {
+          // icon: "cunzhuangshenbao",
+          menuIds: [4100, 4200],
+          title: "创建成效评价申报",
+        },
+        component: () => import("@/views2/AcceptanceEvaluation/index.vue"),
+      },
+      {
+        path: "/acceptanceEvaluation/new",
+        name: "NewAcceptanceEvaluation",
+        hidden: true,
+        meta: {
+          activeMenu: "/acceptanceEvaluation/index",
+          title: "新增",
+          menuIds: [],
+        },
+        component: () => import("@/views2/AcceptanceEvaluation/New/index"),
+      },
+      {
+        path: "/acceptanceEvaluation/details",
+        name: "AcceptanceEvaluationDetails",
+        hidden: true,
+        meta: {
+          activeMenu: "/acceptanceEvaluation/index",
+          title: "详情",
+          menuIds: [],
+        },
+        component: () => import("@/views2/AcceptanceEvaluation/Detail/index"),
+      },
+      {
+        path: "/acceptanceEvaluation/acceptanceTime",
+        name: "AcceptanceTime",
+        hidden: false,
+        meta: {
+          // activeMenu: "/acceptanceEvaluation/index",
+          title: "验收时间配置",
+          menuIds: [4100, 4200],
+        },
+        component: () => import("@/views2/AcceptanceEvaluation/AcceptanceTime/index"),
+      },
+    ],
+  },
+
 ];
 export const defaultRoutes3 = [
   // 未来乡村微信小程序

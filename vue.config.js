@@ -57,7 +57,8 @@ module.exports = {
       },
       '/v2/apiFun': {
         // 未来乡村
-        target: 'http://172.16.25.142:8680/', // 测试环境
+        // target: 'http://172.16.25.142:8680/', // 测试环境
+        target: 'http://172.16.25.142:5000/', // 测试环境
         changeOrigin: true,
         pathRewrite: (path) => path.replace('/v2/apiFun', ''),
         headers: {
