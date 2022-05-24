@@ -6,6 +6,7 @@
         ref="crud"
         :add-method="addMethod"
         :get-method="getMethod"
+        :update-method="updateMethod"
         :delete-method="deleteMethod"
         :before-edit-method="beforeEditMethod"
         :query.sync="query"
@@ -22,7 +23,7 @@
         :permission-delete="4100"
       >
         <template v-slot:form>
-          <el-form-item label="申报批次：" prop="arrangements">
+          <el-form-item label="申报批次：" prop="acceptanceTime" :rules="rule.input">
             <el-input v-model="form.acceptanceTime" maxlength="20"></el-input>
           </el-form-item>
         </template>
@@ -46,7 +47,7 @@
         <template v-slot:table>
           <el-table-column
             label="申报批次"
-            prop="villageName"
+            prop="acceptanceTime"
           ></el-table-column>
           <el-table-column label="创建时间" prop="gmtCreate">
             <template slot-scope="scope">
@@ -63,29 +64,31 @@
 
 import {mapMutations, mapGetters} from "vuex";
 import {
-  getVillageList,
   deleteVillageItem,
+  getSetList,
   setAdd,
+  setDelete,
+  setUpdate,
 } from "@/api2/villageManage";
 import rule from "@/mixins/rule";
-import {recVerify} from '../../../api/villageManage';
-
+const type = 2; //type 1：验收时间，2：申报批次
 export default {
+  mixins: [rule],
   data() {
     return {
-      mixins: [rule],
       query: {
+        type: type,
       },
       form: {
-        type: 2, //type 1：验收时间，2：申报批次
+        type: type, //type 1：验收时间，2：申报批次
         acceptanceTime: '',
       },
       addMethod: setAdd,
-      getMethod: getVillageList,
-      deleteMethod: deleteVillageItem,
+      deleteMethod: setDelete,
+      updateMethod: setUpdate,
+      getMethod: getSetList,
 
       dialogVisible: false,
-      submitSortMethod: recVerify,
     };
   },
   computed: {
@@ -113,8 +116,9 @@ export default {
     beforeEditMethod(item) {
       console.log(item);
       this.form.acceptanceTime = item.acceptanceTime;
-      this.form.type = 2; //type 1：验收时间，2：申报批次
-    }
+      this.form.type = type; //type 1：验收时间，2：申报批次
+      this.form.id = item.id;
+    },
   },
 };
 </script>

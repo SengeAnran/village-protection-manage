@@ -154,3 +154,30 @@ export const setAdd = (data) => {
   });
 };
 
+
+// 验收时间-申报批次列表查询（type 1：验收时间，2：申报批次）
+export const getSetList = (data) => {
+  return axios.request({
+    method: "POST",
+    url: apiHost2 + `/api/workbench/createReports/time/list`,
+    data,
+  });
+};
+
+
+// 验收时间-申报批次新增（type 1：验收时间，2：申报批次）
+export const setDelete = (id) => {
+  return axios.request({
+    method: "get",
+    url: apiHost2 + `/api/workbench/createReports/time/delete/${id}`,
+  });
+};
+
+// 验收时间-申报批次修改
+export const setUpdate = (data) => {
+  return axios.request({
+    method: "POST",
+    url: apiHost2 + `/api/workbench/createReports/time/update/${data.id}/${data.acceptanceTime}`,
+  });
+};
+

@@ -529,6 +529,54 @@ export const defaultRoutes2 = [
   },
   // 验收评价
   {
+    path: "/progressSubmission",
+    component: BlankRouteNode,
+    name: "ProgressSubmission",
+    redirect: {
+      name: "ProgressSubmissionList",
+    },
+    meta: {
+      menuIds: [4100, 4200],
+      title: "项目进度报送",
+      hideChild: false,
+      icon: "cunzhuangshenbao",
+    },
+    children: [
+      {
+        path: "/progressSubmission/index",
+        name: "ProgressSubmissionList",
+        meta: {
+          // icon: "cunzhuangshenbao",
+          menuIds: [4100, 4200],
+          title: "县级报送",
+        },
+        component: () => import("@/views2/ProgressSubmission/index.vue"),
+      },
+      {
+        path: "/progressSubmission/new",
+        name: "NewProgressSubmission",
+        hidden: true,
+        meta: {
+          activeMenu: "/progressSubmission/index",
+          title: "新增",
+          menuIds: [],
+        },
+        component: () => import("@/views2/ProgressSubmission/New/index"),
+      },
+      {
+        path: "/progressSubmission/details",
+        name: "ProgressSubmissionDetails",
+        hidden: true,
+        meta: {
+          activeMenu: "/progressSubmission/index",
+          title: "详情",
+          menuIds: [],
+        },
+        component: () => import("@/views2/ProgressSubmission/Detail/index"),
+      },
+    ],
+  },// 验收评价
+  {
     path: "/acceptanceEvaluation",
     component: BlankRouteNode,
     name: "AcceptanceEvaluation",

@@ -30,7 +30,7 @@ export function removeLocationSearch() {
 }
 const systemTitleType = {
   3: '历史文化村落保护管理应用',
-  4: '浙江省未来乡村建设服务平台',
+  4: '浙江省未来乡村建设工作台',
   1: '未来乡村小程序管理后台',
   2: '跟着节气游乡村管理后台',
 };
@@ -41,6 +41,7 @@ export function verifyAuth() {
   if (systemType) {
     localStorage.setItem('systemType', systemType);
     localStorage.setItem('systemTitle', systemTitleType[systemType]);
+    document.title = systemTitleType[systemType];
     setLoginType('in');
   }
   if (token) {
