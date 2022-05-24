@@ -97,12 +97,7 @@
               v-if="!hideEdit"
               v-permission="permissionEdit"
               type="primary"
-              @click="
-                $router.push({
-                  path: editPath,
-                  query: { id: scope.row[idKey] },
-                })
-              "
+              @click="editItem(scope.row)"
               >编辑</el-link
             >
             <el-link
@@ -191,7 +186,7 @@
         :close-on-click-modal="closeOnClickModal"
       >
         <div>
-          <el-form ref="form" :model="form" :label-width="labelWidth">
+          <el-form ref="form" :model="form" :rules="rule" :label-width="labelWidth">
             <!--表单插槽-->
             <slot name="form"></slot>
           </el-form>
@@ -214,10 +209,12 @@
 </template>
 
 <script>
+import rule from "@/mixins/rule";
 import _ from "lodash";
 import { downloadFile } from "@/utils/data";
 
 export default {
+  mixins: [rule],
   props: {
     // 表单对象
     form: {
@@ -538,13 +535,21 @@ export default {
     },
     // 编辑
     editItem(item) {
-      if (!this.beforeEditMethod) {
-        console.error("请传入 beforeEditMethod 处理数据回填");
-        return;
+      if (this.editPath) {
+        this.$router.push({
+          path: editPath,
+          query: { id: item[this.idKey] },
+        })
+      } else {
+        if (!this.beforeEditMethod) {
+          console.error("请传入 beforeEditMethod 处理数据回填");
+          return;
+        }
+        this.beforeEditMethod(item);
+        this.openDialog();
+        this.mode = 1;
       }
-      this.beforeEditMethod(item);
-      this.openDialog();
-      this.mode = 1;
+
     },
     // 重置表单
     resetForm() {

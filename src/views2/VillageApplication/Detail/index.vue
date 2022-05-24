@@ -256,6 +256,21 @@
             </el-input>
           </el-form-item>
           <el-form-item
+            v-if="userInfo.roleId === 2"
+            label="审核意见附件"
+            prop="processFilesArr"
+            :rules="rule.upload"
+          >
+            <UploadFile2
+              tip="支持格式：.doc, .docx, .pdf"
+              accept=".doc,.docx,.pdf"
+              :data="reviewForm.processFilesArr"
+              @add="onFileAdd($event, 'processFilesArr')"
+              @remove="onFileRemove($event, 'processFilesArr')"
+            />
+          </el-form-item>
+          <el-form-item
+            v-else
             label="审核意见附件"
             prop="processFilesArr"
           >

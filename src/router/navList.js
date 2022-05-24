@@ -480,7 +480,7 @@ export const defaultRoutes2 = [
     meta: {
       menuIds: [4100, 4200],
       title: "村庄申报1",
-      hideChild: true,
+      hideChild: false,
       icon: "cunzhuangshenbao",
     },
     children: [
@@ -488,8 +488,8 @@ export const defaultRoutes2 = [
         path: "/villageApplication2/index",
         name: "VillageApplyList2",
         meta: {
-          icon: "cunzhuangshenbao",
-          menuIds: [],
+          title: "县级申报",
+          menuIds: [4100, 4200],
         },
         component: () => import("@/views2/VillageApplication/index.vue"),
       },
@@ -513,6 +513,17 @@ export const defaultRoutes2 = [
           menuIds: [],
         },
         component: () => import("@/views2/VillageApplication/Detail/index.vue"),
+      },
+      {
+        path: "/villageApplication2/declarationBatch",
+        name: "DeclarationBatch",
+        hidden: false,
+        meta: {
+          // activeMenu: "/acceptanceEvaluation/index",
+          title: "申报批次配置",
+          menuIds: [4100, 4200],
+        },
+        component: () => import("@/views2/VillageApplication/DeclarationBatch/index"),
       },
     ],
   },

@@ -12,7 +12,32 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <div class="mb-8">
-              <el-form-item label="创建村名称" prop="villageId" :rules="rule.select">
+              <el-form-item label="申报类型" prop="villageId" :rules="rule.select">
+                <el-radio v-model="form.type" :label="1">创建村申报</el-radio>
+                <el-radio v-model="form.type" :label="2">片区申报</el-radio>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :span="12">
+<!--            <el-form-item label="推荐次序" prop="countrySortNum" :rules="rule.inputNumber">-->
+<!--              <el-input-->
+<!--                v-model.number="form.countrySortNum"-->
+<!--                placeholder="请输入推荐次序"-->
+<!--                maxlength="8"-->
+<!--              ></el-input>-->
+<!--            </el-form-item>-->
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <div class="mb-8">
+              <el-form-item v-if="form.type === 1" label="创建村名称" prop="villageId" :rules="rule.select">
+                <VillageAddressSelect
+                  v-model="form.villageId"
+                  @change="changeAddress"
+                />
+              </el-form-item>
+              <el-form-item v-else label="片区申报" prop="villageId" :rules="rule.select">
                 <VillageAddressSelect
                   v-model="form.villageId"
                   @change="changeAddress"
@@ -100,7 +125,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="户籍人口数（万人）" prop="huNum" :rules="rule.inputNumber">
+            <el-form-item label="户籍人口数（人）" prop="huNum" :rules="rule.inputNumber">
               <el-input
                 v-model="form.huNum"
                 placeholder="请输入"
@@ -109,7 +134,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="常住人口数（万人）" prop="personNum" :rules="rule.inputNumber">
+            <el-form-item label="常住人口数（人）" prop="personNum" :rules="rule.inputNumber">
               <el-input
                 v-model="form.personNum"
                 placeholder="请输入"
@@ -282,8 +307,11 @@
             </el-col>
           </el-row>
         </div>
+        <el-form-item class="list-table" label="" prop="projects" :rules="listRules">
+          <div class="import">
+            <el-button type="primary" @click="importDialogVisible = true" >批量导入</el-button>
+          </div>
 
-        <el-form-item label="" prop="projects" :rules="listRules">
           <VilliageListTable
             :data="form.projects"
             :hiddenEdit="false"
@@ -313,29 +341,29 @@
       :visible.sync="dialogVisible"
       width="600px"
       @close="resetForm">
-      <el-form ref="projectForm" :model="projectForm" label-width="140px">
-        <el-form-item label="项目名称：">
+      <el-form :rules="rule" ref="projectForm" :model="projectForm" label-width="150px">
+        <el-form-item label="项目名称：" prop="projectName" :rules="rule.input">
           <el-input v-model="projectForm.projectName" maxlength="20"></el-input>
         </el-form-item>
-        <el-form-item label="建设单位：">
+        <el-form-item label="建设单位：" prop="constructUnit" :rules="rule.input">
           <el-input v-model="projectForm.constructUnit" maxlength="20"></el-input>
         </el-form-item>
-        <el-form-item label="建设地点：">
+        <el-form-item label="建设地点：" prop="constructAddress" :rules="rule.input">
           <el-input v-model="projectForm.constructAddress" maxlength="20"></el-input>
         </el-form-item>
-        <el-form-item label="建设内容和规模：">
+        <el-form-item label="建设内容和规模：" prop="constructDetail" :rules="rule.input">
           <el-input v-model="projectForm.constructDetail" maxlength="20"></el-input>
         </el-form-item>
-        <el-form-item label="进度安排：">
+        <el-form-item label="进度安排：" prop="schedule" :rules="rule.input">
           <el-input v-model="projectForm.schedule" maxlength="20"></el-input>
         </el-form-item>
-        <el-form-item label="用地情况：">
+        <el-form-item label="用地情况：" prop="landUse" :rules="rule.input">
           <el-input v-model="projectForm.landUse" maxlength="20"></el-input>
         </el-form-item>
-        <el-form-item label="投资额（万元）：">
+        <el-form-item label="投资额（万元）：" prop="investmentAmount" :rules="rule.input">
           <el-input v-model="projectForm.investmentAmount" maxlength="8"></el-input>
         </el-form-item>
-        <el-form-item label="运行维护管理安排：">
+        <el-form-item label="运行维护管理安排：" prop="arrangements" :rules="rule.input">
           <el-input v-model="projectForm.arrangements" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="备注：">
@@ -346,6 +374,21 @@
           <el-button @click="resetForm">取消</el-button>
         </el-form-item>
       </el-form>
+    </el-dialog>
+    <el-dialog
+      title="批量导入"
+      :visible.sync="importDialogVisible"
+      width="600px"
+      @close="resetForm"
+    >
+      <UploadFile2
+        tip="支持格式：.xlsx"
+        accept=".xlsx"
+        :data="form.annexFiles"
+        @add="onFileAdd2($event, 'annexFiles')"
+        @remove="onFileRemove2($event, 'annexFiles')"
+      />
+      <div>模板下载 请根据模板进行信息填写</div>
     </el-dialog>
   </div>
 </template>
@@ -388,6 +431,7 @@ export default {
   data() {
     return {
       form: {
+        type: 1, // 申报类型
         annexFiles: [], // 附件
         villageName: "", //村庄地址
         town: "", //村庄地址
@@ -419,6 +463,7 @@ export default {
       },
       type: "add",
       dialogVisible: false,
+      importDialogVisible: false,
       projectForm: { // 项目表单
         projectName: "", // 项目名称
         constructUnit: "", // 建设单位
@@ -483,14 +528,34 @@ export default {
         this.form[key].splice(index, 1);
       }
     },
+    onFileAdd2(file, key) {
+      this.form[key].push(file);
+    },
+    onFileRemove2(file, key) {
+      const index = this.form[key].findIndex((item) => {
+        return item.uid === file.uid || item.filePath === file.url;
+      });
+      if (index !== -1) {
+        this.form[key].splice(index, 1);
+      }
+    },
     // 添加 项目
     onSubmit() {
-      if (!this.editProjectForm) {
-        this.form.projects.push(this.projectForm);
-      } else {
-        this.editProjectForm = false;
-      }
-      this.resetForm();
+      this.$refs.projectForm.validate((valid) => {
+        if (valid) {
+          console.log(this.projectForm);
+          if (!this.editProjectForm) {
+            console.log('push')
+            this.form.projects.push(this.projectForm);
+          } else {
+            this.editProjectForm = false;
+          }
+          this.resetForm();
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
     },
     resetForm() {
       this.projectForm = { // 项目表单
@@ -504,7 +569,7 @@ export default {
         arrangements: "", // 运行维护管理安排
         remark: "", // 备注
       };
-      this.$refs.projectForm.resetFields();
+      // this.$refs.projectForm.resetFields();
       this.dialogVisible = false;
     },
 
@@ -668,6 +733,15 @@ export default {
       .el-form-item__label {
         font-size: 16px;
       }
+    }
+  }
+  .list-table {
+    .import {
+      width: 90%;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row-reverse;
+      margin-bottom: 12px;
     }
   }
 }

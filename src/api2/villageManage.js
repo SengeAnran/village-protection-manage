@@ -7,7 +7,7 @@ const { apiHost2 } = config;
 export const getVillageArea = (params) => {
   return axios.request({
     method: "GET",
-    url: apiHost2 + "/villageDeclaration/area",
+    url: apiHost2 + "/api/workbench/villageDeclaration/area",
     params,
   });
 };
@@ -15,7 +15,7 @@ export const getVillageArea = (params) => {
 export const queryTypeDeclaration = (params) => {
   return axios.request({
     method: "GET",
-    url: apiHost2 + "/villageDeclaration/queryTypeDeclaration",
+    url: apiHost2 + "/api/workbench/villageDeclaration/queryTypeDeclaration",
     params,
   });
 };
@@ -24,7 +24,7 @@ export const queryTypeDeclaration = (params) => {
 export const queryBatchInfo = (data) => {
   return axios.request({
     method: "POST",
-    url: apiHost2 + "/villageDeclaration/queryBatchInfo",
+    url: apiHost2 + "/api/workbench/villageDeclaration/queryBatchInfo",
     data,
   });
 };
@@ -32,7 +32,7 @@ export const queryBatchInfo = (data) => {
 export const recVerify = (data) => {
   return axios.request({
     method: "POST",
-    url: apiHost2 + "/villageDeclaration/recVerify",
+    url: apiHost2 + "/api/workbench/villageDeclaration/recVerify",
     data,
   });
 };
@@ -41,7 +41,7 @@ export const recVerify = (data) => {
 export const getRecVillages = (params) => {
   return axios.request({
     method: "get",
-    url: apiHost2 + "/villageDeclaration/recVillages",
+    url: apiHost2 + "/api/workbench/villageDeclaration/recVillages",
     params,
   });
 };
@@ -50,7 +50,7 @@ export const getRecVillages = (params) => {
 export const getVillageList = (params) => {
   return axios.request({
     method: "GET",
-    url: apiHost2 + "/villageDeclaration",
+    url: apiHost2 + "/api/workbench/villageDeclaration",
     params,
   });
 };
@@ -59,7 +59,7 @@ export const getVillageList = (params) => {
 export const villageDeclaration = (data) => {
   return axios.request({
     method: "POST",
-    url: apiHost2 + "/villageDeclaration",
+    url: apiHost2 + "/api/workbench/villageDeclaration",
     data,
   });
 };
@@ -68,7 +68,7 @@ export const villageDeclaration = (data) => {
 export const deleteVillageItem = (data) => {
   return axios.request({
     method: "POST",
-    url: apiHost2 + "/villageDeclaration/delete/Batch",
+    url: apiHost2 + "/api/workbench/villageDeclaration/delete/Batch",
     data,
   });
 };
@@ -77,7 +77,7 @@ export const deleteVillageItem = (data) => {
 export const updateVillageItem = (data) => {
   return axios.request({
     method: "PUT",
-    url: apiHost2 + "/villageDeclaration",
+    url: apiHost2 + "/api/workbench/villageDeclaration",
     data,
   });
 };
@@ -86,7 +86,7 @@ export const updateVillageItem = (data) => {
 export const getVillageDetail = (params) => {
   return axios.request({
     method: "GET",
-    url: apiHost2 + "/villageDeclaration/detail",
+    url: apiHost2 + "/api/workbench/villageDeclaration/detail",
     params,
   });
 };
@@ -95,7 +95,7 @@ export const getVillageDetail = (params) => {
 export const getVillageItemDetail = (params) => {
   return axios.request({
     method: "GET",
-    url: apiHost2 + "/villageDeclaration/detail",
+    url: apiHost2 + "/api/workbench/villageDeclaration/detail",
     params,
   });
 };
@@ -113,7 +113,7 @@ export const getVillageItemDetail = (params) => {
 export const verify = (data) => {
   return axios.request({
     method: "POST",
-    url: apiHost2 + "/villageDeclaration/verify",
+    url: apiHost2 + "/api/workbench/villageDeclaration/verify",
     data,
   });
 };
@@ -123,7 +123,7 @@ export const verify = (data) => {
 export const getCanPromoteList = (params) => {
   return axios.request({
     method: "GET",
-    url: apiHost2 + "/villageDeclaration/detailList",
+    url: apiHost2 + "/api/workbench/villageDeclaration/detailList",
     params,
   });
 };
@@ -131,7 +131,7 @@ export const getCanPromoteList = (params) => {
 export const getvillageDetailExport = (params) => {
   return axios.request({
     method: "GET",
-    url: apiHost2 + "/villageDeclaration/villageDetailExport/" + params.id,
+    url: apiHost2 + "/api/workbench/villageDeclaration/villageDetailExport/" + params.id,
     params,
     responseType: "blob"
   });
@@ -140,8 +140,17 @@ export const getvillageDetailExport = (params) => {
 export const getvillagesExport = (data) => {
   return axios.request({
     method: "post",
-    url: apiHost2 + "/villageDeclaration/export/list",
+    url: apiHost2 + "/api/workbench/villageDeclaration/export/list",
     data,
     responseType: "blob"
   });
 };
+
+// 验收时间-申报批次新增（type 1：验收时间，2：申报批次）
+export const setAdd = (data) => {
+  return axios.request({
+    method: "POST",
+    url: apiHost2 + `/api/workbench/createReports/time/add/${data.type}/${data.acceptanceTime}`,
+  });
+};
+

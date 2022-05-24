@@ -48,12 +48,12 @@
               </el-select>
             </div>
             <div class="search-item">
-              <span class="label">村庄名称：</span>
+              <span class="label">村（片区）名称：</span>
               <el-input
                 style="width: 200px"
                 v-model="query.villageName"
                 :maxlength="50"
-                placeholder="请输入村庄名称"
+                placeholder="请输入村（片区）名称"
               ></el-input>
             </div>
           </div>
@@ -142,7 +142,7 @@
               <p>{{ scope.row.countrySortNum }}</p>
             </template>
           </el-table-column>
-          <el-table-column label="村庄名称" prop="villageName">
+          <el-table-column label="村（片区）名称" prop="villageName">
             <template slot-scope="scope">
               <p>{{ scope.row.villageName }}</p>
             </template>
@@ -238,7 +238,7 @@
           </div>
         </template>
         <template v-slot:table>
-          <el-table-column label="村庄名称" prop="villageName">
+          <el-table-column label="村（片区）名称" prop="villageName">
             <template slot-scope="scope">
               <p>{{ scope.row.villageName }}</p>
             </template>
