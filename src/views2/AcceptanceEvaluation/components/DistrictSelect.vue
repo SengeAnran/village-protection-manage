@@ -1,0 +1,67 @@
+<template>
+  <section class="flex">
+    <el-select style="width: 160px" v-model="district" placeholder="请选择" @change="onDistrictChange">
+      <el-option v-for="item in districtData" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+    </el-select>
+    <el-select
+      v-model="districtVillage"
+      multiple
+      collapse-tags
+      style="margin-left: 10px; width: 120px"
+      placeholder="请选择"
+    >
+      <el-option v-for="item in districtVillageData" :key="item.value" :label="item.label" :value="item.value">
+      </el-option>
+    </el-select>
+  </section>
+</template>
+<script>
+import { getDistrictArea, getDistrictVillage } from '@/api2/acceptanceEvaluation';
+export default {
+  data() {
+    return {
+      district: '',
+      districtData: [],
+      districtVillage: [],
+      districtVillageData: [],
+    };
+  },
+  computed: {
+    userInfo() {
+      return this.$store.getters.userInfo || {};
+    },
+  },
+  methods: {
+    onDistrictChange(name) {
+      this.$emit('change', name);
+      this.getDistrictVillage(name);
+    },
+
+    getDistrictData() {
+      getDistrictArea().then((res) => {
+        this.districtData = res.map((c) => {
+          return {
+            label: c,
+            value: c,
+          };
+        });
+      });
+    },
+    // 查找片区村庄
+    getDistrictVillage(name) {
+      getDistrictVillage({ name }).then((res) => {
+        const data = res.map((c) => ({
+          label: c,
+          value: c,
+        }));
+        this.districtVillage = res;
+        this.districtVillageData = data;
+      });
+    },
+  },
+  mounted() {
+    // 获取片区数据
+    this.getDistrictData();
+  },
+};
+</script>
