@@ -28,3 +28,30 @@ export const getDistrictVillage = (data) => {
     data,
   });
 };
+
+// 回显基本数据 type(1：村庄名称，2：片区名称)
+export const getAreaBaseInfo = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/createReports/find/${data.type}/${data.name}`,
+    data,
+  });
+};
+
+// 评价申报详情
+export const getDetail = (params) => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/createReports/detail/${params.id}`,
+    params,
+  });
+};
+
+// 评价申报新增
+export const saveInfo = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/createReports/save`,
+    data,
+  });
+};

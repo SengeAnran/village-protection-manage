@@ -7,53 +7,71 @@
     <el-row :gutter="20">
       <el-col :span="8">
         <div class="mb-8">
-          <el-form-item label="创建村名称" :rules="rule.select" v-if="villageType === 1">
+          <el-form-item prop="areaId" label="创建村名称" :rules="rule.select" v-if="villageType === 1">
             <VillageSelect v-model="form.areaId" @change="changeAddress('areaId', $event)" />
           </el-form-item>
-          <el-form-item label="片区名称" :rules="rule.select" v-if="villageType === 2">
-            <DistrictSelect v-model="district" @change="changeAddress('district', $event)" />
+          <el-form-item prop="declarationId" label="片区名称" :rules="rule.select" v-if="villageType === 2">
+            <DistrictSelect v-model="form.declarationId" @change="changeAddress('district', $event)" />
           </el-form-item>
         </div>
       </el-col>
       <el-col :span="8">
-        <el-form-item label="创建批次" prop="countrySortNum" :rules="rule.inputNumber">
-          <el-input v-model.number="form.countrySortNum" placeholder="请输入" maxlength="8"></el-input>
+        <el-form-item label="创建批次">
+          <el-input disabled v-model.number="baseInfo.declarationBatch" placeholder="请输入" maxlength="8"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="8">
-        <el-form-item label="总投资（万元）" prop="investNum" :rules="rule.inputNumber">
-          <el-input v-model="form.investNum" placeholder="请输入" maxlength="8"></el-input>
+        <el-form-item label="总投资（万元）">
+          <el-input disabled v-model="baseInfo.investNum" placeholder="请输入" maxlength="8"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
 
     <el-row :gutter="20">
       <el-col :span="8">
-        <el-form-item label="领办领导" prop="leader" :rules="rule.input">
-          <el-input v-model="form.leader" placeholder="请输入" maxlength="20"></el-input>
+        <el-form-item label="领办领导">
+          <el-input disabled v-model="baseInfo.leader" placeholder="请输入" maxlength="20"></el-input>
         </el-form-item>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="联系人" prop="contactPerson" :rules="rule.input">
-          <el-input v-model="form.contactPerson" placeholder="请输入" maxlength="20"></el-input>
+        <el-form-item label="联系人">
+          <el-input disabled v-model="baseInfo.contactPerson" placeholder="请输入" maxlength="20"></el-input>
         </el-form-item>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="联系方式" prop="phone" :rules="rule.mobile">
-          <el-input v-model.number="form.phone" placeholder="请输入"></el-input>
+        <el-form-item label="联系方式">
+          <el-input disabled v-model.number="baseInfo.phone" placeholder="请输入"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
 
-    <el-form-item label="乡镇（街道）人民政府（办事处）关于创建方案完成情况说明" prop="basicText" :rules="rule.input">
-      <el-input type="textarea" :rows="5" placeholder="请输入" maxlength="800" show-word-limit v-model="form.basicText">
+    <el-form-item
+      label="乡镇（街道）人民政府（办事处）关于创建方案完成情况说明"
+      prop="completionStatement"
+      :rules="rule.input"
+    >
+      <el-input
+        type="textarea"
+        :rows="5"
+        placeholder="请输入"
+        maxlength="800"
+        show-word-limit
+        v-model="form.completionStatement"
+      >
       </el-input>
     </el-form-item>
 
-    <el-form-item label="县（市、区）人民政府自评结论" prop="basicText" :rules="rule.input">
-      <el-input type="textarea" :rows="5" placeholder="请输入" maxlength="800" show-word-limit v-model="form.basicText">
+    <el-form-item label="县（市、区）人民政府自评结论" prop="conclusion" :rules="rule.input">
+      <el-input
+        type="textarea"
+        :rows="5"
+        placeholder="请输入"
+        maxlength="800"
+        show-word-limit
+        v-model="form.conclusion"
+      >
       </el-input>
     </el-form-item>
   </div>
@@ -63,6 +81,8 @@ import rule from '@/mixins/rule';
 
 import VillageSelect from '../components/VillageSelect.vue';
 import DistrictSelect from '../components/DistrictSelect.vue';
+
+import { getAreaBaseInfo } from '@/api2/acceptanceEvaluation';
 
 export default {
   components: { VillageSelect, DistrictSelect },
@@ -76,19 +96,53 @@ export default {
   data() {
     return {
       // 片区名称
-      district: '',
-
       villageType: 1,
+
+      baseInfo: {
+        declarationBatch: '', //申报批次
+        investNum: '', //总投资（万元）
+        leader: '', //领办领导
+        contactPerson: '', //联系人
+        phone: '', //联系方式
+      },
     };
+  },
+  watch: {
+    villageType() {
+      this._resetBaseInfo();
+    },
   },
   methods: {
     // 选择村庄地址
     changeAddress(type, val) {
-      console.log(type, val);
-      // const { village, parent } = val;
-      // console.log(village, parent, 'village, parent');
-      // this.form.villageName = village.areaName;
-      // this.form.town = parent.areaName;
+      const params = {};
+      if (type === 'areaId') {
+        params.type = 1;
+        params.name = val.areaName;
+      } else {
+        params.type = 2;
+        params.name = val;
+      }
+      getAreaBaseInfo(params).then((res) => {
+        const data = {
+          areaId: res.areaId,
+        };
+        type === 'areaId' ? (data.declarationId = undefined) : (data.declarationId = res.declarationId);
+        this._assignBaseInfo(res);
+        this.$emit('change', data);
+      });
+    },
+
+    _assignBaseInfo(data) {
+      Object.keys(this.baseInfo).map((key) => {
+        this.baseInfo[key] = data[key] || '--';
+      });
+    },
+    _resetBaseInfo() {
+      Object.keys(this.baseInfo).map((key) => {
+        this.baseInfo[key] = '';
+        this.$emit('change', { areaId: undefined, declarationId: undefined });
+      });
     },
   },
 };

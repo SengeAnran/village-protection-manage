@@ -20,26 +20,40 @@
           <!-- 县级用户 -->
           <div v-if="userInfo.roleId === 3">
             <span v-if="item.prop === 'countyScore' && row.title === '合计'">{{ form[row.countyScoreProp] }}</span>
-            <el-input
+            <el-form-item
               v-if="item.prop === 'countyScore' && row.title !== '合计'"
-              v-model="form[row.countyScoreProp]"
-              size="mini"
-              placeholder="请输入"
-              @change="setTotalScore('countyScoreProp')"
-            />
+              label=""
+              :rules="rule.input"
+              :prop="row.countyScoreProp"
+              :show-message="false"
+            >
+              <el-input
+                v-model="form[row.countyScoreProp]"
+                size="mini"
+                placeholder="请输入"
+                @change="setTotalScore('countyScoreProp')"
+              />
+            </el-form-item>
+
             <span v-else-if="item.prop === 'cityScore'">--</span>
             <span v-else class="cell">{{ row[item.prop] }}</span>
           </div>
           <!-- 市级用户 -->
           <div v-else-if="userInfo.roleId === 2">
             <span v-if="item.prop === 'cityScore' && row.title === '合计'">{{ form[row.cityScoreProp] }}</span>
-            <el-input
+            <el-form-item
               v-if="item.prop === 'cityScore' && row.title !== '合计'"
-              v-model="form[row.cityScoreProp]"
-              size="mini"
-              placeholder="请输入"
-              @change="setTotalScore('cityScoreProp')"
-            />
+              label=""
+              :rules="rule.input"
+              :prop="row.cityScoreProp"
+            >
+              <el-input
+                v-model="form[row.cityScoreProp]"
+                size="mini"
+                placeholder="请输入"
+                @change="setTotalScore('cityScoreProp')"
+              />
+            </el-form-item>
             <span v-else class="cell">{{ row[item.prop] }}</span>
           </div>
           <!-- 省级用户 -->
@@ -52,8 +66,16 @@
   </div>
 </template>
 <script>
+import rule from '@/mixins/rule';
 import { TABLE_SCORE_DATA } from './data';
 export default {
+  mixins: [rule],
+  props: {
+    form: {
+      type: Object,
+      default: () => {},
+    },
+  },
   data() {
     return {
       TABLE_TITLE: [
@@ -116,44 +138,44 @@ export default {
       //   workMechanismCounty: 0,
       // },
 
-      form: {
-        buildPutInCity: '',
-        buildPutInCounty: '',
-        buildSupportCity: '',
-        buildSupportCounty: '',
-        buildUseCity: '',
-        buildUseCounty: '',
-        carryOutConstructionCity: '',
-        carryOutConstructionCounty: '',
-        carryOutCreateCity: '',
-        carryOutCreateCounty: '',
-        digitalScenesCity: '',
-        digitalScenesCounty: '',
-        digitalSocietyCity: '',
-        digitalSocietyCounty: '',
-        featureCity: '',
-        featureCounty: '',
-        indicatorsCommonalityCity: '',
-        indicatorsCommonalityCounty: '',
-        indicatorsPersonalityCity: '',
-        indicatorsPersonalityCounty: '',
-        negativeCity: '',
-        negativeCounty: '',
-        scenesBasicCity: '',
-        scenesBasicCounty: '',
-        scenesBuildCity: '',
-        scenesBuildCounty: '',
-        scenesEmphasisCity: '',
-        scenesEmphasisCounty: '',
-        totalCity: '',
-        totalCounty: '',
-        workBoardCity: '',
-        workBoardCounty: '',
-        workGuideCity: '',
-        workGuideCounty: '',
-        workMechanismCity: '',
-        workMechanismCounty: '',
-      },
+      // form: {
+      //   buildPutInCity: '',
+      //   buildPutInCounty: '',
+      //   buildSupportCity: '',
+      //   buildSupportCounty: '',
+      //   buildUseCity: '',
+      //   buildUseCounty: '',
+      //   carryOutConstructionCity: '',
+      //   carryOutConstructionCounty: '',
+      //   carryOutCreateCity: '',
+      //   carryOutCreateCounty: '',
+      //   digitalScenesCity: '',
+      //   digitalScenesCounty: '',
+      //   digitalSocietyCity: '',
+      //   digitalSocietyCounty: '',
+      //   featureCity: '',
+      //   featureCounty: '',
+      //   indicatorsCommonalityCity: '',
+      //   indicatorsCommonalityCounty: '',
+      //   indicatorsPersonalityCity: '',
+      //   indicatorsPersonalityCounty: '',
+      //   negativeCity: '',
+      //   negativeCounty: '',
+      //   scenesBasicCity: '',
+      //   scenesBasicCounty: '',
+      //   scenesBuildCity: '',
+      //   scenesBuildCounty: '',
+      //   scenesEmphasisCity: '',
+      //   scenesEmphasisCounty: '',
+      //   totalCity: '',
+      //   totalCounty: '',
+      //   workBoardCity: '',
+      //   workBoardCounty: '',
+      //   workGuideCity: '',
+      //   workGuideCounty: '',
+      //   workMechanismCity: '',
+      //   workMechanismCounty: '',
+      // },
     };
   },
   computed: {

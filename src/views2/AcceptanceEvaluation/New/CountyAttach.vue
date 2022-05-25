@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form-item label="附件上传" :rules="rule.upload" prop="annexFiles">
+    <el-form-item label="附件上传" :rules="rule.upload" prop="countySaveAnnex">
       <p style="color: #ff6b00" class="py-4 leading-5">
         <span style="display: block">
           <i class="el-icon-warning"></i> 县级需上传浙江省未来乡村创建成效自评总结及相关支持材料电子版；
@@ -31,7 +31,6 @@ export default {
   },
   methods: {
     addFile(val) {
-      console.log('add add add file');
       this.$emit('addFile', val);
     },
     removeFile(val) {

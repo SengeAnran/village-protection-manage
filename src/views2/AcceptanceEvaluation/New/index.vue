@@ -2,16 +2,17 @@
   <div class="page">
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
       <sub-tit> 创建成效评价申请 </sub-tit>
-      <basic-input :form="form"></basic-input>
+      <basic-input :form="form" @change="villageChange"></basic-input>
       <sub-tit> 未来乡村创建成效评分表 </sub-tit>
-      <score-table></score-table>
+      <score-table :form="form"></score-table>
+
       <county-attach
         :data="form.countySaveAnnex"
         @addFile="onCountyFileAdd"
         @removeFile="onCountyFileRemove"
       ></county-attach>
     </el-form>
-    <div>
+    <div class="action-wrp">
       <el-button @click="onBack">返回</el-button>
       <el-button type="primary" @click="onSubmit">提交</el-button>
       <el-button type="primary" @click="onSave">保存待发</el-button>
@@ -26,6 +27,8 @@ import SubTit from '../components/SubTit.vue';
 import BasicInput from './BasicInput.vue';
 import ScoreTable from './ScoreTable.vue';
 import CountyAttach from './CountyAttach.vue';
+
+import { saveInfo } from '@/api2/acceptanceEvaluation';
 export default {
   name: 'index',
   mixins: [rule],
@@ -35,57 +38,58 @@ export default {
     ScoreTable,
     CountyAttach,
   },
-
+  // 接口文档地址： http://172.16.25.142:5000/doc.html#/%E6%9C%AA%E6%9D%A5%E4%B9%A1%E6%9D%91%E5%B7%A5%E4%BD%9C%E5%8F%B0%E6%9C%8D%E5%8A%A1/%E6%9C%AA%E6%9D%A5%E4%B9%A1%E6%9D%91%E5%88%9B%E5%BB%BA%E6%88%90%E6%95%88/createUsingPOST
   data() {
     return {
       form: {
         areaId: '',
-        batch: '',
-        buildPutInCity: 0,
-        buildPutInCounty: 0,
-        buildSupportCity: 0,
-        buildSupportCounty: 0,
-        buildUseCity: 0,
-        buildUseCounty: 0,
-        carryOutConstructionCity: 0,
-        carryOutConstructionCounty: 0,
-        carryOutCreateCity: 0,
-        carryOutCreateCounty: 0,
+        // batch: '',
+        buildPutInCity: '',
+        buildPutInCounty: '',
+        buildSupportCity: '',
+        buildSupportCounty: '',
+        buildUseCity: '',
+        buildUseCounty: '',
+        carryOutConstructionCity: '',
+        carryOutConstructionCounty: '',
+        carryOutCreateCity: '',
+        carryOutCreateCounty: '',
         completionStatement: '',
         conclusion: '',
-        contactPerson: '',
+        // contactPerson: '',
         countySaveAnnex: [],
-        digitalScenesCity: 0,
-        digitalScenesCounty: 0,
-        digitalSocietyCity: 0,
-        digitalSocietyCounty: 0,
-        featureCity: 0,
-        featureCounty: 0,
-        indicatorsCommonalityCity: 0,
-        indicatorsCommonalityCounty: 0,
-        indicatorsPersonalityCity: 0,
-        indicatorsPersonalityCounty: 0,
-        leader: '',
-        negativeCity: 0,
-        negativeCounty: 0,
-        phone: '',
-        saveToGo: 0,
-        scenesBasicCity: 0,
-        scenesBasicCounty: 0,
-        scenesBuildCity: 0,
-        scenesBuildCounty: 0,
-        scenesEmphasisCity: 0,
-        scenesEmphasisCounty: 0,
-        totalCity: 0,
-        totalCounty: 0,
-        totalInvestment: 0,
-        villageName: '',
-        workBoardCity: 0,
-        workBoardCounty: 0,
-        workGuideCity: 0,
-        workGuideCounty: 0,
-        workMechanismCity: 0,
-        workMechanismCounty: 0,
+        declarationId: '',
+        digitalScenesCity: '',
+        digitalScenesCounty: '',
+        digitalSocietyCity: '',
+        digitalSocietyCounty: '',
+        featureCity: '',
+        featureCounty: '',
+        indicatorsCommonalityCity: '',
+        indicatorsCommonalityCounty: '',
+        indicatorsPersonalityCity: '',
+        indicatorsPersonalityCounty: '',
+        // leader: '',
+        negativeCity: '',
+        negativeCounty: '',
+        // phone: '',
+        saveToGo: '',
+        scenesBasicCity: '',
+        scenesBasicCounty: '',
+        scenesBuildCity: '',
+        scenesBuildCounty: '',
+        scenesEmphasisCity: '',
+        scenesEmphasisCounty: '',
+        totalCity: '',
+        totalCounty: '',
+        // totalInvestment: '',
+        // villageName: '',
+        workBoardCity: '',
+        workBoardCounty: '',
+        workGuideCity: '',
+        workGuideCounty: '',
+        workMechanismCity: '',
+        workMechanismCounty: '',
       },
     };
   },
@@ -94,8 +98,49 @@ export default {
     onBack() {
       this.$router.back();
     },
-    onSubmit() {},
-    onSave() {},
+    onSubmit() {
+      this.$refs.form.validate(async (valid) => {
+        if (!valid) return;
+        await this._beforeSubmit('是否确认提交？');
+
+        const form = { ...this.form };
+        form.countySaveAnnex = this.form.countySaveAnnex.map((c) => c.fileId).join(',');
+        form.saveToGo = 0;
+        this._saveInfo(form);
+      });
+    },
+
+    async onSave() {
+      await this._beforeSubmit('是否保存待发？');
+
+      const form = { ...this.form };
+      form.countySaveAnnex = this.form.countySaveAnnex.map((c) => c.fileId).join(','); // ? 如何保存文件数据
+      form.saveToGo = 1;
+      this._saveInfo(form, '保存成功！');
+    },
+
+    _beforeSubmit(msg) {
+      return new Promise((resolve) => {
+        this.$confirm(msg, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }).then(() => {
+          resolve();
+        });
+      });
+    },
+
+    _saveInfo(form, message) {
+      saveInfo(form).then((res) => {
+        console.log(res, 'res-----');
+        this.$notify.success({
+          title: message || '提交成功！',
+        });
+
+        this.$router.back();
+      });
+    },
 
     // 县级附件上传
     onCountyFileAdd(file) {
@@ -110,13 +155,25 @@ export default {
         this.form['countySaveAnnex'].splice(index, 1);
       }
     },
+
+    villageChange(val) {
+      this.form.areaId = val.areaId;
+      this.form.declarationId = val.declarationId;
+
+      this.$refs.form.validateField('areaId');
+      this.$refs.form.validateField('declarationId');
+    },
   },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .page {
   padding: 20px;
   background-color: #fff;
+
+  .action-wrp {
+    margin-top: 50px;
+  }
 }
 </style>
