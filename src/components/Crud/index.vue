@@ -27,7 +27,15 @@
         type="primary"
         plain
         @click="exportDatas"
-        >导出</el-button
+        >{{exportName}}</el-button
+      >
+      <el-button
+        icon="el-icon-download"
+        v-if="showExport2"
+        type="primary"
+        plain
+        @click="exportDatas2"
+        >{{exportName2}}</el-button
       >
       <slot name="export"></slot>
       <el-button
@@ -265,6 +273,18 @@ export default {
     exportMethod: {
       type: Function,
     },
+    // 导出数据方法2
+    exportMethod2: {
+      type: Function,
+    },
+    exportName: {
+      type: String,
+      default: '导出',
+    },
+    exportName2: {
+      type: String,
+      default: '导出',
+    },
     // 获取数据后方法（items重新赋值等处理）
     afterGetMethod: {
       type: Function,
@@ -327,6 +347,11 @@ export default {
     },
     // 导出
     showExport: {
+      type: Boolean,
+      default: false,
+    },
+    // 导出2
+    showExport2: {
       type: Boolean,
       default: false,
     },
@@ -610,6 +635,28 @@ export default {
             ids: this.selections.map((item) => item[this.idKey]),
           };
           const res = await this.exportMethod(data);
+          downloadFile(res, "浙江省未来乡村申报汇总");
+          this.$notify.success("导出成功");
+        } finally {
+          this.loading = false;
+        }
+      });
+    },
+    // 导出2
+    async exportDatas2() {
+      this.$confirm("是否批量导出所选数据？", "提示", {
+        type: "warning",
+      }).then(async () => {
+        this.loading = true;
+        const { page, size, query } = this;
+        try {
+          const data = {
+            ...query,
+            pageNum: page,
+            pageSize: size,
+            ids: this.selections.map((item) => item[this.idKey]),
+          };
+          const res = await this.exportMethod2(data);
           downloadFile(res, "浙江省未来乡村申报汇总");
           this.$notify.success("导出成功");
         } finally {

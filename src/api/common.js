@@ -13,7 +13,7 @@ export const uploadFile = (data) => {
 export const uploadFile2 = (data) => {
   return axios.request({
     method: "post",
-    url: apiHost2 + "/file/upload",
+    url: apiHost2 + "/api/workbench/custom/file/upload/single",
     data,
     // headers: { 'APPLICATION-ID': '3' },
   });
