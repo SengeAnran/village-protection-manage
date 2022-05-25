@@ -1,13 +1,13 @@
 <template>
   <section class="flex">
-    <el-select style="width: 160px" v-model="district" placeholder="请选择" @change="onDistrictChange">
+    <el-select style="width: 140px" v-model="district" placeholder="请选择" @change="onDistrictChange">
       <el-option v-for="item in districtData" :key="item.value" :label="item.label" :value="item.value"> </el-option>
     </el-select>
     <el-select
-      v-model="districtVillage"
+      v-model="_districtVillage"
       multiple
       collapse-tags
-      style="margin-left: 10px; width: 120px"
+      style="margin-left: 10px; width: 140px"
       placeholder="请选择"
     >
       <el-option v-for="item in districtVillageData" :key="item.value" :label="item.label" :value="item.value">
@@ -27,8 +27,11 @@ export default {
     };
   },
   computed: {
-    userInfo() {
-      return this.$store.getters.userInfo || {};
+    _districtVillage: {
+      get() {
+        return this.districtVillage;
+      },
+      set() {},
     },
   },
   methods: {
