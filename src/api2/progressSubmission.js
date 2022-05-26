@@ -30,6 +30,22 @@ export const getList = (data) => {
     data,
   });
 };
+// 报送详情
+export const getDetail = (data) => {
+  return axios.request({
+    method: "POST",
+    url: apiHost2 + `/api/workbench/progressReport/detail/${data.id}/${data.declarationId}`,
+    data,
+  });
+};
+// 报送新增
+export const addData = (data) => {
+  return axios.request({
+    method: "POST",
+    url: apiHost2 + `/api/workbench/progressReport/save`,
+    data,
+  });
+};
 
 
 

@@ -35,8 +35,8 @@
                 ></el-input>
                 <el-select v-model="form.villageName" :multiple="true" placeholder="请选择片区内村庄">
                   <el-option
-                    v-for="item in villageOptions"
-                    :key="item.value"
+                    v-for="(item, index) in villageOptions"
+                    :key="index"
                     :label="item.label"
                     :value="item.label">
                   </el-option>
@@ -59,8 +59,8 @@
             <el-form-item label="申报批次" prop="declarationBatch" :rules="rule.input">
               <el-select v-model="form.declarationBatch" placeholder="请选择">
                 <el-option
-                  v-for="item in batchOptions"
-                  :key="item.value"
+                  v-for="(item, index) in batchOptions"
+                  :key="index"
                   :label="item.label"
                   :value="item.label">
                 </el-option>
