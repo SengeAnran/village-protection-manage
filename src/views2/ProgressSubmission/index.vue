@@ -343,7 +343,7 @@ export default {
       // } else {
       //   this.$router.push({ name: "villageDetails", query: { id: detailId, goVerify: true } });
       // }
-      this.$router.push({name: "villageDetails", query: {id: id}})
+      this.$router.push({name: "ProgressSubmissionDetails", query: {id: id}})
     },
     // 审核
     goAudit(scope) {
@@ -357,7 +357,7 @@ export default {
       console.log(data);
       const {id} = data;
       this.$router.push({
-        name: "newApplication",
+        name: "NewProgressSubmission",
         query: {id},
       });
     },

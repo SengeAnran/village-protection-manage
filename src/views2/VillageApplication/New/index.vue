@@ -12,36 +12,35 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <div class="mb-8">
-              <el-form-item label="申报类型" prop="villageId" :rules="rule.select">
-                <el-radio v-model="form.type" :label="1">创建村申报</el-radio>
-                <el-radio v-model="form.type" :label="2">片区申报</el-radio>
+              <el-form-item label="申报类型" prop="decType" :rules="rule.select">
+                <el-radio v-model="form.decType" :label="1">创建村申报</el-radio>
+                <el-radio v-model="form.decType" :label="2">片区申报</el-radio>
               </el-form-item>
             </div>
           </el-col>
           <el-col :span="12">
-<!--            <el-form-item label="推荐次序" prop="countrySortNum" :rules="rule.inputNumber">-->
-<!--              <el-input-->
-<!--                v-model.number="form.countrySortNum"-->
-<!--                placeholder="请输入推荐次序"-->
-<!--                maxlength="8"-->
-<!--              ></el-input>-->
-<!--            </el-form-item>-->
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <div class="mb-8">
-              <el-form-item v-if="form.type === 1" label="创建村名称" prop="villageId" :rules="rule.select">
-                <VillageAddressSelect
-                  v-model="form.villageId"
-                  @change="changeAddress"
-                />
+              <el-form-item v-if="form.decType === 1" label="创建村名称" prop="villageName" :rules="rule.select">
+                <VillageSelect v-model="form.villageName" @change="changeAddress('villageName', $event)" />
               </el-form-item>
-              <el-form-item v-else label="片区申报" prop="villageId" :rules="rule.select">
-                <VillageAddressSelect
-                  v-model="form.villageId"
-                  @change="changeAddress"
-                />
+              <el-form-item v-else label="片区申报" prop="villageName" :rules="rule.select">
+                <el-input
+                  v-model="form.area"
+                  placeholder="请输入片区名称"
+                  maxlength="20"
+                ></el-input>
+                <el-select v-model="form.villageName" :multiple="true" placeholder="请选择片区内村庄">
+                  <el-option
+                    v-for="item in villageOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.label">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </div>
           </el-col>
@@ -58,11 +57,14 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="申报批次" prop="declarationBatch" :rules="rule.input">
-              <el-input
-                v-model="form.declarationBatch"
-                placeholder="请输入"
-                maxlength="20"
-              ></el-input>
+              <el-select v-model="form.declarationBatch" placeholder="请选择">
+                <el-option
+                  v-for="item in batchOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.label">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -393,15 +395,19 @@
   </div>
 </template>
 <script>
+import VillageSelect from '../Components/VillageSelect.vue';
 import VilliageListTable from "../Components/VilliageListTable";
 
 
 import rule from "@/mixins/rule";
-import VillageAddressSelect from "../Components/VillageAddressSelect";
-
+import {
+  getSetListAll,
+} from "@/api2/villageManage";
 import { VILLAGE_LIST_ROUTER_NAME, HISTORY_BUILDINGS } from "../constants";
 import { villageDeclaration, getVillageItemDetail } from '@/api2/villageManage'
 import {updateVillageItem} from "../../../api2/villageManage";
+import {getVillageArea} from "@/api2/acceptanceEvaluation";
+import {mapGetters} from "vuex";
 const imgs = (rule, value, callback) => {
   if (value.length < 1) {
     callback(new Error("需要上传1张以上图片"));
@@ -416,24 +422,26 @@ const tableList = (rule, value, callback) => {
     callback(new Error("请添加项目"));
   }
 };
+const villageSelect = (rule, value, callback) => {
+  if (value.length) {
+    callback();
+  } else {
+    callback(new Error("请添加项目"));
+  }
+};
 export default {
   mixins: [rule],
   components: {
     VilliageListTable,
-    VillageAddressSelect,
-  },
-  props: {
-    data: {
-      type: Object,
-      default: () => {},
-    },
+    VillageSelect,
   },
   data() {
     return {
       form: {
-        type: 1, // 申报类型
+        decType: 1, // 申报类型
         annexFiles: [], // 附件
         villageName: "", //村庄地址
+        areaId: "", //村庄地址
         town: "", //村庄地址
         villageId: "", //村庄地址
         countrySortNum: "", //推荐次序
@@ -478,12 +486,16 @@ export default {
       editIndex: "",
       editProjectForm: false, // 编辑表格
       listRules: { required: true, validator: tableList, trigger: "blur" },
+      villageSelects: { required: true, validator: villageSelect, trigger: "blur" },
 
       parentRouteName: VILLAGE_LIST_ROUTER_NAME[1001],
       imgRule: { required: true, validator: imgs, trigger: "change" },
+      villageOptions: [],
+      batchOptions: [],
     };
   },
   computed: {
+    ...mapGetters(["userInfo"]),
     total() {
       return HISTORY_BUILDINGS.reduce((pre, next) => {
         return pre + this.form[next.value];
@@ -497,6 +509,8 @@ export default {
     //   this.form = this.data;
     //   this.imageList = [...this.data.villagePicturesFiles];
     // }
+    this.getVillages();
+    this.getBatchList();
     this.getDetail();
   },
   methods: {
@@ -510,11 +524,38 @@ export default {
         this.finalStatus = res.finalStatus;
         console.log(res);
         this.total = this.countTotal();
+        if (res.decType === 2) {
+          this.form.villageName = res.villageName.split(',');
+        }
+
         if (goVerify) {
           // setTimeout(() => {
           //   this.$el.querySelector("#verify").scrollIntoView();
           // },10)
         }
+      });
+    },
+    // 获取村列表
+    getVillages() {
+      getVillageArea({ areaId: this.userInfo.areaId }).then((res) => {
+        this.villageOptions = res[0].children.map((c) => {
+          return {
+            label: c.areaName,
+            value: c,
+          };
+        });
+      });
+    },
+    // 获取批次列表
+    getBatchList() {
+      getSetListAll(2).then((res) => {
+        console.log(res);
+        this.batchOptions = res.map((c) => {
+          return {
+            label: c,
+            value: c,
+          };
+        });
       });
     },
     onFileAdd(file, key) {
@@ -617,6 +658,9 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           this.form.annexIds = this.form.annexFiles.map(i => i.fileId).toString();
+          if (this.form.decType === 2) {
+            this.form.villageName = this.form.villageName.toString();
+          }
           console.log(this.form.annexIds);
           if (this.type === "edit") {
             // this.form.id = this.$route.query.id;
@@ -654,11 +698,19 @@ export default {
     },
 
     // 选择村庄地址
-    changeAddress(val) {
-      const { village, parent } = val;
-      console.log(village, parent);
-      this.form.villageName = village.areaName;
-      this.form.town = parent.areaName;
+    // changeAddress(val) {
+    //   const { village, parent } = val;
+    //   console.log(village, parent);
+    //   this.form.villageName = village.areaName;
+    //   this.form.town = parent.areaName;
+    // },
+    changeAddress(type, val) {
+      console.log(type, val);
+      this.form[type] = val.areaName;
+      // const { village, parent } = val;
+      // console.log(village, parent, 'village, parent');
+      // this.form.villageName = village.areaName;
+      // this.form.town = parent.areaName;
     },
 
     onImageAdd(res) {

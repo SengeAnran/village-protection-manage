@@ -165,6 +165,13 @@ export const getSetList = (data) => {
 };
 
 
+// 获取验收时间-申报批次（type 1：验收时间，2：申报批次）
+export const getSetListAll = (type) => {
+  return axios.request({
+    method: "get",
+    url: apiHost2 + `/api/workbench/createReports/timeValues/${type}`,
+  });
+};
 // 验收时间-申报批次新增（type 1：验收时间，2：申报批次）
 export const setDelete = (id) => {
   return axios.request({
