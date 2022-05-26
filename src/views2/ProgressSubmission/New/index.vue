@@ -72,7 +72,7 @@
       <div>
         <el-form-item class="list-table" label="" prop="projects" :rules="listRules">
           <div class="import">
-            <el-button type="primary" @click="dialogVisible = true" >历史数据</el-button>
+            <el-button type="primary" @click="dialogVisible = true">历史数据</el-button>
           </div>
 
           <VilliageListTable
@@ -175,9 +175,14 @@ export default {
       editIndex: "",
       editProjectForm: false, // 编辑表格
       listRules: { required: true, validator: tableList, trigger: "blur" },
-
     };
   },
+  mounted() {
+  },
+  methods: {
+    getDetail() {
+    }
+  }
 }
 </script>
 
