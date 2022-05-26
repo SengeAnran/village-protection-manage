@@ -4,12 +4,6 @@ export const DECLEAR_TYPE = {
   1002: "重点村",
   1003: "提升",
 };
-// 村庄列表 一般村、重点村、提升 对应的路由名称
-export const VILLAGE_LIST_ROUTER_NAME = {
-  1001: "newOrdinaryApplication",
-  1002: "newMajorApplication",
-  1003: "newPromoteApplication",
-};
 
 // 审核状态码
 export const DECLEAR_STATUS = { // 0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过

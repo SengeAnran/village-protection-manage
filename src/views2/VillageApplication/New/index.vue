@@ -403,7 +403,6 @@ import rule from "@/mixins/rule";
 import {
   getSetListAll,
 } from "@/api2/villageManage";
-import { VILLAGE_LIST_ROUTER_NAME, HISTORY_BUILDINGS } from "../constants";
 import { villageDeclaration, getVillageItemDetail } from '@/api2/villageManage'
 import {updateVillageItem} from "../../../api2/villageManage";
 import {getVillageArea} from "@/api2/acceptanceEvaluation";
@@ -488,7 +487,6 @@ export default {
       listRules: { required: true, validator: tableList, trigger: "blur" },
       villageSelects: { required: true, validator: villageSelect, trigger: "blur" },
 
-      parentRouteName: VILLAGE_LIST_ROUTER_NAME[1001],
       imgRule: { required: true, validator: imgs, trigger: "change" },
       villageOptions: [],
       batchOptions: [],
@@ -496,11 +494,6 @@ export default {
   },
   computed: {
     ...mapGetters(["userInfo"]),
-    total() {
-      return HISTORY_BUILDINGS.reduce((pre, next) => {
-        return pre + this.form[next.value];
-      }, 0);
-    },
   },
   watch: {
   },
@@ -523,15 +516,8 @@ export default {
         // this.form.annexFiles = [];
         this.finalStatus = res.finalStatus;
         console.log(res);
-        this.total = this.countTotal();
         if (res.decType === 2) {
           this.form.villageName = res.villageName.split(',');
-        }
-
-        if (goVerify) {
-          // setTimeout(() => {
-          //   this.$el.querySelector("#verify").scrollIntoView();
-          // },10)
         }
       });
     },
