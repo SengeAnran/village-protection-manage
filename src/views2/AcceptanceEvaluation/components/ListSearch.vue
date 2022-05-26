@@ -2,9 +2,7 @@
   <div class="list-search-module inline-flex pl-0">
     <div class="search-item" v-if="!isCounty">
       <span class="label">地区：</span>
-      <el-select v-model="query.declarationBatch" placeholder="请选择">
-        <el-option v-for="item in []" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-      </el-select>
+      <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea" />
     </div>
     <div class="search-item">
       <span class="label">村庄名称：</span>
@@ -16,21 +14,18 @@
       ></el-input>
     </div>
     <div class="search-item" v-if="!isCounty">
-      >
       <span class="label">创建批次：</span>
       <el-select v-model="query.declarationBatch" placeholder="请选择">
         <el-option v-for="item in batchOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
     </div>
     <div class="search-item" v-if="!isCounty">
-      >
       <span class="label">评价等次：</span>
       <el-select v-model="query.declarationBatch" placeholder="请选择">
         <el-option v-for="item in cityLevelOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
     </div>
     <div class="search-item" v-if="!isCounty">
-      >
       <span class="label">验收时间：</span>
       <el-select v-model="query.declarationBatch" placeholder="请选择">
         <el-option v-for="item in acceptTimeOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
@@ -109,6 +104,11 @@ export default {
           value: c,
         };
       });
+    },
+
+    changeArea(val) {
+      // this.query.areaId = val.areaId;
+      this.$emit('changeArea', val);
     },
   },
 };

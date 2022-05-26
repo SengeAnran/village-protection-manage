@@ -26,7 +26,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="cityRanking" label="本次验收全市排名" :rules="rule.input">
+            <el-form-item label="本次验收全市排名">
               <el-input style="width: 180px" disabled v-model="form.cityRanking" placeholder="自动排序"></el-input>
             </el-form-item>
           </el-col>
@@ -61,6 +61,8 @@ import rule from '@/mixins/rule';
 import FileAttach from '../components/FileAttach.vue'; // 附件上传
 import SubTit from '../components/SubTit.vue';
 
+import { getSetList } from '@/api2/villageManage';
+
 export default {
   name: 'CityInput',
   mixins: [rule],
@@ -76,6 +78,9 @@ export default {
       timeOptions: [],
     };
   },
+  mounted() {
+    this.setAcceptTimeOpt();
+  },
   methods: {
     // 县级附件上传
     onFileAdd(file) {
@@ -88,6 +93,12 @@ export default {
       if (index !== -1) {
         this.form['citySaveAnnex'].splice(index, 1);
       }
+    },
+
+    setAcceptTimeOpt() {
+      getSetList({ type: 1, pageNum: 1, pageSize: 50 }).then((res) => {
+        this.timeOptions = res.content.map((c) => ({ label: c.acceptanceTime, value: c.id }));
+      });
     },
   },
 };

@@ -1,9 +1,8 @@
 <template>
   <div class="page">
     <el-form ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
-      <BaseInfo />
+      <BaseInfo :form="form" />
       <score-table :form="form" disabled></score-table>
-
       <city-info></city-info>
       <province-info></province-info>
     </el-form>
@@ -34,7 +33,7 @@ export default {
     getData() {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
-        console.log(res, 'res');
+        this.form = res;
       });
     },
   },

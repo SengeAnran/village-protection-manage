@@ -28,7 +28,7 @@ import BasicInput from '../components/BasicInput.vue';
 import ScoreTable from '../components/ScoreTable.vue';
 import FileAttach from '../components/FileAttach.vue'; // 附件上传
 
-import { saveInfo } from '@/api2/acceptanceEvaluation';
+import { saveInfo, getDetail } from '@/api2/acceptanceEvaluation';
 
 export default {
   name: 'index',
@@ -158,6 +158,18 @@ export default {
       this.$refs.form.validateField('areaId');
       this.$refs.form.validateField('declarationId');
     },
+
+    getData() {
+      const id = this.$route.query.id;
+      getDetail({ id }).then((res) => {
+        this.form = res;
+        this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
+      });
+    },
+  },
+  mounted() {
+    const query = this.$route.query;
+    query.id && query.edit && this.getData();
   },
 };
 </script>

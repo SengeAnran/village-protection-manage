@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
-      <base-info></base-info>
+      <base-info :form="form"></base-info>
       <score-table :form="form"></score-table>
       <city-input :form="form"></city-input>
     </el-form>
@@ -20,10 +20,41 @@ import CityInput from '../components/CityInput.vue'; // 市区审核
 
 import { cityAudit, getDetail } from '@/api2/acceptanceEvaluation';
 
+const DEFALUT_FORM = {
+  cityAcceptTime: '',
+  cityLevelRating: '',
+  cityRanking: '',
+  citySaveAnnex: [],
+  cityVerify: '',
+  id: 0,
+  saveToGoCity: 0, //0/1 默认是提交
+  cityOpinion: '', // 驳回说明
+
+  buildPutInCity: '',
+  buildSupportCity: '',
+  buildUseCity: '',
+  carryOutConstructionCity: '',
+  carryOutCreateCity: '',
+  digitalScenesCity: '',
+  digitalSocietyCity: '',
+  featureCity: '',
+  indicatorsCommonalityCity: '',
+  indicatorsPersonalityCity: '',
+  negativeCity: '',
+  scenesBasicCity: '',
+  scenesBuildCity: '',
+  scenesEmphasisCity: '',
+  totalCity: '',
+  workBoardCity: '',
+  workGuideCity: '',
+  workMechanismCity: '',
+};
+
 export default {
   components: { BaseInfo, CityInput, ScoreTable },
   data() {
     return {
+      detail: {},
       form: {
         cityAcceptTime: '',
         cityLevelRating: '',
@@ -59,7 +90,8 @@ export default {
     getDetail() {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
-        console.log(res);
+        this.form = res;
+        this.form.citySaveAnnex = res.countySaveAnnexFiles || [];
       });
     },
     onBack() {
@@ -70,8 +102,9 @@ export default {
         if (!valid) return;
         await this._beforeSubmit('是否确认提交？');
 
-        const form = { ...this.form };
-        form.countySaveAnnex = this.form.citySaveAnnex.map((c) => c.fileId).join(',');
+        // const form = { ...this.form };
+        const form = this._assignForm();
+        form.citySaveAnnex = this.form.citySaveAnnex.map((c) => c.fileId).join(',');
         form.saveToGoCity = 0;
         this._saveInfo(form);
       });
@@ -79,8 +112,9 @@ export default {
     async onSave() {
       await this._beforeSubmit('是否保存待发？');
 
-      const form = { ...this.form };
-      form.countySaveAnnex = this.form.citySaveAnnex.map((c) => c.fileId).join(',');
+      // const form = { ...this.form };
+      const form = this._assignForm();
+      form.citySaveAnnex = this.form.citySaveAnnex.map((c) => c.fileId).join(',');
       form.saveToGoCity = 1;
       this._saveInfo(form, '保存成功！');
     },
@@ -94,6 +128,13 @@ export default {
 
         this.$router.back();
       });
+    },
+    _assignForm() {
+      const form = {};
+      Object.keys(DEFALUT_FORM).map((key) => {
+        form[key] = this.form[key];
+      });
+      return form;
     },
     _beforeSubmit(msg) {
       return new Promise((resolve) => {

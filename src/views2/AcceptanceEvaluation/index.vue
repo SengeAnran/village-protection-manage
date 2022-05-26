@@ -22,16 +22,16 @@
         :permission-delete="10004"
       >
         <template v-slot:search>
-          <list-search :query="query"></list-search>
+          <list-search @changeArea="changeArea" :query="query"></list-search>
         </template>
 
         <template v-slot:tableAction="scope">
-          <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
-          <el-link @click="goAudit(scope)" type="primary"> 审核 </el-link>
-          <div style="display: inline-block">
-            <el-link @click="edit(scope.data)" type="primary"> 修改</el-link>
-          </div>
-          <el-link @click="deleteItem(scope.data.id)" type="danger"> 删除 </el-link>
+          <el-link class="link" @click="goDetail(scope)" type="primary" v-if="showDetail(scope.data)"> 详情 </el-link>
+          <el-link class="link" @click="goAudit(scope)" type="primary" v-if="showAudit(scope.data)"> 审核 </el-link>
+          <el-link class="link" @click="edit(scope.data)" type="primary" v-if="showModify(scope.data)"> 修改</el-link>
+          <el-link class="link" @click="deleteItem(scope.data.id)" type="danger" v-if="showDelete(scope.data)">
+            删除
+          </el-link>
         </template>
 
         <template v-slot:crudAction>
@@ -56,7 +56,7 @@
           <el-table-column label="全市排名" prop="cityRanking" v-if="!isCounty"></el-table-column>
           <el-table-column label="县申请时间" prop="gmtModified" v-if="!isCounty"> </el-table-column>
           <el-table-column label="申请时间" prop="gmtModified"> </el-table-column>
-          <el-table-column label="市审核时间" prop="gmtCreate" v-if="!isCounty"> </el-table-column>
+          <el-table-column label="市审核时间" prop="cityReviewTime" v-if="!isCounty"> </el-table-column>
           <el-table-column label="状态" prop="finalStatus">
             <!--  0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过-->
             <template slot-scope="scope">
@@ -87,6 +87,7 @@ export default {
   data() {
     return {
       query: {
+        areaId: '',
         villageName: '',
         declarationBatch: '',
         cityLevelRating: '',
@@ -166,6 +167,26 @@ export default {
         });
       });
     },
+
+    changeArea(val) {
+      this.query.areaId = val.areaId;
+    },
+    showDetail(data) {
+      return (
+        this.roleId === 3 ||
+        (this.roleId === 2 && data.finalStatus !== 0) ||
+        (this.roleId === 1 && data.finalStatus !== 2)
+      );
+    },
+    showAudit(data) {
+      return (this.roleId === 2 && data.finalStatus === 0) || (this.roleId === 1 && data.finalStatus === 2);
+    },
+    showModify(data) {
+      return (this.roleId === 3 && data.finalStatus === 0) || (this.roleId === 2 && data.finalStatus === 2);
+    },
+    showDelete(data) {
+      return this.roleId === 3 && [0, 1].includes(data.finalStatus);
+    },
   },
 };
 </script>
@@ -181,5 +202,8 @@ export default {
   &.active {
     background: #15be50;
   }
+}
+.link {
+  padding: 0 5px;
 }
 </style>

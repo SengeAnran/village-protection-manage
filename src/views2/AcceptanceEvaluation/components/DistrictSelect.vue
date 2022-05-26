@@ -1,6 +1,6 @@
 <template>
   <section class="flex">
-    <el-select style="width: 140px" v-model="district" placeholder="请选择" @change="onDistrictChange">
+    <el-select style="width: 140px" v-model="_value" placeholder="请选择" @change="onDistrictChange">
       <el-option v-for="item in districtData" :key="item.value" :label="item.label" :value="item.value"> </el-option>
     </el-select>
     <el-select
@@ -18,9 +18,12 @@
 <script>
 import { getDistrictArea, getDistrictVillage } from '@/api2/acceptanceEvaluation';
 export default {
+  props: {
+    area: String,
+  },
   data() {
     return {
-      district: '',
+      // district: '',
       districtData: [],
       districtVillage: [],
       districtVillageData: [],
@@ -32,6 +35,14 @@ export default {
         return this.districtVillage;
       },
       set() {},
+    },
+    _value: {
+      get() {
+        return this.area;
+      },
+      set(val) {
+        this.$emit('update:area', val);
+      },
     },
   },
   methods: {
@@ -65,6 +76,7 @@ export default {
   mounted() {
     // 获取片区数据
     this.getDistrictData();
+    this._value && this.onDistrictChange(this._value);
   },
 };
 </script>

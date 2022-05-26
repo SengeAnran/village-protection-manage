@@ -55,11 +55,17 @@
                 @change="setTotalScore('cityScoreProp')"
               />
             </el-form-item>
+            <span v-if="item.prop === 'countyScore'">{{ form[row.countyScoreProp] }}</span>
             <span v-else class="cell">{{ row[item.prop] }}</span>
           </div>
           <!-- 省级用户 -->
           <div v-else>
-            <span class="cell">{{ row[item.prop] }}</span>
+            <!-- <span class="cell">{{ row[item.prop] }}</span> -->
+            <!-- <div v-if="userInfo.roleId === 1 || !disabled"> -->
+            <span v-if="item.prop === 'countyScore'">{{ form[row.countyScoreProp] }}</span>
+            <span v-else-if="item.prop === 'cityScore'">{{ form[row.cityScoreProp] }}</span>
+            <span v-else class="cell">{{ row[item.prop] }}</span>
+            <!-- </div> -->
           </div>
         </template>
       </el-table-column>

@@ -11,7 +11,11 @@
             <VillageSelect v-model="form.areaId" @change="changeAddress('areaId', $event)" />
           </el-form-item>
           <el-form-item prop="declarationId" label="片区名称" :rules="rule.select" v-if="villageType === 2">
-            <DistrictSelect v-model="form.declarationId" @change="changeAddress('district', $event)" />
+            <DistrictSelect
+              v-model="form.declarationId"
+              :area.sync="saveVO.area"
+              @change="changeAddress('district', $event)"
+            />
           </el-form-item>
         </div>
       </el-col>
@@ -107,9 +111,25 @@ export default {
       },
     };
   },
+  computed: {
+    saveVO() {
+      return this.form.saveVO || {};
+    },
+  },
   watch: {
     villageType() {
       this._resetBaseInfo();
+    },
+    form(val) {
+      if (val.saveVO) {
+        const { declarationId, areaId } = val;
+        this.baseInfo = { ...val.saveVO };
+        this.villageType = (declarationId && 2) || 1;
+        this.$nextTick(() => {
+          declarationId && (this.form.declarationId = declarationId);
+          areaId && (this.form.declarationId = declarationId);
+        });
+      }
     },
   },
   methods: {

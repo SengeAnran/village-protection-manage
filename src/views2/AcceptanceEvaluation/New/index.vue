@@ -1,8 +1,8 @@
 <template>
   <div class="page">
-    <CountyNew v-if="false" />
-    <CityNew v-if="false" />
-    <ProvinceNew />
+    <CountyNew v-if="roleId === 3" />
+    <CityNew v-else-if="roleId === 2" />
+    <ProvinceNew v-else />
   </div>
 </template>
 
@@ -17,6 +17,16 @@ export default {
     CountyNew,
     CityNew,
     ProvinceNew,
+  },
+  computed: {
+    roleId() {
+      return this.$store.getters.userInfo && this.$store.getters.userInfo.roleId;
+    },
+  },
+  data() {
+    return {
+      form: {},
+    };
   },
 };
 </script>
