@@ -83,28 +83,23 @@
             <div class="search-item">
               <span class="label">状态：</span>
               <el-select v-model="query.finalStatus" placeholder="请选择">
-                <el-option
-                  v-for="item in declareStatusOpt"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
+                <el-option v-for="item in declareStatusOpt" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </div>
-
           </div>
         </template>
         <template v-slot:insert>
           <div class="tip" v-if="roleId === 2 && batchInfo.pici">
             <div class="tip-left">
-              <img src="@/assets/imgs/u15.png" alt="">
+              <img src="@/assets/imgs/u15.png" alt="" />
             </div>
             <div class="tip-right">
               <div class="tip-title">排序提示</div>
-              <div class="tip-content">当前正在申报的
-                <span>{{ batchInfo.pici }}</span>个批次中，有
-                <span>{{ batchInfo.import || 0 }}</span>个重点村、
+              <div class="tip-content">
+                当前正在申报的 <span>{{ batchInfo.pici }}</span
+                >个批次中，有 <span>{{ batchInfo.import || 0 }}</span
+                >个重点村、
                 <span>{{ batchInfo.general || 0 }}</span>
                 个一般村申报已审核通过，您需要分批次排序后提交至省级审核。
               </div>
@@ -121,26 +116,15 @@
             <!--              详情-->
             <!--            </el-link>-->
             <!--            <el-divider v-if="roleId !== 1" direction="vertical"></el-divider>-->
-            <el-link
-              @click="goAuditResult(scope)"
-              v-if="actionControl('详情', scope.data.finalStatus)"
-              type="primary"
-            >
+            <el-link @click="goAuditResult(scope)" v-if="actionControl('详情', scope.data.finalStatus)" type="primary">
               详情
             </el-link>
             <!--            <el-divider v-if="roleId !== 1" direction="vertical"></el-divider>-->
-            <el-link
-              @click="goAudit(scope)"
-              v-if="actionControl('审核', scope.data.finalStatus)"
-              type="primary"
-            >
+            <el-link @click="goAudit(scope)" v-if="actionControl('审核', scope.data.finalStatus)" type="primary">
               审核
             </el-link>
             <el-divider v-if="actionControl('修改', scope.data.finalStatus)" direction="vertical"></el-divider>
-            <div
-              style="display: inline-block"
-              v-if="actionControl('修改', scope.data.finalStatus)"
-            >
+            <div style="display: inline-block" v-if="actionControl('修改', scope.data.finalStatus)">
               <el-link @click="edit(scope.data)" type="primary"> 修改</el-link>
               <!--              <el-divider direction="vertical"></el-divider>-->
             </div>
@@ -156,58 +140,31 @@
         </template>
 
         <template v-slot:crudAction>
-          <el-button v-if="roleId === 3" type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报</el-button>
+          <el-button v-if="roleId === 3" type="primary" icon="el-icon-plus" @click="newApplications">
+            新建申报</el-button
+          >
         </template>
 
         <template v-slot:export>
-          <el-button
-            icon="el-icon-download"
-            v-if="roleId !== 3"
-            type="primary"
-            plain
-            @click="exportEnclosure"
-          >导出附件</el-button
+          <el-button icon="el-icon-download" v-if="roleId !== 3" type="primary" plain @click="exportEnclosure"
+            >导出附件</el-button
           >
         </template>
 
         <template v-slot:table>
-          <el-table-column
-            label="村庄名称"
-            prop="villageName"
-          ></el-table-column>
-          <el-table-column
-            label="创建批次"
-            prop="declarationBatch"
-          ></el-table-column>
-          <el-table-column
-            label="总投资（万元）"
-            prop="declarationBatch"
-          ></el-table-column>
-          <el-table-column
-            label="县自评得分"
-            prop="declarationBatch"
-          ></el-table-column>
-          <el-table-column
-            v-if="roleId !== 3"
-            label="市评价得分"
-            prop="declarationBatch"
-          ></el-table-column>
-          <el-table-column
-            v-if="roleId !== 3"
-            label="评价等次"
-            prop="declarationBatch"
-          ></el-table-column>
-          <el-table-column
-            v-if="roleId !== 3"
-            label="全市排名"
-            prop="declarationBatch"
-          ></el-table-column>
-          <el-table-column v-if="roleId === 3" label="申请时间" prop="gmtCreate">
+          <el-table-column label="村(片区)名称" prop="name"></el-table-column>
+          <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
+          <el-table-column label="总投资（万元）" prop="investNum"></el-table-column>
+          <el-table-column label="县自评得分" prop="totalCounty"></el-table-column>
+          <el-table-column v-if="roleId !== 3" label="市评价得分" prop="declarationBatch"></el-table-column>
+          <el-table-column v-if="roleId !== 3" label="评价等次" prop="declarationBatch"></el-table-column>
+          <el-table-column v-if="roleId !== 3" label="全市排名" prop="declarationBatch"></el-table-column>
+          <el-table-column v-if="roleId === 3" label="申请时间" prop="gmtModified">
             <template slot-scope="scope">
               <p>{{ scope.row.gmtCreate }}</p>
             </template>
           </el-table-column>
-          <el-table-column v-else label="县申请时间" prop="gmtCreate">
+          <el-table-column v-else label="县申请时间" prop="gmtModified">
             <template slot-scope="scope">
               <p>{{ scope.row.gmtCreate }}</p>
             </template>
@@ -221,10 +178,7 @@
             <!--            0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过-->
             <template slot-scope="scope">
               <p>
-                <i
-                  class="status"
-                  :class="{ active: scope.row.finalStatus === 4 }"
-                ></i>
+                <i class="status" :class="{ active: scope.row.finalStatus === 4 }"></i>
                 {{ declareStatus[scope.row.finalStatus] }}
               </p>
             </template>
@@ -232,11 +186,7 @@
         </template>
       </Crud>
     </div>
-    <el-dialog
-      title="村庄推荐排序"
-      :visible.sync="dialogVisible"
-      width="800px"
-    >
+    <el-dialog title="村庄推荐排序" :visible.sync="dialogVisible" width="800px">
       <Crud
         ref="dialogCrud"
         :custom-get-method="getDialogDataList"
@@ -289,7 +239,7 @@
           </div>
         </template>
         <template v-slot:table>
-          <el-table-column label="村庄名称" prop="villageName">
+          <el-table-column label="村(片区)名称" prop="villageName">
             <template slot-scope="scope">
               <p>{{ scope.row.villageName }}</p>
             </template>
@@ -309,21 +259,22 @@
   </div>
 </template>
 <script>
-import {mapMutations, mapGetters} from "vuex";
+import { mapMutations, mapGetters } from 'vuex';
 import {
   queryBatchInfo,
   queryTypeDeclaration,
   getRecVillages,
-  getVillageList,
-  deleteVillageItem
-} from "@/api2/villageManage";
+  // getVillageList,
+  deleteVillageItem,
+} from '@/api2/villageManage';
+import { getReportList } from '@/api2/acceptanceEvaluation';
 import {
   DECLEAR_TYPE,
   DECLEAR_STATUS,
   // PRO_DECLEAR_STATUS,
-} from "./constants";
-import {recVerify} from '../../api/villageManage';
-import {getvillagesExport} from "../../api2/villageManage";
+} from './constants';
+import { recVerify } from '../../api/villageManage';
+import { getvillagesExport } from '../../api2/villageManage';
 
 export default {
   data() {
@@ -333,21 +284,21 @@ export default {
 
     return {
       query: {
-        declarationBatch: "",
-        finalStatus: "",
-        villageName: "",
+        // declarationBatch: '',
+        finalStatus: '',
+        villageName: '',
       },
       declareYearOpt: [
         {
-          value: "",
-          label: "2021",
-        }
+          value: '',
+          label: '2021',
+        },
       ],
       queryDeclareTypeOpt: [
         {
-          label: "全部",
-          value: ""
-        }
+          label: '全部',
+          value: '',
+        },
       ],
       dialogDeclareYearOpt: [
         // {
@@ -358,11 +309,11 @@ export default {
       dialogDeclareTypeOpt2: [],
       declareStatusOpt: [
         {
-          label: "全部",
-          value: ""
-        }
+          label: '全部',
+          value: '',
+        },
       ],
-      getMethod: getVillageList,
+      getMethod: getReportList,
       deleteMethod: deleteVillageItem,
       exportMethod: getvillagesExport,
 
@@ -370,13 +321,13 @@ export default {
       submitSortMethod: recVerify,
       batchInfo: {},
       dialogQuery: {
-        declareType: "",
-        declareYear: "",
+        declareType: '',
+        declareYear: '',
       },
     };
   },
   computed: {
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(['userInfo']),
     roleId() {
       console.log(this.userInfo.roleId);
       return this.userInfo.roleId;
@@ -395,7 +346,6 @@ export default {
     // }
     this.getBatchInfo();
 
-
     this.XIANJI_ACTION = {
       修改: (declareStatus) => this._canModify(declareStatus, 3),
       删除: (declareStatus) => this._canModify(declareStatus, 3),
@@ -412,13 +362,11 @@ export default {
   },
   mounted() {
     // this.lookUp();
-
   },
   methods: {
-    ...mapMutations("villageMange", ["changeDeclareList"]),
+    ...mapMutations('villageMange', ['changeDeclareList']),
     normalizeSelectOptions(obj) {
-      if (!Object.prototype.toString.call(obj).slice(8, -1) === "Object")
-        return [];
+      if (!Object.prototype.toString.call(obj).slice(8, -1) === 'Object') return [];
       return Object.keys(obj).map((key) => {
         return {
           label: obj[key],
@@ -446,11 +394,11 @@ export default {
     // 批次
     async getBatchInfo() {
       const res = await queryBatchInfo();
-      const opt = res.map(i => {
+      const opt = res.map((i) => {
         return {
           label: i,
           value: i,
-        }
+        };
       });
       this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(opt);
     },
@@ -460,55 +408,52 @@ export default {
       console.log(res);
       if (res.type) {
         this.dialogDeclareTypeOpt2 = res.type.map((item) => {
-          if (item === "1002") {
+          if (item === '1002') {
             return {
-              label: "重点村",
-              value: "1002",
+              label: '重点村',
+              value: '1002',
             };
           } else {
-            return {label: "一般村", value: "1001"};
+            return { label: '一般村', value: '1001' };
           }
         });
         this.dialogQuery.declareType = this.dialogDeclareTypeOpt2[0].value;
       } else {
-        this.dialogQuery.declareType = "";
+        this.dialogQuery.declareType = '';
       }
       if (res.years) {
         this.dialogDeclareYearOpt = res.years.map((item) => {
           return {
-            label: item + "年度",
+            label: item + '年度',
             value: item,
           };
         });
         this.dialogQuery.declareYear = this.dialogDeclareYearOpt[0].value;
       } else {
-        this.dialogQuery.declareYear = "";
+        this.dialogQuery.declareYear = '';
       }
-
-
     },
     // 市级汇总申报排序提示
     async queryBatchInfo() {
       const res = await queryBatchInfo();
       if (res && res.pici) {
         this.batchInfo = res;
-        this.$confirm('审核已完成！\n' +
-          '您需要分批次排序后提交至省级审核。', '提示', {
+        this.$confirm('审核已完成！\n' + '您需要分批次排序后提交至省级审核。', '提示', {
           confirmButtonText: '前往排序',
           cancelButtonText: '暂不排序',
-          type: 'warning'
-        }).then(() => {
-          this.showDialog();
-        }).catch(() => {
-        });
+          type: 'warning',
+        })
+          .then(() => {
+            this.showDialog();
+          })
+          .catch(() => {});
       } else {
         this.batchInfo = {};
       }
       console.log(res);
-
     },
     showDialog() {
-      this.dialogVisible = true
+      this.dialogVisible = true;
     },
     onSubmit() {
       this.$refs.dialogCrud.submitSort();
@@ -519,7 +464,6 @@ export default {
       const res = await getRecVillages(params);
       console.log(res);
       return res;
-
     },
     // // 申报详情
     // goDeclareRouter(scope) {
@@ -533,7 +477,7 @@ export default {
     // },
     // 审核详情
     goAuditResult(scope) {
-      const {id} = scope.data;
+      const { id } = scope.data;
       // if (this.roleId === 2) {
       //   this.$router.push({
       //     name: "villageDetails",
@@ -542,31 +486,30 @@ export default {
       // } else {
       //   this.$router.push({ name: "villageDetails", query: { id: detailId, goVerify: true } });
       // }
-      this.$router.push({name: "villageDetails", query: {id: id}})
+      this.$router.push({ name: 'villageDetails', query: { id: id } });
     },
     // 审核
     goAudit(scope) {
-      const {id} = scope.data;
-      this.$router.push({name: "villageDetails", query: {id: id}})
+      const { id } = scope.data;
+      this.$router.push({ name: 'villageDetails', query: { id: id } });
     },
-
 
     // 修改
     edit(data) {
       console.log(data);
-      const {id} = data;
+      const { id } = data;
       this.$router.push({
-        name: "newApplication",
-        query: {id},
+        name: 'newApplication',
+        query: { id },
       });
     },
     // 删除
     deleteItem(id) {
-      this.$confirm("是否删除该条数据？", "提示", {
-        type: "warning",
+      this.$confirm('是否删除该条数据？', '提示', {
+        type: 'warning',
       }).then(async () => {
         deleteVillageItem([id]).then(() => {
-          this.$notify.success("删除成功");
+          this.$notify.success('删除成功');
           this.$refs.crud.getItems();
         });
       });
@@ -578,20 +521,18 @@ export default {
      * @param {Number} declareStatus 审核状态码
      */
     actionControl(actionName, declareStatus) {
-      if (this.roleId === 3) { // 县级
-        return (
-          this.XIANJI_ACTION[actionName] &&
-          this.XIANJI_ACTION[actionName](declareStatus)
-        );
+      if (this.roleId === 3) {
+        // 县级
+        return this.XIANJI_ACTION[actionName] && this.XIANJI_ACTION[actionName](declareStatus);
       } else if (this.roleId === 2) {
-        return ( // 市级
-          this.SHIJI_ACTION[actionName] &&
-          this.SHIJI_ACTION[actionName](declareStatus)
+        return (
+          // 市级
+          this.SHIJI_ACTION[actionName] && this.SHIJI_ACTION[actionName](declareStatus)
         );
       } else if (this.roleId === 1) {
-        return ( // 省
-          this.ADMIN_ACTION[actionName] &&
-          this.ADMIN_ACTION[actionName](declareStatus)
+        return (
+          // 省
+          this.ADMIN_ACTION[actionName] && this.ADMIN_ACTION[actionName](declareStatus)
         );
       }
       return false;
@@ -615,9 +556,9 @@ export default {
     // 审核
     _canDeclare(declareStatus, roleId) {
       if (roleId === 2) {
-        return (declareStatus === 0);
+        return declareStatus === 0;
       } else if (roleId === 1) {
-        return (declareStatus === 2);
+        return declareStatus === 2;
       }
       return false;
     },
@@ -648,8 +589,8 @@ export default {
 }
 
 .tip {
-  background: #EDF4FF;
-  border: 1px solid #99CBF9;
+  background: #edf4ff;
+  border: 1px solid #99cbf9;
   border-radius: 4px;
   padding: 12px 16px;
   margin-bottom: 20px;
@@ -684,7 +625,7 @@ export default {
       margin-bottom: 8px;
 
       span {
-        color: #1492FF;
+        color: #1492ff;
       }
     }
 
@@ -692,7 +633,7 @@ export default {
       font-size: 14px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
-      color: #1492FF;
+      color: #1492ff;
       line-height: 22px;
     }
   }

@@ -1,12 +1,15 @@
 <template>
-  <div>
-    <el-form-item label="附件上传" :rules="rule.upload" prop="countySaveAnnex">
+  <div class="file-attach-module">
+    <el-form-item label="附件上传" :rules="rule.upload" :prop="verifyProp">
       <p style="color: #ff6b00" class="py-4 leading-5">
         <span style="display: block">
-          <i class="el-icon-warning"></i> 县级需上传浙江省未来乡村创建成效自评总结及相关支持材料电子版；
+          <i class="el-icon-warning"></i>
+          {{ desc1 || '县级需上传浙江省未来乡村创建成效自评总结及相关支持材料电子版；' }}
         </span>
         <span style="display: inline-block; padding-left: 10px">
-          《浙江省未来乡村创建成效评价申请表》《浙江省未来乡村创建成效评分》由市级审核盖章后统一上传扫描件
+          {{
+            desc2 || '《浙江省未来乡村创建成效评价申请表》《浙江省未来乡村创建成效评分》由市级审核盖章后统一上传扫描件'
+          }}
         </span>
       </p>
       <UploadFile2
@@ -24,6 +27,12 @@ import rule from '@/mixins/rule';
 export default {
   mixins: [rule],
   props: {
+    desc1: String,
+    desc2: String,
+    verifyProp: {
+      type: String,
+      default: 'countySaveAnnex',
+    },
     data: {
       type: Array,
       default: () => [],
@@ -39,3 +48,12 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.file-attach-module {
+  ::v-deep .el-form-item__content {
+    .py-4 {
+      padding-top: 0 !important;
+    }
+  }
+}
+</style>

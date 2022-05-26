@@ -55,3 +55,21 @@ export const saveInfo = (data) => {
     data,
   });
 };
+
+// 评价申报列表查询
+export const getReportList = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/createReports/page`,
+    data,
+  });
+};
+
+// 市级审核
+export const cityAudit = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/createReports/audit/city`,
+    data,
+  });
+};

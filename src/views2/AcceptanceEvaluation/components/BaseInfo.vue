@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-import ViewFile from '../components/ViewFile.vue';
+import ViewFile from './ViewFile.vue';
 
 // import { getDetail } from '@/api2/acceptanceEvaluation';
 

@@ -7,10 +7,23 @@
 </template>
 
 <script>
-import BaseInfo from './BaseInfo.vue';
+import BaseInfo from '../components/BaseInfo.vue';
+
+import { getDetail } from '@/api2/acceptanceEvaluation';
+
 export default {
   name: 'index',
   components: { BaseInfo },
+  methods: {
+    getData() {
+      getDetail().then((res) => {
+        console.log(res, 'res');
+      });
+    },
+  },
+  mounted() {
+    this.getData();
+  },
 };
 </script>
 

@@ -46,6 +46,7 @@
               label=""
               :rules="rule.input"
               :prop="row.cityScoreProp"
+              :show-message="false"
             >
               <el-input
                 v-model="form[row.cityScoreProp]"
@@ -67,7 +68,7 @@
 </template>
 <script>
 import rule from '@/mixins/rule';
-import { TABLE_SCORE_DATA } from './data';
+import { TABLE_SCORE_DATA } from '../New/data';
 export default {
   mixins: [rule],
   props: {

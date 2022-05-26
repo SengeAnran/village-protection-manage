@@ -79,8 +79,8 @@
 <script>
 import rule from '@/mixins/rule';
 
-import VillageSelect from '../components/VillageSelect.vue';
-import DistrictSelect from '../components/DistrictSelect.vue';
+import VillageSelect from './VillageSelect.vue';
+import DistrictSelect from './DistrictSelect.vue';
 
 import { getAreaBaseInfo } from '@/api2/acceptanceEvaluation';
 
