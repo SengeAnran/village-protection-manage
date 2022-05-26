@@ -2,8 +2,9 @@
   <div>
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
       <base-info></base-info>
-      <score-table :form="form"></score-table>
-      <city-input :form="form"></city-input>
+      <score-table :form="form" disabled></score-table>
+      <city-info :form="form"></city-info>
+      <province-input :form="form"></province-input>
     </el-form>
 
     <div style="margin-top: 50px; text-align: center">
@@ -16,42 +17,20 @@
 <script>
 import BaseInfo from '../components/BaseInfo.vue';
 import ScoreTable from '../components/ScoreTable.vue';
-import CityInput from '../components/CityInput.vue'; // 市区审核
+import CityInfo from '../components/CityInfo.vue';
+import ProvinceInput from '../components/ProvinceInput.vue';
 
 import { cityAudit, getDetail } from '@/api2/acceptanceEvaluation';
 
 export default {
-  components: { BaseInfo, CityInput, ScoreTable },
+  components: { BaseInfo, CityInfo, ScoreTable, ProvinceInput },
   data() {
     return {
       form: {
-        cityAcceptTime: '',
-        cityLevelRating: '',
-        cityRanking: '',
-        citySaveAnnex: [],
-        cityVerify: '',
         id: 0,
-        saveToGoCity: 0, //0/1 默认是提交
-        cityOpinion: '', // 驳回说明
-
-        buildPutInCity: '',
-        buildSupportCity: '',
-        buildUseCity: '',
-        carryOutConstructionCity: '',
-        carryOutCreateCity: '',
-        digitalScenesCity: '',
-        digitalSocietyCity: '',
-        featureCity: '',
-        indicatorsCommonalityCity: '',
-        indicatorsPersonalityCity: '',
-        negativeCity: '',
-        scenesBasicCity: '',
-        scenesBuildCity: '',
-        scenesEmphasisCity: '',
-        totalCity: '',
-        workBoardCity: '',
-        workGuideCity: '',
-        workMechanismCity: '',
+        provinceOpinion: '',
+        provinceVerify: '',
+        saveToGoProvince: 0,
       },
     };
   },
@@ -71,8 +50,7 @@ export default {
         await this._beforeSubmit('是否确认提交？');
 
         const form = { ...this.form };
-        form.countySaveAnnex = this.form.citySaveAnnex.map((c) => c.fileId).join(',');
-        form.saveToGoCity = 0;
+        form.saveToGoProvince = 0;
         this._saveInfo(form);
       });
     },
@@ -80,8 +58,7 @@ export default {
       await this._beforeSubmit('是否保存待发？');
 
       const form = { ...this.form };
-      form.countySaveAnnex = this.form.citySaveAnnex.map((c) => c.fileId).join(',');
-      form.saveToGoCity = 1;
+      form.saveToGoProvince = 1;
       this._saveInfo(form, '保存成功！');
     },
 

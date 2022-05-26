@@ -18,7 +18,7 @@
       >
         <template slot-scope="{ row }">
           <!-- 县级用户 -->
-          <div v-if="userInfo.roleId === 3">
+          <div v-if="userInfo.roleId === 3 && !disabled">
             <span v-if="item.prop === 'countyScore' && row.title === '合计'">{{ form[row.countyScoreProp] }}</span>
             <el-form-item
               v-if="item.prop === 'countyScore' && row.title !== '合计'"
@@ -39,7 +39,7 @@
             <span v-else class="cell">{{ row[item.prop] }}</span>
           </div>
           <!-- 市级用户 -->
-          <div v-else-if="userInfo.roleId === 2">
+          <div v-else-if="userInfo.roleId === 2 && !disabled">
             <span v-if="item.prop === 'cityScore' && row.title === '合计'">{{ form[row.cityScoreProp] }}</span>
             <el-form-item
               v-if="item.prop === 'cityScore' && row.title !== '合计'"
@@ -72,6 +72,10 @@ import { TABLE_SCORE_DATA } from '../New/data';
 export default {
   mixins: [rule],
   props: {
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     form: {
       type: Object,
       default: () => {},

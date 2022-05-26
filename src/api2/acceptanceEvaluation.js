@@ -65,6 +65,15 @@ export const getReportList = (data) => {
   });
 };
 
+// 评价申报列表查询
+export const getAuditList = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/createReports/page/audit`,
+    data,
+  });
+};
+
 // 市级审核
 export const cityAudit = (data) => {
   return axios.request({
