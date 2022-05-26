@@ -142,7 +142,7 @@
         >
 <!--          市级审核结果-->
           <div class="examine-item">
-            <div class="examine-title">设市区比选意见</div>
+            <div class="examine-title">设区市比选意见</div>
             <div class="input-item-wrp">
               <el-form-item label="审核结果" prop="introduction">
                 <p class="content">{{ verifyRes(form.cityVerify) }}</p>
@@ -224,7 +224,7 @@
       </div>
       <div v-if="(userInfo.roleId === 2 && finalStatus ===0) ||(userInfo.roleId === 1 && finalStatus ===2)">
 <!--      <div>-->
-        <div class="box-title" v-text="userInfo.roleId === 1? '审核':'设市区比选意见'"></div>
+        <div class="box-title" v-text="userInfo.roleId === 1? '审核':'设区市比选意见'"></div>
         <el-form
           style="padding-left: 14px"
           ref="reviewForm"
@@ -239,7 +239,31 @@
               <el-radio :label="0">不通过</el-radio>
             </el-radio-group>
           </el-form-item>
+          <el-form-item v-if="userInfo.roleId === 1 && reviewForm.status === 0" label="不通过类型" prop="rejectType" :rules="rule.select">
+            <el-radio-group v-model="reviewForm.rejectType">
+              <el-radio :label="2">驳回市级重填</el-radio>
+              <el-radio :label="1">驳回县级重填</el-radio>
+            </el-radio-group>
+          </el-form-item>
           <el-form-item
+            v-if="userInfo.roleId === 2"
+            label="请填写审核意见"
+            prop="opinion"
+            :rules="rule.input"
+          >
+            <el-input
+              style="width: 42%"
+              type="textarea"
+              :rows="5"
+              placeholder="请输入审核意见"
+              maxlength="300"
+              show-word-limit
+              v-model="reviewForm.opinion"
+            >
+            </el-input>
+          </el-form-item>
+          <el-form-item
+            v-else-if="reviewForm.status === 0"
             label="请填写审核意见"
             prop="opinion"
             :rules="rule.input"
@@ -261,6 +285,9 @@
             prop="processFilesArr"
             :rules="rule.upload"
           >
+            <p style="width: 42%; color: #FF6B00" class="py-4 leading-5">
+              <i class="el-icon-warning"></i>上传《未来乡村创建申报表》市级盖章扫描件
+            </p>
             <UploadFile2
               tip="支持格式：.doc, .docx, .pdf"
               accept=".doc,.docx,.pdf"
@@ -269,22 +296,22 @@
               @remove="onFileRemove($event, 'processFilesArr')"
             />
           </el-form-item>
-          <el-form-item
-            v-else
-            label="审核意见附件"
-            prop="processFilesArr"
-          >
-            <UploadFile2
-              tip="支持格式：.doc, .docx, .pdf"
-              accept=".doc,.docx,.pdf"
-              :data="reviewForm.processFilesArr"
-              @add="onFileAdd($event, 'processFilesArr')"
-              @remove="onFileRemove($event, 'processFilesArr')"
-            />
-          </el-form-item>
+<!--          <el-form-item-->
+<!--            v-else-->
+<!--            label="审核意见附件"-->
+<!--            prop="processFilesArr"-->
+<!--          >-->
+<!--            <UploadFile2-->
+<!--              tip="支持格式：.doc, .docx, .pdf"-->
+<!--              accept=".doc,.docx,.pdf"-->
+<!--              :data="reviewForm.processFilesArr"-->
+<!--              @add="onFileAdd($event, 'processFilesArr')"-->
+<!--              @remove="onFileRemove($event, 'processFilesArr')"-->
+<!--            />-->
+<!--          </el-form-item>-->
           <el-form-item style="text-align: center">
-            <el-button  @click="$router.back()">取消</el-button>
-            <el-button type="primary"  @click="validateForm">确定</el-button>
+            <el-button @click="$router.back()">取消</el-button>
+            <el-button type="primary" @click="validateForm">确定</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -352,6 +379,7 @@ export default {
       },
       reviewForm: {
         status: null,
+        rejectType: null,
         opinion: '',
         processFilesArr: [],
       },

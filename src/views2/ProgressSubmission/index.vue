@@ -28,21 +28,22 @@
           <div class="inline-flex mb-6 pl-0">
             <div v-if="roleId !== 3" class="search-item">
               <span class="label">地区：</span>
-              <el-select v-model="query.declarationBatch" placeholder="请选择">
-                <el-option
-                  v-for="item in queryDeclareTypeOpt"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
+              <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea"/>
+<!--              <el-select v-model="query.declarationBatch" placeholder="请选择">-->
+<!--                <el-option-->
+<!--                  v-for="item in queryDeclareTypeOpt"-->
+<!--                  :key="item.value"-->
+<!--                  :label="item.label"-->
+<!--                  :value="item.value"-->
+<!--                >-->
+<!--                </el-option>-->
+<!--              </el-select>-->
             </div>
             <div class="search-item">
               <span class="label">村（片区）名称：</span>
               <el-input
                 style="width: 200px"
-                v-model="query.villageName"
+                v-model="query.name"
                 :maxlength="50"
                 placeholder="请输入村庄名称"
               ></el-input>
@@ -50,11 +51,14 @@
             <div class="search-item">
               <span class="label">申报更新时间：</span>
               <el-date-picker
-                v-model="query.declarationBatch"
+                v-model="query.date"
                 type="datetimerange"
                 range-separator="至"
                 start-placeholder="开始日期"
-                end-placeholder="结束日期">
+                end-placeholder="结束日期"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                @change="setDate"
+              >
               </el-date-picker>
             </div>
 
@@ -72,7 +76,7 @@
             <div
               style="display: inline-block"
             >
-              <el-link @click="edit(scope.data)" type="primary"> 进度报送</el-link>
+              <el-link v-if="roleId === 3" @click="edit(scope.data)" type="primary"> 进度报送</el-link>
               <!--              <el-divider direction="vertical"></el-divider>-->
             </div>
           </div>
@@ -92,7 +96,7 @@
         <template v-slot:table>
           <el-table-column
             label="村（片区）名称"
-            prop="villageName"
+            prop="name"
           ></el-table-column>
           <el-table-column
             label="创建批次"
@@ -100,23 +104,23 @@
           ></el-table-column>
           <el-table-column
             label="项目数"
-            prop="declarationBatch"
+            prop="projectNum"
           ></el-table-column>
           <el-table-column
             label="计划投资（万元）"
-            prop="declarationBatch"
+            prop="investNum"
           ></el-table-column>
           <el-table-column
             label="完成投资(万元)"
-            prop="declarationBatch"
+            prop="completeTotalInvestment"
           ></el-table-column>
           <el-table-column
             label="投资完成率"
-            prop="declarationBatch"
+            prop="rate"
           ></el-table-column>
           <el-table-column label="申报更新时间" prop="gmtCreate">
             <template slot-scope="scope">
-              <p>{{ scope.row.gmtCreate }}</p>
+              <p>{{ scope.row.gmtModified }}</p>
             </template>
           </el-table-column>
         </template>
@@ -125,12 +129,11 @@
   </div>
 </template>
 <script>
-import {mapMutations, mapGetters} from "vuex";
+import { mapMutations, mapGetters} from "vuex";
 import {
   queryBatchInfo,
   queryTypeDeclaration,
   getRecVillages,
-  getVillageList,
   deleteVillageItem
 } from "@/api2/villageManage";
 import {
@@ -141,6 +144,8 @@ import {
 import {recVerify} from '../../api/villageManage';
 import {getvillagesExport} from "../../api2/villageManage";
 
+import { getList } from '@/api2/progressSubmission';
+
 export default {
   data() {
     // const date = new Date();
@@ -149,9 +154,13 @@ export default {
 
     return {
       query: {
-        declarationBatch: "",
-        finalStatus: "",
-        villageName: "",
+        declarationBatch: '',
+        finalStatus: '',
+        name: '',
+        date: '',
+        endDate: '',
+        startDate: '',
+        areaId: '',
       },
       declareYearOpt: [
         {
@@ -178,7 +187,7 @@ export default {
           value: ""
         }
       ],
-      getMethod: getVillageList,
+      getMethod: getList,
       deleteMethod: deleteVillageItem,
       exportMethod: getvillagesExport,
 
@@ -216,6 +225,18 @@ export default {
 
   },
   methods: {
+    // 时间范围
+    setDate(val) {
+      if (val && val.length === 2) {
+        this.query.startDate = val[0];
+        this.query.endDate = val[1];
+      }
+    },
+    // 地区
+    changeArea(val) {
+      console.log(val);
+      this.query.areaId = val.areaId;
+    },
     ...mapMutations("villageMange", ["changeDeclareList"]),
     normalizeSelectOptions(obj) {
       if (!Object.prototype.toString.call(obj).slice(8, -1) === "Object")
