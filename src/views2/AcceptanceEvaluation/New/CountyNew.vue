@@ -72,6 +72,7 @@ export default {
         workGuideCounty: '',
         workMechanismCounty: '',
       },
+      hasTempData: false,
     };
   },
 
@@ -82,6 +83,9 @@ export default {
     },
     saveMethod() {
       return this.isEdit ? updateInfo : saveInfo;
+    },
+    tempSaveMethod() {
+      return this.hasTempData ? updateInfo : saveInfo;
     },
   },
 
@@ -110,7 +114,7 @@ export default {
       form.countySaveAnnex = this.form.countySaveAnnex.map((c) => c.fileId).join(',');
       form.saveToGo = 1;
       // this._saveInfo(form, '保存成功！');
-      saveInfo(form).then(() => {
+      this.tempSaveMethod(form).then(() => {
         this.$notify.success({
           title: '保存成功！',
         });
@@ -181,7 +185,8 @@ export default {
     getCountyTempData() {
       getCountyTempData().then((res) => {
         // console.log(res, '获取保存待发数据');
-        this.form = res;
+        this.hasTempData = Boolean(res);
+        this.form = res || { ...DEFAULT_FORM };
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
       });
     },
