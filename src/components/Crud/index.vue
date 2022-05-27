@@ -281,6 +281,14 @@ export default {
       type: String,
       default: '导出',
     },
+    exportFileName: {
+      type: String,
+      default: '导出文件',
+    },
+    exportFileName2: {
+      type: String,
+      default: '导出文件',
+    },
     exportName2: {
       type: String,
       default: '导出',
@@ -622,6 +630,11 @@ export default {
     },
     // 导出
     async exportDatas() {
+      console.log(this.selections);
+      if (this.selections.length === 0) {
+        this.$notify.error('请选择需要导出的数据');
+        return;
+      }
       this.$confirm("是否批量导出所选数据？", "提示", {
         type: "warning",
       }).then(async () => {
@@ -635,7 +648,7 @@ export default {
             ids: this.selections.map((item) => item[this.idKey]),
           };
           const res = await this.exportMethod(data);
-          downloadFile(res, "浙江省未来乡村申报汇总");
+          downloadFile(res, this.exportFileName);
           this.$notify.success("导出成功");
         } finally {
           this.loading = false;

@@ -487,7 +487,16 @@ export const defaultRoutes2 = [
         name: 'VillageApplyList2',
         meta: {
           title: '县级申报',
-          menuIds: [4100, 4200],
+          menuIds: [410001],
+        },
+        component: () => import('@/views2/VillageApplication/index.vue'),
+      },
+      {
+        path: '/villageApplication2/index',
+        name: 'VillageApplyList2',
+        meta: {
+          title: '省级（市级）审核',
+          menuIds: [410002],
         },
         component: () => import('@/views2/VillageApplication/index.vue'),
       },
@@ -519,13 +528,13 @@ export const defaultRoutes2 = [
         meta: {
           // activeMenu: "/acceptanceEvaluation/index",
           title: '申报批次配置',
-          menuIds: [4100, 4200],
+          menuIds: [410003],
         },
         component: () => import('@/views2/VillageApplication/DeclarationBatch/index'),
       },
     ],
   },
-  // 验收评价
+  // 进度申报
   {
     path: '/progressSubmission',
     component: BlankRouteNode,
@@ -534,7 +543,7 @@ export const defaultRoutes2 = [
       name: 'ProgressSubmissionList',
     },
     meta: {
-      menuIds: [4100, 4200],
+      menuIds: [4200],
       title: '项目进度报送',
       hideChild: false,
       icon: 'cunzhuangshenbao',
@@ -545,8 +554,18 @@ export const defaultRoutes2 = [
         name: 'ProgressSubmissionList',
         meta: {
           // icon: "cunzhuangshenbao",
-          menuIds: [4100, 4200],
+          menuIds: [420001],
           title: '县级报送',
+        },
+        component: () => import('@/views2/ProgressSubmission/index.vue'),
+      },
+      {
+        path: '/progressSubmission/index',
+        name: 'ProgressSubmissionList',
+        meta: {
+          // icon: "cunzhuangshenbao",
+          menuIds: [420002],
+          title: '省级（市级）审阅',
         },
         component: () => import('@/views2/ProgressSubmission/index.vue'),
       },
@@ -582,7 +601,7 @@ export const defaultRoutes2 = [
       name: 'AcceptanceEvaluationList',
     },
     meta: {
-      menuIds: [4100, 4200],
+      menuIds: [4300],
       title: '验收评价',
       hideChild: false,
       icon: 'cunzhuangshenbao',
@@ -593,8 +612,28 @@ export const defaultRoutes2 = [
         name: 'AcceptanceEvaluationList',
         meta: {
           // icon: "cunzhuangshenbao",
-          menuIds: [4100, 4200],
+          menuIds: [430001],
           title: '县级自评申报',
+        },
+        component: () => import('@/views2/AcceptanceEvaluation/index.vue'),
+      },
+      {
+        path: '/acceptanceEvaluation/index',
+        name: 'AcceptanceEvaluationList',
+        meta: {
+          // icon: "cunzhuangshenbao",
+          menuIds: [430002],
+          title: '市级比选',
+        },
+        component: () => import('@/views2/AcceptanceEvaluation/index.vue'),
+      },
+      {
+        path: '/acceptanceEvaluation/index',
+        name: 'AcceptanceEvaluationList',
+        meta: {
+          // icon: "cunzhuangshenbao",
+          menuIds: [430003],
+          title: '省级复核',
         },
         component: () => import('@/views2/AcceptanceEvaluation/index.vue'),
       },
@@ -627,7 +666,7 @@ export const defaultRoutes2 = [
         meta: {
           // activeMenu: "/acceptanceEvaluation/index",
           title: '验收时间配置',
-          menuIds: [4100, 4200],
+          menuIds: [430004],
         },
         component: () => import('@/views2/AcceptanceEvaluation/AcceptanceTime/index'),
       },

@@ -20,6 +20,7 @@
         :permission-add="0"
         :permission-edit="0"
         :permission-delete="10004"
+        export-file-name="浙江省未来乡村申报汇总"
       >
         <template v-slot:search>
           <div class="inline-flex mb-6 pl-0">

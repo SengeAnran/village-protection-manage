@@ -1,14 +1,16 @@
 // 进度报送
 import axios from "@/utils/request";
 import config from "@/utils/config";
+import qs from "qs";
 const { apiHost2 } = config;
-// 导出村庄详情
 
-export const getvillagesExport = (data) => {
+// 导出信息汇总表
+export const getInforExport = (params) => {
+  console.log('params',params)
   return axios.request({
-    method: "post",
-    url: apiHost2 + "/api/workbench/villageDeclaration/export/list",
-    data,
+    method: "get",
+    url: apiHost2 + "/api/workbench/progressReport/export/list?ids=" + params.ids.toString(),
+    // params,
     responseType: "blob"
   });
 };
@@ -34,7 +36,15 @@ export const getList = (data) => {
 export const getDetail = (data) => {
   return axios.request({
     method: "POST",
-    url: apiHost2 + `/api/workbench/progressReport/detail/${data.id}/${data.declarationId}`,
+    url: apiHost2 + `/api/workbench/progressReport/detail/${data.id}`,
+    data,
+  });
+};
+// 报送历史
+export const getHistory = (data) => {
+  return axios.request({
+    method: "POST",
+    url: apiHost2 + `/api/workbench/progressReport/history/${data.id}`,
     data,
   });
 };

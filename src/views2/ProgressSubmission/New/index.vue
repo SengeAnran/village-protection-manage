@@ -11,9 +11,16 @@
       <div class="detail-top">
         <el-row :gutter="20">
           <el-col :span="8">
-            <el-form-item label="创建村/片区名称" prop="villageId">
+            <el-form-item v-if="form.area" label="创建村/片区名称" prop="area">
               <el-input
-                v-model="form.countrySortNum"
+                v-model="form.area"
+                placeholder="请输入创建村/片区名称"
+                disabled
+              ></el-input>
+            </el-form-item>
+            <el-form-item v-if="form.villageName" label="创建村/片区名称" prop="villageName">
+              <el-input
+                v-model="form.villageName"
                 placeholder="请输入创建村/片区名称"
                 disabled
               ></el-input>
@@ -70,26 +77,22 @@
         </el-row>
       </div>
       <div>
-        <el-form-item class="list-table" label="" prop="projects" :rules="listRules">
+        <el-form-item class="list-table" label="" prop="detailLists" :rules="listRules">
           <div class="import">
-            <el-button type="primary" @click="dialogVisible = true">历史数据</el-button>
+            <el-button type="primary" @click="lookHistory">历史数据</el-button>
           </div>
-
           <VilliageListTable
-            :data="form.projects"
+            :form="form"
+            :data="form.detailLists"
             :hiddenEdit="true"
             :hiddenDetail="true"
-            @remove="removeListItem"
-            @editForm="editListItem"
-            @moveUp="moveUpItem"
-            @moveDown="moveDownItem"
           />
         </el-form-item>
       </div>
     </el-form>
     <div>
       <el-button @click="$router.back()">返回</el-button>
-      <el-button type="primary" @click="validateForm">提交</el-button>
+      <el-button type="primary" @click="onSubmit">提交</el-button>
     </div>
     <el-dialog
       title="详情"
@@ -97,13 +100,11 @@
       width="90%"
     >
       <VilliageListTable
-        :data="form.projects"
+        :data="historyList"
         :hiddenEdit="true"
         :hiddenDetail="true"
-        @remove="removeListItem"
-        @editForm="editListItem"
-        @moveUp="moveUpItem"
-        @moveDown="moveDownItem"
+        :history="true"
+        key="history"
       />
     </el-dialog>
   </div>
@@ -113,11 +114,29 @@
 import VilliageListTable from "../Components/VilliageListTable";
 
 import rule from "@/mixins/rule";
+import {addData, getDetail, getHistory} from "@/api2/progressSubmission";
 const tableList = (rule, value, callback) => {
+  console.log(value);
   if (value.length) {
-    callback();
+    const res = value.every((i) => {
+      return i.planGovInvestment !== null && i.planSocialInvestment !== null && i.completeGovInvestmentNow !== null && i.completeSocialInvestmentNow !== null && i.completeTotalInvestmentNow !== null
+    });
+    if (res) {
+      const notNum = value.some((i) => {
+        return isNaN(i.planGovInvestment) || isNaN(i.planSocialInvestment)  && isNaN(i.completeGovInvestmentNow)  && isNaN(i.completeSocialInvestmentNow)  && isNaN(i.completeTotalInvestmentNow)
+      });
+      if (notNum) {
+        callback(new Error("请填写的数据都为数字"));
+      } else {
+        callback();
+      }
+
+    } else {
+      callback(new Error("请填写完数据"));
+    }
   } else {
-    callback(new Error("请添加项目"));
+    callback();
+
   }
 };
 export default {
@@ -128,59 +147,91 @@ export default {
   data() {
     return {
       form: {
-        type: 1, // 申报类型
-        annexFiles: [], // 附件
-        villageName: "", //村庄地址
-        town: "", //村庄地址
-        villageId: "", //村庄地址
-        countrySortNum: "", //推荐次序
-        declarationBatch: "", //申报批次
-        startTime: "", //创建周期 开始
-        endTime: "", //创建周期 结束
-        leader: "", //领办领导
-        construct: "", //建设单位
-        contactPerson: "", // 联系人
-        phone: "", //联系方式
-        huNum: "", //户籍人口数（万人）
-        personNum: "", //常住人口数（万人）
-        investNum: "", //计划总投资（万元）
-        incomeNum: "", //村级集体经济年经营性收入（万元）
-
-        villageProperty: [], //村庄属性（可多选）
-
-        basicText: "", //基本情况
-        meetingText: "", //村民代表会议（村民会议）关于未来乡村建设方案决议情况
-        townText: "", //乡、镇（街道）人民政府（办事处）意见
-        departmentText: "", //县（市、区）部门审核意见
-        governmentText: "", //县（市、区）人民政府意见
-        projectFilingPerson: "", //填表人
-        projectFilingPhone: "", //联系电话
-        projectFilingAudit: "", //审核人
-        projects: [], //项目列表
+        area: '',
+        villageName: '',
+        declarationBatch: '',
+        investNum: '',
+        leader: '',
+        contactPerson: '',
+        phone: '',
+        detailLists: [],
       },
+      historyList: [],
       type: "add",
+      firstTime: false, // 是否是第一次填报进度
       dialogVisible: false,
       importDialogVisible: false,
-      projectForm: { // 项目表单
-        projectName: "", // 项目名称
-        constructUnit: "", // 建设单位
-        constructAddress: "", // 建设地点
-        constructDetail: "", // 建设内容和规模
-        schedule: "", // 进度安排
-        landUse: "", // 用地情况
-        investmentAmount: "", // 投资额（万元）
-        arrangements: "", // 运行维护管理安排
-        remark: "", // 备注
-      },
       editIndex: "",
       editProjectForm: false, // 编辑表格
       listRules: { required: true, validator: tableList, trigger: "blur" },
     };
   },
-  mounted() {
+  beforeMount() {
+    this.getDetail();
   },
   methods: {
     getDetail() {
+      getDetail({ id: this.$route.query.id }).then((res) => {
+        this.form = res;
+        this.form.detailLists = this.form.detailLists.map((i) => {
+          return {
+            ...i,
+            completeTotalInvestmentNow: null,
+            completeGovInvestmentNow: null,
+            completeSocialInvestmentNow: null,
+          };
+        });
+        this.firstTime = this.form.detailLists.every(i => {
+          return i.planGovInvestment === null;
+        });
+      });
+    },
+    // 添加 项目
+    onSubmit() {
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          console.log(valid);
+          console.log(this.form);
+          let time = 0;
+          this.form.detailLists.forEach(async (item) => {
+            let data = {};
+            if (this.firstTime) {
+              data = {
+                completeGovInvestment: Number(item.completeGovInvestmentNow),
+                completeSocialInvestment: Number(item.completeSocialInvestmentNow),
+                completeTotalInvestment: Number(item.completeTotalInvestmentNow),
+                planGovInvestment: Number(item.planGovInvestment),
+                planSocialInvestment: Number(item.planGovInvestment),
+                projectId: Number(item.projectId),
+                rate: item.completeTotalInvestmentNow / item.investmentAmount,
+              };
+            } else {
+              data = {
+                completeGovInvestment: Number(item.completeGovInvestmentNow),
+                completeSocialInvestment: Number(item.completeSocialInvestmentNow),
+                completeTotalInvestment: Number(item.completeTotalInvestmentNow),
+                projectId: Number(item.projectId),
+                rate: item.completeTotalInvestmentNow / item.investmentAmount,
+              };
+            }
+            await addData(data);
+            ++time;
+            if (time === this.form.detailLists.length) {
+              this.$notify.success({
+                title: '进度上报成功！',
+              });
+              this.$router.back();
+              return;
+            }
+          });
+        }
+      });
+    },
+    async lookHistory() {
+
+      const res = await getHistory({ id: this.$route.query.id })
+      this.historyList = res;
+      this.dialogVisible = true;
     }
   }
 }
