@@ -55,26 +55,26 @@ module.exports = {
           'APPLICATION-ID': '3',
         },
       },
-      '/apiFun': {
+      '/apiWX': {
         // 未来乡村
         // target: 'http://172.16.25.142:8680/', // 测试环境
-        target: 'http://172.16.25.142:5000/', // 测试环境
-        changeOrigin: true,
-        pathRewrite: (path) => path.replace('/apiFun', ''),
-        headers: {
-          Connection: 'keep-alive',
-          'APPLICATION-ID': '4',
-        },
-      },
-      '/apiWX': {
-        // 未来乡村小程序
         target: 'http://172.16.25.142:5000/', // 测试环境
         changeOrigin: true,
         pathRewrite: (path) => path.replace('/apiWX', ''),
         headers: {
           Connection: 'keep-alive',
+          'APPLICATION-ID': '4',
         },
       },
+      // '/apiWX': {
+      //   // 未来乡村小程序
+      //   target: 'http://172.16.25.142:5000/', // 测试环境
+      //   changeOrigin: true,
+      //   pathRewrite: (path) => path.replace('/apiWX', ''),
+      //   headers: {
+      //     Connection: 'keep-alive',
+      //   },
+      // },
     },
   },
 };
