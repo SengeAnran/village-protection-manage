@@ -8,7 +8,7 @@
       <el-col :span="8">
         <div class="mb-8">
           <el-form-item prop="areaId" label="创建村名称" :rules="rule.select" v-if="villageType === 1">
-            <VillageSelect v-model="form.areaId" @change="changeAddress('areaId', $event)" />
+            <VillageSelect ref="villageSelect" v-model="form.areaId" @change="changeAddress('areaId', $event)" />
           </el-form-item>
           <el-form-item prop="declarationId" label="片区名称" :rules="rule.select" v-if="villageType === 2">
             <DistrictSelect
@@ -124,10 +124,12 @@ export default {
       if (val.saveVO) {
         const { declarationId, areaId } = val;
         this.baseInfo = { ...val.saveVO };
-        this.villageType = (declarationId && 2) || 1;
+        this.villageType = val.saveVO.decType;
         this.$nextTick(() => {
           declarationId && (this.form.declarationId = declarationId);
           areaId && (this.form.declarationId = declarationId);
+
+          val.saveVO.decType === 1 && this.$refs.villageSelect.setCascaderValue(val.saveVO.villageName);
         });
       }
     },
@@ -146,8 +148,9 @@ export default {
       getAreaBaseInfo(params).then((res) => {
         const data = {
           areaId: res.areaId,
+          declarationId: res.declarationId,
         };
-        type === 'areaId' ? (data.declarationId = undefined) : (data.declarationId = res.declarationId);
+        // type === 'areaId' ? (data.declarationId = undefined) : (data.declarationId = res.declarationId);
         this._assignBaseInfo(res);
         this.$emit('change', data);
       });

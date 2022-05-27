@@ -78,6 +78,14 @@ export default {
       timeOptions: [],
     };
   },
+  watch: {
+    // 'form.cityLevelRating'() {
+    //   this.$emit('evaluateChange'); // 触发排名变动
+    // },
+    'form.cityAcceptTime'() {
+      this.$emit('evaluateChange'); // 触发排名变动
+    },
+  },
   mounted() {
     this.setAcceptTimeOpt();
   },
@@ -97,7 +105,7 @@ export default {
 
     setAcceptTimeOpt() {
       getSetList({ type: 1, pageNum: 1, pageSize: 50 }).then((res) => {
-        this.timeOptions = res.content.map((c) => ({ label: c.acceptanceTime, value: c.id }));
+        this.timeOptions = res.content.map((c) => ({ label: c.acceptanceTime, value: c.acceptanceTime }));
       });
     },
   },

@@ -3,8 +3,8 @@
     <el-form ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
       <BaseInfo :form="form" />
       <score-table :form="form" disabled></score-table>
-      <city-info></city-info>
-      <province-info></province-info>
+      <city-info v-if="showCity" :form="form"></city-info>
+      <province-info v-if="showProvince" :form="form"></province-info>
     </el-form>
 
     <div style="text-align: center; padding: 40px">
@@ -20,7 +20,6 @@ import CityInfo from '../components/CityInfo.vue';
 import ProvinceInfo from '../components/ProvinceInfo.vue';
 
 import { getDetail } from '@/api2/acceptanceEvaluation';
-
 export default {
   name: 'index',
   components: { BaseInfo, ScoreTable, CityInfo, ProvinceInfo },
@@ -28,6 +27,14 @@ export default {
     return {
       form: {},
     };
+  },
+  computed: {
+    showCity() {
+      return this.form.finalStatus > 0;
+    },
+    showProvince() {
+      return this.form.finalStatus > 2;
+    },
   },
   methods: {
     getData() {

@@ -1,6 +1,12 @@
 <template>
   <section>
-    <el-cascader style="width: 100%" :props="villageProps" @change="onChange"></el-cascader>
+    <el-cascader
+      style="width: 100%"
+      :props="villageProps"
+      @change="onChange"
+      :placeholder="placeAreaName"
+      :class="{ darkColor: cascaderStyle }"
+    ></el-cascader>
   </section>
 </template>
 <script>
@@ -14,6 +20,9 @@ export default {
         lazy: true,
         lazyLoad: (node, resolve) => this.villageLazyLoad(node, resolve),
       },
+
+      placeAreaName: '请选择', // 数据回填，展示当前列表数据
+      cascaderStyle: false, //placeholder 样式
     };
   },
   computed: {
@@ -42,6 +51,33 @@ export default {
         resolve(nodes);
       });
     },
+    clearCascaderValue() {
+      this.placeAreaName = '请选择';
+      this.cascaderStyle = false;
+    },
+    setCascaderValue(val) {
+      this.placeAreaName = val;
+      this.cascaderStyle = true;
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.darkColor {
+  ::v-deep .el-input {
+    input:-moz-placeholder,
+    textarea:-moz-placeholder {
+      color: #606266;
+    }
+    input:-ms-input-placeholder,
+    textarea:-ms-input-placeholder {
+      color: #606266;
+    }
+    input::-webkit-input-placeholder,
+    textarea::-webkit-input-placeholder {
+      color: #606266;
+    }
+  }
+}
+</style>

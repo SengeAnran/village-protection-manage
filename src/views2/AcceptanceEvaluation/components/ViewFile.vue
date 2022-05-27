@@ -1,7 +1,7 @@
 <template>
-  <div class="view-file-module">
+  <div class="view-file-module" @click="openFile">
     <i class="el-icon-link"></i>
-    附件名称附件名称附件名称附件名称附件名称.pdf
+    {{ data.fileName }}
   </div>
 </template>
 <script>
@@ -10,6 +10,11 @@ export default {
     data: {
       type: Object,
       default: () => {},
+    },
+  },
+  methods: {
+    openFile() {
+      console.log('open file');
     },
   },
 };

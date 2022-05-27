@@ -1,6 +1,6 @@
 <template>
   <div class="village-manage block">
-    <div>
+    <div v-loading="loading">
       <div class="text-lg mb-4">申报列表</div>
       <Crud
         ref="crud"
@@ -11,8 +11,6 @@
         id-key="id"
         actionWidth="180px"
         :multiple-delete="userInfo.roleId === 3"
-        showExport
-        :export-method="exportMethod"
         :hideAdd="true"
         :hideEdit="true"
         :hideView="true"
@@ -20,6 +18,7 @@
         :permission-add="0"
         :permission-edit="0"
         :permission-delete="10004"
+        @selectionChange="selectionChange"
       >
         <template v-slot:search>
           <list-search @changeArea="changeArea" :query="query"></list-search>
@@ -36,14 +35,15 @@
 
         <template v-slot:crudAction>
           <el-button v-if="roleId === 3" type="primary" icon="el-icon-plus" @click="newApplications">
-            新建申报</el-button
-          >
+            新建申报
+          </el-button>
         </template>
 
         <template v-slot:export>
-          <el-button icon="el-icon-download" v-if="roleId !== 3" type="primary" plain @click="exportEnclosure"
-            >导出附件</el-button
-          >
+          <el-button icon="el-icon-download" type="primary" plain @click="exportList"> 导出 </el-button>
+          <el-button icon="el-icon-download" v-if="roleId !== 3" type="primary" plain @click="exportEnclosure">
+            导出附件
+          </el-button>
         </template>
 
         <template v-slot:table>
@@ -62,7 +62,7 @@
             <template slot-scope="scope">
               <p>
                 <i class="status" :class="{ active: scope.row.finalStatus === 4 }"></i>
-                {{ DECLEAR_STATUS[scope.row.finalStatus] }}
+                {{ DECLEAR_STATUS[scope.row.finalStatus] || '--' }}
               </p>
             </template>
           </el-table-column>
@@ -73,14 +73,11 @@
 </template>
 <script>
 import { mapMutations, mapGetters } from 'vuex';
-
 import ListSearch from './components/ListSearch.vue';
 
-import { getRecVillages, deleteVillageItem } from '@/api2/villageManage';
-import { getAuditList, getReportList } from '@/api2/acceptanceEvaluation';
+import { getAuditList, getReportList, deleteItem, exportList } from '@/api2/acceptanceEvaluation';
 import { DECLEAR_STATUS } from './constants';
-import { recVerify } from '../../api/villageManage';
-import { getvillagesExport } from '../../api2/villageManage';
+import { downloadFile } from '@/utils/data';
 
 export default {
   components: { ListSearch },
@@ -95,10 +92,13 @@ export default {
         finalStatus: '',
       },
       // getMethod: getAuditList,
-      deleteMethod: deleteVillageItem,
-      exportMethod: getvillagesExport,
-      submitSortMethod: recVerify,
+      deleteMethod: deleteItem,
+      exportMethod: exportList,
       DECLEAR_STATUS,
+
+      selections: [], // 表格选中数据
+
+      loading: false,
     };
   },
   computed: {
@@ -125,18 +125,38 @@ export default {
         };
       });
     },
+    exportList() {
+      this._exportFiles(exportList, '导出信息汇总表');
+      // this._exportFiles(exportList, '导出信息汇总表.xlsx');
+    },
     // 导出附件
     exportEnclosure() {
       console.log('导出附件');
     },
+
+    _exportFiles(exportFunc, fileName = '导出信息汇总表 ') {
+      if (!this.selections.length) {
+        this.$message.warning('请选择需要导出的数据');
+        return;
+      }
+      this.$confirm('是否批量导出所选数据？', '提示', {
+        type: 'warning',
+      }).then(async () => {
+        this.loading = true;
+        try {
+          const data = {
+            declarationIds: this.selections.map((item) => item.id),
+          };
+          const res = await exportFunc(data);
+          downloadFile(res, fileName);
+        } finally {
+          this.loading = false;
+        }
+      });
+    },
+
     newApplications() {
       this.$router.push({ name: 'NewAcceptanceEvaluation' });
-    },
-    async getDialogDataList(params) {
-      console.log(params);
-      const res = await getRecVillages(params);
-      console.log(res);
-      return res;
     },
     // 详情
     goDetail(scope) {
@@ -161,7 +181,7 @@ export default {
       this.$confirm('是否删除该条数据？', '提示', {
         type: 'warning',
       }).then(async () => {
-        deleteVillageItem([id]).then(() => {
+        deleteItem({ id }).then(() => {
           this.$notify.success('删除成功');
           this.$refs.crud.getItems();
         });
@@ -170,6 +190,9 @@ export default {
 
     changeArea(val) {
       this.query.areaId = val.areaId;
+    },
+    selectionChange(val) {
+      this.selections = val;
     },
     showDetail(data) {
       return (
@@ -182,7 +205,10 @@ export default {
       return (this.roleId === 2 && data.finalStatus === 0) || (this.roleId === 1 && data.finalStatus === 2);
     },
     showModify(data) {
-      return (this.roleId === 3 && data.finalStatus === 0) || (this.roleId === 2 && data.finalStatus === 2);
+      return (
+        (this.roleId === 3 && data.finalStatus === 0) ||
+        (this.roleId === 2 && (data.finalStatus === 2 || data.finalStatus === 3))
+      );
     },
     showDelete(data) {
       return this.roleId === 3 && [0, 1].includes(data.finalStatus);

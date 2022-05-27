@@ -55,6 +55,14 @@ export const saveInfo = (data) => {
     data,
   });
 };
+//评价申报更新
+export const updateInfo = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/createReports/update`,
+    data,
+  });
+};
 
 // 评价申报列表查询
 export const getReportList = (data) => {
@@ -79,6 +87,52 @@ export const cityAudit = (data) => {
   return axios.request({
     method: 'POST',
     url: apiHost2 + `/api/workbench/createReports/audit/city`,
+    data,
+  });
+};
+
+// 省级审核
+export const provinceAudit = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/createReports/audit/province`,
+    data,
+  });
+};
+
+// 县级 获取待发数据
+export const getCountyTempData = (params) => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/createReports/generation`,
+    params,
+  });
+};
+
+// 获取本次验收全市排名
+export const getCityRanking = (params) => {
+  return axios.request({
+    method: 'GET',
+    url:
+      apiHost2 + `/api/workbench/createReports/ranking/${params.areaId}/${params.cityAcceptTime}/${params.totalCity}`,
+    params,
+  });
+};
+
+// 评价申报删除
+export const deleteItem = (params) => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/createReports/delete/${params.id}`,
+    params,
+  });
+};
+
+// 自评申报列表 - 导出
+export const exportList = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/createReports/export`,
     data,
   });
 };

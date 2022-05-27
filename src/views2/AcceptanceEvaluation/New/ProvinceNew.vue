@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
-      <base-info></base-info>
+      <base-info :form="form"></base-info>
       <score-table :form="form" disabled></score-table>
       <city-info :form="form"></city-info>
       <province-input :form="form"></province-input>
@@ -20,7 +20,8 @@ import ScoreTable from '../components/ScoreTable.vue';
 import CityInfo from '../components/CityInfo.vue';
 import ProvinceInput from '../components/ProvinceInput.vue';
 
-import { cityAudit, getDetail } from '@/api2/acceptanceEvaluation';
+import { provinceAudit, getDetail } from '@/api2/acceptanceEvaluation';
+import { PROVINCE_DEFAULT_FORM as DEFAULT_FORM } from '../constants';
 
 export default {
   components: { BaseInfo, CityInfo, ScoreTable, ProvinceInput },
@@ -38,7 +39,9 @@ export default {
     getDetail() {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
-        console.log(res);
+        this.form = res;
+        this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
+        this.form.citySaveAnnex = res.countySaveAnnexFiles || [];
       });
     },
     onBack() {
@@ -49,7 +52,8 @@ export default {
         if (!valid) return;
         await this._beforeSubmit('是否确认提交？');
 
-        const form = { ...this.form };
+        // const form = { ...this.form };
+        const form = this._assignForm();
         form.saveToGoProvince = 0;
         this._saveInfo(form);
       });
@@ -57,13 +61,14 @@ export default {
     async onSave() {
       await this._beforeSubmit('是否保存待发？');
 
-      const form = { ...this.form };
+      // const form = { ...this.form };
+      const form = this._assignForm();
       form.saveToGoProvince = 1;
       this._saveInfo(form, '保存成功！');
     },
 
     _saveInfo(form, message) {
-      cityAudit(form).then((res) => {
+      provinceAudit(form).then((res) => {
         console.log(res, 'res-----');
         this.$notify.success({
           title: message || '提交成功！',
@@ -71,6 +76,13 @@ export default {
 
         this.$router.back();
       });
+    },
+    _assignForm() {
+      const form = {};
+      Object.keys(DEFAULT_FORM).map((key) => {
+        form[key] = this.form[key];
+      });
+      return form;
     },
     _beforeSubmit(msg) {
       return new Promise((resolve) => {

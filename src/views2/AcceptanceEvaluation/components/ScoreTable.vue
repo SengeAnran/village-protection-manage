@@ -231,6 +231,8 @@ export default {
         this.form.totalCounty = this.countScore('countyScoreProp');
       } else if (val === 'cityScoreProp') {
         this.form.totalCity = this.countScore('cityScoreProp');
+
+        this.$emit('evaluateChange'); // 触发排名变动
       }
     },
     countScore(prop) {

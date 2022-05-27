@@ -11,6 +11,8 @@
         @addFile="onCountyFileAdd"
         @removeFile="onCountyFileRemove"
       ></file-attach>
+
+      <province-info v-if="[0, 1].includes(form.provinceVerify)" :form="form"></province-info>
     </el-form>
     <div class="action-wrp">
       <el-button @click="onBack">返回</el-button>
@@ -27,8 +29,10 @@ import SubTit from '../components/SubTit.vue';
 import BasicInput from '../components/BasicInput.vue';
 import ScoreTable from '../components/ScoreTable.vue';
 import FileAttach from '../components/FileAttach.vue'; // 附件上传
+import ProvinceInfo from '../components/ProvinceInfo.vue';
 
-import { saveInfo, getDetail } from '@/api2/acceptanceEvaluation';
+import { saveInfo, getDetail, updateInfo, getCountyTempData } from '@/api2/acceptanceEvaluation';
+import { COUNTY_DEFAULT_FORM as DEFAULT_FORM } from '../constants';
 
 export default {
   name: 'index',
@@ -38,55 +42,47 @@ export default {
     BasicInput,
     ScoreTable,
     FileAttach,
+    ProvinceInfo,
   },
-  // 接口文档地址： http://172.16.25.142:5000/doc.html#/%E6%9C%AA%E6%9D%A5%E4%B9%A1%E6%9D%91%E5%B7%A5%E4%BD%9C%E5%8F%B0%E6%9C%8D%E5%8A%A1/%E6%9C%AA%E6%9D%A5%E4%B9%A1%E6%9D%91%E5%88%9B%E5%BB%BA%E6%88%90%E6%95%88/createUsingPOST
   data() {
     return {
       form: {
         areaId: '',
-        buildPutInCity: '',
         buildPutInCounty: '',
-        buildSupportCity: '',
         buildSupportCounty: '',
-        buildUseCity: '',
         buildUseCounty: '',
-        carryOutConstructionCity: '',
         carryOutConstructionCounty: '',
-        carryOutCreateCity: '',
         carryOutCreateCounty: '',
         completionStatement: '',
         conclusion: '',
         countySaveAnnex: [],
         declarationId: '',
-        digitalScenesCity: '',
         digitalScenesCounty: '',
-        digitalSocietyCity: '',
         digitalSocietyCounty: '',
-        featureCity: '',
         featureCounty: '',
-        indicatorsCommonalityCity: '',
         indicatorsCommonalityCounty: '',
-        indicatorsPersonalityCity: '',
         indicatorsPersonalityCounty: '',
-        negativeCity: '',
         negativeCounty: '',
         saveToGo: '',
-        scenesBasicCity: '',
         scenesBasicCounty: '',
-        scenesBuildCity: '',
         scenesBuildCounty: '',
-        scenesEmphasisCity: '',
         scenesEmphasisCounty: '',
-        totalCity: '',
         totalCounty: '',
-        workBoardCity: '',
         workBoardCounty: '',
-        workGuideCity: '',
         workGuideCounty: '',
-        workMechanismCity: '',
         workMechanismCounty: '',
       },
     };
+  },
+
+  computed: {
+    isEdit() {
+      const query = this.$route.query;
+      return query.id && query.edit;
+    },
+    saveMethod() {
+      return this.isEdit ? updateInfo : saveInfo;
+    },
   },
 
   methods: {
@@ -98,7 +94,8 @@ export default {
         if (!valid) return;
         await this._beforeSubmit('是否确认提交？');
 
-        const form = { ...this.form };
+        // const form = { ...this.form };
+        const form = this._assignForm();
         form.countySaveAnnex = this.form.countySaveAnnex.map((c) => c.fileId).join(',');
         form.saveToGo = 0;
         this._saveInfo(form);
@@ -108,10 +105,17 @@ export default {
     async onSave() {
       await this._beforeSubmit('是否保存待发？');
 
-      const form = { ...this.form };
+      // const form = { ...this.form };
+      const form = this._assignForm();
       form.countySaveAnnex = this.form.countySaveAnnex.map((c) => c.fileId).join(',');
       form.saveToGo = 1;
-      this._saveInfo(form, '保存成功！');
+      // this._saveInfo(form, '保存成功！');
+      saveInfo(form).then(() => {
+        this.$notify.success({
+          title: '保存成功！',
+        });
+        this.$router.back();
+      });
     },
 
     _beforeSubmit(msg) {
@@ -126,9 +130,16 @@ export default {
       });
     },
 
+    _assignForm() {
+      const form = {};
+      Object.keys(DEFAULT_FORM).map((key) => {
+        form[key] = this.form[key];
+      });
+      return form;
+    },
+
     _saveInfo(form, message) {
-      saveInfo(form).then((res) => {
-        console.log(res, 'res-----');
+      this.saveMethod(form).then(() => {
         this.$notify.success({
           title: message || '提交成功！',
         });
@@ -166,10 +177,22 @@ export default {
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
       });
     },
+    // 获取保存待发数据
+    getCountyTempData() {
+      getCountyTempData().then((res) => {
+        // console.log(res, '获取保存待发数据');
+        this.form = res;
+        this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
+      });
+    },
   },
   mounted() {
     const query = this.$route.query;
-    query.id && query.edit && this.getData();
+    if (query.id && query.edit) {
+      this.getData();
+    } else {
+      this.getCountyTempData();
+    }
   },
 };
 </script>

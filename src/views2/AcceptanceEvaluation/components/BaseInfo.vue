@@ -3,7 +3,7 @@
     <el-row :gutter="20">
       <el-col :span="8">
         <div class="mb-8">
-          <el-form-item label="片区名称" v-if="villageType"> {{ saveVO.area }} </el-form-item>
+          <el-form-item label="片区名称" v-if="villageType === 2"> {{ saveVO.area }} </el-form-item>
           <el-form-item label="创建村名称" v-else> {{ saveVO.villageName }} </el-form-item>
         </div>
       </el-col>
@@ -47,15 +47,16 @@
       {{ form.conclusion }}
     </el-form-item>
     <el-form-item label="附件">
-      <view-file></view-file>
+      <div v-if="form.countySaveAnnexFiles && form.countySaveAnnexFiles.length">
+        <view-file v-for="(item, i) in form.countySaveAnnexFiles" :key="i" :data="item"></view-file>
+      </div>
+      <div v-else>--</div>
     </el-form-item>
   </div>
 </template>
 <script>
 import ViewFile from './ViewFile.vue';
-
 // import { getDetail } from '@/api2/acceptanceEvaluation';
-
 export default {
   components: {
     ViewFile,
@@ -70,36 +71,17 @@ export default {
     return {
       // 片区名称
       district: '',
-
-      villageType: 1,
     };
   },
   computed: {
     saveVO() {
       return this.form.saveVO || {};
     },
+    villageType() {
+      return this.saveVO.decType;
+    },
   },
-  methods: {
-    // 选择村庄地址
-    // changeAddress(type, val) {
-    //   console.log(type, val);
-    //   const params = {};
-    //   if (type === 'areaId') {
-    //     params.type = 1;
-    //     params.name = val.areaName;
-    //   } else {
-    //     params.type = 2;
-    //     params.name = val;
-    //   }
-    //   getAreaBaseInfo(params).then((res) => {
-    //     console.log(res, '---res');
-    //   });
-    //   // const { village, parent } = val;
-    //   // console.log(village, parent, 'village, parent');
-    //   // this.form.villageName = village.areaName;
-    //   // this.form.town = parent.areaName;
-    // },
-  },
+  methods: {},
   mounted() {},
 };
 </script>

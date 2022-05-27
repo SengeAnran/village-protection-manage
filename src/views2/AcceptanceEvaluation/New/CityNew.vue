@@ -2,8 +2,10 @@
   <div>
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
       <base-info :form="form"></base-info>
-      <score-table :form="form"></score-table>
-      <city-input :form="form"></city-input>
+      <score-table :form="form" @evaluateChange="setCityRanking"></score-table>
+      <city-input :form="form" @evaluateChange="setCityRanking"></city-input>
+
+      <province-info v-if="[0, 1].includes(form.provinceVerify)" :form="form"></province-info>
     </el-form>
 
     <div style="margin-top: 50px; text-align: center">
@@ -17,48 +19,19 @@
 import BaseInfo from '../components/BaseInfo.vue';
 import ScoreTable from '../components/ScoreTable.vue';
 import CityInput from '../components/CityInput.vue'; // 市区审核
+import ProvinceInfo from '../components/ProvinceInfo.vue';
 
-import { cityAudit, getDetail } from '@/api2/acceptanceEvaluation';
-
-const DEFALUT_FORM = {
-  cityAcceptTime: '',
-  cityLevelRating: '',
-  cityRanking: '',
-  citySaveAnnex: [],
-  cityVerify: '',
-  id: 0,
-  saveToGoCity: 0, //0/1 默认是提交
-  cityOpinion: '', // 驳回说明
-
-  buildPutInCity: '',
-  buildSupportCity: '',
-  buildUseCity: '',
-  carryOutConstructionCity: '',
-  carryOutCreateCity: '',
-  digitalScenesCity: '',
-  digitalSocietyCity: '',
-  featureCity: '',
-  indicatorsCommonalityCity: '',
-  indicatorsPersonalityCity: '',
-  negativeCity: '',
-  scenesBasicCity: '',
-  scenesBuildCity: '',
-  scenesEmphasisCity: '',
-  totalCity: '',
-  workBoardCity: '',
-  workGuideCity: '',
-  workMechanismCity: '',
-};
+import { cityAudit, getDetail, getCityRanking } from '@/api2/acceptanceEvaluation';
+import { CITY_DEFAULT_FORM as DEFAULT_FORM } from '../constants';
 
 export default {
-  components: { BaseInfo, CityInput, ScoreTable },
+  components: { BaseInfo, CityInput, ScoreTable, ProvinceInfo },
   data() {
     return {
-      detail: {},
       form: {
         cityAcceptTime: '',
         cityLevelRating: '',
-        cityRanking: '',
+        cityRanking: '', // 实际仅仅用作展示
         citySaveAnnex: [],
         cityVerify: '',
         id: 0,
@@ -91,11 +64,22 @@ export default {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
         this.form = res;
-        this.form.citySaveAnnex = res.countySaveAnnexFiles || [];
+        this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
+        this.form.citySaveAnnex = res.citySaveAnnexFiles || [];
       });
     },
     onBack() {
       this.$router.back();
+    },
+    setCityRanking() {
+      const { totalCity, cityAcceptTime } = this.form;
+      if (!totalCity && totalCity !== 0) {
+        return;
+      }
+      if (!cityAcceptTime) {
+        return;
+      }
+      this._getCityRanking();
     },
     onSubmit() {
       this.$refs.form.validate(async (valid) => {
@@ -131,7 +115,7 @@ export default {
     },
     _assignForm() {
       const form = {};
-      Object.keys(DEFALUT_FORM).map((key) => {
+      Object.keys(DEFAULT_FORM).map((key) => {
         form[key] = this.form[key];
       });
       return form;
@@ -145,6 +129,16 @@ export default {
         }).then(() => {
           resolve();
         });
+      });
+    },
+    _getCityRanking() {
+      const params = {
+        areaId: this.$store.getters.userInfo.areaId,
+        cityAcceptTime: this.form.cityAcceptTime,
+        totalCity: this.form.totalCity,
+      };
+      getCityRanking(params).then((res) => {
+        this.form.cityRanking = res;
       });
     },
   },
