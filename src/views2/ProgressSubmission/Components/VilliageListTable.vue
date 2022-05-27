@@ -60,10 +60,27 @@
       </el-table-column>
     </el-table-column>
 
-    <el-table-column v-if="!showFirst" :label="'完成投资 ' + data[0].gmtModified.slice(0, 10)" width="250">
+    <el-table-column v-if="!showFirst && !history && data[0].gmtModified" :label="'完成投资 ' + data[0].gmtModified.slice(0, 10)" width="250">
       <el-table-column prop="completeTotalInvestment" label="总投资（万元）" width="120"></el-table-column>
       <el-table-column prop="completeGovInvestment" label="其中政府投资（万元）" width="120"></el-table-column>
       <el-table-column prop="completeSocialInvestment" label="其中社会投资（万元）" width="120"></el-table-column>
+    </el-table-column>
+    <el-table-column v-for="(item, index) in data[0].historyLists" :key=index :label="'完成投资 ' + item.gmtModified && item.gmtModified.slice(0, 10)" width="250">
+      <el-table-column label="总投资（万元）" width="120">
+        <template slot-scope="scope">
+          <span>{{scope.row.historyLists[index].completeGovInvestment}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="其中政府投资（万元）" width="120">
+        <template slot-scope="scope">
+          <span>{{scope.row.historyLists[index].completeGovInvestment}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="其中社会投资（万元）" width="120">
+        <template slot-scope="scope">
+          <span>{{scope.row.historyLists[index].completeGovInvestment}}</span>
+        </template>
+      </el-table-column>
     </el-table-column>
     <el-table-column v-if="type === 'edit' && !history" label="完成投资" width="250">
       <el-table-column prop="completeTotalInvestmentNow" label="总投资（万元）" width="120">

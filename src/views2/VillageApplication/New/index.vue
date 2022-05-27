@@ -378,19 +378,36 @@
       </el-form>
     </el-dialog>
     <el-dialog
+      class="import-dialog"
       title="批量导入"
       :visible.sync="importDialogVisible"
       width="504px"
       @close="resetForm"
+      center
     >
       <UploadFile2
         tip="支持格式：.xlsx"
-        accept=".xlsx"
-        :data="form.annexFiles"
-        @add="onFileAdd2($event, 'annexFiles')"
+        accept=".xlsx,.xlw"
+        :data="importFiles"
+        :upload-method="uploadMethod"
+        returnData
+        @returnData="returnDatas($event)"
         @remove="onFileRemove2($event, 'annexFiles')"
       />
-      <div>模板下载 请根据模板进行信息填写</div>
+      <div style="margin: 0 auto; text-align: center">
+        <el-button
+          icon="el-icon-download"
+          type="primary"
+          plain
+          @click="downLoad"
+          style="margin: 32px 0 8px"
+        >模板下载</el-button>
+        <div>请根据模板进行信息填写</div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="importDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="importDialogVisible = false">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -401,12 +418,13 @@ import VilliageListTable from "../Components/VilliageListTable";
 
 import rule from "@/mixins/rule";
 import {
-  getSetListAll,
+  getSetListAll, getTemplate,
 } from "@/api2/villageManage";
-import { villageDeclaration, getVillageItemDetail } from '@/api2/villageManage'
+import { villageDeclaration, getVillageItemDetail, importBatch } from '@/api2/villageManage'
 import {updateVillageItem} from "../../../api2/villageManage";
 import {getVillageArea} from "@/api2/acceptanceEvaluation";
 import {mapGetters} from "vuex";
+import {downloadFile} from "@/utils/data";
 const imgs = (rule, value, callback) => {
   if (value.length < 1) {
     callback(new Error("需要上传1张以上图片"));
@@ -436,6 +454,7 @@ export default {
   },
   data() {
     return {
+      uploadMethod: importBatch,
       form: {
         decType: 1, // 申报类型
         annexFiles: [], // 附件
@@ -468,6 +487,7 @@ export default {
         projectFilingAudit: "", //审核人
         projects: [], //项目列表
       },
+      importFiles: [],
       type: "add",
       dialogVisible: false,
       importDialogVisible: false,
@@ -544,6 +564,12 @@ export default {
         });
       });
     },
+    // 下载模版
+    async downLoad() {
+      const res = await getTemplate();
+      downloadFile(res, '批量导入模版');
+      this.$notify.success("下载成功！");
+    },
     onFileAdd(file, key) {
       this.form[key].push(file);
     },
@@ -557,6 +583,11 @@ export default {
     },
     onFileAdd2(file, key) {
       this.form[key].push(file);
+    },
+    returnDatas(data) {
+      console.log(data);
+      this.form.projects = this.form.projects.concat(...data);
+      // this.importFiles.push(file);
     },
     onFileRemove2(file, key) {
       const index = this.form[key].findIndex((item) => {
@@ -780,6 +811,13 @@ export default {
       justify-content: space-between;
       flex-direction: row-reverse;
       margin-bottom: 12px;
+    }
+  }
+}
+.block {
+  .import-dialog {
+    &::v-deep .upload-img-wrp {
+      text-align: center;
     }
   }
 }

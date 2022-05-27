@@ -53,6 +53,7 @@
     >
       <VilliageListTable
         :data="historyList"
+        history
         :hiddenEdit="true"
         :hiddenDetail="true"
       />

@@ -1,7 +1,6 @@
 // 进度报送
 import axios from "@/utils/request";
 import config from "@/utils/config";
-import qs from "qs";
 const { apiHost2 } = config;
 
 // 导出信息汇总表

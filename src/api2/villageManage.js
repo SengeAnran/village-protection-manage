@@ -152,10 +152,17 @@ export const importBatch = (data) => {
     method: "post",
     url: apiHost2 + "/api/workbench/villageDeclaration/import/batch",
     data,
-    responseType: "blob"
   });
 };
 
+// 下载未来乡村创建项目备案表模板
+export const getTemplate = () => {
+  return axios.request({
+    method: "get",
+    url: apiHost2 + "/api/workbench/villageDeclaration/download/template",
+    responseType: "blob"
+  });
+};
 // 验收时间-申报批次新增（type 1：验收时间，2：申报批次）
 export const setAdd = (data) => {
   return axios.request({

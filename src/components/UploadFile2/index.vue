@@ -28,6 +28,15 @@ export default {
       type: Array,
       default: () => [],
     },
+    // 上传方法
+    uploadMethod: {
+      type: Function,
+    },
+    // 上传后返回数据
+    returnData: {
+      type: Boolean,
+      default: false,
+    },
     limit: {
       type: Number,
       default: 10,
@@ -72,11 +81,17 @@ export default {
       //console.log(info);
       const formData = new FormData();
       formData.append("file", info.file);
-
-      const res = await uploadFile2(formData);
+      let res;
+      if (this.uploadMethod) {
+        res = await this.uploadMethod(formData);
+      } else {
+        res = await uploadFile2(formData);
+      }
       this.$message.success("文件上传成功");
       this.$emit("add", { ...res, uid: info.file.uid });
-
+      if (this.returnData) {
+        this.$emit("returnData", res);
+      }
       if (this.$refs.upload.uploadFiles.length >= this.limit) {
         this.disabled = true;
       }
