@@ -146,6 +146,16 @@ export const getvillagesExport = (data) => {
   });
 };
 
+// 批量导入未来乡村创建项目备案表
+export const importBatch = (data) => {
+  return axios.request({
+    method: "post",
+    url: apiHost2 + "/api/workbench/villageDeclaration/import/batch",
+    data,
+    responseType: "blob"
+  });
+};
+
 // 验收时间-申报批次新增（type 1：验收时间，2：申报批次）
 export const setAdd = (data) => {
   return axios.request({

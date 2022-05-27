@@ -67,7 +67,7 @@
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
             <el-link
-              @click="goAuditResult(scope)"
+              @click="goDetail(scope)"
               type="primary"
             >
               详情
@@ -77,7 +77,6 @@
               style="display: inline-block"
             >
               <el-link v-if="roleId === 3" @click="edit(scope.data)" type="primary"> 进度报送</el-link>
-              <!--              <el-divider direction="vertical"></el-divider>-->
             </div>
           </div>
         </template>
@@ -142,10 +141,9 @@ import {
   // PRO_DECLEAR_STATUS,
 } from "./constants";
 import {recVerify} from '../../api/villageManage';
-import {getvillagesExport} from "../../api2/villageManage";
 
-import { getList } from '@/api2/progressSubmission';
-
+import {getInforExport, getList} from '@/api2/progressSubmission';
+import qs from "qs";
 export default {
   data() {
     // const date = new Date();
@@ -189,7 +187,7 @@ export default {
       ],
       getMethod: getList,
       deleteMethod: deleteVillageItem,
-      exportMethod: getvillagesExport,
+      exportMethod: getInforExport,
 
       dialogVisible: false,
       submitSortMethod: recVerify,
@@ -219,6 +217,8 @@ export default {
     //   this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(PRO_DECLEAR_STATUS));
     // }
     this.getBatchInfo();
+    console.log( ([12,13]).toString());
+
   },
   mounted() {
     // this.lookUp();
@@ -343,39 +343,13 @@ export default {
       return res;
 
     },
-    // // 申报详情
-    // goDeclareRouter(scope) {
-    //   const { id, declareYear, finalStatus } = scope.data;
-    //
-    //   this.changeDeclareList({ id, declareYear, finalStatus });
-    //   this.$router.push({
-    //     name: "villageDetails",
-    //     query: { id: id, goVerify: false }
-    //   });
-    // },
-    // 审核详情
-    goAuditResult(scope) {
+    // 详情
+    goDetail(scope) {
       const {id} = scope.data;
-      // if (this.roleId === 2) {
-      //   this.$router.push({
-      //     name: "villageDetails",
-      //     query: { id, declareYear, finalStatus: DECLEAR_TYPE[finalStatus] },
-      //   });
-      // } else {
-      //   this.$router.push({ name: "villageDetails", query: { id: detailId, goVerify: true } });
-      // }
-      this.$router.push({name: "ProgressSubmissionDetails", query: {id: id}})
+      this.$router.push({name: "ProgressSubmissionDetails", query: {id: id, type: 'look'}})
     },
-    // 审核
-    goAudit(scope) {
-      const {id} = scope.data;
-      this.$router.push({name: "villageDetails", query: {id: id}})
-    },
-
-
     // 修改
     edit(data) {
-      console.log(data);
       const {id} = data;
       this.$router.push({
         name: "NewProgressSubmission",

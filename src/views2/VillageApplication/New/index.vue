@@ -311,7 +311,7 @@
         </div>
         <el-form-item class="list-table" label="" prop="projects" :rules="listRules">
           <div class="import">
-            <el-button type="primary" @click="importDialogVisible = true" >批量导入</el-button>
+            <el-button type="primary" @click="importDialogVisible = true">批量导入</el-button>
           </div>
 
           <VilliageListTable
@@ -380,7 +380,7 @@
     <el-dialog
       title="批量导入"
       :visible.sync="importDialogVisible"
-      width="600px"
+      width="504px"
       @close="resetForm"
     >
       <UploadFile2

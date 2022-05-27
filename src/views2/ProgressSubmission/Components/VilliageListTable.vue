@@ -8,53 +8,150 @@
     <el-table-column prop="schedule" label="进度安排" width="120"> </el-table-column>
     <el-table-column prop="landUse" label="用地情况" width="120"> </el-table-column>
     <el-table-column label="计划投资" width="250">
-      <el-table-column prop="investmentAmount" label="总投资（万元）" width="80"> </el-table-column>
-      <el-table-column prop="investmentAmount" label="政府投资（万元）" width="80"> </el-table-column>
-      <el-table-column prop="investmentAmount" label="社会投资（万元）" width="80"> </el-table-column>
+      <el-table-column prop="investmentAmount" label="总投资（万元）" width="120"> </el-table-column>
+      <el-table-column prop="planGovInvestment" label="政府投资（万元）" width="120">
+        <template slot-scope="scope">
+<!--          <el-button @click="onClick(scope)">sss</el-button>-->
+          <!-- 县级用户 -->
+          <div v-if="userInfo.roleId === 3">
+            <el-form-item
+              v-if="showFirst"
+              label=""
+              :show-message="false"
+            >
+              <el-input
+                v-model="form.detailLists[scope.$index].planGovInvestment"
+                size="mini"
+                maxlength="20"
+                placeholder="请输入"
+              />
+            </el-form-item>
+            <span v-else class="cell">{{ scope.row.planGovInvestment }}</span>
+          </div>
+          <!-- 省市级用户 -->
+          <div v-else>
+            <span class="cell">{{ scope.row.planGovInvestment }}</span>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="planSocialInvestment" label="社会投资（万元）" width="120">
+        <template slot-scope="scope">
+          <!-- 县级用户 -->
+          <div v-if="userInfo.roleId === 3">
+            <el-form-item
+              v-if="showFirst"
+              label=""
+              :show-message="false"
+            >
+              <el-input
+                v-model="form.detailLists[scope.$index].planSocialInvestment"
+                size="mini"
+                maxlength="20"
+                placeholder="请输入"
+              />
+            </el-form-item>
+            <span v-else class="cell">{{ scope.row.planSocialInvestment }}</span>
+          </div>
+          <!-- 省市级用户 -->
+          <div v-else>
+            <span class="cell">{{ scope.row.planSocialInvestment }}</span>
+          </div>
+        </template>
+      </el-table-column>
     </el-table-column>
-    <el-table-column label="完成投资" width="250">
-      <el-table-column prop="investmentAmount" label="总投资（万元）" width="80"> </el-table-column>
-      <el-table-column prop="investmentAmount" label="其中政府投资（万元）" width="80"> </el-table-column>
-      <el-table-column prop="investmentAmount" label="其中社会投资（万元）" width="80"> </el-table-column>
+
+    <el-table-column v-if="!showFirst" :label="'完成投资 ' + data[0].gmtModified.slice(0, 10)" width="250">
+      <el-table-column prop="completeTotalInvestment" label="总投资（万元）" width="120"></el-table-column>
+      <el-table-column prop="completeGovInvestment" label="其中政府投资（万元）" width="120"></el-table-column>
+      <el-table-column prop="completeSocialInvestment" label="其中社会投资（万元）" width="120"></el-table-column>
     </el-table-column>
-    <el-table-column prop="arrangements" width="120" label="完成率"> </el-table-column>
-<!--    <el-table-column v-if="!hiddenOperation" label="操作" min-width="150px">-->
-<!--      <template slot-scope="scope">-->
-<!--        <div>-->
-<!--          <el-link-->
-<!--            type="primary"-->
-<!--            @click="$emit('moveUp', { data: scope.row, index: scope.$index })"-->
-<!--          >上移</el-link-->
-<!--          >-->
-<!--          <el-divider direction="vertical"></el-divider>-->
-<!--          <el-link-->
-<!--            type="primary"-->
-<!--            @click="$emit('moveDown', { data: scope.row, index: scope.$index });"-->
-<!--          >下移</el-link-->
-<!--          >-->
-<!--          <el-divider direction="vertical"></el-divider>-->
-<!--          <el-link-->
-<!--            type="primary"-->
-<!--            @click="$emit('editForm', { data: scope.row, index: scope.$index })"-->
-<!--          >-->
-<!--            编辑-->
-<!--          </el-link>-->
-<!--          <el-divider direction="vertical"></el-divider>-->
-<!--          <el-link type="danger" @click="removeItem(scope.$index, scope.row)"-->
-<!--            >删除</el-link-->
-<!--          >-->
-<!--        </div>-->
-<!--      </template>-->
-<!--    </el-table-column>-->
+    <el-table-column v-if="type === 'edit' && !history" label="完成投资" width="250">
+      <el-table-column prop="completeTotalInvestmentNow" label="总投资（万元）" width="120">
+        <template slot-scope="scope">
+          <!-- 县级用户 -->
+          <div>
+            <el-form-item
+              label=""
+              :show-message="false"
+            >
+              <el-input
+                v-model="form.detailLists[scope.$index].completeTotalInvestmentNow"
+                size="mini"
+                maxlength="20"
+                placeholder="请输入"
+              />
+            </el-form-item>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="completeGovInvestmentNow" label="其中政府投资（万元）" width="120">
+        <template slot-scope="scope">
+          <!-- 县级用户 -->
+          <div>
+            <el-form-item
+              label=""
+              :show-message="false"
+            >
+              <el-input
+                v-model="form.detailLists[scope.$index].completeGovInvestmentNow"
+                size="mini"
+                maxlength="20"
+                placeholder="请输入"
+              />
+            </el-form-item>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="completeSocialInvestmentNow" label="其中社会投资（万元）" width="120">
+        <template slot-scope="scope">
+          <!-- 县级用户 -->
+          <div>
+            <el-form-item
+              label=""
+              :show-message="false"
+            >
+              <el-input
+                v-model="form.detailLists[scope.$index].completeSocialInvestmentNow"
+                size="mini"
+                maxlength="20"
+                placeholder="请输入"
+              />
+            </el-form-item>
+          </div>
+        </template>
+      </el-table-column>
+    </el-table-column>
+    <el-table-column prop="rate" width="120" label="完成率">
+      <template slot-scope="scope">
+        <!-- 县级用户 -->
+        <div v-if="userInfo.roleId === 3 && !history">
+          <span class="cell">--</span>
+        </div>
+        <!-- 省市级用户 -->
+        <div v-else>
+          <span class="cell">{{ scope.row.rate * 100 + '%' }}</span>
+        </div>
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 <script>
 import { mapGetters } from "vuex";
+import rule from "@/mixins/rule";
 export default {
+  mixins: [rule],
   props: {
+    form: {
+      type: Object,
+      default: () => {},
+    },
     data: {
       type: Array,
       default: () => [],
+    },
+    history: { // 查看历史
+      type: Boolean,
+      default: false,
     },
     hiddenOperation: { // 隐藏操作栏
       type: Boolean,
@@ -79,19 +176,42 @@ export default {
   },
   data() {
     return {
+      type: 'edit',
       refill: false,
+      showFirst: false,
     };
   },
   computed: {
     ...mapGetters(["userInfo"]),
   },
+  mounted() {
+    this.init();
+  },
   methods: {
+    init() {
+      if (!this.history) {
+        if (this.$route.query.type === 'look') {
+          this.type = 'look';
+        }
+        if (this.data && this.data.length > 0) {
+          this.showFirst = this.data.every(i => {
+            return i.planGovInvestment === null
+          });
+        }
+      }
+
+      console.log(this.showFirst);
+    },
     removeItem(index) {
       this.$myConfirm({
         content: "确认删除该数据？"
       }).then(() => {
         this.$emit("remove", index);
       })
+    },
+    onClick(scope) {
+      console.log(scope);
+      console.log(scope.$index);
     },
   },
 };
