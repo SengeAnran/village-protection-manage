@@ -13,6 +13,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'carryOutCreateCounty',
     cityScoreProp: 'carryOutCreateCity',
+    max: 20,
   },
   {
     title: '创建方案实施情况30分',
@@ -26,6 +27,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'carryOutConstructionCounty',
     cityScoreProp: 'carryOutConstructionCity',
+    max: 10,
   },
   //****** 重要指标完成情况 *******
   {
@@ -41,6 +43,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'indicatorsCommonalityCounty',
     cityScoreProp: 'indicatorsCommonalityCity',
+    max: 15,
   },
   {
     title: '重要指标完成情况15分',
@@ -52,6 +55,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'indicatorsPersonalityCounty',
     cityScoreProp: 'indicatorsPersonalityCity',
+    max: 5,
   },
   //***** 数字化应用情况 ********
   {
@@ -67,6 +71,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'digitalSocietyCounty',
     cityScoreProp: 'digitalSocietyCity',
+    max: 5,
   },
   {
     title: '数字化应用情况12分',
@@ -80,6 +85,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'digitalScenesCounty',
     cityScoreProp: 'digitalScenesCity',
+    max: 7,
   },
   //****** 场景建设成效 *******
   {
@@ -95,6 +101,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'scenesBasicCounty',
     cityScoreProp: 'scenesBasicCity',
+    max: 9,
   },
   {
     title: '场景建设成效20分',
@@ -106,6 +113,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'scenesBuildCounty',
     cityScoreProp: 'scenesBuildCity',
+    max: 5,
   },
   {
     title: '场景建设成效20分',
@@ -117,6 +125,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'scenesEmphasisCounty',
     cityScoreProp: 'scenesEmphasisCity',
+    max: 6,
   },
   //****** 建设投入情况 *******
   {
@@ -132,6 +141,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'buildPutInCounty',
     cityScoreProp: 'buildPutInCity',
+    max: 5,
   },
   {
     title: '建设投入情况9分',
@@ -143,6 +153,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'buildSupportCounty',
     cityScoreProp: 'buildSupportCity',
+    max: 2,
   },
   {
     title: '建设投入情况9分',
@@ -154,6 +165,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'buildUseCounty',
     cityScoreProp: 'buildUseCity',
+    max: 2,
   },
   //****** 工作推进情况 *******
   {
@@ -169,6 +181,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'workMechanismCounty',
     cityScoreProp: 'workMechanismCity',
+    max: 3,
   },
   {
     title: '工作推进情况9分',
@@ -181,6 +194,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'workBoardCounty',
     cityScoreProp: 'workBoardCity',
+    max: 3,
   },
   {
     title: '工作推进情况9分',
@@ -192,6 +206,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'workGuideCounty',
     cityScoreProp: 'workGuideCity',
+    max: 3,
   },
 
   //****** 特色和创新情况 *******
@@ -208,6 +223,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'featureCounty',
     cityScoreProp: 'featureCity',
+    max: 5,
   },
 
   //****** 负面清单 *******

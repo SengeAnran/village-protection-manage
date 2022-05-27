@@ -126,8 +126,7 @@ export default {
       });
     },
     exportList() {
-      this._exportFiles(exportList, '导出信息汇总表');
-      // this._exportFiles(exportList, '导出信息汇总表.xlsx');
+      this._exportFiles(exportList, '导出信息汇总表.xlsx');
     },
     // 导出附件
     exportEnclosure() {

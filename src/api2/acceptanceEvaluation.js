@@ -134,5 +134,6 @@ export const exportList = (data) => {
     method: 'POST',
     url: apiHost2 + `/api/workbench/createReports/export`,
     data,
+    responseType: 'blob',
   });
 };
