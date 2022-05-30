@@ -84,8 +84,8 @@ export default {
       return query.id && query.edit;
     },
     saveMethod() {
-      // return this.isEdit ? updateInfo : saveInfo;
-      return saveInfo;
+      return this.isEdit ? updateInfo : saveInfo;
+      // return saveInfo;
     },
     tempSaveMethod() {
       // return this.hasTempData ? updateInfo : saveInfo;
