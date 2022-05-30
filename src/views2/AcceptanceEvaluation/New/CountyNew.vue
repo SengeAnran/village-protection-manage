@@ -31,8 +31,7 @@ import ScoreTable from '../components/ScoreTable.vue';
 import FileAttach from '../components/FileAttach.vue'; // 附件上传
 import ProvinceInfo from '../components/ProvinceInfo.vue';
 
-// import { saveInfo, getDetail, updateInfo, getCountyTempData } from '@/api2/acceptanceEvaluation';
-import { saveInfo, getDetail, getCountyTempData } from '@/api2/acceptanceEvaluation';
+import { saveInfo, getDetail, updateInfo, getCountyTempData } from '@/api2/acceptanceEvaluation';
 import { COUNTY_DEFAULT_FORM as DEFAULT_FORM } from '../constants';
 
 export default {
