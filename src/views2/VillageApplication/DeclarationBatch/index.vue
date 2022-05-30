@@ -51,7 +51,7 @@
           ></el-table-column>
           <el-table-column label="创建时间" prop="gmtCreate">
             <template slot-scope="scope">
-              <p>{{ scope.row.gmtCreate }}</p>
+              <p>{{ scope.row.gmtCreate.slice(0, 10) }}</p>
             </template>
           </el-table-column>
         </template>

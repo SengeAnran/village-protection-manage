@@ -20,8 +20,8 @@
         label-width="80px"
       >
         <div class="input-item-wrp">
-          <el-form-item label="创建村名称" prop="villageId">
-            <p class="content">{{ form.town }}{{ form.villageName }}</p>
+          <el-form-item label="创建村（片区）名称" prop="villageId">
+            <p class="content">{{ form.area || form.villageName }}</p>
           </el-form-item>
           <el-form-item label="推荐次序" prop="countrySortNum">
             <p class="content">{{ form.countrySortNum }}</p>
@@ -194,26 +194,26 @@
                 <p class="content">{{ form.provinceOpinion }}</p>
               </el-form-item>
             </div>
-            <div class="input-item-wrp">
-              <el-form-item label="审核意见附件" prop="introduction">
-<!--                <p class="content fu-file" v-for="(item, index) in form.provinceAuditFile" :key="index">-->
-<!--                  <a :href="item.filePath">-->
+<!--            <div class="input-item-wrp">-->
+<!--              <el-form-item label="审核意见附件" prop="introduction">-->
+<!--&lt;!&ndash;                <p class="content fu-file" v-for="(item, index) in form.provinceAuditFile" :key="index">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <a :href="item.filePath">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <i class="el-icon-link"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <span>&ndash;&gt;-->
+<!--&lt;!&ndash;                    {{ item.fileName }}&ndash;&gt;-->
+<!--&lt;!&ndash;                  </span>&ndash;&gt;-->
+<!--&lt;!&ndash;                  </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                </p>&ndash;&gt;-->
+<!--                <p class="content fu-file" v-if="form.provinceAuditFile">-->
+<!--                  <a :href="form.provinceAuditFile.filePath">-->
 <!--                    <i class="el-icon-link"></i>-->
 <!--                    <span>-->
-<!--                    {{ item.fileName }}-->
+<!--                    {{ form.provinceAuditFile.fileName }}-->
 <!--                  </span>-->
 <!--                  </a>-->
 <!--                </p>-->
-                <p class="content fu-file" v-if="form.provinceAuditFile">
-                  <a :href="form.provinceAuditFile.filePath">
-                    <i class="el-icon-link"></i>
-                    <span>
-                    {{ form.provinceAuditFile.fileName }}
-                  </span>
-                  </a>
-                </p>
-              </el-form-item>
-            </div>
+<!--              </el-form-item>-->
+<!--            </div>-->
             <div class="input-item-wrp">
               <el-form-item label="审核时间" prop="introduction">
                 <p class="content">{{ form.provinceAuditTime }}</p>
@@ -222,7 +222,7 @@
           </div>
         </el-form>
       </div>
-      <div v-if="(userInfo.roleId === 2 && finalStatus ===0) ||(userInfo.roleId === 1 && finalStatus ===2)">
+      <div v-if="(userInfo.roleId === 2 && (finalStatus === 0 || (finalStatus === 3 && cityVerify))) || (userInfo.roleId === 1 && finalStatus ===2)">
 <!--      <div>-->
         <div class="box-title" v-text="userInfo.roleId === 1? '审核':'设区市比选意见'"></div>
         <el-form
@@ -384,6 +384,7 @@ export default {
         processFilesArr: [],
       },
       finalStatus: null,
+      cityVerify: false,
       total: 0,
 
       tips: "",
@@ -391,7 +392,6 @@ export default {
       dialogId: "",
       textarea: "",
       status: null,
-      verifyKey: false,
     };
   },
   watch: {
@@ -438,20 +438,23 @@ export default {
 
 
     init() {
-      const { id, verifyKey, verifyDetail } = this.$route.query;
-      if (verifyKey) {
-        this.verifyKey = verifyKey;
-      }
-      if (verifyDetail) {
-        //console.log(verifyDetail);
-        this.textarea = verifyDetail.opinion;
-        this.status = verifyDetail.status;
-        //console.log(this.textarea);
+      const { id, cityVerify } = this.$route.query;
+      if (cityVerify) {
+        this.cityVerify = cityVerify;
       }
       if (!id) return;
       getVillageItemDetail({ id }).then((res) => {
         this.form = res;
         this.finalStatus = res.finalStatus;
+        if (this.cityVerify) {
+          // status: null,
+          // rejectType: null,
+          // opinion: '',
+          // processFilesArr: [],
+          this.reviewForm.status = 1;
+          this.reviewForm.opinion = res.cityOpinion;
+          this.reviewForm.processFilesArr = [res.cityAuditFile];
+        }
         //console.log(res);
       });
     },
@@ -469,6 +472,7 @@ export default {
       switch (index) {
         case 0 : return '不通过';
         case 1 : return '通过';
+        case -1 : return '通过';
         default: return ''
       }
     },

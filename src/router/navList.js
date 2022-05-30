@@ -575,7 +575,7 @@ export const defaultRoutes2 = [
         hidden: true,
         meta: {
           activeMenu: '/progressSubmission/index',
-          title: '新增',
+          title: '进度报送',
           menuIds: [],
         },
         component: () => import('@/views2/ProgressSubmission/New/index'),

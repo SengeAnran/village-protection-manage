@@ -49,7 +49,7 @@
               ></el-input>
             </div>
             <div class="search-item">
-              <span class="label">申报更新时间：</span>
+              <span class="label">报送更新时间：</span>
               <el-date-picker
                 v-model="query.date"
                 type="datetimerange"
@@ -115,9 +115,10 @@
           ></el-table-column>
           <el-table-column
             label="投资完成率"
+            sortable
             prop="rate"
           ></el-table-column>
-          <el-table-column label="申报更新时间" prop="gmtCreate">
+          <el-table-column label="报送更新时间" prop="gmtCreate">
             <template slot-scope="scope">
               <p>{{ scope.row.gmtModified }}</p>
             </template>
@@ -143,7 +144,7 @@ import {
 import {recVerify} from '../../api/villageManage';
 
 import {getInforExport, getList} from '@/api2/progressSubmission';
-import qs from "qs";
+// import qs from "qs";
 export default {
   data() {
     // const date = new Date();

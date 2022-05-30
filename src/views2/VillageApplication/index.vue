@@ -76,15 +76,24 @@
             <!--            <el-divider v-if="roleId !== 1" direction="vertical"></el-divider>-->
             <el-link
               @click="goAudit(scope)"
-              v-if="actionControl('审核', scope.data.finalStatus)"
+              v-if="actionControl('审核', scope.data.finalStatus) "
               type="primary"
             >
               审核
             </el-link>
+<!--            市级审核修改-->
+            <el-divider v-if="roleId === 2 && scope.data.cityVerify === -1" direction="vertical"></el-divider>
+            <el-link
+              @click="goAuditVerify(scope)"
+              v-if="(roleId === 2 && scope.data.cityVerify === -1) "
+              type="primary"
+            >
+              修改
+            </el-link>
             <el-divider v-if="actionControl('修改', scope.data.finalStatus)" direction="vertical"></el-divider>
             <div
               style="display: inline-block"
-              v-if="actionControl('修改', scope.data.finalStatus)"
+              v-if="actionControl('修改', scope.data.finalStatus) || (roleId === 3 && scope.data.finalStatus === 3 && scope.data.cityVerify !== -1)"
             >
               <el-link @click="edit(scope.data)" type="primary"> 修改</el-link>
               <!--              <el-divider direction="vertical"></el-divider>-->
@@ -214,6 +223,7 @@ export default {
       详情: (declareStatus) => this._canViewDeclare(declareStatus, 3),
     };
     this.SHIJI_ACTION = {
+      修改: (declareStatus) => this._canModify(declareStatus, 2),
       审核: (declareStatus) => this._canDeclare(declareStatus, 2),
       详情: (declareStatus) => this._canViewDeclare(declareStatus, 2),
     };
@@ -259,6 +269,11 @@ export default {
     goAudit(scope) {
       const {id} = scope.data;
       this.$router.push({name: "villageDetails", query: {id: id}})
+    },
+    // 市级审核修改
+    goAuditVerify(scope) {
+      const {id} = scope.data;
+      this.$router.push({name: "villageDetails", query: {id: id, cityVerify: true}})
     },
 
 
@@ -310,7 +325,7 @@ export default {
 
     // 修改、删除 *******
     _canModify(declareStatus, roleId) {
-      return roleId === 3 && (declareStatus === 0 || declareStatus === 1 || declareStatus === 3);
+      return roleId === 3 && (declareStatus === 0 || declareStatus === 1);
     },
     // 审核详情
     _canViewDeclare(declareStatus, roleId) {

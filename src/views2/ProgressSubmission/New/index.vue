@@ -7,7 +7,7 @@
       :model="form"
       label-width="80px"
     >
-      <h3 class="text-gray-800 text-2xl mb-8">新建申报</h3>
+      <h3 class="text-gray-800 text-2xl mb-8">未来乡村项目进度报送</h3>
       <div class="detail-top">
         <el-row :gutter="20">
           <el-col :span="8">
@@ -18,7 +18,7 @@
                 disabled
               ></el-input>
             </el-form-item>
-            <el-form-item v-if="form.villageName" label="创建村/片区名称" prop="villageName">
+            <el-form-item v-if="form.villageName && !form.villageName" label="创建村/片区名称" prop="villageName">
               <el-input
                 v-model="form.villageName"
                 placeholder="请输入创建村/片区名称"

@@ -9,7 +9,7 @@
     <el-table-column prop="landUse" label="用地情况" width="120"> </el-table-column>
     <el-table-column label="计划投资" width="250">
       <el-table-column prop="investmentAmount" label="总投资（万元）" width="120"> </el-table-column>
-      <el-table-column prop="planGovInvestment" label="政府投资（万元）" width="120">
+      <el-table-column prop="planGovInvestment" label="政府投资（万元）" width="150">
         <template slot-scope="scope">
 <!--          <el-button @click="onClick(scope)">sss</el-button>-->
           <!-- 县级用户 -->
@@ -19,8 +19,9 @@
               label=""
               :show-message="false"
             >
-              <el-input
+              <el-input-number
                 v-model="form.detailLists[scope.$index].planGovInvestment"
+                :controls="false"
                 size="mini"
                 maxlength="20"
                 placeholder="请输入"
@@ -43,8 +44,9 @@
               label=""
               :show-message="false"
             >
-              <el-input
+              <el-input-number
                 v-model="form.detailLists[scope.$index].planSocialInvestment"
+                :controls="false"
                 size="mini"
                 maxlength="20"
                 placeholder="请输入"
@@ -68,7 +70,7 @@
     <el-table-column v-for="(item, index) in data[0].historyLists" :key=index :label="'完成投资 ' + item.gmtModified && item.gmtModified.slice(0, 10)" width="250">
       <el-table-column label="总投资（万元）" width="120">
         <template slot-scope="scope">
-          <span>{{scope.row.historyLists[index].completeGovInvestment}}</span>
+          <span>{{scope.row.historyLists[index].completeTotalInvestment}}</span>
         </template>
       </el-table-column>
       <el-table-column label="其中政府投资（万元）" width="120">
@@ -83,7 +85,7 @@
       </el-table-column>
     </el-table-column>
     <el-table-column v-if="type === 'edit' && !history" label="完成投资" width="250">
-      <el-table-column prop="completeTotalInvestmentNow" label="总投资（万元）" width="120">
+      <el-table-column prop="completeTotalInvestmentNow" label="总投资（万元）" width="150">
         <template slot-scope="scope">
           <!-- 县级用户 -->
           <div>
@@ -91,8 +93,9 @@
               label=""
               :show-message="false"
             >
-              <el-input
+              <el-input-number
                 v-model="form.detailLists[scope.$index].completeTotalInvestmentNow"
+                :controls="false"
                 size="mini"
                 maxlength="20"
                 placeholder="请输入"
@@ -101,7 +104,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="completeGovInvestmentNow" label="其中政府投资（万元）" width="120">
+      <el-table-column prop="completeGovInvestmentNow" label="其中政府投资（万元）" width="150">
         <template slot-scope="scope">
           <!-- 县级用户 -->
           <div>
@@ -109,8 +112,9 @@
               label=""
               :show-message="false"
             >
-              <el-input
+              <el-input-number
                 v-model="form.detailLists[scope.$index].completeGovInvestmentNow"
+                :controls="false"
                 size="mini"
                 maxlength="20"
                 placeholder="请输入"
@@ -119,7 +123,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="completeSocialInvestmentNow" label="其中社会投资（万元）" width="120">
+      <el-table-column prop="completeSocialInvestmentNow" label="其中社会投资（万元）" width="150">
         <template slot-scope="scope">
           <!-- 县级用户 -->
           <div>
@@ -127,8 +131,9 @@
               label=""
               :show-message="false"
             >
-              <el-input
+              <el-input-number
                 v-model="form.detailLists[scope.$index].completeSocialInvestmentNow"
+                :controls="false"
                 size="mini"
                 maxlength="20"
                 placeholder="请输入"
@@ -141,8 +146,8 @@
     <el-table-column prop="rate" width="120" label="完成率">
       <template slot-scope="scope">
         <!-- 县级用户 -->
-        <div v-if="userInfo.roleId === 3 && !history">
-          <span class="cell">--</span>
+        <div v-if="userInfo.roleId === 3 && !history && type !== 'look'">
+          <span class="cell">{{ (form.detailLists[scope.$index].completeTotalInvestmentNow / form.detailLists[scope.$index].investmentAmount) * 100 +'%'||'--'}}</span>
         </div>
         <!-- 省市级用户 -->
         <div v-else>
@@ -241,5 +246,20 @@ export default {
     background-color: #f3f3f3;
     color: #222;
   }
+  &::v-deep .el-table__body-wrapper{
+    //width: 10px;
+    //height: 10px;
+    //background-color: #1e8dff;
+    //padding-bottom: 10px;
+    &::-webkit-scrollbar{
+      z-index: 10;
+      width: 10px;
+      height: 10px;
+    }
+  }
+  &::v-deep .el-table__fixed {
+    border-bottom: 5px solid rgba(238, 35, 35, 0);
+  }
 }
+
 </style>

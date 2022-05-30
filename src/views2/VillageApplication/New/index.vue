@@ -13,8 +13,12 @@
           <el-col :span="12">
             <div class="mb-8">
               <el-form-item label="申报类型" prop="decType" :rules="rule.select">
-                <el-radio v-model="form.decType" :label="1">创建村申报</el-radio>
-                <el-radio v-model="form.decType" :label="2">片区申报</el-radio>
+<!--                <el-radio v-model="form.decType" :label="1">创建村申报</el-radio>-->
+<!--                <el-radio v-model="form.decType" :label="2">片区申报</el-radio>-->
+                <el-radio-group v-model="form.decType" @change="changeDecType">
+                  <el-radio :label="1">创建村申报</el-radio>
+                  <el-radio :label="2">片区申报</el-radio>
+                </el-radio-group>
               </el-form-item>
             </div>
           </el-col>
@@ -25,9 +29,17 @@
           <el-col :span="12">
             <div class="mb-8">
               <el-form-item v-if="form.decType === 1" label="创建村名称" prop="villageName" :rules="rule.select">
-                <VillageSelect v-model="form.villageName" @change="changeAddress('villageName', $event)" />
+<!--                <VillageSelect v-model="form.villageName" @change="changeAddress('villageName', $event)" />-->
+                <el-select v-model="form.villageName" placeholder="请选择">
+                  <el-option
+                    v-for="item in villageOptions1"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.label">
+                  </el-option>
+                </el-select>
               </el-form-item>
-              <el-form-item v-else label="片区申报" prop="villageName" :rules="rule.select">
+              <el-form-item v-if="showdecType2" label="片区申报" prop="villageName" :rules="rule.select">
                 <el-input
                   v-model="form.area"
                   placeholder="请输入片区名称"
@@ -412,7 +424,7 @@
   </div>
 </template>
 <script>
-import VillageSelect from '../Components/VillageSelect.vue';
+// import VillageSelect from '../Components/VillageSelect.vue';
 import VilliageListTable from "../Components/VilliageListTable";
 
 
@@ -450,11 +462,12 @@ export default {
   mixins: [rule],
   components: {
     VilliageListTable,
-    VillageSelect,
+    // VillageSelect,
   },
   data() {
     return {
       uploadMethod: importBatch,
+      showdecType2: false, // 展示区域选择
       form: {
         decType: 1, // 申报类型
         annexFiles: [], // 附件
@@ -508,6 +521,7 @@ export default {
       villageSelects: { required: true, validator: villageSelect, trigger: "blur" },
 
       imgRule: { required: true, validator: imgs, trigger: "change" },
+      villageOptions1: [],
       villageOptions: [],
       batchOptions: [],
     };
@@ -527,6 +541,16 @@ export default {
     this.getDetail();
   },
   methods: {
+    changeDecType() {
+      console.log(this.form.decType);
+      if (this.form.decType === 1) {
+        this.form.villageName = '';
+        this.showdecType2 = false;
+      } else {
+        this.form.villageName = [];
+        this.showdecType2 = true;
+      }
+    },
     getDetail() {
       const { id } = this.$route.query;
       if (!id) return;
@@ -548,6 +572,12 @@ export default {
           return {
             label: c.areaName,
             value: c,
+          };
+        });
+        this.villageOptions1 = res[0].children.map((c) => {
+          return {
+            label: c.areaName,
+            value: c.areaId,
           };
         });
       });
