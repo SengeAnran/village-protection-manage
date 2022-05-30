@@ -31,7 +31,7 @@
                 v-model="form[row.countyScoreProp]"
                 size="mini"
                 placeholder="请输入"
-                @change="setTotalScore('countyScoreProp')"
+                @change="setTotalScore('countyScoreProp', row.countyScoreProp)"
               />
             </el-form-item>
 
@@ -52,7 +52,7 @@
                 v-model="form[row.cityScoreProp]"
                 size="mini"
                 placeholder="请输入"
-                @change="setTotalScore('cityScoreProp')"
+                @change="setTotalScore('cityScoreProp', row.cityScoreProp)"
               />
             </el-form-item>
             <span v-if="item.prop === 'countyScore'">{{ form[row.countyScoreProp] }}</span>
@@ -137,10 +137,18 @@ export default {
       x[1].style.display = 'none';
     },
 
-    setTotalScore(val) {
-      if (val === 'countyScoreProp') {
+    setTotalScore(type, propsName) {
+      // 设置输入为数字
+      this.form[propsName] = this._transNumber(this.form[propsName]);
+      // 扣分项转化
+      if (propsName.indexOf('negative') !== -1) {
+        this.form[propsName] = this.form[propsName] > 0 ? -this.form[propsName] : this.form[propsName];
+      }
+
+      // 计算总值
+      if (type === 'countyScoreProp') {
         this.form.totalCounty = this.countScore('countyScoreProp');
-      } else if (val === 'cityScoreProp') {
+      } else if (type === 'cityScoreProp') {
         this.form.totalCity = this.countScore('cityScoreProp');
 
         this.$emit('evaluateChange'); // 触发排名变动
@@ -157,6 +165,9 @@ export default {
         }
       }, 0);
       return sums;
+    },
+    _transNumber(val) {
+      return val.replace(/^(?:0\d|\D)*(\d*(?:\.\d{0,2})?).*$/g, '$1');
     },
   },
   mounted() {

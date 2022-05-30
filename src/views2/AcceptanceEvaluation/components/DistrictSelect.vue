@@ -9,6 +9,7 @@
       collapse-tags
       style="margin-left: 10px; width: 140px"
       placeholder="请选择"
+      class="village-select"
     >
       <el-option v-for="item in districtVillageData" :key="item.value" :label="item.label" :value="item.value">
       </el-option>
@@ -80,3 +81,11 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.village-select {
+  ::v-deep .el-tag.el-tag--info {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+</style>

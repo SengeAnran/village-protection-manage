@@ -1,6 +1,7 @@
 <template>
   <div class="page">
     <el-form ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
+      <sub-tit> 申报详情 </sub-tit>
       <BaseInfo :form="form" />
       <score-table :form="form" disabled></score-table>
       <city-info v-if="showCity" :form="form"></city-info>
@@ -18,11 +19,12 @@ import BaseInfo from '../components/BaseInfo.vue';
 import ScoreTable from '../components/ScoreTable.vue';
 import CityInfo from '../components/CityInfo.vue';
 import ProvinceInfo from '../components/ProvinceInfo.vue';
+import SubTit from '../components/SubTit.vue';
 
 import { getDetail } from '@/api2/acceptanceEvaluation';
 export default {
   name: 'index',
-  components: { BaseInfo, ScoreTable, CityInfo, ProvinceInfo },
+  components: { BaseInfo, ScoreTable, CityInfo, ProvinceInfo, SubTit },
   data() {
     return {
       form: {},
@@ -52,6 +54,7 @@ export default {
 
 <style scoped lang="scss">
 .page {
+  padding: 20px;
   background-color: #fff;
 }
 </style>

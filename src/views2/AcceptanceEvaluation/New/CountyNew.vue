@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
-      <sub-tit> 创建成效评价申请 </sub-tit>
+      <sub-tit> {{ (isEdit && '修改') || '创建' }}成效评价申请 </sub-tit>
       <basic-input :form="form" @change="villageChange"></basic-input>
       <sub-tit> 未来乡村创建成效评分表 </sub-tit>
       <score-table :form="form"></score-table>
@@ -190,13 +190,20 @@ export default {
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
       });
     },
+
+    _modifyPageTitle(val) {
+      this.$route.meta.title = val;
+    },
   },
+
   mounted() {
     const query = this.$route.query;
     if (query.id && query.edit) {
       this.getData();
+      this._modifyPageTitle('修改');
     } else {
       this.getCountyTempData();
+      this._modifyPageTitle('新增');
     }
   },
 };

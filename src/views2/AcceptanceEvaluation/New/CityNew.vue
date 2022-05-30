@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
+      <sub-tit> 申报详情</sub-tit>
       <base-info :form="form"></base-info>
       <score-table :form="form" @evaluateChange="setCityRanking"></score-table>
       <city-input :form="form" @evaluateChange="setCityRanking"></city-input>
@@ -20,12 +21,13 @@ import BaseInfo from '../components/BaseInfo.vue';
 import ScoreTable from '../components/ScoreTable.vue';
 import CityInput from '../components/CityInput.vue'; // 市区审核
 import ProvinceInfo from '../components/ProvinceInfo.vue';
+import SubTit from '../components/SubTit.vue';
 
 import { cityAudit, getDetail, getCityRanking } from '@/api2/acceptanceEvaluation';
 import { CITY_DEFAULT_FORM as DEFAULT_FORM } from '../constants';
 
 export default {
-  components: { BaseInfo, CityInput, ScoreTable, ProvinceInfo },
+  components: { BaseInfo, CityInput, ScoreTable, ProvinceInfo, SubTit },
   data() {
     return {
       form: {
@@ -141,9 +143,13 @@ export default {
         this.form.cityRanking = res;
       });
     },
+    _modifyPageTitle(val) {
+      this.$route.meta.title = val;
+    },
   },
   mounted() {
     this.getDetail();
+    this._modifyPageTitle('审核');
   },
 };
 </script>
