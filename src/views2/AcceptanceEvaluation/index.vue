@@ -244,7 +244,7 @@ export default {
     },
     showModify(data) {
       return (
-        (this.roleId === 3 && data.finalStatus === 0) ||
+        (this.roleId === 3 && (data.finalStatus === 0 || data.finalStatus === 1)) ||
         (this.roleId === 2 && (data.finalStatus === 2 || data.finalStatus === 3))
       );
     },
