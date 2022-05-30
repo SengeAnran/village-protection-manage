@@ -31,7 +31,8 @@ import ScoreTable from '../components/ScoreTable.vue';
 import FileAttach from '../components/FileAttach.vue'; // 附件上传
 import ProvinceInfo from '../components/ProvinceInfo.vue';
 
-import { saveInfo, getDetail, updateInfo, getCountyTempData } from '@/api2/acceptanceEvaluation';
+// import { saveInfo, getDetail, updateInfo, getCountyTempData } from '@/api2/acceptanceEvaluation';
+import { saveInfo, getDetail, getCountyTempData } from '@/api2/acceptanceEvaluation';
 import { COUNTY_DEFAULT_FORM as DEFAULT_FORM } from '../constants';
 
 export default {
@@ -47,6 +48,7 @@ export default {
   data() {
     return {
       form: {
+        isSave: undefined,
         areaId: '',
         buildPutInCounty: '',
         buildSupportCounty: '',
@@ -82,10 +84,12 @@ export default {
       return query.id && query.edit;
     },
     saveMethod() {
-      return this.isEdit ? updateInfo : saveInfo;
+      // return this.isEdit ? updateInfo : saveInfo;
+      return saveInfo;
     },
     tempSaveMethod() {
-      return this.hasTempData ? updateInfo : saveInfo;
+      // return this.hasTempData ? updateInfo : saveInfo;
+      return saveInfo;
     },
   },
 

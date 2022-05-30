@@ -17,6 +17,7 @@ export const CITY_LEVEL_RATING = ['合格', '良好', '优秀'];
 
 // 县级默认表单
 export const COUNTY_DEFAULT_FORM = {
+  isSave: undefined,
   id: '',
   areaId: '',
   buildPutInCounty: '',
