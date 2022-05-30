@@ -18,7 +18,7 @@
                 disabled
               ></el-input>
             </el-form-item>
-            <el-form-item v-if="form.villageName && !form.villageName" label="创建村/片区名称" prop="villageName">
+            <el-form-item v-else label="创建村/片区名称" prop="villageName">
               <el-input
                 v-model="form.villageName"
                 placeholder="请输入创建村/片区名称"
@@ -82,6 +82,7 @@
             <el-button type="primary" @click="lookHistory">历史数据</el-button>
           </div>
           <VilliageListTable
+            v-if="showTable"
             :form="form"
             :data="form.detailLists"
             :hiddenEdit="true"
@@ -146,6 +147,7 @@ export default {
   },
   data() {
     return {
+      showTable: false,
       form: {
         area: '',
         villageName: '',
@@ -184,6 +186,7 @@ export default {
         this.firstTime = this.form.detailLists.every(i => {
           return i.planGovInvestment === null;
         });
+        this.showTable = true;
       });
     },
     // 添加 项目

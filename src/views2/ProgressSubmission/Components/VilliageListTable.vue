@@ -7,7 +7,7 @@
     <el-table-column prop="constructDetail" label="建设内容和规模" width="120"> </el-table-column>
     <el-table-column prop="schedule" label="进度安排" width="120"> </el-table-column>
     <el-table-column prop="landUse" label="用地情况" width="120"> </el-table-column>
-    <el-table-column label="计划投资" width="250">
+    <el-table-column label="计划投资" width="350">
       <el-table-column prop="investmentAmount" label="总投资（万元）" width="120"> </el-table-column>
       <el-table-column prop="planGovInvestment" label="政府投资（万元）" width="150">
         <template slot-scope="scope">
@@ -35,7 +35,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="planSocialInvestment" label="社会投资（万元）" width="120">
+      <el-table-column prop="planSocialInvestment" label="社会投资（万元）" width="150">
         <template slot-scope="scope">
           <!-- 县级用户 -->
           <div v-if="userInfo.roleId === 3">
@@ -62,12 +62,13 @@
       </el-table-column>
     </el-table-column>
 
-    <el-table-column v-if="!showFirst && !history && data[0].gmtModified" :label="'完成投资 ' + data[0].gmtModified.slice(0, 10)" width="250">
+    <el-table-column v-if="!showFirst && !history && data[0] && data[0].gmtModified" :label="'完成投资 ' + data[0].gmtModified.slice(0, 10)" width="250">
       <el-table-column prop="completeTotalInvestment" label="总投资（万元）" width="120"></el-table-column>
       <el-table-column prop="completeGovInvestment" label="其中政府投资（万元）" width="120"></el-table-column>
       <el-table-column prop="completeSocialInvestment" label="其中社会投资（万元）" width="120"></el-table-column>
     </el-table-column>
-    <el-table-column v-for="(item, index) in data[0].historyLists" :key=index :label="'完成投资 ' + item.gmtModified && item.gmtModified.slice(0, 10)" width="250">
+    <span v-if="history && data[0] && data[0].historyLists && data[0].historyLists.length > 0">
+      <el-table-column v-for="(item, index) in data[0].historyLists" :key=index :label="'完成投资 ' + data[0].historyLists && data[0].historyLists.length >0 && item.gmtModified && item.gmtModified.slice(0, 10)" width="250">
       <el-table-column label="总投资（万元）" width="120">
         <template slot-scope="scope">
           <span>{{scope.row.historyLists[index].completeTotalInvestment}}</span>
@@ -84,6 +85,8 @@
         </template>
       </el-table-column>
     </el-table-column>
+    </span>
+
     <el-table-column v-if="type === 'edit' && !history" label="完成投资" width="250">
       <el-table-column prop="completeTotalInvestmentNow" label="总投资（万元）" width="150">
         <template slot-scope="scope">
@@ -206,7 +209,7 @@ export default {
   computed: {
     ...mapGetters(["userInfo"]),
   },
-  mounted() {
+  beforeMount() {
     this.init();
   },
   methods: {
@@ -215,13 +218,15 @@ export default {
         if (this.$route.query.type === 'look') {
           this.type = 'look';
         }
+        console.log(this.data && this.data.length > 0);
+        console.log(this.data);
         if (this.data && this.data.length > 0) {
           this.showFirst = this.data.every(i => {
             return i.planGovInvestment === null
           });
+          console.log(this.showFirst);
         }
       }
-
       console.log(this.showFirst);
     },
     removeItem(index) {

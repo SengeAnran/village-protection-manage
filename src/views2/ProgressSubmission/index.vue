@@ -14,6 +14,7 @@
         showExport
         showExport2
         :export-method="exportMethod"
+        :export-method2="exportMethod2"
         export-name="导出信息汇总表"
         export-name2="导出项目进度表"
         :hideAdd="true"
@@ -143,7 +144,7 @@ import {
 } from "./constants";
 import {recVerify} from '../../api/villageManage';
 
-import {getInforExport, getList} from '@/api2/progressSubmission';
+import {exportDetail, getInforExport, getList} from '@/api2/progressSubmission';
 // import qs from "qs";
 export default {
   data() {
@@ -189,6 +190,7 @@ export default {
       getMethod: getList,
       deleteMethod: deleteVillageItem,
       exportMethod: getInforExport,
+      exportMethod2: exportDetail,
 
       dialogVisible: false,
       submitSortMethod: recVerify,

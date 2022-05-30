@@ -14,6 +14,20 @@ export const getInforExport = (params) => {
   });
 };
 
+// 报送详情 - 导出
+export const exportDetail = (data) => {
+  console.log('data',data)
+  return axios.request({
+    method: "POST",
+    url: apiHost2 + "/api/workbench/progressReport/detailExport",
+    // params,
+    data: {
+      ids: data.ids,
+    },
+    responseType: "blob"
+  });
+};
+
 // 验收时间-申报批次新增（type 1：验收时间，2：申报批次）
 export const setAdd = (data) => {
   return axios.request({

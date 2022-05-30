@@ -657,6 +657,10 @@ export default {
     },
     // 导出2
     async exportDatas2() {
+      if (this.selections.length === 0) {
+        this.$notify.error('请选择需要导出的数据');
+        return;
+      }
       this.$confirm("是否批量导出所选数据？", "提示", {
         type: "warning",
       }).then(async () => {
