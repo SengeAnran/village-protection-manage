@@ -137,3 +137,11 @@ export const exportList = (data) => {
     responseType: 'blob',
   });
 };
+// 导出附件
+export const exportAnnex = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/createReports/export/annex`,
+    data,
+  });
+};

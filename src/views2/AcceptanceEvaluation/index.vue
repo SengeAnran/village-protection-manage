@@ -75,7 +75,7 @@
 import { mapMutations, mapGetters } from 'vuex';
 import ListSearch from './components/ListSearch.vue';
 
-import { getAuditList, getReportList, deleteItem, exportList } from '@/api2/acceptanceEvaluation';
+import { getAuditList, getReportList, deleteItem, exportList, exportAnnex } from '@/api2/acceptanceEvaluation';
 import { DECLEAR_STATUS } from './constants';
 import { downloadFile } from '@/utils/data';
 
@@ -104,7 +104,6 @@ export default {
   computed: {
     ...mapGetters(['userInfo']),
     roleId() {
-      console.log(this.userInfo.roleId);
       return this.userInfo.roleId;
     },
     isCounty() {
@@ -128,11 +127,6 @@ export default {
     exportList() {
       this._exportFiles(exportList, '导出信息汇总表.xlsx');
     },
-    // 导出附件
-    exportEnclosure() {
-      console.log('导出附件');
-    },
-
     _exportFiles(exportFunc, fileName = '导出信息汇总表 ') {
       if (!this.selections.length) {
         this.$message.warning('请选择需要导出的数据');
@@ -152,6 +146,51 @@ export default {
           this.loading = false;
         }
       });
+    },
+    // 导出附件
+    exportEnclosure() {
+      if (!this.selections.length) {
+        this.$message.warning('请选择需要导出的数据');
+        return;
+      }
+      this.$confirm('是否批量导出所选数据？', '提示', {
+        type: 'warning',
+      }).then(async () => {
+        this.loading = true;
+        try {
+          const data = {
+            ids: this.selections.map((item) => item.id),
+          };
+          const res = await exportAnnex(data);
+          this._downloadFiles(res);
+        } finally {
+          this.loading = false;
+        }
+      });
+    },
+
+    _downloadFiles(data) {
+      if (!data.length) return;
+      for (let i = 0; i < data.length; i++) {
+        data[i].citySaveAnnexFiles &&
+          data[i].citySaveAnnexFiles.forEach((a) => {
+            this._downloadLink(a.filePath, a.fileName);
+          });
+        data[i].countySaveAnnexFiles &&
+          data[i].countySaveAnnexFiles.forEach((b) => {
+            this._downloadLink(b.filePath, b.fileName);
+          });
+      }
+    },
+
+    _downloadLink(url, fileName) {
+      const aDom = document.createElement('a');
+      aDom.style.display = 'none';
+      aDom.href = url;
+      aDom.setAttribute('download', fileName);
+      document.body.appendChild(aDom);
+      aDom.click();
+      document.body.removeChild(aDom);
     },
 
     newApplications() {
