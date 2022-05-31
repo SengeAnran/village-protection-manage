@@ -54,8 +54,8 @@
           <el-table-column label="市评价得分" prop="totalCity" v-if="!isCounty"></el-table-column>
           <el-table-column label="评价等次" prop="cityLevelRating" v-if="!isCounty">
             <template slot-scope="scope">
-              <p v-if="scope.row.cityLevelRating">
-                {{ CITY_LEVEL_RATING[scope.row.cityLevelRating] }}
+              <p>
+                {{ CITY_LEVEL_RATING[scope.row.cityLevelRating] || '' }}
               </p>
             </template>
           </el-table-column>
@@ -189,23 +189,35 @@ export default {
       for (let i = 0; i < data.length; i++) {
         data[i].citySaveAnnexFiles &&
           data[i].citySaveAnnexFiles.forEach((a) => {
+            console.log(111, a.filePath);
             this._downloadLink(a.filePath, a.fileName);
           });
         data[i].countySaveAnnexFiles &&
           data[i].countySaveAnnexFiles.forEach((b) => {
+            console.log(111, b.filePath);
+
             this._downloadLink(b.filePath, b.fileName);
           });
       }
     },
 
-    _downloadLink(url, fileName) {
-      const aDom = document.createElement('a');
-      aDom.style.display = 'none';
-      aDom.href = url;
-      aDom.setAttribute('download', fileName);
-      document.body.appendChild(aDom);
-      aDom.click();
-      document.body.removeChild(aDom);
+    _downloadLink(url) {
+      // const aDom = document.createElement('a');
+      // aDom.style.display = 'none';
+      // aDom.href = url;
+      // aDom.setAttribute('download', fileName);
+      // document.body.appendChild(aDom);
+      // aDom.click();
+      // document.body.removeChild(aDom);
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none'; // 防止影响页面
+      iframe.style.height = 0; // 防止影响页面
+      iframe.src = url;
+      document.body.appendChild(iframe); // 这一行必须，iframe挂在到dom树上才会发请求
+      // 5分钟之后删除（onload方法对于下载链接不起作用，就先抠脚一下吧）
+      setTimeout(() => {
+        iframe.remove();
+      }, 5 * 60 * 1000);
     },
 
     newApplications() {

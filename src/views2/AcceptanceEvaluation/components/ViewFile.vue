@@ -14,7 +14,7 @@ export default {
   },
   methods: {
     openFile() {
-      console.log('open file');
+      window.open(this.data.filePath, '_self');
     },
   },
 };

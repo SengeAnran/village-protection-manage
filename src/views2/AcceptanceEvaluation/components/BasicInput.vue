@@ -8,7 +8,7 @@
       <el-col :span="8">
         <div class="mb-8">
           <el-form-item prop="areaId" label="创建村名称" :rules="rule.select" v-if="villageType === 1">
-            <VillageSelect ref="villageSelect" v-model="form.areaId" @change="changeAddress('areaId', $event)" />
+            <VillageSelect ref="villageSelect" v-model="saveVO.villageName" @change="changeAddress('areaId', $event)" />
           </el-form-item>
           <el-form-item prop="declarationId" label="片区名称" :rules="rule.select" v-if="villageType === 2">
             <DistrictSelect
@@ -103,6 +103,7 @@ export default {
       villageType: 1,
 
       baseInfo: {
+        // villageName: '',
         declarationBatch: '', //申报批次
         investNum: '', //总投资（万元）
         leader: '', //领办领导
@@ -129,7 +130,7 @@ export default {
           declarationId && (this.form.declarationId = declarationId);
           areaId && (this.form.declarationId = declarationId);
 
-          val.saveVO.decType === 1 && this.$refs.villageSelect.setCascaderValue(val.saveVO.villageName);
+          val.saveVO.decType === 1 && this.$refs.villageSelect.setValue(val.saveVO.villageName);
         });
       }
     },
@@ -140,7 +141,7 @@ export default {
       const params = {};
       if (type === 'areaId') {
         params.type = 1;
-        params.name = val.areaName;
+        params.name = val;
       } else {
         params.type = 2;
         params.name = val;
