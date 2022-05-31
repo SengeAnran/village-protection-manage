@@ -230,9 +230,13 @@ export default {
   methods: {
     // 时间范围
     setDate(val) {
+      console.log(val);
       if (val && val.length === 2) {
         this.query.startDate = val[0];
         this.query.endDate = val[1];
+      } else {
+        this.query.startDate = '';
+        this.query.endDate = '';
       }
     },
     // 地区

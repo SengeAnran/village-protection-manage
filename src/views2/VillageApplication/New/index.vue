@@ -562,6 +562,7 @@ export default {
         console.log(res);
         if (res.decType === 2) {
           this.form.villageName = res.villageName.split(',');
+          this.showdecType2 = true;
         }
       });
     },
