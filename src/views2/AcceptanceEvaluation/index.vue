@@ -55,7 +55,7 @@
           <el-table-column label="评价等次" prop="cityLevelRating" v-if="!isCounty">
             <template slot-scope="scope">
               <p v-if="scope.row.cityLevelRating">
-                {{ CITY_LEVEL_RATING[form.cityLevelRating] }}
+                {{ CITY_LEVEL_RATING[scope.row.cityLevelRating] }}
               </p>
             </template>
           </el-table-column>
