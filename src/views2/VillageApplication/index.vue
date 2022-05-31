@@ -82,18 +82,18 @@
               审核
             </el-link>
 <!--            市级审核修改-->
-            <el-divider v-if="roleId === 2 && scope.data.cityVerify === -1 && scope.data.finalStatus === 3" direction="vertical"></el-divider>
+            <el-divider v-if="roleId === 2 && scope.data.rejectType === 2 && scope.data.finalStatus === 3" direction="vertical"></el-divider>
             <el-link
               @click="goAuditVerify(scope)"
-              v-if="(roleId === 2 && scope.data.cityVerify === -1 && scope.data.finalStatus === 3) "
+              v-if="(roleId === 2 && scope.data.rejectType === 2 && scope.data.finalStatus === 3) "
               type="primary"
             >
               修改
             </el-link>
-            <el-divider v-if="actionControl('修改', scope.data.finalStatus) || (roleId === 3 && scope.data.finalStatus === 3 && scope.data.cityVerify !== -1)" direction="vertical"></el-divider>
+            <el-divider v-if="actionControl('修改', scope.data.finalStatus) || (roleId === 3 && scope.data.finalStatus === 3 && scope.data.rejectType === 1)" direction="vertical"></el-divider>
             <div
               style="display: inline-block"
-              v-if="actionControl('修改', scope.data.finalStatus) || (roleId === 3 && scope.data.finalStatus === 3 && scope.data.cityVerify !== -1)"
+              v-if="actionControl('修改', scope.data.finalStatus) || (roleId === 3 && scope.data.finalStatus === 3 && scope.data.rejectType === 1)"
             >
               <el-link @click="edit(scope.data)" type="primary"> 修改</el-link>
               <!--              <el-divider direction="vertical"></el-divider>-->
