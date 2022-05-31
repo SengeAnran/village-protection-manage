@@ -145,3 +145,11 @@ export const exportAnnex = (data) => {
     data,
   });
 };
+// 查询所有已申报过的村庄（过滤已存在的）
+export const filterVillageArea = (params) => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/createReports/villages`,
+    params,
+  });
+};
