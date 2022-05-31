@@ -7,7 +7,7 @@
     <el-table-column prop="constructDetail" label="建设内容和规模" width="120"> </el-table-column>
     <el-table-column prop="schedule" label="进度安排" width="120"> </el-table-column>
     <el-table-column prop="landUse" label="用地情况" width="120"> </el-table-column>
-    <el-table-column label="计划投资" width="350">
+    <el-table-column label="计划投资" :key=1 width="350">
       <el-table-column prop="investmentAmount" label="总投资（万元）" width="120"> </el-table-column>
       <el-table-column prop="planGovInvestment" label="政府投资（万元）" width="150">
         <template slot-scope="scope">
@@ -68,7 +68,7 @@
       <el-table-column prop="completeSocialInvestment" label="其中社会投资（万元）" width="120"></el-table-column>
     </el-table-column>
     <span v-if="history && data[0] && data[0].historyLists && data[0].historyLists.length > 0">
-      <el-table-column v-for="(item, index) in data[0].historyLists" :key=index :label="'完成投资 ' + data[0].historyLists && data[0].historyLists.length >0 && item.gmtModified && item.gmtModified.slice(0, 10)" width="250">
+      <el-table-column v-for="(item, index) in data[0].historyLists" :key=1000+index :label="'完成投资 ' + item.gmtModified.slice(0, 10)" width="250">
       <el-table-column label="总投资（万元）" width="120">
         <template slot-scope="scope">
           <span>{{scope.row.historyLists[index].completeTotalInvestment}}</span>
@@ -150,11 +150,11 @@
       <template slot-scope="scope">
         <!-- 县级用户 -->
         <div v-if="userInfo.roleId === 3 && !history && type !== 'look'">
-          <span class="cell">{{ (form.detailLists[scope.$index].completeTotalInvestmentNow / form.detailLists[scope.$index].investmentAmount) * 100 +'%'||'--'}}</span>
+          <span class="cell">{{ ((form.detailLists[scope.$index].completeTotalInvestmentNow / form.detailLists[scope.$index].investmentAmount) * 100).toFixed(2) +'%'||'--'}}</span>
         </div>
         <!-- 省市级用户 -->
         <div v-else>
-          <span class="cell">{{ scope.row.rate * 100 + '%' }}</span>
+          <span class="cell">{{ (scope.row.rate * 100).toFixed(2) + '%' }}</span>
         </div>
       </template>
     </el-table-column>

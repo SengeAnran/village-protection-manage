@@ -472,7 +472,7 @@ export default {
       switch (index) {
         case 0 : return '不通过';
         case 1 : return '通过';
-        case -1 : return '通过';
+        case -1 : return '不通过';
         default: return ''
       }
     },
@@ -503,6 +503,7 @@ export default {
         fileId: this.reviewForm.processFilesArr.map(i => i.fileId).toString(), // 审核意见附件id
         status: this.reviewForm.status, // 审核状态 通过:1 不通过:0
         opinion: this.reviewForm.opinion, // 审核意见
+        rejectType: this.reviewForm.rejectType, // 审核意见
         verifyType: this.roleId === 2 ? 1 : 2, //1:市级审核，2：省级审核
       });
       this.$notify.success("操作成功");

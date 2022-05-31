@@ -723,15 +723,19 @@ export default {
     },
 
     // 新增申报item
-    async submit(params) {
+    submit(params) {
       console.log(params);
-      await villageDeclaration(params);
-      this.$message({
-        message: '添加成功！',
-        type: 'success'
+      villageDeclaration(params).then(() => {
+        this.$message({
+          message: '添加成功！',
+          type: 'success'
+        });
+        this.$router.back();
+      }).catch(() => {
+        if (this.form.decType === 2) {
+          this.form.villageName = this.form.villageName.split(',');
+        }
       });
-      this.$router.back();
-
     },
     // 修改item
     async update(params) {

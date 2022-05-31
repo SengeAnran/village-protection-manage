@@ -206,7 +206,7 @@ export default {
                 planGovInvestment: Number(item.planGovInvestment),
                 planSocialInvestment: Number(item.planGovInvestment),
                 projectId: Number(item.projectId),
-                rate: item.completeTotalInvestmentNow / item.investmentAmount,
+                rate: (item.completeTotalInvestmentNow / item.investmentAmoun).toFixed(4),
               };
             } else {
               data = {
@@ -214,7 +214,7 @@ export default {
                 completeSocialInvestment: Number(item.completeSocialInvestmentNow),
                 completeTotalInvestment: Number(item.completeTotalInvestmentNow),
                 projectId: Number(item.projectId),
-                rate: item.completeTotalInvestmentNow / item.investmentAmount,
+                rate: (item.completeTotalInvestmentNow / item.investmentAmount).toFixed(4),
               };
             }
             await addData(data);
