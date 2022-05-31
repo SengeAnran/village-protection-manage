@@ -52,10 +52,23 @@
           <el-table-column label="总投资（万元）" prop="investNum"></el-table-column>
           <el-table-column label="县自评得分" prop="totalCounty"></el-table-column>
           <el-table-column label="市评价得分" prop="totalCity" v-if="!isCounty"></el-table-column>
-          <el-table-column label="评价等次" prop="cityLevelRating" v-if="!isCounty"></el-table-column>
-          <el-table-column label="全市排名" prop="cityRanking" v-if="!isCounty"></el-table-column>
+          <el-table-column label="评价等次" prop="cityLevelRating" v-if="!isCounty">
+            <template slot-scope="scope">
+              <p v-if="scope.row.cityLevelRating">
+                {{ CITY_LEVEL_RATING[form.cityLevelRating] }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column label="全市排名" prop="cityRanking" v-if="!isCounty">
+            <template slot-scope="scope">
+              <p v-if="scope.row.cityRanking">
+                {{ scope.row.cityAcceptTime && scope.row.cityAcceptTime.replace('-', '') }} -
+                {{ scope.row.cityRanking }}
+              </p>
+            </template>
+          </el-table-column>
           <el-table-column label="县申请时间" prop="gmtModified" v-if="!isCounty"> </el-table-column>
-          <el-table-column label="申请时间" prop="gmtModified"> </el-table-column>
+          <el-table-column label="申请时间" prop="gmtModified" v-else></el-table-column>
           <el-table-column label="市审核时间" prop="cityReviewTime" v-if="!isCounty"> </el-table-column>
           <el-table-column label="状态" prop="finalStatus">
             <!--  0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过-->
@@ -78,6 +91,7 @@ import ListSearch from './components/ListSearch.vue';
 import { getAuditList, getReportList, deleteItem, exportList, exportAnnex } from '@/api2/acceptanceEvaluation';
 import { DECLEAR_STATUS } from './constants';
 import { downloadFile } from '@/utils/data';
+import { CITY_LEVEL_RATING } from './constants';
 
 export default {
   components: { ListSearch },
@@ -99,6 +113,7 @@ export default {
       selections: [], // 表格选中数据
 
       loading: false,
+      CITY_LEVEL_RATING,
     };
   },
   computed: {
@@ -245,7 +260,7 @@ export default {
     showModify(data) {
       return (
         (this.roleId === 3 && (data.finalStatus === 0 || data.finalStatus === 1)) ||
-        (this.roleId === 2 && (data.finalStatus === 2 || data.finalStatus === 3))
+        (this.roleId === 2 && data.finalStatus === 3)
       );
     },
     showDelete(data) {

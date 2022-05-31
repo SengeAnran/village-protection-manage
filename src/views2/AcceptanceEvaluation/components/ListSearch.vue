@@ -94,7 +94,7 @@ export default {
     },
     setAcceptTimeOpt() {
       getSetList({ type: 1, pageNum: 1, pageSize: 50 }).then((res) => {
-        this.acceptTimeOpt = res.content.map((c) => ({ label: c.acceptanceTime, value: c.id }));
+        this.acceptTimeOpt = res.content.map((c) => ({ label: c.acceptanceTime, value: c.acceptanceTime }));
       });
     },
     setFinalStatusOpt() {
