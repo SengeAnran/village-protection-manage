@@ -738,14 +738,20 @@ export default {
       });
     },
     // 修改item
-    async update(params) {
+    update(params) {
       console.log(params);
-      await updateVillageItem(params);
-      this.$message({
-        message: '修改成功！',
-        type: 'success'
+      updateVillageItem(params).then(() => {
+        this.$message({
+          message: '修改成功！',
+          type: 'success'
+        });
+        this.$router.back();
+      }).catch(() => {
+        if (this.form.decType === 2) {
+          this.form.villageName = this.form.villageName.split(',');
+        }
       });
-      this.$router.back();
+
 
     },
 
