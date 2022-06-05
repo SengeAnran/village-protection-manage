@@ -204,7 +204,7 @@ export default {
                 completeSocialInvestment: Number(item.completeSocialInvestmentNow),
                 completeTotalInvestment: Number(item.completeTotalInvestmentNow),
                 planGovInvestment: Number(item.planGovInvestment),
-                planSocialInvestment: Number(item.planGovInvestment),
+                planSocialInvestment: Number(item.planSocialInvestment),
                 projectId: Number(item.projectId),
                 rate: item.completeTotalInvestmentNow / item.investmentAmount,
               };

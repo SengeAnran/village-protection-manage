@@ -77,7 +77,7 @@
       </el-table-column>
       <el-table-column label="其中社会投资（万元）" width="120">
         <template slot-scope="scope">
-          <span>{{scope.row.historyLists[index].completeGovInvestment}}</span>
+          <span>{{scope.row.historyLists[index].completeSocialInvestment}}</span>
         </template>
       </el-table-column>
     </el-table-column>
