@@ -19,9 +19,9 @@ const devConfig = {
   apiHost3: '/apiWX', // 未来乡村微信小程序
   // apiHost3: "http://172.16.25.142:5000", // 未来乡村微信小程序
   // loginPath: window.location.origin + '/admin',
-  // loginPath: 'https://wlxc.xscitydo.com:28080/portal/', // 测试环境
+  loginPath: 'https://wlxc.xscitydo.com:28080/portal/', // 测试环境
   // loginPath: 'https://jqy.zjagri.cn/v2/portal/', // 生产环境2
-  loginPath: 'https://172.16.25.164:8080/portal/', // 生产环境2
+  // loginPath: 'https://172.16.25.164:8080/portal/', // 生产环境2
   // loginPath: 'http://223.4.73.15/portal/', // 生产环境
   routerBase: '/admin',
 };
