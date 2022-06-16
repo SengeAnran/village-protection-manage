@@ -20,11 +20,11 @@ export default {
       declarationBatch: '',
       queryDeclareTypeOpt: [
         {
-          label: "全部批次",
-          value: ""
-        }
+          label: '全部批次',
+          value: '',
+        },
       ],
-    }
+    };
   },
   mounted() {
     this.getBatchInfo();

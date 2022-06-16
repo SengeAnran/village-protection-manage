@@ -1,12 +1,12 @@
 <template>
   <div class="show-box">
     <div class="select-batch">
-      <SelectBatch @changeSelect="changeSelect"/>
+      <SelectBatch @changeSelect="changeSelect" />
     </div>
     <div class="left-content">
     </div>
     <div class="right-content">
-      <FinanceIncome v-if="false"/>
+      <FinanceIncome :batch="batch"/>
     </div>
   </div>
 </template>
@@ -16,11 +16,16 @@ import FinanceIncome from "@/views2/HomePage/Components/ProgressSubmission/Finan
 import SelectBatch from "@/views2/HomePage/Components/SelectBatch";
 export default {
   components: { FinanceIncome, SelectBatch },
+  data() {
+    return {
+      batch: '',
+    };
+  },
   methods: {
     changeSelect(val) {
-      console.log(val);
+      this.batch = val;
     },
-  }
+  },
 }
 </script>
 
@@ -47,5 +52,6 @@ export default {
   position: absolute;
   right: 20px;
   top: 20px;
+  z-index: 10;
 }
 </style>

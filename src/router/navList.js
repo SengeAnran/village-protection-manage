@@ -473,9 +473,9 @@ export const defaultRoutes2 = [
     component: () => import('@/views2/HomePage/index'),
     name: 'HomePage',
     meta: {
-      menuIds: [4100, 410003],
+      menuIds: [4050],
       title: '首页',
-      hideChild: false,
+      hideChild: true,
       icon: 'cunzhuangshenbao',
     },
   },
