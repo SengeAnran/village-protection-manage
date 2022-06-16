@@ -467,6 +467,18 @@ export const defaultRoutes = [
 
 export const defaultRoutes2 = [
   // 未来乡村
+  // 首页
+  {
+    path: '/homePage',
+    component: () => import('@/views2/HomePage/index'),
+    name: 'HomePage',
+    meta: {
+      menuIds: [4100, 410003],
+      title: '首页',
+      hideChild: false,
+      icon: 'cunzhuangshenbao',
+    },
+  },
   // 村庄申报 / 村庄审核
   {
     path: '/villageApplication2',
@@ -592,7 +604,8 @@ export const defaultRoutes2 = [
         component: () => import('@/views2/ProgressSubmission/Detail/index'),
       },
     ],
-  }, // 验收评价
+  },
+  // 验收评价
   {
     path: '/acceptanceEvaluation',
     component: BlankRouteNode,
