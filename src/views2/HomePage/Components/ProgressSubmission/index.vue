@@ -1,5 +1,8 @@
 <template>
   <div class="show-box">
+    <div class="select-batch">
+      <SelectBatch @changeSelect="changeSelect"/>
+    </div>
     <div class="left-content">
     </div>
     <div class="right-content">
@@ -10,13 +13,20 @@
 
 <script>
 import FinanceIncome from "@/views2/HomePage/Components/ProgressSubmission/FinanceIncome";
+import SelectBatch from "@/views2/HomePage/Components/SelectBatch";
 export default {
-  components: { FinanceIncome }
+  components: { FinanceIncome, SelectBatch },
+  methods: {
+    changeSelect(val) {
+      console.log(val);
+    },
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .show-box {
+  position: relative;
   height: 274px;
   display: flex;
   justify-content: space-between;
@@ -32,5 +42,10 @@ export default {
     height: 100%;
     //background-color: pink;
   }
+}
+.select-batch {
+  position: absolute;
+  right: 20px;
+  top: 20px;
 }
 </style>
