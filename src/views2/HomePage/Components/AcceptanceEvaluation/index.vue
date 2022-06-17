@@ -6,21 +6,30 @@
     <div class="left-content">
       <TotalSummary :data="data" />
     </div>
-    <div class="right-content"></div>
+    <div class="right-content">
+      <BarChart :chart-data="chartData"/>
+    </div>
   </div>
 </template>
 
 <script>
 import SelectBatch from '@/views2/HomePage/Components/SelectBatch';
 import TotalSummary from './TotalSummary.vue';
+import BarChart from './BarChart';
 import { getAcceptanceStatistics } from '@/api2/homePage';
 
 export default {
-  components: { SelectBatch, TotalSummary },
+  components: { BarChart, SelectBatch, TotalSummary },
   data() {
     return {
       batch: '',
       data: {},
+      chartData: {
+        xAxisData: [],
+        dataList1: [],
+        dataList2: [],
+        dataList3: [],
+      },
     };
   },
   mounted() {
@@ -28,11 +37,16 @@ export default {
   },
   methods: {
     changeSelect(val) {
-      console.log(val);
+      this.batch = val;
+      this.getData();
     },
     getData() {
       getAcceptanceStatistics({ declarationBatch: this.batch }).then((res) => {
         this.data = res || {};
+        this.chartData.xAxisData = res.cityCountVOList.map((i) => {return i.cityName});
+        this.chartData.dataList1 = res.cityCountVOList.map((i) => {return i.passTotalCount});
+        this.chartData.dataList2 = res.cityCountVOList.map((i) => {return i.readyPassTotalCount});
+        this.chartData.dataList3 = res.cityCountVOList.map((i) => {return i.noPassTotalCount});
       });
     },
   },
@@ -62,5 +76,6 @@ export default {
   position: absolute;
   right: 20px;
   top: 20px;
+  z-index: 10;
 }
 </style>

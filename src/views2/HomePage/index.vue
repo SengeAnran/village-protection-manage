@@ -7,8 +7,8 @@
   <ProgressSubmission/>
   <div class="box-title">验收评价</div>
   <AcceptanceEvaluation/>
-  <div class="box-title">优秀案例</div>
-  <ExcellentCases/>
+<!--  <div class="box-title">优秀案例</div>-->
+  <ExcellentCases v-if="false"/>
 </div>
 </template>
 

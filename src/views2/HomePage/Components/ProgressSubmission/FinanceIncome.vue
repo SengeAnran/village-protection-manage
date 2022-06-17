@@ -88,7 +88,7 @@ export default {
         legend: {
           show: true,
           data: ['计划社会投资', '计划政府投资', '完成社会投资', '完成政府投资'],
-          left: 30,
+          left: 60,
           top: 0,
           textStyle: {
             color: 'rgba(0, 0, 0, 0.85)',
