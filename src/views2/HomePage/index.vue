@@ -38,6 +38,6 @@ export default {
   font-weight: 500;
   color: #333333;
   padding-left: 20px;
-  margin-bottom: 13px;
+  //margin-bottom: 13px;
 }
 </style>

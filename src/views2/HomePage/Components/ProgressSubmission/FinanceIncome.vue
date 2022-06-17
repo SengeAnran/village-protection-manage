@@ -1,26 +1,38 @@
 <template>
   <div class="community_address">
-    <div class="item_wrapper">
-      <div class="line_charts" ref="charts"></div>
-    </div>
+    <div class="line_charts" ref="charts"></div>
   </div>
 </template>
 
 <script>
 import * as echarts from 'echarts';
-import {getProjectProgressReport} from "@/api2/homePage";
+import { getProjectProgressReport } from "@/api2/homePage";
 // import { getFinancePublicTrend } from '@/api/Overview/CityEvolution/api';
 export default {
+  props: {
+    batch: {
+      type: String,
+      default: '',
+    },
+  },
   name: 'CityEvolution',
   data() {
     return {
       charts: null,
       xAxisData: [],
-      financeIncome: [],
-      publickPre: [],
+      dataList1: [],
+      dataList2: [],
+      dataList3: [],
+      dataList4: [],
       data: [],
       timmerOneAnim: null,
+      unit: '万',
     };
+  },
+  watch: {
+    batch() {
+      this.loadData();
+    },
   },
   mounted() {
     const charts = this.$refs.charts;
@@ -34,7 +46,7 @@ export default {
     //   this.charts.dispatchAction({
     //     type: 'showTip',
     //     seriesIndex: 0,
-    //     dataIndex: count % this.financeIncome.length,
+    //     dataIndex: count % this.dataList1.length,
     //   });
     //   count++;
     // }, 4500);
@@ -47,34 +59,69 @@ export default {
     getOptions() {
       const option = {
         grid: {
-          top: '15%',
+          top: '28%',
           left: '10%',
           right: '10%',
           bottom: '15%',
         },
         legend: {
-          show: false,
-          data: ['财政总收入', '公共财政预算收入'],
-          right: 30,
-          top: 7,
-          bottom: 7,
+          show: true,
+          data: ['计划社会投资', '计划政府投资', '完成社会投资', '完成政府投资'],
+          left: 30,
+          top: 0,
           textStyle: {
-            color: '#FFFFFF',
-            fontSize: 20,
-            fontFamily: 'DIN Alternate',
+            color: 'rgba(0, 0, 0, 0.85)',
+            fontSize: 12,
+            fontFamily: 'PingFangSC-Regular, PingFang SC',
           },
+          itemWidth: 10,
+          itemHeight: 10,
         },
         tooltip: {
           trigger: 'axis',
-          axisPointer: {
+          axisPointer: { // 坐标轴指示器配置项。
             type: 'shadow',
           },
           textStyle: {
             color: '#fff',
-            fontSize: 22,
+            fontSize: 14,
           },
           borderColor: 'rgba(255, 255, 255, 0.4)',
           backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          formatter: (params) => {
+            console.log(params);
+            let str = params[0].name + '<br />';
+            console.log(str);
+            str += `&nbsp; &nbsp;  完成总投: ${(params[0].value + params[1].value).toFixed(2)}${this.unit}<br/>`;
+            params.forEach((item) => {
+              console.log(item.seriesName);
+              if (item.value) {
+                if (item.seriesName.indexOf('计划政府投资') != -1) {
+                  str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
+                                    "></span>
+                                         ${item.seriesName}
+                                         :
+                                       ${item.value}${this.unit}  <br/><br/>`;
+                }else if (item.seriesName.indexOf('完成社会投资') != -1) {
+                  str += `&nbsp; &nbsp;  计划总投: ${(params[2].value + params[3].value).toFixed(2)}${this.unit}<br/><span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
+                                    "></span>
+                                         ${item.seriesName}
+                                         :
+                                       ${item.value}${this.unit}
+                                        <br/>`;
+                }else{
+                  str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
+                                    "></span>
+                                        ${item.seriesName}
+                                        :
+                                      ${item.value}${this.unit}
+                                        <br/>`;
+                }
+              }
+            });
+            str += `&nbsp; &nbsp;  投资完成率: ${((params[2].value + params[3].value)/(params[0].value + params[1].value) * 100).toFixed(2)}%<br/>`
+            return str;
+          },
         },
         xAxis: {
           data: this.xAxisData,
@@ -95,9 +142,9 @@ export default {
             },
           },
           axisLabel: {
-            color: '#FFFFFF',
+            color: '#666666',
             textStyle: {
-              fontSize: 20,
+              fontSize: 12,
             },
           },
           splitLine: {
@@ -108,110 +155,97 @@ export default {
         yAxis: [
           {
             type: 'value',
-            name: '亿元',
+            name: '(千万)',
             nameTextStyle: {
               align: 'center',
-              color: '#fff',
-              fontSize: 20,
+              color: '#8C8C8C',
+              fontSize: 12,
             },
             splitLine: {
               show: true,
               lineStyle: {
-                color: 'rgba(255,255,255,0.2)',
+                color: '#F2F2F2',
+                type: 'dashed',
               },
             },
             axisLine: {
-              show: true,
+              show: false,
               lineStyle: {
-                color: '#979797',
+                // color: '#979797',
               },
             },
             axisLabel: {
-              color: '#FFFFFF',
+              color: 'rgba(0, 0, 0, 0.45)',
               margin: 10,
               textStyle: {
-                fontSize: 20,
+                fontSize: 12,
               },
             },
             axisTick: {
-              show: true,
+              show: false,
             },
           },
         ],
         series: [
           {
+            stack: 'AA',
             z: 1,
-            name: '财政总收入',
-            data: this.financeIncome,
+            name: '计划社会投资',
+            data: this.dataList1,
             type: 'bar',
             barMaxWidth: 'auto',
-            barWidth: 20,
+            barWidth: 10,
             itemStyle: {
-              color: {
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
-                type: 'linear',
-                global: false,
-                colorStops: [
-                  {
-                    offset: 0,
-                    color: '#90E4FA',
-                  },
-                  {
-                    offset: 1,
-                    color: '#8CE1F9',
-                  },
-                ],
-              },
+              // color: {
+              //   x: 0,
+              //   y: 0,
+              //   x2: 0,
+              //   y2: 1,
+              //   type: 'linear',
+              //   global: false,
+              //   colorStops: [
+              //     {
+              //       offset: 0,
+              //       color: '#90E4FA',
+              //     },
+              //     {
+              //       offset: 1,
+              //       color: '#8CE1F9',
+              //     },
+              //   ],
+              // },
+              color: '#1492FF',
+              borderRadius: [2, 2, 0, 0],
             },
             label: {
-              show: true,
+              show: false,
               position: 'top',
               distance: 10,
               color: '#fff',
             },
+            // emphasis: {
+            //   focus: 'series',
+            //   tooltip: {
+            //     textStyle: {
+            //       color: '#fff',
+            //       fontSize: 14,
+            //     },
+            //     borderColor: 'rgba(255, 255, 255, 0.4)',
+            //     backgroundColor: 'rgba(0, 0, 0, 0.3)',
+            //   },
+            // },
           },
           {
-            name: '财政总收入',
-            type: 'pictorialBar',
-            barMaxWidth: '20',
-            symbol: 'diamond',
-            symbolOffset: ['-100%', '50%'],
-            symbolSize: [20, 20],
-          },
-          {
-            name: '财政总收入',
-            data: this.financeIncome,
-            type: 'pictorialBar',
-            barMaxWidth: '20',
-            symbolPosition: 'end',
-            symbol: 'diamond',
-            symbolOffset: ['-60%', '-50%'],
-            symbolSize: [20, 15],
-            zlevel: 2,
-            itemStyle: {
-              normal: {
-                borderColor: '#8bead4',
-                borderWidth: 2,
-                color: '#8bead4',
-              },
-            },
-            tooltip: {
-              show: false,
-            },
-          },
-
-          {
+            stack: 'AA',
             type: 'bar',
-            name: '公共财政预算收入',
-            barWidth: 20,
+            name: '计划政府投资',
+            barWidth: 10,
             itemStyle: {
-              color: '#31EABC',
+              color: '#FED887',
+              borderRadius: [2, 2, 0, 0],
             },
             label: {
-              show: true,
+              show: false,
               position: 'top',
               distance: 10,
               color: '#FFFFFF',
@@ -219,64 +253,84 @@ export default {
                 fontSize: 22,
               },
             },
-            data: this.publickPre,
+            data: this.dataList2,
           },
           {
-            type: 'pictorialBar',
-            barMaxWidth: '20',
-            symbol: 'diamond',
-            symbolOffset: [0, '50%'],
-            symbolSize: [20, 15],
-          },
-          {
-            data: this.publickPre,
-            type: 'pictorialBar',
-            barMaxWidth: '20',
-            symbolPosition: 'end',
-            symbol: 'diamond',
-            symbolOffset: ['60%', '-50%'],
-            symbolSize: [20, 15],
-            zlevel: 2,
+            stack: 'BB',
+            z: 1,
+            name: '完成社会投资',
+            data: this.dataList3,
+            type: 'bar',
+            barMaxWidth: 'auto',
+            barWidth: 10,
             itemStyle: {
-              normal: {
-                borderColor: '#8bead4',
-                borderWidth: 2,
-                color: '#8bead4',
+              // color: {
+              //   x: 0,
+              //   y: 0,
+              //   x2: 0,
+              //   y2: 1,
+              //   type: 'linear',
+              //   global: false,
+              //   colorStops: [
+              //     {
+              //       offset: 0,
+              //       color: '#90E4FA',
+              //     },
+              //     {
+              //       offset: 1,
+              //       color: '#8CE1F9',
+              //     },
+              //   ],
+              // },
+              color: '#1492FF',
+              borderRadius: [2, 2, 0, 0],
+            },
+            label: {
+              show: false,
+              position: 'top',
+              distance: 10,
+              color: '#fff',
+            },
+          },
+          {
+            stack: 'BB',
+            type: 'bar',
+            name: '完成政府投资',
+            barWidth: 10,
+            itemStyle: {
+              color: '#FED887',
+              borderRadius: [2, 2, 0, 0],
+            },
+            label: {
+              show: false,
+              position: 'top',
+              distance: 10,
+              color: '#FFFFFF',
+              textStyle: {
+                fontSize: 22,
               },
             },
-            tooltip: {
-              show: false,
-            },
-          },
-          {
-            type: 'pictorialBar',
-            barMaxWidth: '20',
-            symbol: 'diamond',
-            symbolOffset: [0, '50%'],
-            symbolSize: [20, 15],
-            zlevel: -2,
+            data: this.dataList4,
           },
         ],
       };
       return option;
     },
     async loadData() {
-      const res = await getProjectProgressReport();
-      console.log(res);
-      const xAxisData = [];
-      const financeIncome = [];
-      const publickPre = [];
-      res
-        .reverse()
-        .slice(res.length - 6)
-        .forEach((item) => {
-          xAxisData.push(item.nf);
-          financeIncome.push(item.czsr);
-          publickPre.push(item.ggys);
-        });
+      const params = {
+        batch: this.batch,
+      };
+      const res = await getProjectProgressReport(params);
+      const xAxisData = res.projectProgressReportVO.map((i) => {return i.areaName});
+      const dataList1 = res.projectProgressReportVO.map((i) => {return i.planGovInvestment});
+      const dataList2 = res.projectProgressReportVO.map((i) => {return i.planSocialInvestment});
+      const dataList3 = res.projectProgressReportVO.map((i) => {return i.completeSocialInvestment});
+      const dataList4 = res.projectProgressReportVO.map((i) => {return i.completeGovInvestment});
       this.xAxisData = xAxisData;
-      this.financeIncome = financeIncome;
-      this.publickPre = publickPre;
+      this.dataList1 = dataList1;
+      this.dataList2 = dataList2;
+      this.dataList3 = dataList3;
+      this.dataList4 = dataList4;
       this.setData();
     },
   },
@@ -284,26 +338,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 .community_address {
-  position: absolute;
-  width: 840px;
-  height: 550px;
-  top: 550px;
-  // top: 0;
-  left: 0;
+  //background-color: pink;
+  width: 100%;
+  height: 100%;
   padding-top: 20px;
   padding-left: 20px;
   box-sizing: border-box;
-  .item_wrapper {
-    margin-top: 65px;
-    height: 460px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    .line_charts {
-      height: 460px;
-      width: 100%;
-      box-sizing: border-box;
-    }
+  .line_charts {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
   }
 }
 </style>

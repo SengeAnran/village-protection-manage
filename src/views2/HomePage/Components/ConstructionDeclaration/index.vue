@@ -1,12 +1,15 @@
 <template>
   <div class="show-box">
+    <div class="select-batch">
+      <SelectBatch @changeSelect="changeSelect"/>
+    </div>
     <div class="left-content">
       <PieChart
         :list="pieDataList"
         :isPercent="false"
         unit="个"
         showMinTitle
-        total="378"
+        :total="378"
         totalUnit="个"
         minTitle="申报总数"
       />
@@ -17,8 +20,9 @@
 
 <script>
 import PieChart from './PieChart';
+import SelectBatch from "@/views2/HomePage/Components/SelectBatch";
 export default {
-  components: { PieChart },
+  components: { PieChart, SelectBatch },
   data() {
     return {
       pieDataList: [
@@ -28,11 +32,17 @@ export default {
       ],
     };
   },
+  methods: {
+    changeSelect(val) {
+      console.log(val);
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 .show-box {
+  position: relative;
   display: flex;
   justify-content: space-between;
   .left-content {
@@ -47,5 +57,10 @@ export default {
     height: 239px;
     //background-color: pink;
   }
+}
+.select-batch {
+  position: absolute;
+  right: 20px;
+  top: 20px;
 }
 </style>

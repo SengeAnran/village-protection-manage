@@ -7,7 +7,7 @@
       <TotalSummary />
     </div>
     <div class="right-content">
-      <FinanceIncome v-if="false" />
+      <FinanceIncome :batch="batch" />
     </div>
   </div>
 </template>
@@ -18,9 +18,14 @@ import SelectBatch from '@/views2/HomePage/Components/SelectBatch';
 import TotalSummary from './TotalSummary.vue';
 export default {
   components: { FinanceIncome, SelectBatch, TotalSummary },
+  data() {
+    return {
+      batch: '',
+    };
+  },
   methods: {
     changeSelect(val) {
-      console.log(val);
+      this.batch = val;
     },
   },
 };
@@ -49,5 +54,6 @@ export default {
   position: absolute;
   right: 20px;
   top: 20px;
+  z-index: 10;
 }
 </style>
