@@ -22,7 +22,6 @@ export default {
           dataList1: [],
           dataList2: [],
           dataList3: [],
-          dataList4: [],
         };
       },
     },
@@ -38,7 +37,7 @@ export default {
       dataList4: [],
       data: [],
       timmerOneAnim: null,
-      unit: '万',
+      unit: '个',
     };
   },
   watch: {
@@ -116,34 +115,16 @@ export default {
 //   <div style="display: flex;"></div>
 // </div>`
             let str = params[0].name + '<br />';
-            str += `&nbsp; &nbsp;  完成总投: ${(params[0].value + params[1].value).toFixed(2)}${this.unit}<br/>`;
+            str += `&nbsp; &nbsp;  申报总数: ${(params[0].value + params[1].value + params[3].value).toFixed(2)}${this.unit}<br/>`;
             params.forEach((item) => {
               // console.log(item.seriesName);
-              if (item.value) {
-                if (item.seriesName.indexOf('计划政府投资') != -1) {
-                  str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
-                                    "></span>
-                                         ${item.seriesName}
-                                         :
-                                       ${item.value}${this.unit}  <br/><br/>`;
-                }else if (item.seriesName.indexOf('完成社会投资') != -1) {
-                  str += `&nbsp; &nbsp;  计划总投: ${(params[2].value + params[3].value).toFixed(2)}${this.unit}<br/><span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
-                                    "></span>
-                                         ${item.seriesName}
-                                         :
-                                       ${item.value}${this.unit}
-                                        <br/>`;
-                }else{
-                  str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
+              str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
                                     "></span>
                                         ${item.seriesName}
                                         :
                                       ${item.value}${this.unit}
                                         <br/>`;
-                }
-              }
             });
-            str += `&nbsp; &nbsp;  投资完成率: ${((params[2].value + params[3].value)/(params[0].value + params[1].value) * 100).toFixed(2)}%<br/>`
             return str;
           },
         },
@@ -214,7 +195,7 @@ export default {
           {
             stack: 'AA',
             z: 1,
-            name: '计划社会投资',
+            name: '审核通过',
             data: this.dataList1,
             type: 'bar',
             barMaxWidth: 'auto',
@@ -265,7 +246,7 @@ export default {
           {
             stack: 'AA',
             type: 'bar',
-            name: '计划政府投资',
+            name: '待审核',
             barWidth: 10,
             itemStyle: {
               color: '#FED887',
@@ -283,9 +264,9 @@ export default {
             data: this.dataList2,
           },
           {
-            stack: 'BB',
+            stack: 'AA',
             z: 1,
-            name: '完成社会投资',
+            name: '审核未通过',
             data: this.dataList3,
             type: 'bar',
             barMaxWidth: 'auto',
@@ -309,7 +290,7 @@ export default {
               //     },
               //   ],
               // },
-              color: '#1492FF',
+              color: '#FF9D9D',
               borderRadius: [2, 2, 0, 0],
             },
             label: {
@@ -318,26 +299,6 @@ export default {
               distance: 10,
               color: '#fff',
             },
-          },
-          {
-            stack: 'BB',
-            type: 'bar',
-            name: '完成政府投资',
-            barWidth: 10,
-            itemStyle: {
-              color: '#FED887',
-              borderRadius: [2, 2, 0, 0],
-            },
-            label: {
-              show: false,
-              position: 'top',
-              distance: 10,
-              color: '#FFFFFF',
-              textStyle: {
-                fontSize: 22,
-              },
-            },
-            data: this.dataList4,
           },
         ],
       };

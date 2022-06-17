@@ -9,7 +9,7 @@
         :isPercent="false"
         unit="个"
         showMinTitle
-        :total="378"
+        :total="total"
         totalUnit="个"
         minTitle="申报总数"
       />
@@ -20,7 +20,8 @@
 
 <script>
 import PieChart from './PieChart';
-import SelectBatch from "@/views2/HomePage/Components/SelectBatch";
+import SelectBatch from '@/views2/HomePage/Components/SelectBatch';
+import { getCountVillage } from '@/api2/homePage';
 export default {
   components: { PieChart, SelectBatch },
   data() {
@@ -30,11 +31,33 @@ export default {
         { name: '待审核', value: 50 },
         { name: '审核未通过', value: 28 },
       ],
+      total: 0,
+      chartData: {
+        xAxisData: [],
+        dataList1: [],
+        dataList2: [],
+        dataList3: [],
+      },
     };
+  },
+  mounted() {
+    this.getData('');
   },
   methods: {
     changeSelect(val) {
-      console.log(val);
+      this.getData(val);
+    },
+    getData(val) {
+      getCountVillage({ declarationBatch: val }).then((res) => {
+        this.chartData.xAxisData = res.cityCountVOList.map((i) => {return i.cityName});
+        this.chartData.dataList1 = res.cityCountVOList.map((i) => {return i.passTotalCount});
+        this.chartData.dataList2 = res.cityCountVOList.map((i) => {return i.readyPassTotalCount});
+        this.chartData.dataList3 = res.cityCountVOList.map((i) => {return i.noPassTotalCount});
+        this.pieDataList[0].value = res.passTotalCount;
+        this.pieDataList[1].value = res.readyPassTotalCount;
+        this.pieDataList[2].value = res.passTotalCount;
+        this.total = res.passTotalCount + res.readyPassTotalCount + res.passTotalCount;
+      });
     },
   },
 }

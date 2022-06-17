@@ -7,7 +7,7 @@
       <TotalSummary />
     </div>
     <div class="right-content">
-      <FinanceIncome :batch="batch" />
+      <FinanceIncome :chartData="chartData" />
     </div>
   </div>
 </template>
@@ -16,16 +16,34 @@
 import FinanceIncome from '@/views2/HomePage/Components/ProgressSubmission/FinanceIncome';
 import SelectBatch from '@/views2/HomePage/Components/SelectBatch';
 import TotalSummary from './TotalSummary.vue';
+import { getProjectProgressReport } from '@/api2/homePage';
 export default {
   components: { FinanceIncome, SelectBatch, TotalSummary },
   data() {
     return {
-      batch: '',
+      chartData: {
+        xAxisData: [],
+        dataList1: [],
+        dataList2: [],
+        dataList3: [],
+        dataList4: [],
+      },
     };
+  },
+  mounted() {
+    this.getData('');
   },
   methods: {
     changeSelect(val) {
-      this.batch = val;
+      this.getData(val);
+    },
+    async getData(batch) {
+      const res = await getProjectProgressReport({ batch });
+      this.chartData.xAxisData = res.projectProgressReportVO.map((i) => {return i.areaName});
+      this.chartData.dataList1 = res.projectProgressReportVO.map((i) => {return i.planGovInvestment});
+      this.chartData.dataList2 = res.projectProgressReportVO.map((i) => {return i.planSocialInvestment});
+      this.chartData.dataList3 = res.projectProgressReportVO.map((i) => {return i.completeSocialInvestment});
+      this.chartData.dataList4 = res.projectProgressReportVO.map((i) => {return i.completeGovInvestment});
     },
   },
 };

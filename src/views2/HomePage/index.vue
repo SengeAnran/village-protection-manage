@@ -13,14 +13,14 @@
 </template>
 
 <script>
-import TopData from "./Components/TopData.vue";
+import TopData from './Components/TopData.vue';
 import ConstructionDeclaration from './Components/ConstructionDeclaration';
 import ProgressSubmission from './Components/ProgressSubmission';
 import AcceptanceEvaluation from './Components/AcceptanceEvaluation';
 import ExcellentCases from './Components/ExcellentCases';
 export default {
   name: 'index',
-  components: {TopData, ConstructionDeclaration, ProgressSubmission, AcceptanceEvaluation, ExcellentCases},
+  components: { TopData, ConstructionDeclaration, ProgressSubmission, AcceptanceEvaluation, ExcellentCases},
   data() {
     return {
     }
