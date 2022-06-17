@@ -4,7 +4,7 @@
       <SelectBatch @changeSelect="changeSelect" />
     </div>
     <div class="left-content">
-      <TotalSummary />
+      <TotalSummary :data="data" />
     </div>
     <div class="right-content"></div>
   </div>
@@ -13,11 +13,27 @@
 <script>
 import SelectBatch from '@/views2/HomePage/Components/SelectBatch';
 import TotalSummary from './TotalSummary.vue';
+import { getAcceptanceStatistics } from '@/api2/homePage';
+
 export default {
   components: { SelectBatch, TotalSummary },
+  data() {
+    return {
+      batch: '',
+      data: {},
+    };
+  },
+  mounted() {
+    this.getData();
+  },
   methods: {
     changeSelect(val) {
       console.log(val);
+    },
+    getData() {
+      getAcceptanceStatistics({ declarationBatch: this.batch }).then((res) => {
+        this.data = res || {};
+      });
     },
   },
 };

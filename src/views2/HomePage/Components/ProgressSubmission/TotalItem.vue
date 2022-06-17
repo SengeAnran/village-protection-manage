@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="g-wrp">
-      <div class="g-rect" :style="{ width: socialWith }">
+      <div class="g-rect" :style="{ width: socialWidth }">
         <div class="g-rect-fill"></div>
       </div>
-      <div class="g-rect" :style="{ width: governmentWith }">
+      <div class="g-rect" :style="{ width: governmentWidth }">
         <div class="g-rect-fill"></div>
       </div>
     </div>
     <div class="g-legend">
-      <div class="g-legend-item" :style="{ width: socialWith }">
+      <div class="g-legend-item" :style="{ width: socialWidth }">
         <span class="g-legend-icon"></span>
         社会投资
       </div>
-      <div class="g-legend-item" :style="{ width: governmentWith }">
+      <div class="g-legend-item" :style="{ width: governmentWidth }">
         <span class="g-legend-icon"></span>
         政府投资
       </div>
@@ -33,10 +33,10 @@ export default {
     total() {
       return +this.social + this.government;
     },
-    socialWith() {
+    socialWidth() {
       return `${(this.social / this.total) * 100}%`;
     },
-    governmentWith() {
+    governmentWidth() {
       return `${(1 - this.social / this.total) * 100}%`;
     },
   },
