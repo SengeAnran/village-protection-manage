@@ -10,3 +10,12 @@ export const getProjectProgressReport = (params) => {
     params,
   });
 };
+
+// 验收评价统计
+export const getAcceptanceStatistics = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/index/count`,
+    data,
+  });
+};
