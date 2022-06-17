@@ -119,7 +119,7 @@ export default {
             str += `&nbsp; &nbsp;  完成总投: ${(params[0].value + params[1].value).toFixed(2)}${this.unit}<br/>`;
             params.forEach((item) => {
               // console.log(item.seriesName);
-              if (item.value) {
+              // if (item.value) {
                 if (item.seriesName.indexOf('计划政府投资') != -1) {
                   str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
                                     "></span>
@@ -141,9 +141,9 @@ export default {
                                       ${item.value}${this.unit}
                                         <br/>`;
                 }
-              }
+              // }
             });
-            str += `&nbsp; &nbsp;  投资完成率: ${((params[2].value + params[3].value)/(params[0].value + params[1].value) * 100).toFixed(2)}%<br/>`
+            str += `&nbsp; &nbsp;  投资完成率: ${params[0].value + params[1].value === 0 ? 0 : ((params[2].value + params[3].value)/(params[0].value + params[1].value) * 100 ).toFixed(2)}%<br/>`
             return str;
           },
         },

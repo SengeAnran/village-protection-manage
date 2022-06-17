@@ -8,6 +8,7 @@ export const getPreviewsNum = (params) => {
     method: 'GET',
     url: apiHost2 + `/api/workbench/index/previewsNum`,
     params,
+    headers: { 'APPLICATION-ID': 4 },
   });
 };
 // 【首页】未来乡村创建申报统计
@@ -16,6 +17,7 @@ export const getCountVillage = (data) => {
     method: 'post',
     url: apiHost2 + `/api/workbench/index/countVillage`,
     data,
+    headers: { 'APPLICATION-ID': 4 },
   });
 };
 // 【首页】项目进度报送
@@ -24,6 +26,7 @@ export const getProjectProgressReport = (params) => {
     method: 'GET',
     url: apiHost2 + `/api/workbench/index/projectProgressReport`,
     params,
+    headers: { 'APPLICATION-ID': 4 },
   });
 };
 // 验收评价统计
@@ -32,5 +35,6 @@ export const getAcceptanceStatistics = (data) => {
     method: 'POST',
     url: apiHost2 + `/api/workbench/index/count`,
     data,
+    headers: { 'APPLICATION-ID': 4 },
   });
 };

@@ -476,7 +476,7 @@ export const defaultRoutes2 = [
       menuIds: [4050],
       title: '首页',
       hideChild: true,
-      icon: 'cunzhuangshenbao',
+      icon: 'shouye',
     },
   },
   // 村庄申报 / 村庄审核
@@ -558,7 +558,7 @@ export const defaultRoutes2 = [
       menuIds: [4200],
       title: '项目进度报送',
       hideChild: false,
-      icon: 'cunzhuangshenbao',
+      icon: 'jindushangbao',
     },
     children: [
       {
@@ -617,7 +617,7 @@ export const defaultRoutes2 = [
       menuIds: [4300],
       title: '验收评价',
       hideChild: false,
-      icon: 'cunzhuangshenbao',
+      icon: 'xiangmuyanshou',
     },
     children: [
       {
