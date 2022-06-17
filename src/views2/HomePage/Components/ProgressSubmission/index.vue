@@ -4,7 +4,7 @@
       <SelectBatch @changeSelect="changeSelect" />
     </div>
     <div class="left-content">
-      <TotalSummary />
+      <TotalSummary :data="data" />
     </div>
     <div class="right-content">
       <FinanceIncome :chartData="chartData" />
@@ -21,6 +21,7 @@ export default {
   components: { FinanceIncome, SelectBatch, TotalSummary },
   data() {
     return {
+      data: {},
       chartData: {
         xAxisData: [],
         dataList1: [],
@@ -39,11 +40,22 @@ export default {
     },
     async getData(batch) {
       const res = await getProjectProgressReport({ batch });
-      this.chartData.xAxisData = res.projectProgressReportVO.map((i) => {return i.areaName});
-      this.chartData.dataList1 = res.projectProgressReportVO.map((i) => {return i.planGovInvestment});
-      this.chartData.dataList2 = res.projectProgressReportVO.map((i) => {return i.planSocialInvestment});
-      this.chartData.dataList3 = res.projectProgressReportVO.map((i) => {return i.completeSocialInvestment});
-      this.chartData.dataList4 = res.projectProgressReportVO.map((i) => {return i.completeGovInvestment});
+      this.data = res;
+      this.chartData.xAxisData = res.projectProgressReportVO.map((i) => {
+        return i.areaName;
+      });
+      this.chartData.dataList1 = res.projectProgressReportVO.map((i) => {
+        return i.planGovInvestment;
+      });
+      this.chartData.dataList2 = res.projectProgressReportVO.map((i) => {
+        return i.planSocialInvestment;
+      });
+      this.chartData.dataList3 = res.projectProgressReportVO.map((i) => {
+        return i.completeSocialInvestment;
+      });
+      this.chartData.dataList4 = res.projectProgressReportVO.map((i) => {
+        return i.completeGovInvestment;
+      });
     },
   },
 };

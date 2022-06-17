@@ -1,12 +1,17 @@
 <template>
   <div class="module-wrp">
-    <TotalTitle name="投资完成率" unit="个" :count="187" :icon="require('../../img/acceptance-icon.png')" />
+    <TotalTitle
+      name="验收评价申报数"
+      unit="个"
+      :count="data.declarationTotalCount"
+      :icon="require('../../img/acceptance-icon.png')"
+    />
     <div style="height: 14px"></div>
-    <TotalItem color="#70ABF8" />
+    <TotalItem name="审核通过" color="#70ABF8" :count="data.passTotalCount" :total="data.declarationTotalCount" />
     <div class="gap"></div>
-    <TotalItem color="#FEC447" />
+    <TotalItem name="待审核" color="#FEC447" :count="data.readyPassTotalCount" :total="data.declarationTotalCount" />
     <div class="gap"></div>
-    <TotalItem color="#FF9D9D" />
+    <TotalItem name="审核未通过" color="#FF9D9D" :count="data.noPassTotalCount" :total="data.declarationTotalCount" />
   </div>
 </template>
 <script>
@@ -15,6 +20,12 @@ import TotalItem from './TotalItem.vue';
 export default {
   name: 'TotalSummary',
   components: { TotalItem, TotalTitle },
+  props: {
+    data: {
+      type: Object,
+      default: () => {},
+    },
+  },
   data() {
     return {};
   },

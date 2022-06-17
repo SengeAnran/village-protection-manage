@@ -9,11 +9,11 @@
       </div>
     </div>
     <div class="g-legend">
-      <div class="g-legend-item" :style="{ width: socialWidth }">
+      <div class="g-legend-item">
         <span class="g-legend-icon"></span>
         社会投资
       </div>
-      <div class="g-legend-item" :style="{ width: governmentWidth }">
+      <div class="g-legend-item">
         <span class="g-legend-icon"></span>
         政府投资
       </div>
@@ -23,11 +23,9 @@
 <script>
 export default {
   name: 'TotalItem',
-  data() {
-    return {
-      social: 50,
-      government: 30,
-    };
+  props: {
+    social: [Number, String],
+    government: [Number, String],
   },
   computed: {
     total() {
@@ -78,9 +76,9 @@ export default {
 .g-legend {
   display: flex;
   .g-legend-item {
-    width: 0;
+    width: 50%;
     line-height: 24px;
-    transition: width 0.6s 0.3s;
+    // transition: width 0.6s 0.3s;
   }
   .g-legend-icon {
     display: inline-block;

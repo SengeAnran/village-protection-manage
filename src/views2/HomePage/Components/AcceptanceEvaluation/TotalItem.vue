@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="g-txt">
-      <span>审核通过</span>
+      <span>{{ name }}</span>
       <span>{{ count }}个</span>
     </div>
     <div class="g-rect-border" :style="{ borderColor: colorRgb(color, 0.25) }">
@@ -25,12 +25,17 @@ export default {
       type: String,
       default: '#70abf8',
     },
-  },
-  data() {
-    return {
-      total: 100,
-      count: 30,
-    };
+    name: {
+      type: String,
+    },
+    count: {
+      type: [String, Number],
+      default: 0,
+    },
+    total: {
+      type: [String, Number],
+      default: 1,
+    },
   },
   computed: {
     processWidth() {
