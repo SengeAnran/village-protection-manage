@@ -24,7 +24,7 @@ export default {
 <style lang="scss" scoped>
 .module-wrp {
   padding-left: 20px;
-  padding-top: 8px;
+  padding-top: 16px;
   .gap {
     height: 14px;
   }

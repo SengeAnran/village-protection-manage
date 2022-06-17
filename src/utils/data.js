@@ -1,8 +1,8 @@
-import { Message } from "element-ui";
+import { Message } from 'element-ui';
 // 数组头部添加“全部”选项
 export function addAllOption(arr) {
   if (Array.isArray(arr)) {
-    return [{ label: "全部", value: "全部" }].concat([...arr]);
+    return [{ label: '全部', value: '全部' }].concat([...arr]);
   }
   return arr;
 }
@@ -15,15 +15,15 @@ export function addAllOption(arr) {
  */
 
 export function downloadFile(blobData, fileName, type) {
-  let blob = new Blob([blobData.data], { type: type || "application/vnd.ms-excel" });
+  let blob = new Blob([blobData.data], { type: type || 'application/vnd.ms-excel' });
   const reader = new FileReader();
-  reader.onload = function() {
+  reader.onload = function () {
     try {
       // json能解析: 后台返回的原始数据，说明出错
       const resData = JSON.parse(this.result);
       Message({
-        type: "error",
-        message: resData.msg
+        type: 'error',
+        message: resData.msg,
       });
     } catch {
       const href = URL.createObjectURL(blob);
@@ -35,15 +35,15 @@ export function downloadFile(blobData, fileName, type) {
 }
 // 导出word文件
 export function downloadWordFile(blobData, fileName) {
-  let blob = new Blob([blobData.data], { type: "application/msword" });
+  let blob = new Blob([blobData.data], { type: 'application/msword' });
   const reader = new FileReader();
-  reader.onload = function() {
+  reader.onload = function () {
     try {
       // json能解析: 后台返回的原始数据，说明出错
       const resData = JSON.parse(this.result);
       Message({
-        type: "error",
-        message: resData.msg
+        type: 'error',
+        message: resData.msg,
       });
     } catch {
       const href = URL.createObjectURL(blob);
@@ -55,17 +55,17 @@ export function downloadWordFile(blobData, fileName) {
 }
 
 function _downloadLink(url, fileName) {
-  const aDom = document.createElement("a");
-  aDom.style.display = "none";
+  const aDom = document.createElement('a');
+  aDom.style.display = 'none';
   aDom.href = url;
-  aDom.setAttribute("download", fileName);
+  aDom.setAttribute('download', fileName);
   document.body.appendChild(aDom);
   aDom.click();
   document.body.removeChild(aDom);
 
   Message({
-    type: "success",
-    message: "成功导出文件！"
+    type: 'success',
+    message: '成功导出文件！',
   });
 }
 
@@ -95,14 +95,41 @@ function saveAs(data, name) {
   save_link.click();
 }
 
-export function downloadFileByI (url)  {
-  const iframe = document.createElement("iframe");
-  iframe.style.display = "none"; // 防止影响页面
+export function downloadFileByI(url) {
+  const iframe = document.createElement('iframe');
+  iframe.style.display = 'none'; // 防止影响页面
   iframe.style.height = 0; // 防止影响页面
   iframe.src = url;
   document.body.appendChild(iframe); // 这一行必须，iframe挂在到dom树上才会发请求
   // 5分钟之后删除（onload方法对于下载链接不起作用，就先抠脚一下吧）
-  setTimeout(() =>{
+  setTimeout(() => {
     iframe.remove();
   }, 5 * 60 * 1000);
+}
+
+export function colorRgb(color16, opacity) {
+  // 16进制颜色值的正则
+  const reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
+  // 把颜色值变成小写
+  let color = color16.toLowerCase();
+  if (reg.test(color)) {
+    // 如果只有三位的值，需变成六位，如：#fff => #ffffff
+    if (color.length === 4) {
+      var colorNew = '#';
+      for (let i = 1; i < 4; i += 1) {
+        colorNew += color.slice(i, i + 1).concat(color.slice(i, i + 1));
+      }
+      color = colorNew;
+    }
+    // 处理六位的颜色值，转为RGB
+    const colorChange = [];
+    for (let i = 1; i < 7; i += 2) {
+      colorChange.push(parseInt('0x' + color.slice(i, i + 2)));
+    }
+
+    opacity = opacity === undefined ? 1 : opacity;
+    return 'rgba(' + colorChange.join(',') + `,${opacity}` + ')';
+  } else {
+    return color;
+  }
 }

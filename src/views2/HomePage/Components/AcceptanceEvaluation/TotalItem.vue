@@ -1,99 +1,96 @@
 <template>
   <div>
-    <div class="g-wrp">
-      <div class="g-rect" :style="{ width: socialWith }">
-        <div class="g-rect-fill"></div>
-      </div>
-      <div class="g-rect" :style="{ width: governmentWith }">
-        <div class="g-rect-fill"></div>
+    <div class="g-txt">
+      <span>审核通过</span>
+      <span>{{ count }}个</span>
+    </div>
+    <div class="g-rect-border" :style="{ borderColor: colorRgb(color, 0.25) }">
+      <div class="g-rect" :style="{ width: processWidth }">
+        <div class="g-rect-fill" :style="{ background: color }"></div>
       </div>
     </div>
-    <div class="g-legend">
-      <div class="g-legend-item" :style="{ width: socialWith }">
-        <span class="g-legend-icon"></span>
-        社会投资
-      </div>
-      <div class="g-legend-item" :style="{ width: governmentWith }">
-        <span class="g-legend-icon"></span>
-        政府投资
+    <div class="g-slice-wrp" :style="{ width: processWidth }">
+      <div class="g-slice">
+        <div class="triangle" :style="{ borderBottomColor: colorRgb(color, 0.8) }"></div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { colorRgb } from '@/utils/data';
 export default {
   name: 'TotalItem',
+  props: {
+    color: {
+      type: String,
+      default: '#70abf8',
+    },
+  },
   data() {
     return {
-      social: 50,
-      government: 30,
+      total: 100,
+      count: 30,
     };
   },
   computed: {
-    total() {
-      return +this.social + this.government;
+    processWidth() {
+      return `${(this.count / this.total) * 100}%`;
     },
-    socialWith() {
-      return `${(this.social / this.total) * 100}%`;
-    },
-    governmentWith() {
-      return `${(1 - this.social / this.total) * 100}%`;
+  },
+  methods: {
+    colorRgb(color, opacity) {
+      return colorRgb(color, opacity);
     },
   },
 };
 </script>
 <style lang="scss" scoped>
-.g-wrp {
+.g-txt {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  color: #333333;
+  line-height: 20px;
+  margin-bottom: 2px;
+  & span:last-child {
+    font-size: 14px;
+  }
+}
+.g-rect-border {
   width: 100%;
   height: 16px;
-  border-radius: 2px;
-  border: 1px solid #f2f2f2;
   padding: 3px;
-  display: flex;
-  margin-bottom: 2px;
-  overflow: hidden;
+  background: #ffffff;
+  border-radius: 3px;
+  border: 1px solid #dcebff;
   .g-rect {
-    width: 0;
-    height: 8px;
     transition: width 0.6s 0.3s;
-    border-radius: 2px 0px 0px 2px;
-    overflow: hidden;
     .g-rect-fill {
-      width: 100%;
-      height: 100%;
+      width: 0px;
+      height: 8px;
       background: #70abf8;
+      border-radius: 2px;
       animation: widthAnimate 1s forwards;
-    }
-    &:nth-child(2) {
-      border-radius: 0px 2px 2px 0px;
-      overflow: hidden;
-      .g-rect-fill {
-        width: 100%;
-        height: 100%;
-        background: #fed887;
-      }
     }
   }
 }
-.g-legend {
-  display: flex;
-  .g-legend-item {
-    width: 0;
-    line-height: 24px;
-    transition: width 0.6s 0.3s;
-  }
-  .g-legend-icon {
+.g-slice-wrp {
+  width: 100%;
+  transition: width 0.6s 0.3s;
+}
+.g-slice {
+  position: relative;
+  animation: widthAnimate 1s forwards;
+  .triangle {
+    position: absolute;
     display: inline-block;
-    width: 10px;
-    height: 10px;
-    background: #70abf8;
-    border-radius: 2px;
-    margin-right: 4px;
-  }
-  .g-legend-item:nth-child(2) {
-    .g-legend-icon {
-      background: #fed887;
-    }
+    border: solid 7px transparent;
+    border-left-width: 6px;
+    border-right-width: 6px;
+    border-bottom-color: #b2ebf2;
+    transform: translateY(-6px);
+    margin-right: -5px;
+    right: 0;
   }
 }
 @keyframes widthAnimate {

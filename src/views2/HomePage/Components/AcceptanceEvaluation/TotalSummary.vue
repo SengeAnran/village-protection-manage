@@ -1,12 +1,12 @@
 <template>
   <div class="module-wrp">
-    <TotalTitle name="投资完成率" unit="%" :count="88" :icon="require('../../img/acceptance-icon.png')" />
+    <TotalTitle name="投资完成率" unit="个" :count="187" :icon="require('../../img/acceptance-icon.png')" />
+    <div style="height: 14px"></div>
+    <TotalItem color="#70ABF8" />
     <div class="gap"></div>
-    <TotalTitle name="计划投资" unit="万元" countSize="24" :icon="false" :count="29413" />
-    <TotalItem />
+    <TotalItem color="#FEC447" />
     <div class="gap"></div>
-    <TotalTitle name="完成投资" unit="万元" countSize="24" :icon="false" :count="20400" />
-    <TotalItem />
+    <TotalItem color="#FF9D9D" />
   </div>
 </template>
 <script>
@@ -24,9 +24,9 @@ export default {
 <style lang="scss" scoped>
 .module-wrp {
   padding-left: 20px;
-  padding-top: 8px;
+  padding-top: 20px;
   .gap {
-    height: 14px;
+    height: 11px;
   }
 }
 </style>
