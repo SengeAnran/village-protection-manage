@@ -29,13 +29,13 @@ export default {
   },
   computed: {
     total() {
-      return +this.social + this.government;
+      return +this.social + this.government || 1;
     },
     socialWidth() {
       return `${(this.social / this.total) * 100}%`;
     },
     governmentWidth() {
-      return `${(1 - this.social / this.total) * 100}%`;
+      return `${(this.government / this.total) * 100}%`;
     },
   },
 };
