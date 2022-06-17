@@ -1,25 +1,26 @@
 <template>
   <div class="show-box">
     <div class="select-batch">
-      <SelectBatch @changeSelect="changeSelect"/>
+      <SelectBatch @changeSelect="changeSelect" />
     </div>
     <div class="left-content">
+      <TotalSummary />
     </div>
-    <div class="right-content">
-    </div>
+    <div class="right-content"></div>
   </div>
 </template>
 
 <script>
-import SelectBatch from "@/views2/HomePage/Components/SelectBatch";
+import SelectBatch from '@/views2/HomePage/Components/SelectBatch';
+import TotalSummary from './TotalSummary.vue';
 export default {
-  components: { SelectBatch },
+  components: { SelectBatch, TotalSummary },
   methods: {
     changeSelect(val) {
       console.log(val);
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
