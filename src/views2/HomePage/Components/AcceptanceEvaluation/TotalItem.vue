@@ -39,7 +39,8 @@ export default {
   },
   computed: {
     processWidth() {
-      return `${(this.count / this.total) * 100}%`;
+      const total = !this.total ? 1 : this.total;
+      return `${(this.count / total) * 100}%`;
     },
   },
   methods: {
@@ -82,6 +83,7 @@ export default {
 .g-slice-wrp {
   width: 100%;
   transition: width 0.6s 0.3s;
+  padding: 0 3px;
 }
 .g-slice {
   position: relative;
