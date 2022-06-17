@@ -1,19 +1,26 @@
 <template>
   <div class="items" >
-    <div class="item" v-for="(item, index) in dataList" :key="index" :style="{background: `url(${item.backgroundImg}) no-repeat`}">
-      <img :src="item.iconImg" alt="">
-      <label-info
-        :direction="labelInfoSet.direction"
-        :color="item.color"
-        :label="item.label"
-        :num="item.num"
-        :unit="item.unit"
-      ></label-info>
-    </div>
+    <el-row :gutter="20">
+      <el-col :span="8" v-for="(item, index) in dataList" :key="index" style="text-align: center">
+        <div class="item" :style="{background: `url(${item.backgroundImg}) 100% 100% no-repeat`}">
+          <img :src="item.iconImg" alt="">
+          <label-info
+            :direction="labelInfoSet.direction"
+            :color="item.color"
+            :label="item.label"
+            :num="item.num"
+            :unit="item.unit"
+          ></label-info>
+        </div>
+      </el-col>
+    </el-row>
+
   </div>
 </template>
 
 <script>
+import { getPreviewsNum } from "@/api2/homePage";
+
 export default {
   name: 'TopData',
   data() {
@@ -21,7 +28,7 @@ export default {
       dataList: [
         {
           label: '未来乡村创建总数',
-          num: 1281,
+          num: 0,
           unit: '个',
           color: '#5F59FF',
           backgroundImg: require('../img/bg_02.png'),
@@ -29,7 +36,7 @@ export default {
         },
         {
           label: '在建数',
-          num: 12531,
+          num: 0,
           unit: '人',
           color: '#FEC447',
           backgroundImg: require('../img/bg_01.png'),
@@ -37,7 +44,7 @@ export default {
         },
         {
           label: '验收数',
-          num: 42434,
+          num: 0,
           unit: '个',
           color: '#3DC899',
           backgroundImg: require('../img/bg_03.png'),
@@ -52,22 +59,34 @@ export default {
       },
     };
   },
-}
+  mounted() {
+    this.getData();
+  },
+  methods: {
+    getData() {
+      getPreviewsNum().then((res) => {
+        this.dataList[0].num = res.totalNum;
+        this.dataList[1].num = res.buildingNum;
+        this.dataList[2].num = res.completeNum;
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .items {
   width: 100%;
-  display: flex;
+  //display: flex;
   //justify-content: space-between;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  //justify-content: space-between;
+  //flex-wrap: wrap;
   margin-bottom: 32px;
   .item {
-    width: 350px;
+    margin: 0 auto;
+    max-width: 350px;
     height: 102px;
     display: flex;
-    //margin: 15px 0;
     align-items: center;
     img {
       margin-left: 30px;
@@ -78,6 +97,12 @@ export default {
     &::v-deep .label {
       margin-top: 3px
     }
+  }
+  .el-col:first-child .item {
+    margin: 0 auto 0 0;
+  }
+  .el-col:last-child .item {
+    margin: 0 0 0 auto;
   }
 }
 </style>

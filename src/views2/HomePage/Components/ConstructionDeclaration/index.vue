@@ -14,16 +14,19 @@
         minTitle="申报总数"
       />
     </div>
-    <div class="right-content"></div>
+    <div class="right-content">
+      <BarChart :chart-data="chartData"/>
+    </div>
   </div>
 </template>
 
 <script>
 import PieChart from './PieChart';
 import SelectBatch from '@/views2/HomePage/Components/SelectBatch';
+import BarChart from './BarChart';
 import { getCountVillage } from '@/api2/homePage';
 export default {
-  components: { PieChart, SelectBatch },
+  components: { PieChart, SelectBatch, BarChart },
   data() {
     return {
       pieDataList: [
@@ -56,6 +59,7 @@ export default {
         this.pieDataList[0].value = res.passTotalCount;
         this.pieDataList[1].value = res.readyPassTotalCount;
         this.pieDataList[2].value = res.passTotalCount;
+        console.log(this.chartData);
         this.total = res.passTotalCount + res.readyPassTotalCount + res.passTotalCount;
       });
     },
@@ -85,5 +89,6 @@ export default {
   position: absolute;
   right: 20px;
   top: 20px;
+  z-index: 10;
 }
 </style>
