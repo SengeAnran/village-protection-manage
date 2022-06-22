@@ -56,7 +56,6 @@ export default {
   mounted() {
     const charts = this.$refs.charts;
     this.charts = echarts.init(charts);
-    console.log(this.charts);
     // this.$nextTick(() => {
     //   this.loadData();
     // });
@@ -76,11 +75,8 @@ export default {
   },
   methods: {
     setData() {
-      console.log('sss');
       this.charts.clear();
-      console.log('sss');
       this.charts.setOption(this.getOptions());
-      console.log('sss');
     },
     getOptions() {
       const option = {
@@ -123,7 +119,6 @@ export default {
             let str = params[0].name + '<br />';
             str += `&nbsp; &nbsp;  <em>申报总数</em>: ${params[0].value + params[1].value + params[2].value}${this.unit}<br/>`;
             params.forEach((item) => {
-              // console.log(item.seriesName);
               str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
                                     "></span>
                                         ${item.seriesName}
