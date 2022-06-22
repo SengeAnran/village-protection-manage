@@ -6,7 +6,6 @@
 
 <script>
 import * as echarts from 'echarts';
-
 // import { getFinancePublicTrend } from '@/api/Overview/CityEvolution/api';
 export default {
   props: {
@@ -43,9 +42,11 @@ export default {
   watch: {
     chartData: {
       handler: function (val) {
-        if (val.xAxisData && val.xAxisData.length > 0) {
-          this.loadData();
-        }
+        this.$nextTick(() => {
+          if (val.xAxisData && val.xAxisData.length > 0) {
+            this.loadData();
+          }
+        })
       },
       deep: true,
       immediate: true,

@@ -7,7 +7,7 @@
       <TotalSummary :data="data" />
     </div>
     <div class="right-content">
-      <FinanceIncome :chartData="chartData" />
+      <FinanceIncome v-if="showBar" :chartData="chartData" />
     </div>
   </div>
 </template>
@@ -21,6 +21,8 @@ export default {
   components: { FinanceIncome, SelectBatch, TotalSummary },
   data() {
     return {
+      showBar: true,
+      flag: true,
       data: {},
       chartData: {
         xAxisData: [],
@@ -33,6 +35,16 @@ export default {
   },
   mounted() {
     this.getData('');
+    window.addEventListener('resize', () => {
+      if (this.flag) {
+        this.flag = false;
+        this.showBar = false;
+        setTimeout(() => {
+          this.flag = true;
+          this.showBar = true;
+        },200);
+      }
+    });
   },
   methods: {
     changeSelect(val) {

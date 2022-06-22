@@ -44,9 +44,11 @@ export default {
   watch: {
     chartData: {
       handler: function (val) {
-        if (val.xAxisData && val.xAxisData.length > 0) {
-          this.loadData();
-        }
+        this.$nextTick(() => {
+          if (val.xAxisData && val.xAxisData.length > 0) {
+            this.loadData();
+          }
+        })
       },
       deep: true,
       immediate: true,

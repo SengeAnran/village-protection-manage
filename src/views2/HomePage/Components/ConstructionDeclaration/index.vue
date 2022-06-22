@@ -5,6 +5,7 @@
     </div>
     <div class="left-content">
       <PieChart
+        v-if="showBar"
         :list="pieDataList"
         :isPercent="false"
         unit="个"
@@ -15,7 +16,7 @@
       />
     </div>
     <div class="right-content">
-      <BarChart :chart-data="chartData"/>
+      <BarChart v-if="showBar" key="1" :chart-data="chartData"/>
     </div>
   </div>
 </template>
@@ -35,6 +36,8 @@ export default {
         { name: '审核未通过', value: 28 },
       ],
       total: 0,
+      showBar: true,
+      flag: true,
       chartData: {
         xAxisData: [],
         dataList1: [],
@@ -45,6 +48,16 @@ export default {
   },
   mounted() {
     this.getData('');
+    window.addEventListener('resize', () => {
+      if (this.flag) {
+        this.flag = false;
+        this.showBar = false;
+        setTimeout(() => {
+          this.flag = true;
+          this.showBar = true;
+        },200);
+      }
+    });
   },
   methods: {
     changeSelect(val) {

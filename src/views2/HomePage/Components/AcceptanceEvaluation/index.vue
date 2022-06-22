@@ -7,7 +7,7 @@
       <TotalSummary :data="data" />
     </div>
     <div class="right-content">
-      <BarChart :chart-data="chartData"/>
+      <BarChart v-if="showBar" :chart-data="chartData"/>
     </div>
   </div>
 </template>
@@ -24,6 +24,8 @@ export default {
     return {
       batch: '',
       data: {},
+      showBar: true,
+      flag: true,
       chartData: {
         xAxisData: [],
         dataList1: [],
@@ -34,6 +36,16 @@ export default {
   },
   mounted() {
     this.getData();
+    window.addEventListener('resize', () => {
+      if (this.flag) {
+        this.flag = false;
+        this.showBar = false;
+        setTimeout(() => {
+          this.flag = true;
+          this.showBar = true;
+        },200);
+      }
+    });
   },
   methods: {
     changeSelect(val) {

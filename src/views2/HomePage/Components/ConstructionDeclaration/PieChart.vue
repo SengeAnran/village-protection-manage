@@ -61,9 +61,11 @@ export default {
   watch: {
     list: {
       handler: function (val) {
-        if (typeof val === typeof []) {
-          this.initChart();
-        }
+        this.$nextTick(() => {
+          if (typeof val === typeof []) {
+            this.initChart();
+          }
+        });
       },
       immediate: false,
       deep: true,

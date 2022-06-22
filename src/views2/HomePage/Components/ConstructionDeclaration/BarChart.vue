@@ -43,9 +43,11 @@ export default {
   watch: {
     chartData: {
       handler: function (val) {
-        if (val.xAxisData && val.xAxisData.length > 0) {
-          this.loadData();
-        }
+        this.$nextTick(() => {
+          if (val.xAxisData && val.xAxisData.length > 0) {
+            this.loadData();
+          }
+        });
       },
       deep: true,
       immediate: true,
@@ -54,6 +56,7 @@ export default {
   mounted() {
     const charts = this.$refs.charts;
     this.charts = echarts.init(charts);
+    console.log(this.charts);
     // this.$nextTick(() => {
     //   this.loadData();
     // });
@@ -73,8 +76,11 @@ export default {
   },
   methods: {
     setData() {
+      console.log('sss');
       this.charts.clear();
+      console.log('sss');
       this.charts.setOption(this.getOptions());
+      console.log('sss');
     },
     getOptions() {
       const option = {
