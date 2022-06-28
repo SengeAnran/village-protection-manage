@@ -5,7 +5,7 @@
       <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea" />
     </div>
     <div class="search-item">
-      <span class="label">村庄名称：</span>
+      <span class="label">村（片区）名称：</span>
       <el-input
         style="width: 200px"
         v-model="query.villageName"
