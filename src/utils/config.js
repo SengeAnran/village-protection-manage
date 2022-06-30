@@ -1,7 +1,7 @@
 const proConfig = {
   // apiHost: '/api/lswhcl', // 老
   apiHost: '/v2/apiProxy',
-  apiHost2: '/v2/apiFun',
+  apiHost2: '/v2/apiWX',
   apiHost3: '/v2/apiWX',
   // loginPath: window.location.origin + '/lswhcl',
   // loginPath: 'https://wlxc.xscitydo.com:28080/portal/',

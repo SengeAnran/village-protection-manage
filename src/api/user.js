@@ -33,7 +33,7 @@ export const logout = (data) => {
 export const unBind = (params) => {
   return axios.request({
     method: 'GET',
-    url: apiHost + '/user/unBind',
+    url: apiHost3 + '/user/unBind',
     params,
   });
 };
