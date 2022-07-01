@@ -5,7 +5,7 @@ const proConfig = {
   apiHost3: '/v2/apiWX',
   // loginPath: window.location.origin + '/lswhcl',
   // loginPath: 'https://wlxc.xscitydo.com:28080/portal/',
-  loginPath: 'https://jqy.zjagri.cn/v2/portal/',
+  loginPath: 'https://wlxc.zjagri.cn/v2/portal/',
   // routerBase: '/lswhcl', // 老版本
   routerBase: '/v2/admin',
   sn_loginPath: 'https://szsn.zjagri.cn/sso/assets/szsnbg/login.html', //三农平台默认登录地址
