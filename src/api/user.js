@@ -1,6 +1,6 @@
 import axios from '@/utils/request';
 import config from '@/utils/config';
-const { apiHost, apiHost3 } = config;
+const { apiHost, apiHost3, apiHost2 } = config;
 
 export const pwdLogin = (data) => {
   return axios.request({
@@ -47,7 +47,7 @@ export const getUserCommonInfo = () => {
 export const getUserInfo = (aplicationId) => {
   // return axios.get(`${apiHost}/user/info`);
   return axios.request({
-    method: "GET",
+    method: 'GET',
     url: `${apiHost3}/api/user/user/info`,
     headers: { 'APPLICATION-ID': `${aplicationId}` },
   });
@@ -65,7 +65,7 @@ export const getUserInfo = (aplicationId) => {
 export const getUserPermission = (aplicationId) => {
   // return axios.get(`${apiHost}/user/menus`);
   return axios.request({
-    method: "GET",
+    method: 'GET',
     url: `${apiHost3}/api/user/user/menus`,
     headers: { 'APPLICATION-ID': `${aplicationId}` },
   });
@@ -111,7 +111,7 @@ export const getRoleList = () => {
   return axios.request({
     method: 'get',
     url: `${apiHost3}/api/user/user/roles`,
-    headers: { 'APPLICATION-ID': '3' }
+    headers: { 'APPLICATION-ID': '3' },
   });
 };
 
@@ -155,4 +155,16 @@ export const editUser = (params) => {
 // 子系统扫码绑定
 export const scanBinding = (data) => {
   return axios.post(`${apiHost}/scanBinding`, data);
+};
+
+// 未来乡村在线系统跳转过来，通过 c_token 换取token
+export const exchangeToken = (params) => {
+  return axios.get(apiHost2 + `/api/user/login/dxLogin`, { params });
+};
+
+// 获取门户地址及登录地址
+export const queryRedirectUrl = (params) => {
+  return axios.get(apiHost2 + `/wlxc/open/user/application/queryRedirectUrl`, {
+    params,
+  });
 };

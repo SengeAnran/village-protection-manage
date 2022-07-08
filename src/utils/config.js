@@ -9,6 +9,7 @@ const proConfig = {
   // routerBase: '/lswhcl', // 老版本
   routerBase: '/v2/admin',
   sn_loginPath: 'https://szsn.zjagri.cn/sso/assets/szsnbg/login.html', //三农平台默认登录地址
+  wlxczx_loginPath: 'https://wlxc.zjagri.cn/home', // 未来乡村在线地址
 };
 
 const devConfig = {
@@ -24,6 +25,7 @@ const devConfig = {
   // loginPath: 'https://172.16.25.164:8080/portal/', // 生产环境2
   // loginPath: 'http://223.4.73.15/portal/', // 生产环境
   routerBase: '/admin',
+  wlxczx_loginPath: 'http://125.124.157.152:8081/sso/?redirect=http://125.124.53.202:8085/home',
 };
 
 const config = process.env.VUE_APP_ENV === 'production' ? proConfig : devConfig;

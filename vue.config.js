@@ -55,6 +55,11 @@ module.exports = {
           'APPLICATION-ID': '3',
         },
       },
+      '/apiWX/wlxc': {
+        target: 'http://125.124.53.202:8099/', // 测试环境
+        changeOrigin: true,
+        pathRewrite: (path) => path.replace('/apiWX/wlxc', ''),
+      },
       '/apiWX': {
         // 未来乡村
         // target: 'http://172.16.25.142:8680/', // 测试环境

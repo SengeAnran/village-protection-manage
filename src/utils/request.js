@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Message } from 'element-ui';
 import config from '@/utils/config';
-import {getLoginPath, getToken, removeToken} from '@/utils/auth';
+import { timeoutRedirect, getToken, removeToken } from '@/utils/auth';
 
 const option = {
   baseURL: config.requestBaseUrl,
@@ -38,7 +38,8 @@ service.interceptors.response.use(
     if (res.code === 2001 || res.code === 401) {
       Message.error((res && res.msg) || '未知异常！');
       removeToken();
-      location.href = getLoginPath(true);
+      // location.href = getLoginPath(true);
+      timeoutRedirect();
     } else if (res.code !== 0) {
       Message.error((res && res.msg) || '未知异常！');
       return Promise.reject(new Error((res && res.msg) || '未知异常！'));
@@ -56,7 +57,8 @@ service.interceptors.response.use(
     Message.error({ message: res.msg || '未知异常！', showClose: true });
     if (res.code === 2001) {
       removeToken();
-      location.href = getLoginPath(true);
+      // location.href = getLoginPath(true);
+      timeoutRedirect();
     }
     return Promise.reject(error);
   },

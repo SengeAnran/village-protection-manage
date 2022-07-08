@@ -1,4 +1,4 @@
-import { pwdLogin, logout, getUserInfo, getUserCommonInfo, getUserPermission } from '@/api/user';
+import { pwdLogin, logout, getUserInfo, getUserCommonInfo, getUserPermission, queryRedirectUrl } from '@/api/user';
 // import { removeToken } from "@/utils/auth";
 import { handleLoginOut } from '@/utils/auth';
 // import config from "@/utils/config";
@@ -30,6 +30,8 @@ export default {
     hasGetUserCommonInfo: false, // 是否获取过用户基础信息
     permissionList: [], // 权限列表
     routeList: [], // 菜单列表
+
+    redirectUrl: {},
   },
   mutations: {
     setToken(state, value) {
@@ -41,7 +43,7 @@ export default {
         state.changeSystem = true;
       }
       window.localStorage.setItem('systemType', payload);
-      window.localStorage.setItem('systemTitle', systemTitleType[payload])
+      window.localStorage.setItem('systemTitle', systemTitleType[payload]);
       state.systemTitle = systemTitleType[payload];
       //console.log('systemTitle', state.systemTitle);
       state.roleSystemType = payload;
@@ -71,6 +73,10 @@ export default {
     },
     SET_PERMISSION_LIST(state, data) {
       state.permissionList = data;
+    },
+
+    CHANGE_REDIRECT_URL(state, data) {
+      state.redirectUrl = data || {};
     },
   },
   actions: {
@@ -127,6 +133,12 @@ export default {
             resolve();
           });
         });
+      });
+    },
+
+    getRedirectUrl({ commit }) {
+      return queryRedirectUrl().then((res) => {
+        commit('CHANGE_REDIRECT_URL', res);
       });
     },
   },
