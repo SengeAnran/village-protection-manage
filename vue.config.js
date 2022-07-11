@@ -68,7 +68,7 @@ module.exports = {
         pathRewrite: (path) => path.replace('/apiWX', ''),
         headers: {
           Connection: 'keep-alive',
-          'APPLICATION-ID': '4',
+          // 'APPLICATION-ID': '4',
         },
       },
       // '/apiWX': {
