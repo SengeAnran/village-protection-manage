@@ -55,11 +55,24 @@
           >
             <p class="content">{{ form[item.value] }}</p>
           </el-form-item>
+
+          <el-form-item
+            v-if="form.villageType"
+            label="其中属历史建筑数量"
+          >
+            <p class="content">{{ form.isHistoryNum }}</p>
+          </el-form-item>
         </div>
 
 <!--        <div v-if="form.declareType !== 1001">-->
         <div>
+
           <h4 class="block-tit" style="margin-bottom: 20px">推荐村简介</h4>
+          <div class="input-item-wrp">
+            <el-form-item label="村落类型" prop="introduction">
+              <p class="content">{{ villageType[form.villageType] }}</p>
+            </el-form-item>
+          </div>
           <div class="input-item-wrp">
             <el-form-item label="推荐村简介" prop="introduction">
               <p class="content">{{ form.introduction }}</p>
@@ -183,6 +196,7 @@ export default {
   },
   data() {
     return {
+      villageType: [" ",'红色文化村落','自然生态村落','民俗风情村落'],
       form: {
         villageId: "", //村庄地址
         population: "", // 人口数量
@@ -211,7 +225,9 @@ export default {
         templeNum: "", //古寺数量
         modernBuildingNum: "", //近现代建筑数量
         featureNum: "", //特色建材数量
+        isHistoryNum: "",
 
+        villageType: "",
         introduction: "", //introduction
         villagePicturesArr: [], //图片数组
         villagePicturesFiles: [], // 编辑表单时图片回显

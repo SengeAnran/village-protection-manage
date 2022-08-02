@@ -35,8 +35,33 @@
       </div>
       <div class="total-wrp"><span>总数：</span>{{ total }} 个</div>
       <VillageHistoryBuildingForm class="input-item-wrp" :form="form" />
+      <el-form-item
+        label="其中属历史建筑数量"
+        :rule="rule.inputNumber"
+      >
+        <el-input-number
+          v-model.number="form.isHistoryNum"
+          placeholder="请输入"
+          :min="0"
+        ></el-input-number>
+      </el-form-item>
       <h4 class="block-tit">推荐村简介</h4>
       <div>
+        <el-form-item
+          label="村落类型"
+          prop="villageType"
+          :rules="rule.select"
+        >
+          <el-select v-model="form.villageType" placeholder="请选择" @change="selectType()">
+            <el-option
+              v-for="item in villageTypeOpt"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item
           label="推荐村简介"
           prop="introduction"
@@ -53,7 +78,7 @@
           >
           </el-input>
           <p style="width: 42%; color: #999" class="py-4 leading-5">
-            要求：1、标题简炼，特色鲜明；2、简介内容包含村庄基本概况、古建状况、人文底蕴；3、文字精炼、彰显其历史文化价值和保护利用价值这两个价值的必要性。
+            {{ tips }}
           </p>
         </el-form-item>
 
@@ -141,12 +166,28 @@ export default {
         modernBuildingNum: "", //近现代建筑数量
         featureNum: "", //特色建材数量
         other: "", //其他
+        isHistoryNum: "", //其中属历史建筑数量
 
+        villageType: null, // 村落类型
         introduction: "", //introduction
         villagePicturesArr: [], //图片数组
         villagePicturesFiles: [], // 编辑表单时图片回显
       },
-
+      villageTypeOpt: [
+        {
+          value: 1,
+          label: "红色文化村落",
+        },
+        {
+          value: 2,
+          label: "自然生态村落",
+        },
+        {
+          value: 3,
+          label: "民俗风情村落",
+        },
+      ], // 村落类型
+      tips: '',
       parentRouteName: VILLAGE_LIST_ROUTER_NAME[1001],
       imgRule: { required: true, validator: imgs, trigger: "change" },
     };
@@ -173,6 +214,14 @@ export default {
     }
   },
   methods: {
+    selectType() { // 选择村落类型
+      switch (this.form.villageType) {
+        case 1: this.tips = '要求：提供村落红色文化的重大事件、人物事迹情况，重要理论发源地、名人故里等情况，具有鲜明的红色文化特色的建筑遗迹数量及情况。'; break;
+        case 2: this.tips = '要求：提供村落选址、布局、空间走向情况，古树名木情况，村落建筑格调与山水环境相融合、相呼应情况，历史价值、文化价值和景观价值情况。'; break;
+        case 3: this.tips = '要求：提供村庄农业文化遗产、非物质文化、二十四节气活动、传统民俗活动等文化情况，具有民俗风情格调的建筑数量及情况。'; break;
+        default: this.tips = '';
+      }
+    },
     validateForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
