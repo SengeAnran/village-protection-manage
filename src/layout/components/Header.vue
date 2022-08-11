@@ -35,6 +35,7 @@ export default {
   computed: {
     ...mapGetters(['userInfo', 'systemTitle']),
     zzdName() {
+      console.log(this.userInfo);
       return this.userInfo.zzdName;
     },
   },

@@ -35,7 +35,7 @@ export default {
     // 限制文件大小（MB）
     limitSize: {
       type: Number,
-      default: 30,
+      default: 50,
     },
     multiple: {
       type: Boolean,

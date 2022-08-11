@@ -196,7 +196,7 @@ export default {
   },
   data() {
     return {
-      villageType: [" ",'红色文化村落','自然生态村落','民俗风情村落'],
+      villageType: [" ",'红色文化村落','自然生态村落','民俗风情村落', '古建筑村落'],
       form: {
         villageId: "", //村庄地址
         population: "", // 人口数量

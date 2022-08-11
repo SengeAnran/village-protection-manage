@@ -186,6 +186,10 @@ export default {
           value: 3,
           label: "民俗风情村落",
         },
+        {
+          value: 4,
+          label: "古建筑村落",
+        },
       ], // 村落类型
       tips: '',
       parentRouteName: VILLAGE_LIST_ROUTER_NAME[1001],
@@ -219,6 +223,7 @@ export default {
         case 1: this.tips = '要求：提供村落红色文化的重大事件、人物事迹情况，重要理论发源地、名人故里等情况，具有鲜明的红色文化特色的建筑遗迹数量及情况。'; break;
         case 2: this.tips = '要求：提供村落选址、布局、空间走向情况，古树名木情况，村落建筑格调与山水环境相融合、相呼应情况，历史价值、文化价值和景观价值情况。'; break;
         case 3: this.tips = '要求：提供村庄农业文化遗产、非物质文化、二十四节气活动、传统民俗活动等文化情况，具有民俗风情格调的建筑数量及情况。'; break;
+        case 4: this.tips = '要求：1、标题简炼，特色鲜明；2、简介内容包含村庄基本概况、古建状况、人文底蕴；3、文字精炼、彰显其历史文化价值和保护利用价值这两个价值的必要性。'; break;
         default: this.tips = '';
       }
     },
