@@ -56,12 +56,12 @@
           <el-table-column label="村庄名称" prop="village" width="100"> </el-table-column>
           <el-table-column label="指标完成率" prop="completionRate">
             <template slot-scope="scope">
-              {{ scope.row.completionRate || '--' }}
+              {{ (scope.row.completionRate && `${scope.row.completionRate}%`) || '--' }}
             </template>
           </el-table-column>
           <el-table-column label="动态指标完成率" prop="dynamicCompletionRate">
             <template slot-scope="scope">
-              {{ scope.row.dynamicCompletionRate || '--' }}
+              {{ (scope.row.dynamicCompletionRate && `${scope.row.dynamicCompletionRate}%`) || '--' }}
             </template>
           </el-table-column>
           <el-table-column label="状态" prop="finalStatus">
