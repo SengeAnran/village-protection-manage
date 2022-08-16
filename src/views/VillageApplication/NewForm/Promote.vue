@@ -26,7 +26,7 @@
       </el-form-item>
 
       <h4 class="block-tit">重点村古建筑调查表</h4>
-      <VillageBaseForm class="input-item-wrp" :form="form" disabled />
+      <VillageBaseForm class="input-item-wrp" :form="form" />
 
       <div class="block-tit">
         古建筑数量（处）
@@ -47,7 +47,6 @@
       <VillageHistoryBuildingForm
         class="input-item-wrp"
         :form="form"
-        disabled
       />
 
       <h4 class="block-tit">推荐村简介</h4>

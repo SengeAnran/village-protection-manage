@@ -55,6 +55,10 @@ export default {
       type: Number,
       default: 10,
     },
+    size: {
+      type: Number,
+      default: 5,
+    },
     multiple: {
       type: Boolean,
       default: true,
@@ -104,13 +108,13 @@ export default {
         file.type === "image/png" ||
         file.type === "image/jpg" ||
         file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 3;
+      const isLt2M = file.size / 1024 / 1024 < this.size;
 
       if (!isFormat) {
         this.$message.error("上传图片只能是 JPG、PNG 格式!");
       }
       if (!isLt2M) {
-        this.$message.error("上传图片大小不能超过 3MB!");
+        this.$message.error(`上传图片大小不能超过 ${this.size}MB!`);
       }
       return isFormat && isLt2M;
     },
