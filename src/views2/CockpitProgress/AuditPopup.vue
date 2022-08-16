@@ -34,7 +34,7 @@
 </template>
 <script>
 import { auditProgress } from '@/api2/cockpitProgress';
-import { getCockpitEditUrl } from './utils';
+import { goCockpitEditUrl } from './utils';
 
 export default {
   props: {
@@ -90,7 +90,8 @@ export default {
       }
     },
     goCockpitEdit(url) {
-      window.location.href = getCockpitEditUrl(url);
+      // window.location.href = getCockpitEditUrl(url);
+      goCockpitEditUrl(url);
     },
   },
 };

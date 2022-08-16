@@ -9,3 +9,8 @@ export function getCockpitEditUrl(url) {
     return `${url}?c_token=${c_token}`;
   }
 }
+
+export function goCockpitEditUrl(url) {
+  const e_url = getCockpitEditUrl(url);
+  window.open(e_url, '_blank');
+}

@@ -1,7 +1,7 @@
 <template>
   <div class="village-manage block">
     <div>
-      <div class="text-lg mb-4">申报列表</div>
+      <div class="text-lg mb-4">村庄列表</div>
       <Crud
         ref="crud"
         :get-method="getMethod"
@@ -84,19 +84,21 @@
       :id="auditId"
       @confirm="onAuditConfirm"
     />
+    <ReasonPopup :visible.sync="reasonPopupVisible" />
   </div>
 </template>
 <script>
 import { mapMutations, mapGetters } from 'vuex';
 import { DECLARE_STATUS, CASCADER_PROPS } from './constants';
-import { getCockpitEditUrl } from './utils';
+import { goCockpitEditUrl } from './utils';
 
 import { pageQuery } from '@/api2/cockpitProgress';
 
 import AuditPopup from './AuditPopup.vue';
+import ReasonPopup from './ReasonPopup.vue';
 
 export default {
-  components: { AuditPopup },
+  components: { AuditPopup, ReasonPopup },
   data() {
     return {
       declareStatusOpt: [
@@ -121,6 +123,8 @@ export default {
       cockpitUrl: '',
       auditStatus: '',
       auditId: 0,
+
+      reasonPopupVisible: false, // 审核弹窗
 
       getMethod: pageQuery,
     };
@@ -154,7 +158,8 @@ export default {
       const actionName = this.computedActionName(data.finalStatus);
       if (actionName === '查看') {
         // window.location.href = data.stationUrl;
-        window.location.href = getCockpitEditUrl(data.stationUrl);
+        // window.location.href = getCockpitEditUrl(data.stationUrl);
+        goCockpitEditUrl(data.stationUrl);
       } else if (actionName === '审核') {
         this.cockpitUrl = scope.data.stationUrl;
         this.auditPopupVisible = true;
