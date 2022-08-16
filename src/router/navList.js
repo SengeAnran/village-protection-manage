@@ -685,6 +685,43 @@ export const defaultRoutes2 = [
       },
     ],
   },
+  // 驾驶舱进度
+  {
+    path: '/cockpitProgress',
+    component: BlankRouteNode,
+    name: 'CockpitProgress',
+    redirect: {
+      name: 'CockpitProgressList',
+    },
+    meta: {
+      menuIds: [4400],
+      title: '驾驶舱进度',
+      hideChild: false,
+      icon: 'xiangmuyanshou',
+    },
+    children: [
+      {
+        path: '/cockpitProgress/index',
+        name: 'CockpitProgressList',
+        meta: {
+          // icon: "cunzhuangshenbao",
+          menuIds: [440001],
+          title: '县级初审',
+        },
+        component: () => import('@/views2/CockpitProgress/index.vue'),
+      },
+      {
+        path: '/cockpitProgress/index',
+        name: 'CockpitProgressList',
+        meta: {
+          // icon: "cunzhuangshenbao",
+          menuIds: [440002],
+          title: '省级终审',
+        },
+        component: () => import('@/views2/CockpitProgress/index.vue'),
+      },
+    ],
+  },
 ];
 export const defaultRoutes3 = [
   // 未来乡村微信小程序

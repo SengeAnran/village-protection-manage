@@ -44,6 +44,7 @@ export function verifyAuth() {
   if (systemType) {
     localStorage.setItem('systemType', systemType);
     localStorage.setItem('systemTitle', systemTitleType[systemType]);
+    localStorage.setItem('systemCToken', c_token); // 存储c_token 驾驶舱跳转时使用
     document.title = systemTitleType[systemType];
     // setLoginType('in');
   }
