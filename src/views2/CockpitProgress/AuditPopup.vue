@@ -14,16 +14,32 @@
       </div>
       <div class="row">
         <span class="row-name">审核结果:</span>
-        <div class="row-option" v-if="Number(status) === 1">
+        <!-- 县级只有通过选项 -->
+        <div class="row-option" v-if="[0, 1].includes(Number(status))">
           <el-radio v-model="result" label="1">通过</el-radio>
         </div>
+        <!-- 省级未审核 -->
         <div class="row-option" v-if="Number(status) === 2">
           <el-radio v-model="result" label="1">通过</el-radio>
-          <el-radio v-model="result" label="0">不通过</el-radio>
+          <el-radio v-model="result" label="0">退回</el-radio>
         </div>
+        <!-- 省级审核后 - 已合格 -->
         <div class="row-option" v-if="Number(status) === 3">
-          <el-radio v-model="result" label="0">上线</el-radio>
+          <el-radio v-model="result" label="0">退回</el-radio>
         </div>
+      </div>
+      <div class="row textarea" v-if="Number(result) === 0">
+        <el-form ref="ruleFormRef" :model="ruleForm" label-width="120px" class="demo-ruleForm" labelWidth="0">
+          <el-form-item :rules="[{ required: true, trigger: 'blur', message: '请输入' }]" prop="reason">
+            <el-input
+              v-model="ruleForm.reason"
+              placeholder="请输入退回原因"
+              type="textarea"
+              style="width: 290px"
+              rows="3"
+            />
+          </el-form-item>
+        </el-form>
       </div>
     </div>
     <span slot="footer" class="dialog-footer">
@@ -60,6 +76,9 @@ export default {
   data() {
     return {
       result: undefined,
+      ruleForm: {
+        reason: '',
+      },
     };
   },
   watch: {
@@ -81,13 +100,32 @@ export default {
     onConfirm() {
       if (this.result === undefined) {
         this.$message.warning('请选择审核结果');
+        return;
+      }
+      const params = {
+        id: this.id,
+        status: Number(this.result),
+      };
+      if (params.status) {
+        // 通过
+        params.rejection = undefined;
+        this.audit(params);
       } else {
-        auditProgress({ id: this.id, status: Number(this.result) }).then(() => {
-          this.$message.success('审核成功');
-          this._visible = false;
-          this.$emit('confirm');
+        // 不通过 -- 校验不通过原因
+        this.$refs.ruleFormRef.validate((valid) => {
+          if (valid) {
+            params.rejection = this.ruleForm.reason;
+            this.audit(params);
+          }
         });
       }
+    },
+    audit(params) {
+      auditProgress(params).then(() => {
+        this.$message.success('审核成功');
+        this._visible = false;
+        this.$emit('confirm');
+      });
     },
     goCockpitEdit(url) {
       // window.location.href = getCockpitEditUrl(url);
@@ -120,6 +158,9 @@ export default {
         cursor: pointer;
         text-decoration: underline;
       }
+    }
+    .textarea {
+      padding: 10px 19px 0px 144px;
     }
   }
 }

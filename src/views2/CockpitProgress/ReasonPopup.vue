@@ -1,25 +1,25 @@
 <template>
   <el-dialog
     class="dialog"
-    title="驳回原因"
+    title="退回原因"
     :close-on-click-modal="false"
     :visible.sync="_visible"
     width="500px"
     top="22%"
   >
-    <div class="content">这里是驳回原因</div>
+    <div class="content">{{ rejection }}</div>
   </el-dialog>
 </template>
 <script>
 export default {
   props: {
-    id: {
-      type: Number,
-      default: 0,
-    },
     visible: {
       type: Boolean,
       default: false,
+    },
+    rejection: {
+      type: String,
+      default: '',
     },
   },
   computed: {

@@ -7,7 +7,7 @@
         :get-method="getMethod"
         :query.sync="query"
         id-key="id"
-        actionWidth="80px"
+        actionWidth="140px"
         :hideAdd="true"
         :hideEdit="true"
         :hideView="true"
@@ -44,9 +44,12 @@
           </div>
         </template>
         <template v-slot:tableAction="scope">
-          <div style="text-align: center">
+          <div style="text-align: center; display: flex; justify-content: space-around">
             <el-link @click="handleClick(scope)" type="primary">
               {{ computedActionName(scope.data.finalStatus) }}
+            </el-link>
+            <el-link v-if="scope.data.finalStatus === 0" @click="showRejectReason(scope)" type="primary">
+              退回原因
             </el-link>
           </div>
         </template>
@@ -68,7 +71,11 @@
             <template slot-scope="scope">
               <p
                 class="status"
-                :class="{ disabled: scope.row.finalStatus === -1, success: scope.row.finalStatus === 3 }"
+                :class="{
+                  disabled: scope.row.finalStatus === -1,
+                  success: scope.row.finalStatus === 3,
+                  danger: scope.row.finalStatus === 0,
+                }"
               >
                 {{ declareStatus[scope.row.finalStatus] }}
               </p>
@@ -84,7 +91,7 @@
       :id="auditId"
       @confirm="onAuditConfirm"
     />
-    <ReasonPopup :visible.sync="reasonPopupVisible" />
+    <ReasonPopup :visible.sync="reasonPopupVisible" :rejection="rejection" />
   </div>
 </template>
 <script>
@@ -125,6 +132,7 @@ export default {
       auditId: 0,
 
       reasonPopupVisible: false, // 审核弹窗
+      rejection: '',
 
       getMethod: pageQuery,
     };
@@ -167,12 +175,17 @@ export default {
         this.auditId = data.id;
       }
     },
+    showRejectReason(scope) {
+      const { data } = scope;
+      this.reasonPopupVisible = true;
+      this.rejection = data.rejection;
+    },
     onAuditConfirm() {
       this.$refs.crud.getItems();
     },
     computedActionName(status) {
       if (this.roleId === 3) {
-        return status === 1 ? '审核' : '查看';
+        return [0, 1].includes(status) ? '审核' : '查看';
       } else if (this.roleId === 1) {
         return [2, 3].includes(status) ? '审核' : '查看';
       }
@@ -213,6 +226,9 @@ export default {
   }
   &.success {
     color: #4caf50;
+  }
+  &.danger {
+    color: #d50808;
   }
 }
 </style>

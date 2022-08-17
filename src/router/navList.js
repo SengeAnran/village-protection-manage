@@ -716,7 +716,7 @@ export const defaultRoutes2 = [
         meta: {
           // icon: "cunzhuangshenbao",
           menuIds: [440002],
-          title: '省级终审',
+          title: '省级复核',
         },
         component: () => import('@/views2/CockpitProgress/index.vue'),
       },
