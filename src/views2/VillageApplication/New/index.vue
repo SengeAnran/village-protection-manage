@@ -123,21 +123,21 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="户籍人口数（人）" prop="huNum" :rules="rule.inputNumber">
-              <el-input
+            <el-form-item label="户籍人口数（万人）" prop="huNum" :rules="rule.inputNumber">
+              <el-input-number
                 v-model="form.huNum"
                 placeholder="请输入"
                 maxlength="8"
-              ></el-input>
+              ></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="常住人口数（人）" prop="personNum" :rules="rule.inputNumber">
-              <el-input
+            <el-form-item label="常住人口数（万人）" prop="personNum" :rules="rule.inputNumber">
+              <el-input-number
                 v-model="form.personNum"
                 placeholder="请输入"
                 maxlength="8"
-              ></el-input>
+              ></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -256,13 +256,13 @@
           </el-input>
         </el-form-item>
         
-        <h4 class="block-tit">未来乡村创建项目备案表</h4>
+        <h4 class="block-tit">浙江省未来乡村创建方案</h4>
         <div class="detail-top">
           <el-row :gutter="20">
             <el-col :span="24">
-              <el-form-item label="浙江省未来乡村创建方案" prop="richText" :rules="rule.rich">
+              <el-form-item label="浙江省未来乡村创建方案" prop="createScenario" :rules="rule.richText">
                 <div style="width: 90%">
-                  <RichTextEditor v-model="form.richText" />
+                  <rich-text-editor v-model="form.createScenario" />
                 </div>
               </el-form-item>
             </el-col>
@@ -333,6 +333,7 @@
       title="添加"
       :visible.sync="dialogVisible"
       width="800px"
+      :lock-scroll="true"
       @close="resetForm">
       <el-form :rules="rule" ref="projectForm" :model="projectForm" label-width="260px">
         <el-form-item label="项目名称：" prop="projectName" :rules="rule.input">
@@ -353,14 +354,19 @@
         <el-form-item label="用地情况：" prop="landUse" :rules="rule.input">
           <el-input v-model="projectForm.landUse" maxlength="20"></el-input>
         </el-form-item>
-        <el-form-item label="计划投资其中政府投资（万元）：" prop="investmentAmount" :rules="rule.input">
-          <el-input v-model="projectForm.investmentAmount" maxlength="8"></el-input>
+        <el-form-item label="计划投资其中政府投资（万元）：" prop="planGovInvestment" :rules="rule.inputNumber">
+          <el-input-number v-model="projectForm.planGovInvestment" maxlength="8"></el-input-number>
         </el-form-item>
-         <el-form-item label="计划投资其中社会投资（万元）：" prop="investmentAmount2" :rules="rule.input">
-          <el-input v-model="projectForm.investmentAmount2" maxlength="8"></el-input>
+         <el-form-item label="计划投资其中社会投资（万元）：" prop="planSocialInvestment" :rules="rule.inputNumber">
+          <el-input-number v-model="projectForm.planSocialInvestment" maxlength="8"></el-input-number>
         </el-form-item>
-         <el-form-item label="计划投资其中自筹投资（万元）：" prop="investmentAmount3" :rules="rule.input">
-          <el-input v-model="projectForm.investmentAmount3" maxlength="8"></el-input>
+        <el-form-item label="计划投资其中自筹投资（万元）：" prop="planSelfInvestment" :rules="rule.inputNumber">
+          <el-input-number v-model="projectForm.planSelfInvestment" maxlength="8"></el-input-number>
+        </el-form-item>
+        <el-form-item label="类型：" prop="type" :rules="rule.select">
+          <el-select v-model="projectForm.type" placeholder="请选择">
+            <el-option v-for="(item, index) of types" :key="index" :label="item.name" :value="item.value"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="运行维护管理安排：" prop="arrangements" :rules="rule.input">
           <el-input v-model="projectForm.arrangements" maxlength="20"></el-input>
@@ -421,7 +427,9 @@ import {updateVillageItem} from "../../../api2/villageManage";
 import {getVillageArea} from "@/api2/acceptanceEvaluation";
 import {mapGetters} from "vuex";
 import {downloadFile} from "@/utils/data";
-import RichTextEditor from "@/components/RichTextEditor/index.vue";
+
+import { types } from '@/views2/utils/project';
+
 const imgs = (rule, value, callback) => {
   if (value.length < 1) {
     callback(new Error("需要上传1张以上图片"));
@@ -447,11 +455,11 @@ export default {
   mixins: [rule],
   components: {
     VilliageListTable,
-    RichTextEditor
 },
   data() {
     return {
       uploadMethod: importBatch,
+      types,
       showdecType2: false, // 展示区域选择
       form: {
         decType: 1, // 申报类型
@@ -486,7 +494,7 @@ export default {
         projectFilingPhone: "", //联系电话
         projectFilingAudit: "", //审核人
         projects: [], //项目列表
-        richText: "", // 未来乡村创建项目备案表
+        createScenario: "", // 未来乡村创建方案
       },
       importFiles: [],
       type: "add",
@@ -499,11 +507,12 @@ export default {
         constructDetail: "", // 建设内容和规模
         schedule: "", // 进度安排
         landUse: "", // 用地情况
-        investmentAmount: "", // 投资额（万元）
-        investmentAmount2: "",
-        investmentAmount3: "",
+        govInvestment: "", // 投资额（万元）
+        selfInvestment: "", // 投资额（万元）
+        socialInvestment: "", // 投资额（万元）
         arrangements: "", // 运行维护管理安排
         remark: "", // 备注
+        type: null,
         // 富文本
       },
       editIndex: "",
@@ -625,11 +634,12 @@ export default {
         constructDetail: "", // 建设内容和规模
         schedule: "", // 进度安排
         landUse: "", // 用地情况
-        investmentAmount: "", // 投资额（万元）
-        investmentAmount2: "", // 投资额（万元）
-        investmentAmount3: "", // 投资额（万元）
+        govInvestment: "", // 投资额（万元）
+        selfInvestment: "", // 投资额（万元）
+        socialInvestment: "", // 投资额（万元）
         arrangements: "", // 运行维护管理安排
         remark: "", // 备注
+        type: null,
       };
       // this.$refs.projectForm.resetFields();
       this.dialogVisible = false;

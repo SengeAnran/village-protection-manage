@@ -8,14 +8,18 @@
     <el-table-column prop="schedule" label="进度安排"> </el-table-column>
     <el-table-column prop="landUse" label="用地情况"> </el-table-column>
     <el-table-column label="计划总投资（万元）" header-align="center" >
-      <el-table-column prop="investmentAmount" label="自筹投资" width="100" :resizable="false"> </el-table-column>
-      <el-table-column prop="investmentAmount2" label="社会投资" width="100" :resizable="false"> </el-table-column>
-      <el-table-column prop="investmentAmount3" label="政府投资" width="100" :resizable="false"> </el-table-column>
+      <el-table-column prop="planSelfInvestment" label="自筹投资" width="100" :resizable="false"> </el-table-column>
+      <el-table-column prop="planSocialInvestment" label="社会投资" width="100" :resizable="false"> </el-table-column>
+      <el-table-column prop="planGovInvestment" label="政府投资" width="100" :resizable="false"> </el-table-column>
     </el-table-column>
-
     <el-table-column prop="arrangements" label="运行维护管理安排"> </el-table-column>
+    <el-table-column prop="type" label="类型">
+      <template slot-scope="scope">
+        <span>{{ mapType(scope.row.type) }}</span>
+      </template>
+    </el-table-column>
     <el-table-column prop="remark" label="备注"> </el-table-column>
-    <el-table-column v-if="!hiddenOperation" label="操作" min-width="150px">
+    <el-table-column v-if="!hiddenOperation" label="操作" min-width="164px">
       <template slot-scope="scope">
         <div>
           <el-link
@@ -47,6 +51,7 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+import { mapType } from '@/views2/utils/project';
 export default {
   props: {
     data: {
@@ -83,6 +88,7 @@ export default {
     ...mapGetters(["userInfo"]),
   },
   methods: {
+    mapType,
     removeItem(index) {
       this.$myConfirm({
         content: "确认删除该数据？"

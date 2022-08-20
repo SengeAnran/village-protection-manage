@@ -1,10 +1,9 @@
 <template>
   <div class="editor-com-root" @click.stop>
     <!-- 工具栏 -->
-    <Toolbar v-if="init" style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" />
+    <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" />
     <!-- 编辑器 -->
     <Editor
-      v-if="init"
       style="height: 400px; overflow-y: hidden"
       :defaultConfig="editorConfig"
       v-model="html"
@@ -15,12 +14,14 @@
 </template>
 
 <script>
+import emitter from 'element-ui/lib/mixins/emitter.js';
 import { uploadFile2 } from '@/api/common.js';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import '@wangeditor/editor/dist/css/style.css';
 const defaultRichText = '<p style="text-align: left;"><span style="color: rgb(170, 170, 170);">一、基本情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">二、创建方案的实施情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">三、数字化建设与应用情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">四、场景特别是“一老一小”场景建设情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">五、建设投入情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">六、工作推进情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">七、特色和创新情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">八、相关附件</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">报告中涉及到的支撑材料可作为附件单独提供，并需提供附件清单方便查阅。</span></p>';
 export default {
   name: 'RichTextEditor',
+  mixins: [emitter],
   components: { Editor, Toolbar },
   model: {
     prop: 'value',
@@ -39,8 +40,8 @@ export default {
   },
   data() {
     return {
+      inited: false,
       editor: null,
-      init: 0,
       toolbarConfig: {
         // toolbarKeys: [ /* 显示哪些菜单，如何排序、分组 */ ],
         excludeKeys: ['group-video', 'insertImage', 'group-image', 'codeBlock'],
@@ -73,6 +74,12 @@ export default {
     html: {
       set: function (val) {
         this.$emit('input', val);
+        if (!this.inited) {
+          this.inited = true;
+          return;
+        }
+        console.log('xxxxxx', val);
+        this.dispatch('ElFormItem', 'el.form.change', [val]);
       },
       get: function () {
         return this.value;
@@ -80,13 +87,11 @@ export default {
     },
   },
   mounted() {
-    this.init = 1;
   },
   methods: {
     onCreated(editor) {
       this.editor = Object.seal(editor); // 【注意】一定要用 Object.seal() 否则会报错
       editor.setHtml(this.value);
-      this.init = 2;
     },
     onChange(editor) {
       this.$emit('change', editor.getHtml());
@@ -110,5 +115,14 @@ export default {
   border: 1px solid #ccc;
   z-index: 1000;
   pointer-events: all;
+}
+</style>
+
+<style lang="scss">
+
+.el-form-item.is-error {
+  .editor-com-root {
+    border-color: red;
+  }
 }
 </style>

@@ -93,7 +93,7 @@
           </div>
           <h4 class="block-tit">浙江省未来乡村创建方案</h4>
           <rich-text-editor class="mt-4" mode="view" :value="form.richText" />
-          <div class="input-item-wrp mt-4">
+          <!-- <div class="input-item-wrp mt-4">
             <el-form-item label="附件：" prop="introduction">
               <div v-if="form.annexFiles && form.annexFiles.length > 0">
                 <p class="content fu-file" v-for="(item, index) in form.annexFiles" :key="index">
@@ -107,7 +107,7 @@
               </div>
 
             </el-form-item>
-          </div>
+          </div> -->
         </div>
         <h4 class="block-tit">未来乡村创建项目备案表</h4>
         <div class="input-item-wrp">
