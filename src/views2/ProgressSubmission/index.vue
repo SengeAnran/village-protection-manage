@@ -29,16 +29,16 @@
           <div class="inline-flex mb-6 pl-0">
             <div v-if="roleId !== 3" class="search-item">
               <span class="label">地区：</span>
-              <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea"/>
-<!--              <el-select v-model="query.declarationBatch" placeholder="请选择">-->
-<!--                <el-option-->
-<!--                  v-for="item in queryDeclareTypeOpt"-->
-<!--                  :key="item.value"-->
-<!--                  :label="item.label"-->
-<!--                  :value="item.value"-->
-<!--                >-->
-<!--                </el-option>-->
-<!--              </el-select>-->
+              <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea" />
+              <!--              <el-select v-model="query.declarationBatch" placeholder="请选择">-->
+              <!--                <el-option-->
+              <!--                  v-for="item in queryDeclareTypeOpt"-->
+              <!--                  :key="item.value"-->
+              <!--                  :label="item.label"-->
+              <!--                  :value="item.value"-->
+              <!--                >-->
+              <!--                </el-option>-->
+              <!--              </el-select>-->
             </div>
             <div class="search-item">
               <span class="label">村（片区）名称：</span>
@@ -62,63 +62,38 @@
               >
               </el-date-picker>
             </div>
-
           </div>
         </template>
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
-            <el-link
-              @click="goDetail(scope)"
-              type="primary"
-            >
-              详情
-            </el-link>
+            <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
             <el-divider v-if="roleId === 3" direction="vertical"></el-divider>
-            <div
-              style="display: inline-block"
-            >
+            <div style="display: inline-block">
               <el-link v-if="roleId === 3" @click="edit(scope.data)" type="primary"> 进度报送</el-link>
             </div>
           </div>
         </template>
 
-<!--        <template v-slot:export>-->
-<!--          <el-button-->
-<!--            icon="el-icon-download"-->
-<!--            v-if="roleId !== 3"-->
-<!--            type="primary"-->
-<!--            plain-->
-<!--            @click="exportEnclosure"-->
-<!--          >导出附件</el-button-->
-<!--          >-->
-<!--        </template>-->
+        <!--        <template v-slot:export>-->
+        <!--          <el-button-->
+        <!--            icon="el-icon-download"-->
+        <!--            v-if="roleId !== 3"-->
+        <!--            type="primary"-->
+        <!--            plain-->
+        <!--            @click="exportEnclosure"-->
+        <!--          >导出附件</el-button-->
+        <!--          >-->
+        <!--        </template>-->
 
         <template v-slot:table>
-          <el-table-column
-            label="村（片区）名称"
-            prop="name"
-          ></el-table-column>
-          <el-table-column
-            label="创建批次"
-            prop="declarationBatch"
-          ></el-table-column>
-          <el-table-column
-            label="项目数"
-            prop="projectNum"
-          ></el-table-column>
-          <el-table-column
-            label="计划投资（万元）"
-            prop="investNum"
-          ></el-table-column>
-          <el-table-column
-            label="完成投资(万元)"
-            prop="completeTotalInvestment"
-          ></el-table-column>
-          <el-table-column
-            label="投资完成率"
-            sortable
-            prop="rate"
-          ></el-table-column>
+          <el-table-column label="村（片区）名称" prop="name"></el-table-column>
+          <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
+          <el-table-column label="项目数" prop="projectNum"></el-table-column>
+          <el-table-column label="已开工项目数" prop="projectNum"></el-table-column>
+          <el-table-column label="项目开工比例" prop="projectNum"></el-table-column>
+          <el-table-column label="计划投资（万元）" prop="investNum"></el-table-column>
+          <el-table-column label="完成投资(万元)" prop="completeTotalInvestment"></el-table-column>
+          <el-table-column label="投资完成率" sortable prop="rate"></el-table-column>
           <el-table-column label="报送更新时间" prop="gmtCreate">
             <template slot-scope="scope">
               <p>{{ scope.row.gmtModified }}</p>
@@ -130,21 +105,16 @@
   </div>
 </template>
 <script>
-import { mapMutations, mapGetters} from "vuex";
-import {
-  queryBatchInfo,
-  queryTypeDeclaration,
-  getRecVillages,
-  deleteVillageItem
-} from "@/api2/villageManage";
+import { mapMutations, mapGetters } from 'vuex';
+import { queryBatchInfo, queryTypeDeclaration, getRecVillages, deleteVillageItem } from '@/api2/villageManage';
 import {
   DECLEAR_TYPE,
   DECLEAR_STATUS,
   // PRO_DECLEAR_STATUS,
-} from "./constants";
-import {recVerify} from '../../api/villageManage';
+} from './constants';
+import { recVerify } from '../../api/villageManage';
 
-import {exportDetail, getInforExport, getList} from '@/api2/progressSubmission';
+import { exportDetail, getInforExport, getList } from '@/api2/progressSubmission';
 // import qs from "qs";
 export default {
   data() {
@@ -164,15 +134,15 @@ export default {
       },
       declareYearOpt: [
         {
-          value: "",
-          label: "2021",
-        }
+          value: '',
+          label: '2021',
+        },
       ],
       queryDeclareTypeOpt: [
         {
-          label: "全部",
-          value: ""
-        }
+          label: '全部',
+          value: '',
+        },
       ],
       dialogDeclareYearOpt: [
         // {
@@ -183,9 +153,9 @@ export default {
       dialogDeclareTypeOpt2: [],
       declareStatusOpt: [
         {
-          label: "全部",
-          value: ""
-        }
+          label: '全部',
+          value: '',
+        },
       ],
       getMethod: getList,
       deleteMethod: deleteVillageItem,
@@ -196,13 +166,13 @@ export default {
       submitSortMethod: recVerify,
       batchInfo: {},
       dialogQuery: {
-        declareType: "",
-        declareYear: "",
+        declareType: '',
+        declareYear: '',
       },
     };
   },
   computed: {
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(['userInfo']),
     roleId() {
       console.log(this.userInfo.roleId);
       return this.userInfo.roleId;
@@ -220,12 +190,10 @@ export default {
     //   this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(PRO_DECLEAR_STATUS));
     // }
     this.getBatchInfo();
-    console.log( ([12,13]).toString());
-
+    console.log([12, 13].toString());
   },
   mounted() {
     // this.lookUp();
-
   },
   methods: {
     // 时间范围
@@ -244,10 +212,9 @@ export default {
       console.log(val);
       this.query.areaId = val.areaId;
     },
-    ...mapMutations("villageMange", ["changeDeclareList"]),
+    ...mapMutations('villageMange', ['changeDeclareList']),
     normalizeSelectOptions(obj) {
-      if (!Object.prototype.toString.call(obj).slice(8, -1) === "Object")
-        return [];
+      if (!Object.prototype.toString.call(obj).slice(8, -1) === 'Object') return [];
       return Object.keys(obj).map((key) => {
         return {
           label: obj[key],
@@ -275,11 +242,11 @@ export default {
     // 批次
     async getBatchInfo() {
       const res = await queryBatchInfo();
-      const opt = res.map(i => {
+      const opt = res.map((i) => {
         return {
           label: i,
           value: i,
-        }
+        };
       });
       this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(opt);
     },
@@ -289,55 +256,52 @@ export default {
       console.log(res);
       if (res.type) {
         this.dialogDeclareTypeOpt2 = res.type.map((item) => {
-          if (item === "1002") {
+          if (item === '1002') {
             return {
-              label: "重点村",
-              value: "1002",
+              label: '重点村',
+              value: '1002',
             };
           } else {
-            return {label: "一般村", value: "1001"};
+            return { label: '一般村', value: '1001' };
           }
         });
         this.dialogQuery.declareType = this.dialogDeclareTypeOpt2[0].value;
       } else {
-        this.dialogQuery.declareType = "";
+        this.dialogQuery.declareType = '';
       }
       if (res.years) {
         this.dialogDeclareYearOpt = res.years.map((item) => {
           return {
-            label: item + "年度",
+            label: item + '年度',
             value: item,
           };
         });
         this.dialogQuery.declareYear = this.dialogDeclareYearOpt[0].value;
       } else {
-        this.dialogQuery.declareYear = "";
+        this.dialogQuery.declareYear = '';
       }
-
-
     },
     // 市级汇总申报排序提示
     async queryBatchInfo() {
       const res = await queryBatchInfo();
       if (res && res.pici) {
         this.batchInfo = res;
-        this.$confirm('审核已完成！\n' +
-          '您需要分批次排序后提交至省级审核。', '提示', {
+        this.$confirm('审核已完成！\n' + '您需要分批次排序后提交至省级审核。', '提示', {
           confirmButtonText: '前往排序',
           cancelButtonText: '暂不排序',
-          type: 'warning'
-        }).then(() => {
-          this.showDialog();
-        }).catch(() => {
-        });
+          type: 'warning',
+        })
+          .then(() => {
+            this.showDialog();
+          })
+          .catch(() => {});
       } else {
         this.batchInfo = {};
       }
       console.log(res);
-
     },
     showDialog() {
-      this.dialogVisible = true
+      this.dialogVisible = true;
     },
     onSubmit() {
       this.$refs.dialogCrud.submitSort();
@@ -348,28 +312,27 @@ export default {
       const res = await getRecVillages(params);
       console.log(res);
       return res;
-
     },
     // 详情
     goDetail(scope) {
-      const {id} = scope.data;
-      this.$router.push({name: "ProgressSubmissionDetails", query: {id: id, type: 'look'}})
+      const { id } = scope.data;
+      this.$router.push({ name: 'ProgressSubmissionDetails', query: { id: id, type: 'look' } });
     },
     // 修改
     edit(data) {
-      const {id} = data;
+      const { id } = data;
       this.$router.push({
-        name: "NewProgressSubmission",
-        query: {id},
+        name: 'NewProgressSubmission',
+        query: { id },
       });
     },
     // 删除
     deleteItem(id) {
-      this.$confirm("是否删除该条数据？", "提示", {
-        type: "warning",
+      this.$confirm('是否删除该条数据？', '提示', {
+        type: 'warning',
       }).then(async () => {
         deleteVillageItem([id]).then(() => {
-          this.$notify.success("删除成功");
+          this.$notify.success('删除成功');
           this.$refs.crud.getItems();
         });
       });
@@ -381,20 +344,18 @@ export default {
      * @param {Number} declareStatus 审核状态码
      */
     actionControl(actionName, declareStatus) {
-      if (this.roleId === 3) { // 县级
-        return (
-          this.XIANJI_ACTION[actionName] &&
-          this.XIANJI_ACTION[actionName](declareStatus)
-        );
+      if (this.roleId === 3) {
+        // 县级
+        return this.XIANJI_ACTION[actionName] && this.XIANJI_ACTION[actionName](declareStatus);
       } else if (this.roleId === 2) {
-        return ( // 市级
-          this.SHIJI_ACTION[actionName] &&
-          this.SHIJI_ACTION[actionName](declareStatus)
+        return (
+          // 市级
+          this.SHIJI_ACTION[actionName] && this.SHIJI_ACTION[actionName](declareStatus)
         );
       } else if (this.roleId === 1) {
-        return ( // 省
-          this.ADMIN_ACTION[actionName] &&
-          this.ADMIN_ACTION[actionName](declareStatus)
+        return (
+          // 省
+          this.ADMIN_ACTION[actionName] && this.ADMIN_ACTION[actionName](declareStatus)
         );
       }
       return false;
@@ -418,9 +379,9 @@ export default {
     // 审核
     _canDeclare(declareStatus, roleId) {
       if (roleId === 2) {
-        return (declareStatus === 0);
+        return declareStatus === 0;
       } else if (roleId === 1) {
-        return (declareStatus === 2);
+        return declareStatus === 2;
       }
       return false;
     },
@@ -451,8 +412,8 @@ export default {
 }
 
 .tip {
-  background: #EDF4FF;
-  border: 1px solid #99CBF9;
+  background: #edf4ff;
+  border: 1px solid #99cbf9;
   border-radius: 4px;
   padding: 12px 16px;
   margin-bottom: 20px;
@@ -487,7 +448,7 @@ export default {
       margin-bottom: 8px;
 
       span {
-        color: #1492FF;
+        color: #1492ff;
       }
     }
 
@@ -495,7 +456,7 @@ export default {
       font-size: 14px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
-      color: #1492FF;
+      color: #1492ff;
       line-height: 22px;
     }
   }

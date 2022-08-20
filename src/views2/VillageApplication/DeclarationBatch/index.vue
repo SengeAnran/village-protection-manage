@@ -26,29 +26,28 @@
           <el-form-item label="申报批次：" prop="acceptanceTime" :rules="rule.input">
             <el-input v-model="form.acceptanceTime" maxlength="20"></el-input>
           </el-form-item>
+          <el-form-item label="申报批次：" prop="NewTime" :rules="rule.input">
+            <el-input v-model="form.NewTime" maxlength="20"></el-input>
+          </el-form-item>
         </template>
-<!--        <template v-slot:tableAction="scope">-->
-<!--          <div style="text-align: left">-->
-<!--            <div-->
-<!--              style="display: inline-block"-->
-<!--            >-->
-<!--              <el-link @click="edit(scope.data)" type="primary"> 修改</el-link>-->
-<!--              &lt;!&ndash;              <el-divider direction="vertical"></el-divider>&ndash;&gt;-->
-<!--            </div>-->
-<!--            <el-divider direction="vertical"></el-divider>-->
-<!--          </div>-->
-<!--        </template>-->
+        <!--        <template v-slot:tableAction="scope">-->
+        <!--          <div style="text-align: left">-->
+        <!--            <div-->
+        <!--              style="display: inline-block"-->
+        <!--            >-->
+        <!--              <el-link @click="edit(scope.data)" type="primary"> 修改</el-link>-->
+        <!--              &lt;!&ndash;              <el-divider direction="vertical"></el-divider>&ndash;&gt;-->
+        <!--            </div>-->
+        <!--            <el-divider direction="vertical"></el-divider>-->
+        <!--          </div>-->
+        <!--        </template>-->
 
         <template v-slot:crudAction>
-<!--          <el-button v-if="roleId === 3" type="primary" icon="el-icon-plus" @click="newApplications"> 新建</el-button>-->
+          <!--          <el-button v-if="roleId === 3" type="primary" icon="el-icon-plus" @click="newApplications"> 新建</el-button>-->
         </template>
 
-
         <template v-slot:table>
-          <el-table-column
-            label="申报批次"
-            prop="acceptanceTime"
-          ></el-table-column>
+          <el-table-column label="申报批次" prop="acceptanceTime"></el-table-column>
           <el-table-column label="创建时间" prop="gmtCreate">
             <template slot-scope="scope">
               <p>{{ scope.row.gmtCreate.slice(0, 10) }}</p>
@@ -61,16 +60,9 @@
 </template>
 
 <script>
-
-import {mapMutations, mapGetters} from "vuex";
-import {
-  deleteVillageItem,
-  getSetList,
-  setAdd,
-  setDelete,
-  setUpdate,
-} from "@/api2/villageManage";
-import rule from "@/mixins/rule";
+import { mapMutations, mapGetters } from 'vuex';
+import { deleteVillageItem, getSetList, setAdd, setDelete, setUpdate } from '@/api2/villageManage';
+import rule from '@/mixins/rule';
 const type = 2; //type 1：验收时间，2：申报批次
 export default {
   mixins: [rule],
@@ -82,6 +74,7 @@ export default {
       form: {
         type: type, //type 1：验收时间，2：申报批次
         acceptanceTime: '',
+        NewTime: '',
       },
       addMethod: setAdd,
       deleteMethod: setDelete,
@@ -92,23 +85,22 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(['userInfo']),
     roleId() {
       console.log(this.userInfo.roleId);
       return this.userInfo.roleId;
     },
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
-    ...mapMutations("villageMange", ["changeDeclareList"]),
+    ...mapMutations('villageMange', ['changeDeclareList']),
     // 删除
     deleteItem(id) {
-      this.$confirm("是否删除该条数据？", "提示", {
-        type: "warning",
+      this.$confirm('是否删除该条数据？', '提示', {
+        type: 'warning',
       }).then(async () => {
         deleteVillageItem([id]).then(() => {
-          this.$notify.success("删除成功");
+          this.$notify.success('删除成功');
           this.$refs.crud.getItems();
         });
       });
@@ -146,8 +138,8 @@ export default {
 }
 
 .tip {
-  background: #EDF4FF;
-  border: 1px solid #99CBF9;
+  background: #edf4ff;
+  border: 1px solid #99cbf9;
   border-radius: 4px;
   padding: 12px 16px;
   margin-bottom: 20px;
@@ -182,7 +174,7 @@ export default {
       margin-bottom: 8px;
 
       span {
-        color: #1492FF;
+        color: #1492ff;
       }
     }
 
@@ -190,7 +182,7 @@ export default {
       font-size: 14px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
-      color: #1492FF;
+      color: #1492ff;
       line-height: 22px;
     }
   }

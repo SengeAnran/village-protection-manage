@@ -544,6 +544,17 @@ export const defaultRoutes2 = [
         },
         component: () => import('@/views2/VillageApplication/DeclarationBatch/index'),
       },
+      {
+        path: '/villageApplication2/applicationQuota',
+        name: 'ApplicationQuota',
+        hidden: false,
+        meta: {
+          // activeMenu: "/acceptanceEvaluation/index",
+          title: '申报名额配置',
+          menuIds: [410003],
+        },
+        component: () => import('@/views2/VillageApplication/ApplicationQuota/index'),
+      },
     ],
   },
   // 进度申报
