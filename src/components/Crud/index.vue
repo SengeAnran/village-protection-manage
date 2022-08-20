@@ -611,11 +611,8 @@ export default {
             ids: this.selections.map((item) => item[this.idKey]),
           };
           const res = await this.exportMethod2(data);
-<<<<<<< HEAD
           downloadFile(res, '浙江省未来乡村申报汇总');
-=======
           downloadFile(res, this.exportFileName2);
->>>>>>> cb051381fc1c8943fbee820e2f7a6aa9b7d60de4
           this.$notify.success('导出成功');
         } finally {
           this.loading = false;
