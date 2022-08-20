@@ -568,7 +568,6 @@ export default {
     },
     // 导出
     async exportDatas() {
-      console.log(this.selections);
       if (this.selections.length === 0) {
         this.$notify.error('请选择需要导出的数据');
         return;
@@ -612,7 +611,11 @@ export default {
             ids: this.selections.map((item) => item[this.idKey]),
           };
           const res = await this.exportMethod2(data);
+<<<<<<< HEAD
           downloadFile(res, '浙江省未来乡村申报汇总');
+=======
+          downloadFile(res, this.exportFileName2);
+>>>>>>> cb051381fc1c8943fbee820e2f7a6aa9b7d60de4
           this.$notify.success('导出成功');
         } finally {
           this.loading = false;
