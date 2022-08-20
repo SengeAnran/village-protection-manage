@@ -91,7 +91,9 @@
               <p class="content">{{ form.governmentText }}</p>
             </el-form-item>
           </div>
-          <div class="input-item-wrp">
+          <h4 class="block-tit">浙江省未来乡村创建方案</h4>
+          <rich-text-editor class="mt-4" mode="view" :value="form.richText" />
+          <div class="input-item-wrp mt-4">
             <el-form-item label="附件：" prop="introduction">
               <div v-if="form.annexFiles && form.annexFiles.length > 0">
                 <p class="content fu-file" v-for="(item, index) in form.annexFiles" :key="index">
@@ -376,6 +378,7 @@ export default {
         projectFilingPhone: "", //联系电话
         projectFilingAudit: "", //审核人
         projects: [], //项目列表
+        richText: '23333', //
       },
       reviewForm: {
         status: null,

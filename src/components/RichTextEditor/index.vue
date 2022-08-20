@@ -1,73 +1,24 @@
 <template>
-  <div class="editor-com-root" @click.stop>
-    <!-- 工具栏 -->
-    <Toolbar v-if="init" style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" />
-    <!-- 编辑器 -->
-    <Editor
-      v-if="init"
-      style="height: 400px; overflow-y: hidden"
-      :defaultConfig="editorConfig"
-      v-model="html"
-      @onChange="onChange"
-      @onCreated="onCreated"
-    />
-  </div>
+  <Editor v-if="mode === 'edit'" v-model="html" />
+  <Viewer v-else :value="html" />
 </template>
 
 <script>
-import { uploadFile2 } from '@/api/common.js';
-import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
-import '@wangeditor/editor/dist/css/style.css';
-const defaultRichText = '<p style="text-align: left;"><span style="color: rgb(170, 170, 170);">一、基本情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">二、创建方案的实施情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">三、数字化建设与应用情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">四、场景特别是“一老一小”场景建设情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">五、建设投入情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">六、工作推进情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">七、特色和创新情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">八、相关附件</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">报告中涉及到的支撑材料可作为附件单独提供，并需提供附件清单方便查阅。</span></p>';
+import Editor from './Editor.vue';
+import Viewer from './Viewer.vue';
+
 export default {
-  name: 'RichTextEditor',
-  components: { Editor, Toolbar },
-  model: {
-    prop: 'value',
-    event: 'input',
-  },
+  components: { Editor, Viewer },
   props: {
+    mode: {
+      type: String,
+      default: 'edit',
+      validate: (v) => ['edit', 'view'].includes(v),
+    },
     value: {
       type: String,
       // default: '',
     },
-    placeholder: {
-      type: String,
-      // default: '请输入内容...',
-      default: defaultRichText,
-    },
-  },
-  data() {
-    return {
-      editor: null,
-      init: 0,
-      toolbarConfig: {
-        // toolbarKeys: [ /* 显示哪些菜单，如何排序、分组 */ ],
-        excludeKeys: ['group-video', 'insertImage', 'group-image', 'codeBlock'],
-        insertKeys: {
-          index: 22, // 插入的位置，基于当前的 toolbarKeys
-          keys: ['uploadImage'],
-        },
-      },
-      editorConfig: {
-        html: this.value,
-        placeholder: this.placeholder,
-        // autoFocus: false,
-        // 所有的菜单配置，都要在 MENU_CONF 属性下
-        MENU_CONF: {
-          uploadImage: {
-            async customUpload(file, insertFn) {
-              const href = '';
-              const formData = new FormData();
-              formData.append('file', file);
-              const res = await uploadFile2(formData);
-              const { filePath, fileName } = res;
-              insertFn(filePath || '', fileName || '', href);
-            },
-          },
-        },
-      },
-    };
   },
   computed: {
     html: {
@@ -79,36 +30,5 @@ export default {
       },
     },
   },
-  mounted() {
-    this.init = 1;
-  },
-  methods: {
-    onCreated(editor) {
-      this.editor = Object.seal(editor); // 【注意】一定要用 Object.seal() 否则会报错
-      editor.setHtml(this.value);
-      this.init = 2;
-    },
-    onChange(editor) {
-      this.$emit('change', editor.getHtml());
-    },
-    getText() {
-      const editor = this.editor;
-      if (editor == null) return;
-      return editor.getText();
-    },
-  },
-  beforeDestroy() {
-    const editor = this.editor;
-    if (editor == null) return;
-    editor.destroy(); // 组件销毁时，及时销毁 editor ，重要！！！
-  },
 };
 </script>
-
-<style lang="scss" scoped>
-.editor-com-root {
-  border: 1px solid #ccc;
-  z-index: 1000;
-  pointer-events: all;
-}
-</style>
