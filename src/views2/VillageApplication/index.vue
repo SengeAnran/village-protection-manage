@@ -62,12 +62,21 @@
           >
         </template>
         <template v-slot:export>
-          <el-button icon="el-icon-download" type="primary" plain @click="exportDatas">材料打印</el-button>
-          <el-button type="primary" @click="UnifiedReporting"> 统一上报</el-button>
+          <el-button v-if="roleId !== 1" icon="el-icon-download" type="primary" plain @click="exportDatas"
+            >材料打印</el-button
+          >
+          <el-button v-if="roleId === 3 || roleId === 2" type="primary" @click="UnifiedReport"> 统一上报</el-button>
         </template>
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
-            <el-link v-if="actionControl('排序', scope.data.finalStatus)" type="primary" @click="sort(scope)">
+            <el-link
+              v-if="
+                actionControl('排序', scope.data.finalStatus) &&
+                (isNaN(scope.data.countrySortNum) || isNaN(scope.data.citySortNum))
+              "
+              type="primary"
+              @click="sort(scope)"
+            >
               排序
             </el-link>
             <el-divider v-if="actionControl('排序', scope.data.finalStatus)" direction="vertical"></el-divider>
@@ -124,9 +133,14 @@
 
         <template v-slot:table>
           <el-table-column label="申报批次" prop="declarationBatch"></el-table-column>
-          <el-table-column label="推荐次序" align="center" width="100" prop="countrySortNum">
+          <el-table-column v-if="roleId === 3" label="推荐次序" align="center" width="100" prop="countrySortNum">
             <template slot-scope="scope">
-              <p>{{ scope.row.countrySortNum }}</p>
+              <p>{{ scope.row.countrySortNum || '-' }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column v-if="roleId === 2" label="推荐次序" align="center" width="100" prop="citySortNum">
+            <template slot-scope="scope">
+              <p>{{ scope.row.citySortNum || '-' }}</p>
             </template>
           </el-table-column>
           <el-table-column label="村（片区）名称" prop="villageName">
@@ -134,7 +148,7 @@
               <p>{{ scope.row.villageName }}</p>
             </template>
           </el-table-column>
-          <el-table-column v-if="roleId < 3" label="申报县" prop="gmtCreate">
+          <el-table-column v-if="roleId < 3" label="地区" prop="gmtCreate">
             <template slot-scope="scope">
               <p>{{ scope.row.country }}</p>
             </template>
@@ -198,11 +212,18 @@
 </template>
 <script>
 import { mapMutations, mapGetters } from 'vuex';
-import { queryBatchInfo, getVillageList, deleteVillageItem, materialPrinting, sortList } from '@/api2/villageManage';
+import {
+  queryBatchInfo,
+  getVillageList,
+  deleteVillageItem,
+  materialPrinting,
+  sortList,
+  unifiedReporting,
+} from '@/api2/villageManage';
 import { DECLEAR_STATUS } from './constants';
 import { recVerify } from '../../api/villageManage';
 import { getvillagesExport } from '../../api2/villageManage';
-import { downloadFile } from '@/utils/data';
+import { downloadWordFile } from '@/utils/data';
 import rule from '@/mixins/rule';
 const sort = (rule, value, callback) => {
   if (!value) {
@@ -247,8 +268,9 @@ export default {
           value: '',
         },
       ],
+      // 最终审核状态（0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过 5县级待上报 6市级待上报
       // 0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过
-      textColor: ['#E6A23C', '#F56C6C', '#E6A23C', '#F56C6C', '#67C23A'],
+      textColor: ['#E6A23C', '#F56C6C', '#E6A23C', '#F56C6C', '#67C23A', '#E6A23C', '#E6A23C'],
       sortDialogVisible: false, // 排序框
       ScanDocDialogVisible: false, // 扫描件上传
       sortRule: { required: true, validator: sort, trigger: 'blur' },
@@ -333,45 +355,54 @@ export default {
               id: item.id,
             };
             const res = await materialPrinting(data);
-            downloadFile(res, this.exportFileName2);
+            downloadWordFile(res, this.exportFileName2);
             this.$notify.success('导出成功');
           });
         });
       }
     },
     // 统一上报
-    async UnifiedReporting() {
+    async UnifiedReport() {
       if (this.selections.length === 0) {
         this.$notify.error('请选择需要上报的申报信息');
         return;
       }
-      if (!this.selections.every((i) => i.finalStatus === 0)) {
-        this.$notify.error('选中的申报信息状态有误');
-        return;
-      } else if (!this.selections.every((i) => !isNaN(i.citySortNum))) {
-        this.$notify.error('“请先对选中的申报信息进行推荐次序排序');
-        return;
-      } else {
-        this.$confirm('是否确认上报选中的申报信息？', '提示', {
-          type: 'warning',
-        }).then(async () => {
-          this.loading = true;
-          const { query } = this;
-          try {
-            const data = {
-              ...query,
-              // pageNum: page,
-              // pageSize: size,
-              ids: this.selections.map((item) => item[this.idKey]),
-            };
-            const res = await this.exportMethod2(data);
-            downloadFile(res, this.exportFileName2);
-            this.$notify.success('导出成功');
-          } finally {
-            this.loading = false;
-          }
-        });
+      if (this.roleId === 3) {
+        //县级
+        if (!this.selections.every((i) => i.finalStatus === 0)) {
+          // 5县级待上报
+          this.$notify.error('选中的申报信息状态有误');
+          return;
+        } else if (!this.selections.every((i) => !isNaN(i.countrySortNum)) || this.sortNum('countrySortNum')) {
+          this.$notify.error('请先对选中的申报信息进行推荐次序排序');
+          return;
+        }
+      } else if (this.roleId === 2) {
+        // 市级
+        if (!this.selections.every((i) => i.finalStatus === 6)) {
+          // 6市级待上报
+          this.$notify.error('选中的申报信息状态有误');
+          return;
+        } else if (!this.selections.every((i) => !isNaN(i.citySortNum)) || this.sortNum('citySortNum')) {
+          this.$notify.error('请先对选中的申报信息进行推荐次序排序');
+          return;
+        }
       }
+      this.$confirm('是否确认上报选中的申报信息？', '提示', {
+        type: 'warning',
+      }).then(() => {
+        const data = {
+          ids: this.selections.map((item) => item.id),
+        };
+        unifiedReporting(data).then(() => {
+          this.$notify.success('统一上报成功！');
+        });
+      });
+    },
+    sortNum(key) {
+      // 判断排序是否合理
+      const sortNums = this.selections.map((i) => i[key]).sort();
+      return !sortNums.every((i, index) => i === index + 1);
     },
     onFileAdd(file, key) {
       this.form2[key].push(file);
@@ -471,7 +502,7 @@ export default {
 
     // 排序
     _canSort(declareStatus, roleId) {
-      if ((roleId === 3 && declareStatus === 0) || (roleId === 2 && declareStatus === 1)) {
+      if ((roleId === 3 && declareStatus === 5) || (roleId === 2 && declareStatus === 6)) {
         return true;
       }
       return false;

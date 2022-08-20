@@ -218,3 +218,11 @@ export const sortList = (data) => {
     data,
   });
 };
+// 统一上报
+export const unifiedReporting = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + '/api/workbench/villageDeclaration/unifiedReporting',
+    data,
+  });
+};

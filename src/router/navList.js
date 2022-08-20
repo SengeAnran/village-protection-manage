@@ -499,7 +499,7 @@ export const defaultRoutes2 = [
         name: 'VillageApplyList2',
         meta: {
           title: '县级申报',
-          menuIds: [410001],
+          menuIds: [410001, 430002],
         },
         component: () => import('@/views2/VillageApplication/index.vue'),
       },
