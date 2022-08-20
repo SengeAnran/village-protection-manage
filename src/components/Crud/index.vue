@@ -9,34 +9,18 @@
         <el-button type="primary" @click="search">查询</el-button>
         <el-button plain @click="resetSearch">重置</el-button>
       </div>
-<!--      <slot name="export"></slot>-->
+      <!--      <slot name="export"></slot>-->
     </div>
     <!--crud操作-->
     <div style="margin-bottom: 15px">
-      <el-button
-        v-if="!hideAdd"
-        v-permission="permissionAdd"
-        type="primary"
-        @click="addItem"
-        >新增</el-button
-      >
+      <el-button v-if="!hideAdd" v-permission="permissionAdd" type="primary" @click="addItem">新增</el-button>
       <slot name="crudAction"></slot>
-      <el-button
-        icon="el-icon-download"
-        v-if="showExport"
-        type="primary"
-        plain
-        @click="exportDatas"
-        >{{exportName}}</el-button
-      >
-      <el-button
-        icon="el-icon-download"
-        v-if="showExport2"
-        type="primary"
-        plain
-        @click="exportDatas2"
-        >{{exportName2}}</el-button
-      >
+      <el-button icon="el-icon-download" v-if="showExport" type="primary" plain @click="exportDatas">{{
+        exportName
+      }}</el-button>
+      <el-button icon="el-icon-download" v-if="showExport2" type="primary" plain @click="exportDatas2">{{
+        exportName2
+      }}</el-button>
       <slot name="export"></slot>
       <el-button
         icon="el-icon-delete"
@@ -69,19 +53,8 @@
       :data="items"
       @selection-change="selectionChange"
     >
-      <el-table-column
-        v-if="selection"
-        type="selection"
-        width="50"
-        align="center"
-        fixed="left"
-      ></el-table-column>
-      <el-table-column
-        :label="order ? '推荐次序' : '序号'"
-        width="80"
-        align="center"
-        fixed="left"
-      >
+      <el-table-column v-if="selection" type="selection" width="50" align="center" fixed="left"></el-table-column>
+      <el-table-column :label="order ? '推荐次序' : '序号'" width="80" align="center" fixed="left">
         <template slot-scope="scope">
           {{ scope.$index + 1 + (page - 1) * size }}
         </template>
@@ -90,22 +63,12 @@
       <!--表格列插槽-->
       <slot name="table" :data="items"></slot>
 
-      <el-table-column
-        v-if="!hideTableAction"
-        label="操作"
-        :width="actionWidth"
-        fixed="right"
-        align="center"
-      >
+      <el-table-column v-if="!hideTableAction" label="操作" :width="actionWidth" fixed="right" align="center">
         <template slot-scope="scope">
           <!--表格操作插槽-->
           <div class="table-action">
             <slot name="tableAction" :data="scope.row"></slot>
-            <el-link
-              v-if="!hideEdit"
-              v-permission="permissionEdit"
-              type="primary"
-              @click="editItem(scope.row)"
+            <el-link v-if="!hideEdit" v-permission="permissionEdit" type="primary" @click="editItem(scope.row)"
               >编辑</el-link
             >
             <el-link
@@ -126,31 +89,13 @@
               @click.native="deleteItem(scope.row)"
               >删除</el-link
             >
-            <el-link
-              v-if="moveUp"
-              type="primary"
-              @click.native="moveUpItem(scope.row, scope.$index)"
-              >上移</el-link
-            >
+            <el-link v-if="moveUp" type="primary" @click.native="moveUpItem(scope.row, scope.$index)">上移</el-link>
             <el-divider v-if="moveUp" direction="vertical"></el-divider>
-            <el-link
-              v-if="moveDown"
-              type="primary"
-              @click.native="moveDownItem(scope.row, scope.$index)"
-              >下移</el-link
-            >
+            <el-link v-if="moveDown" type="primary" @click.native="moveDownItem(scope.row, scope.$index)">下移</el-link>
             <el-divider v-if="moveDown" direction="vertical"></el-divider>
-            <el-link
-              v-if="moveTop"
-              type="primary"
-              @click.native="moveTopItem(scope.row, scope.$index)"
-              >置顶</el-link
-            >
+            <el-link v-if="moveTop" type="primary" @click.native="moveTopItem(scope.row, scope.$index)">置顶</el-link>
             <el-divider v-if="moveTop" direction="vertical"></el-divider>
-            <el-link
-              v-if="virtualDelete"
-              type="danger"
-              @click.native="virtualDeleteItem(scope.row, scope.$index)"
+            <el-link v-if="virtualDelete" type="danger" @click.native="virtualDeleteItem(scope.row, scope.$index)"
               >移除</el-link
             >
             <slot name="tableEdit" :data="scope.row"></slot>
@@ -201,13 +146,7 @@
         </div>
         <div v-if="!hideDialogAction" slot="footer">
           <el-button @click="closeDialog">取消</el-button>
-          <el-button
-            v-if="!hideSave"
-            type="primary"
-            :loading="loading"
-            @click="saveItem"
-            >确定</el-button
-          >
+          <el-button v-if="!hideSave" type="primary" :loading="loading" @click="saveItem">确定</el-button>
           <!--表单操作插槽-->
           <slot name="dialogAction"></slot>
         </div>
@@ -217,9 +156,9 @@
 </template>
 
 <script>
-import rule from "@/mixins/rule";
-import _ from "lodash";
-import { downloadFile } from "@/utils/data";
+import rule from '@/mixins/rule';
+import _ from 'lodash';
+import { downloadFile } from '@/utils/data';
 
 export default {
   mixins: [rule],
@@ -237,12 +176,12 @@ export default {
     // 弹窗标题
     title: {
       type: String,
-      default: "",
+      default: '',
     },
     // 表格是否开启多选模式
     tableHeight: {
       type: String,
-      default: "",
+      default: '',
     },
     // 表格是否开启多选模式
     selection: {
@@ -336,17 +275,17 @@ export default {
     // 新增页面地址
     addPath: {
       type: String,
-      default: "",
+      default: '',
     },
     // 编辑页面地址
     editPath: {
       type: String,
-      default: "",
+      default: '',
     },
     // 查看页面地址
     viewPath: {
       type: String,
-      default: "",
+      default: '',
     },
     // 隐藏新增按钮
     hideAdd: {
@@ -421,12 +360,12 @@ export default {
     // 编辑和删除区域宽度
     actionWidth: {
       type: String,
-      default: "140px",
+      default: '140px',
     },
     // 弹窗宽度
     dialogWidth: {
       type: String,
-      default: "500px",
+      default: '500px',
     },
     // 是否点击遮罩关闭弹窗
     closeOnClickModal: {
@@ -441,7 +380,7 @@ export default {
     // 表单label宽度，95容纳5个字
     labelWidth: {
       type: String,
-      default: "95px",
+      default: '95px',
     },
     // 推荐次序
     order: {
@@ -490,17 +429,17 @@ export default {
           this.resetForm(); // 防止dom销毁报错
         }
         this.updateForm(_.cloneDeep(this.defaultForm));
-        this.$emit("dialogClose");
+        this.$emit('dialogClose');
       }
     },
   },
   computed: {
     modeText() {
-      let text = "新增";
+      let text = '新增';
       if (this.mode === 0) {
-        text = "新增";
+        text = '新增';
       } else if (this.mode === 1) {
-        text = "编辑";
+        text = '编辑';
       }
       return text;
     },
@@ -528,7 +467,7 @@ export default {
         }
         this.loading = false;
         this.afterGetMethod && this.afterGetMethod();
-        this.$emit("changeData");
+        this.$emit('changeData');
       } finally {
         this.loading = false;
       }
@@ -546,7 +485,7 @@ export default {
         this.page = 1;
         this.getItems();
       });
-      this.$emit("resetForm");
+      this.$emit('resetForm');
     },
     // 打开弹窗
     openDialog() {
@@ -572,17 +511,16 @@ export default {
         this.$router.push({
           path: editPath,
           query: { id: item[this.idKey] },
-        })
+        });
       } else {
         if (!this.beforeEditMethod) {
-          console.error("请传入 beforeEditMethod 处理数据回填");
+          console.error('请传入 beforeEditMethod 处理数据回填');
           return;
         }
         this.beforeEditMethod(item);
         this.openDialog();
         this.mode = 1;
       }
-
     },
     // 重置表单
     resetForm() {
@@ -590,8 +528,8 @@ export default {
     },
     // 删除
     async deleteItem(item) {
-      this.$confirm("是否删除该条数据？", "提示", {
-        type: "warning",
+      this.$confirm('是否删除该条数据？', '提示', {
+        type: 'warning',
       }).then(async () => {
         this.loading = true;
         try {
@@ -600,7 +538,7 @@ export default {
             data = this.beforeDeleteMethod(item);
           }
           await this.deleteMethod(data);
-          this.$notify.success("删除成功");
+          this.$notify.success('删除成功');
           await this.getItems();
         } finally {
           this.loading = false;
@@ -609,8 +547,8 @@ export default {
     },
     // 虚拟删除
     async virtualDeleteItem(item, index) {
-      this.$confirm("是否移除该条数据？", "提示", {
-        type: "warning",
+      this.$confirm('是否移除该条数据？', '提示', {
+        type: 'warning',
       }).then(async () => {
         //console.log(item, index);
         this.items.splice(index, 1);
@@ -630,13 +568,12 @@ export default {
     },
     // 导出
     async exportDatas() {
-      console.log(this.selections);
       if (this.selections.length === 0) {
         this.$notify.error('请选择需要导出的数据');
         return;
       }
-      this.$confirm("是否批量导出所选数据？", "提示", {
-        type: "warning",
+      this.$confirm('是否批量导出所选数据？', '提示', {
+        type: 'warning',
       }).then(async () => {
         this.loading = true;
         const { page, size, query } = this;
@@ -649,7 +586,7 @@ export default {
           };
           const res = await this.exportMethod(data);
           downloadFile(res, this.exportFileName);
-          this.$notify.success("导出成功");
+          this.$notify.success('导出成功');
         } finally {
           this.loading = false;
         }
@@ -661,8 +598,8 @@ export default {
         this.$notify.error('请选择需要导出的数据');
         return;
       }
-      this.$confirm("是否批量导出所选数据？", "提示", {
-        type: "warning",
+      this.$confirm('是否批量导出所选数据？', '提示', {
+        type: 'warning',
       }).then(async () => {
         this.loading = true;
         const { page, size, query } = this;
@@ -674,8 +611,9 @@ export default {
             ids: this.selections.map((item) => item[this.idKey]),
           };
           const res = await this.exportMethod2(data);
-          downloadFile(res, "浙江省未来乡村申报汇总");
-          this.$notify.success("导出成功");
+          downloadFile(res, '浙江省未来乡村申报汇总');
+          downloadFile(res, this.exportFileName2);
+          this.$notify.success('导出成功');
         } finally {
           this.loading = false;
         }
@@ -683,14 +621,14 @@ export default {
     },
     // 批量删除
     async deleteMultiple() {
-      this.$confirm("是否批量删除所选数据？", "提示", {
-        type: "warning",
+      this.$confirm('是否批量删除所选数据？', '提示', {
+        type: 'warning',
       }).then(async () => {
         this.loading = true;
         try {
           let data = this.selections.map((item) => item[this.idKey]);
           await this.deleteMethod(data);
-          this.$notify.success("删除成功");
+          this.$notify.success('删除成功');
           await this.getItems();
         } finally {
           this.loading = false;
@@ -730,10 +668,10 @@ export default {
       this.loading = true;
       try {
         await this.submitSortMethod(data);
-        this.$emit("submitSuccess");
+        this.$emit('submitSuccess');
         this.$message({
-          message: "提交成功！",
-          type: "success",
+          message: '提交成功！',
+          type: 'success',
         });
         this.loading = false;
       } finally {
@@ -776,15 +714,15 @@ export default {
     // 表格多选回调
     selectionChange(val) {
       this.selections = val;
-      this.$emit("selectionChange", val);
+      this.$emit('selectionChange', val);
     },
     // 同步form到父组件
     updateForm(form) {
-      this.$emit("update:form", form);
+      this.$emit('update:form', form);
     },
     // 同步query到父组件
     updateQuery(query) {
-      this.$emit("update:query", query);
+      this.$emit('update:query', query);
     },
   },
 };

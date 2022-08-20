@@ -499,7 +499,7 @@ export const defaultRoutes2 = [
         name: 'VillageApplyList2',
         meta: {
           title: '县级申报',
-          menuIds: [410001],
+          menuIds: [410001, 430002],
         },
         component: () => import('@/views2/VillageApplication/index.vue'),
       },
@@ -552,6 +552,17 @@ export const defaultRoutes2 = [
           menuIds: [410003],
         },
         component: () => import('@/views2/VillageApplication/DeclarationBatch/index'),
+      },
+      {
+        path: '/villageApplication2/applicationQuota',
+        name: 'ApplicationQuota',
+        hidden: false,
+        meta: {
+          // activeMenu: "/acceptanceEvaluation/index",
+          title: '申报名额配置',
+          menuIds: [410003],
+        },
+        component: () => import('@/views2/VillageApplication/ApplicationQuota/index'),
       },
     ],
   },
