@@ -78,7 +78,6 @@ export default {
           this.inited = true;
           return;
         }
-        console.log('xxxxxx', val);
         this.dispatch('ElFormItem', 'el.form.change', [val]);
       },
       get: function () {

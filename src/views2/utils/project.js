@@ -30,6 +30,5 @@ const typeMap = new Map(types.map((ele) => [ele.value, ele.name]));
  * 根据类型之获取类型名称
  */
 export function mapType(value) {
-  console.log('xxxxx', value, typeMap.get(Number(value)), typeMap);
   return typeMap.get(Number(value)) || '';
 }

@@ -686,7 +686,6 @@ export default {
 
 
     validateForm() {
-      console.log('xxxxxx', this.form);
       this.$refs["form"].validate((valid) => {
         if (valid) {
           this.form.annexIds = this.form.annexFiles.map(i => i.fileId).toString();
