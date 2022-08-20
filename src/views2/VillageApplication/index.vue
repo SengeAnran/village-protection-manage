@@ -124,8 +124,15 @@
             >
               删除
             </el-link>
-            <el-divider v-if="roleId === 3 && scope.data.finalStatus === 4" direction="vertical"></el-divider>
-            <el-link @click="uploadScan(scope)" v-if="roleId === 3 && scope.data.finalStatus === 4" type="primary">
+            <el-divider
+              v-if="roleId === 3 && scope.data.finalStatus === 4 && !scope.data.multipartFileVO"
+              direction="vertical"
+            ></el-divider>
+            <el-link
+              @click="uploadScan(scope)"
+              v-if="roleId === 3 && scope.data.finalStatus === 4 && !scope.data.multipartFileVO"
+              type="primary"
+            >
               扫描件上传
             </el-link>
           </div>
@@ -204,7 +211,7 @@
         </el-form-item>
         <el-form-item>
           <el-button>取消</el-button>
-          <el-button type="primary" @click="onSubmit">提交</el-button>
+          <el-button type="primary" @click="onSubmitUploadScan">提交</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -219,6 +226,7 @@ import {
   materialPrinting,
   sortList,
   unifiedReporting,
+  uploadScan,
 } from '@/api2/villageManage';
 import { DECLEAR_STATUS } from './constants';
 import { recVerify } from '../../api/villageManage';
@@ -258,6 +266,7 @@ export default {
         sort: null,
       },
       form2: {
+        id: null,
         annexFiles: [],
       },
       dialogDeclareYearOpt: [],
@@ -418,6 +427,8 @@ export default {
     // 上传扫描件
     uploadScan(scope) {
       console.log(scope);
+      this.form2.id = scope.data.id;
+      this.form2.annexFiles = [];
       this.ScanDocDialogVisible = true;
     },
     // 排序
@@ -438,6 +449,20 @@ export default {
         this.sortDialogVisible = false;
         this.$refs.crud.getItems();
         this.$notify.success('提交排序成功！');
+      });
+    },
+    // 提交排序
+    onSubmitUploadScan() {
+      const data = {
+        id: this.form2.id,
+        fileId: this.form2.annexFiles[0].fileId,
+      };
+      uploadScan(data).then(() => {
+        this.form2.id = null;
+        this.form2.annexFiles = [];
+        this.ScanDocDialogVisible = false;
+        this.$refs.crud.getItems();
+        this.$notify.success('扫描件上传成功！');
       });
     },
     // 审核详情

@@ -226,3 +226,12 @@ export const unifiedReporting = (data) => {
     data,
   });
 };
+
+// 上传扫描件
+export const uploadScan = (params) => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + '/api/workbench/villageDeclaration/uploadScan',
+    params,
+  });
+};
