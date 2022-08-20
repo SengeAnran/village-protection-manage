@@ -3,15 +3,24 @@
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
       <sub-tit> {{ (isEdit && '修改') || '创建' }}成效评价申请 </sub-tit>
       <basic-input :form="form" @change="villageChange"></basic-input>
-      <sub-tit> 未来乡村创建成效评分表 </sub-tit>
-      <score-table :form="form"></score-table>
-
+      <sub-tit> 浙江省未来乡村创建成效自评总结 </sub-tit>
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <div class="mb-8 mt-2">
+            <el-form-item prop="richText" label="浙江省未来乡村创建成效自评总结" :rules="rule.richText" >
+              <rich-text-editor v-model="form.richText" />
+            </el-form-item>
+          </div>
+        </el-col>
+      </el-row>
       <file-attach
         :data="form.countySaveAnnex"
         @addFile="onCountyFileAdd"
         @removeFile="onCountyFileRemove"
       ></file-attach>
 
+      <sub-tit> 未来乡村创建成效评分表 </sub-tit>
+      <score-table :form="form"></score-table>
       <province-info v-if="[0, 1].includes(form.provinceVerify)" :form="form"></province-info>
     </el-form>
     <div class="action-wrp">
@@ -73,6 +82,7 @@ export default {
         workBoardCounty: '',
         workGuideCounty: '',
         workMechanismCounty: '',
+        richText: '',
       },
       hasTempData: false,
     };
@@ -182,6 +192,7 @@ export default {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
         this.form = res;
+        console.log('getDetail', res);
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
       });
     },

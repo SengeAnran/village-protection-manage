@@ -19,22 +19,26 @@
         <template slot-scope="{ row }">
           <!-- 县级用户 -->
           <div v-if="userInfo.roleId === 3 && !disabled">
-            <span v-if="item.prop === 'countyScore' && row.title === '合计'">{{ form[row.countyScoreProp] }}</span>
             <el-form-item
-              v-if="item.prop === 'countyScore' && row.title !== '合计'"
+              v-if="item.prop === 'countyScore'"
+              :style="{ 'margin-bottom': row.title === '合计' ? 0 : undefined }"
               label=""
-              :rules="rule.input"
+              :rules="row.title === '合计' ? rule.maxScore : rule.input"
               :prop="row.countyScoreProp"
-              :show-message="false"
+              :show-message="row.title === '合计'"
             >
+              <template v-if="row.title === '合计'" #error="{ error }">
+                <span class="el-form-item__error common-reset-form-error-message">{{ error }}</span>
+              </template>
+              <plain-text v-if="row.title === '合计'" v-model="form[row.countyScoreProp]" />
               <el-input
+                v-else
                 v-model="form[row.countyScoreProp]"
                 size="mini"
                 placeholder="请输入"
                 @change="setTotalScore('countyScoreProp', row.countyScoreProp)"
               />
             </el-form-item>
-
             <span v-else-if="item.prop === 'cityScore'">--</span>
             <span v-else class="cell">{{ row[item.prop] }}</span>
           </div>

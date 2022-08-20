@@ -44,6 +44,16 @@ const upload = (rule, value, callback) => {
   }
 };
 
+const emptyRich = '<p><br></p>';
+const richText = (rule, value, callback) => {
+  if (!value || value === emptyRich) {
+    callback(new Error("内容不能为空"));
+  } else {
+    callback();
+  }
+};
+
+
 export default {
   data() {
     return {
@@ -77,6 +87,12 @@ export default {
         mobile: { required: true, validator: mobile, trigger: "blur" },
         email: { required: true, validator: email, trigger: "blur" },
         age: { required: true, validator: age, trigger: "blur" },
+        maxScore: {
+          require: true, type: 'number',  max: 97, trigger: 'change', message: '分数不得超过97分'
+        },
+        richText: {
+          require, validator: richText, trigger: 'change',
+        }
       },
     };
   },
