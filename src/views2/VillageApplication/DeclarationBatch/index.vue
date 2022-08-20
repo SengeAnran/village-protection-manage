@@ -26,8 +26,15 @@
           <el-form-item label="申报批次：" prop="acceptanceTime" :rules="rule.input">
             <el-input v-model="form.acceptanceTime" maxlength="20"></el-input>
           </el-form-item>
-          <el-form-item label="申报批次：" prop="NewTime" :rules="rule.input">
-            <el-input v-model="form.NewTime" maxlength="20"></el-input>
+          <el-form-item label="申报批次：" prop="NewTime">
+            <el-date-picker
+              v-model="form.NewTime"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            >
+            </el-date-picker>
           </el-form-item>
         </template>
         <!--        <template v-slot:tableAction="scope">-->
