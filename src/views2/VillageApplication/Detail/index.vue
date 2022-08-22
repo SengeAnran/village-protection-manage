@@ -1,16 +1,144 @@
 <template>
-  <div  class="block">
-    <div class="clearfix export">
+  <div class="block">
+    <div class="nav-root mb-4">
+      <RouterBack>详情</RouterBack>
       <el-button class="export-button" @click="clickExport">导出</el-button>
     </div>
-    <div class="block">
-      <RouterBack>详情</RouterBack>
-      <div class="box-title">申报详情</div>
-      <div class="examine-result">
-        <img v-if="finalStatus === 4" src="../imgs/pass.png" alt="">
-        <img v-if="finalStatus === 3" src="../imgs/pro_reject.png" alt="">
-        <img v-if="finalStatus === 1" src="../imgs/reject.png" alt="">
+    <div class="box-title">申报详情</div>
+    <div class="examine-result">
+      <img v-if="finalStatus === 4" src="../imgs/pass.png" alt="">
+      <img v-if="finalStatus === 3" src="../imgs/pro_reject.png" alt="">
+      <img v-if="finalStatus === 1" src="../imgs/reject.png" alt="">
+    </div>
+    <el-form
+      style="padding-left: 14px"
+      ref="form"
+      class="form"
+      label-position="top"
+      :model="form"
+      label-width="80px"
+    >
+      <div class="input-item-wrp">
+        <el-form-item label="创建村（片区）名称" prop="villageId">
+          <p class="content">{{ form.area || form.villageName }}</p>
+        </el-form-item>
+        <el-form-item label="推荐次序" prop="countrySortNum">
+          <p class="content">{{ form.countrySortNum }}</p>
+        </el-form-item>
+        <el-form-item label="申报批次" prop="declarationBatch">
+          <p class="content">{{ form.declarationBatch }}</p>
+        </el-form-item>
+        <el-form-item label="创建周期" prop="resPopulation">
+          <p class="content">{{ form.startTime.slice(0,7) }} 至 {{ form.endTime.slice(0,7) }}</p>
+        </el-form-item>
+        <el-form-item label="领办领导">
+          <p class="content">{{ form.leader }}</p>
+        </el-form-item>
+        <el-form-item label="建设单位">
+          <p class="content">{{ form.construct }}</p>
+        </el-form-item>
+        <el-form-item label="联系人">
+          <p class="content">{{ form.contactPerson }}</p>
+        </el-form-item>
+        <el-form-item label="联系方式" prop="resPopulation">
+          <p class="content">{{ form.phone }}</p>
+        </el-form-item>
+        <el-form-item label="户籍人口数（万人）" prop="resPopulation">
+          <p class="content">{{ form.huNum }}</p>
+        </el-form-item>
+        <el-form-item label="常住人口数（万人）" prop="resPopulation">
+          <p class="content">{{ form.personNum }}</p>
+        </el-form-item>
+        <el-form-item label="计划总投资（万元）" prop="resPopulation">
+          <p class="content">{{ form.investNum }}</p>
+        </el-form-item>
+        <el-form-item label="村级集体经济年经营性收入（万元）" prop="resPopulation">
+          <p class="content">{{ form.incomeNum }}</p>
+        </el-form-item>
+        <el-form-item label="村庄属性：" prop="resPopulation">
+          <p class="content">{{ form.villageProperty.toString() }}</p>
+        </el-form-item>
       </div>
+      <div>
+        <div class="input-item-wrp">
+          <el-form-item label="基本情况" prop="introduction">
+            <p class="content">{{ form.basicText }}</p>
+          </el-form-item>
+        </div>
+        <div class="input-item-wrp">
+          <el-form-item label="村民代表会议（村民会议）关于未来乡村建设方案决议情况" prop="introduction">
+            <p class="content">{{ form.meetingText }}</p>
+          </el-form-item>
+        </div>
+        <div class="input-item-wrp">
+          <el-form-item label="村民代表会议（村民会议）关于未来乡村建设方案决议情况" prop="introduction">
+            <p class="content">{{ form.townText }}</p>
+          </el-form-item>
+        </div>
+        <div class="input-item-wrp">
+          <el-form-item label="乡、镇（街道）人民政府（办事处）意见" prop="introduction">
+            <p class="content">{{ form.departmentText }}</p>
+          </el-form-item>
+        </div>
+        <div class="input-item-wrp">
+          <el-form-item label="县（市、区）部门审核意见" prop="introduction">
+            <p class="content">{{ form.departmentText }}</p>
+          </el-form-item>
+        </div>
+        <div class="input-item-wrp">
+          <el-form-item label="县（市、区）人民政府意见" prop="introduction">
+            <p class="content">{{ form.governmentText }}</p>
+          </el-form-item>
+        </div>
+        <h4 class="block-tit">浙江省未来乡村创建方案</h4>
+        <rich-text-editor class="mt-4" mode="view" :value="form.createScenario" />
+        <!-- <div class="input-item-wrp mt-4">
+          <el-form-item label="附件：" prop="introduction">
+            <div v-if="form.annexFiles && form.annexFiles.length > 0">
+              <p class="content fu-file" v-for="(item, index) in form.annexFiles" :key="index">
+                <a :href="item.filePath">
+                  <i class="el-icon-link"></i>
+                  <span>
+                  {{ item.fileName }}
+                </span>
+                </a>
+              </p>
+            </div>
+
+          </el-form-item>
+        </div> -->
+      </div>
+      <h4 class="block-tit">未来乡村创建项目备案表</h4>
+      <div class="input-item-wrp">
+        <el-form-item label="负责人" prop="resPopulation">
+          <p class="content">{{ form.projectFilingPerson }}</p>
+        </el-form-item>
+        <el-form-item label="联系电话" prop="resPopulation">
+          <p class="content">{{ form.projectFilingPhone }}</p>
+        </el-form-item>
+        <el-form-item label="审核人" prop="resPopulation">
+          <p class="content">{{ form.projectFilingAudit }}</p>
+        </el-form-item>
+      </div>
+      <el-form-item>
+        <VilliageListTable
+          :data="form.projects"
+          :hiddenEdit="false"
+          :hiddenDetail="true"
+          hiddenOperation
+        />
+      </el-form-item>
+      <div id="verify"></div>
+    </el-form>
+    <!-- 审核详情 -->
+    <div
+      v-if="
+        finalStatus > FINAL_STATUS.CITY_VERIFY_PENDING &&
+        finalStatus <= FINAL_STATUS.CITY_REPORT_PENDING &&
+        finalStatus !== FINAL_STATUS.COUNTRY_REPORT_PENDING
+      "
+    >
+      <div class="box-title">审核详情</div>
       <el-form
         style="padding-left: 14px"
         ref="form"
@@ -19,181 +147,42 @@
         :model="form"
         label-width="80px"
       >
-        <div class="input-item-wrp">
-          <el-form-item label="创建村（片区）名称" prop="villageId">
-            <p class="content">{{ form.area || form.villageName }}</p>
-          </el-form-item>
-          <el-form-item label="推荐次序" prop="countrySortNum">
-            <p class="content">{{ form.countrySortNum }}</p>
-          </el-form-item>
-          <el-form-item label="申报批次" prop="declarationBatch">
-            <p class="content">{{ form.declarationBatch }}</p>
-          </el-form-item>
-          <el-form-item label="创建周期" prop="resPopulation">
-            <p class="content">{{ form.startTime.slice(0,7) }} 至 {{ form.endTime.slice(0,7) }}</p>
-          </el-form-item>
-          <el-form-item label="领办领导">
-            <p class="content">{{ form.leader }}</p>
-          </el-form-item>
-          <el-form-item label="建设单位">
-            <p class="content">{{ form.construct }}</p>
-          </el-form-item>
-          <el-form-item label="联系人">
-            <p class="content">{{ form.contactPerson }}</p>
-          </el-form-item>
-          <el-form-item label="联系方式" prop="resPopulation">
-            <p class="content">{{ form.phone }}</p>
-          </el-form-item>
-          <el-form-item label="户籍人口数（万人）" prop="resPopulation">
-            <p class="content">{{ form.huNum }}</p>
-          </el-form-item>
-          <el-form-item label="常住人口数（万人）" prop="resPopulation">
-            <p class="content">{{ form.personNum }}</p>
-          </el-form-item>
-          <el-form-item label="计划总投资（万元）" prop="resPopulation">
-            <p class="content">{{ form.investNum }}</p>
-          </el-form-item>
-          <el-form-item label="村级集体经济年经营性收入（万元）" prop="resPopulation">
-            <p class="content">{{ form.incomeNum }}</p>
-          </el-form-item>
-          <el-form-item label="村庄属性：" prop="resPopulation">
-            <p class="content">{{ form.villageProperty.toString() }}</p>
-          </el-form-item>
-        </div>
-        <div>
-          <div class="input-item-wrp">
-            <el-form-item label="基本情况" prop="introduction">
-              <p class="content">{{ form.basicText }}</p>
-            </el-form-item>
-          </div>
-          <div class="input-item-wrp">
-            <el-form-item label="村民代表会议（村民会议）关于未来乡村建设方案决议情况" prop="introduction">
-              <p class="content">{{ form.meetingText }}</p>
-            </el-form-item>
-          </div>
-          <div class="input-item-wrp">
-            <el-form-item label="村民代表会议（村民会议）关于未来乡村建设方案决议情况" prop="introduction">
-              <p class="content">{{ form.townText }}</p>
-            </el-form-item>
-          </div>
-          <div class="input-item-wrp">
-            <el-form-item label="乡、镇（街道）人民政府（办事处）意见" prop="introduction">
-              <p class="content">{{ form.departmentText }}</p>
-            </el-form-item>
-          </div>
-          <div class="input-item-wrp">
-            <el-form-item label="县（市、区）部门审核意见" prop="introduction">
-              <p class="content">{{ form.departmentText }}</p>
-            </el-form-item>
-          </div>
-          <div class="input-item-wrp">
-            <el-form-item label="县（市、区）人民政府意见" prop="introduction">
-              <p class="content">{{ form.governmentText }}</p>
-            </el-form-item>
-          </div>
-          <div class="input-item-wrp">
-            <el-form-item label="附件：" prop="introduction">
-              <div v-if="form.annexFiles && form.annexFiles.length > 0">
-                <p class="content fu-file" v-for="(item, index) in form.annexFiles" :key="index">
-                  <a :href="item.filePath">
-                    <i class="el-icon-link"></i>
-                    <span>
-                    {{ item.fileName }}
-                  </span>
-                  </a>
-                </p>
-              </div>
-
-            </el-form-item>
-          </div>
-        </div>
-        <h4 class="block-tit">未来乡村创建项目备案表</h4>
-        <div class="input-item-wrp">
-          <el-form-item label="负责人" prop="resPopulation">
-            <p class="content">{{ form.projectFilingPerson }}</p>
-          </el-form-item>
-          <el-form-item label="联系电话" prop="resPopulation">
-            <p class="content">{{ form.projectFilingPhone }}</p>
-          </el-form-item>
-          <el-form-item label="审核人" prop="resPopulation">
-            <p class="content">{{ form.projectFilingAudit }}</p>
-          </el-form-item>
-        </div>
-        <el-form-item>
-          <VilliageListTable
-            :data="form.projects"
-            :hiddenEdit="false"
-            :hiddenDetail="true"
-            hiddenOperation
-          />
-        </el-form-item>
-        <div id="verify"></div>
-      </el-form>
-      <!--        审核详情-->
-      <div v-if="finalStatus > 0">
-        <div class="box-title">审核详情</div>
-        <el-form
-          style="padding-left: 14px"
-          ref="form"
-          class="form"
-          label-position="top"
-          :model="form"
-          label-width="80px"
-        >
 <!--          市级审核结果-->
-          <div class="examine-item">
-            <div class="examine-title">设区市比选意见</div>
-            <div class="input-item-wrp">
-              <el-form-item label="审核结果" prop="introduction">
-                <p class="content">{{ verifyRes(form.cityVerify) }}</p>
-              </el-form-item>
-            </div>
-            <div class="input-item-wrp">
-              <el-form-item label="审核意见" prop="introduction">
-                <p class="content">{{ form.cityOpinion }}</p>
-              </el-form-item>
-            </div>
-            <div class="input-item-wrp">
-              <el-form-item label="审核意见附件" prop="introduction">
-<!--                <div v-if="form.cityAuditFile && form.cityAuditFile.length > 0">-->
-<!--                  <p class="content fu-file" v-for="(item, index) in form.cityAuditFile" :key="index">-->
-<!--                    <a :href="item.filePath">-->
-<!--                      <i class="el-icon-link"></i>-->
-<!--                      <span>-->
-<!--                    {{ item.fileName }}-->
-<!--                  </span>-->
-<!--                    </a>-->
-<!--                  </p>-->
-<!--                </div>-->
-                <p class="content fu-file" v-if="form.cityAuditFile">
-                  <a :href="form.cityAuditFile.filePath">
-                    <i class="el-icon-link"></i>
-                    <span>
-                    {{ form.cityAuditFile.fileName }}
-                  </span>
-                  </a>
-                </p>
-              </el-form-item>
-            </div>
-            <div class="input-item-wrp">
-              <el-form-item label="审核时间" prop="introduction">
-                <p class="content">{{ form.cityAuditTime }}</p>
-              </el-form-item>
-            </div>
+        <div class="examine-item">
+          <div class="examine-title">设区市比选意见</div>
+          <div class="input-item-wrp">
+            <el-form-item label="比选结果" prop="introduction">
+              <p class="content">{{ verifyRes(form.cityVerify) }}</p>
+            </el-form-item>
           </div>
+          <div class="input-item-wrp">
+            <el-form-item label="比选意见" prop="introduction">
+              <p class="content">{{ form.cityOpinion }}</p>
+            </el-form-item>
+          </div>
+          <div class="input-item-wrp">
+            <el-form-item label="比选时间" prop="introduction">
+              <p class="content">{{ form.cityAuditTime }}</p>
+            </el-form-item>
+          </div>
+        </div>
 <!--          省级审核结果-->
-          <div v-if="finalStatus > 2" class="examine-item">
-            <div class="examine-title">省级审核详情</div>
-            <div class="input-item-wrp">
-              <el-form-item label="审核结果" prop="introduction">
-                <p class="content">{{ verifyRes(form.provinceVerify) }}</p>
-              </el-form-item>
-            </div>
-            <div class="input-item-wrp">
-              <el-form-item label="审核意见" prop="introduction">
-                <p class="content">{{ form.provinceOpinion }}</p>
-              </el-form-item>
-            </div>
+        <div
+          v-if="
+            finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED
+          "
+          class="examine-item">
+          <div class="examine-title">省级审核详情</div>
+          <div class="input-item-wrp">
+            <el-form-item label="审核结果" prop="introduction">
+              <p class="content">{{ verifyRes(form.provinceVerify) }}</p>
+            </el-form-item>
+          </div>
+          <div class="input-item-wrp">
+            <el-form-item label="审核意见" prop="introduction">
+              <p class="content">{{ form.provinceOpinion }}</p>
+            </el-form-item>
+          </div>
 <!--            <div class="input-item-wrp">-->
 <!--              <el-form-item label="审核意见附件" prop="introduction">-->
 <!--&lt;!&ndash;                <p class="content fu-file" v-for="(item, index) in form.provinceAuditFile" :key="index">&ndash;&gt;-->
@@ -214,88 +203,77 @@
 <!--                </p>-->
 <!--              </el-form-item>-->
 <!--            </div>-->
-            <div class="input-item-wrp">
-              <el-form-item label="审核时间" prop="introduction">
-                <p class="content">{{ form.provinceAuditTime }}</p>
-              </el-form-item>
-            </div>
+          <div class="input-item-wrp">
+            <el-form-item label="审核时间" prop="introduction">
+              <p class="content">{{ form.provinceAuditTime }}</p>
+            </el-form-item>
           </div>
-        </el-form>
-      </div>
-      <div v-if="(userInfo.roleId === 2 && (finalStatus === 0 || (finalStatus === 3 && cityVerify))) || (userInfo.roleId === 1 && finalStatus ===2)">
+        </div>
+      </el-form>
+    </div>
+    <div
+      v-if="
+        (userInfo.roleId === 2 &&
+          (finalStatus === 0 || (finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED && cityVerify))) ||
+        (userInfo.roleId === 1 && finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PENDING)
+      "
+    >
 <!--      <div>-->
-        <div class="box-title" v-text="userInfo.roleId === 1? '审核':'设区市比选意见'"></div>
-        <el-form
-          style="padding-left: 14px"
-          ref="reviewForm"
-          class="form"
-          label-position="top"
-          :model="reviewForm"
-          label-width="80px"
+      <div class="box-title" v-text="userInfo.roleId === 1? '审核':'设区市比选意见'"></div>
+      <el-form
+        style="padding-left: 14px"
+        ref="reviewForm"
+        class="form"
+        label-position="top"
+        :model="reviewForm"
+        label-width="80px"
+      >
+        <el-form-item :label="userInfo.roleId === 1 ? '审核结果' : '比选结果'" prop="status" :rules="rule.select">
+          <el-radio-group v-model="reviewForm.status">
+            <el-radio :label="1">通过</el-radio>
+            <el-radio :label="0">不通过</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item v-if="userInfo.roleId === 1 && reviewForm.status === 0" label="不通过类型" prop="rejectType" :rules="rule.select">
+          <el-radio-group v-model="reviewForm.rejectType">
+            <el-radio :label="2">驳回市级重填</el-radio>
+            <el-radio :label="1">驳回县级重填</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item
+          v-if="userInfo.roleId === 2 || reviewForm.status === 0"
+          :label="userInfo.roleId === 2 ? '请填写比选意见' : '请填写审核意见'"
+          prop="opinion"
+          :rules="rule.input"
         >
-          <el-form-item label="审核结果" prop="status" :rules="rule.select">
-            <el-radio-group v-model="reviewForm.status">
-              <el-radio :label="1">通过</el-radio>
-              <el-radio :label="0">不通过</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item v-if="userInfo.roleId === 1 && reviewForm.status === 0" label="不通过类型" prop="rejectType" :rules="rule.select">
-            <el-radio-group v-model="reviewForm.rejectType">
-              <el-radio :label="2">驳回市级重填</el-radio>
-              <el-radio :label="1">驳回县级重填</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item
-            v-if="userInfo.roleId === 2"
-            label="请填写审核意见"
-            prop="opinion"
-            :rules="rule.input"
+          <el-input
+            style="width: 42%"
+            type="textarea"
+            :rows="5"
+            :placeholder="userInfo.roleId === 2 ? '请输入比选意见' : '请输入审核意见'"
+            maxlength="300"
+            show-word-limit
+            v-model="reviewForm.opinion"
           >
-            <el-input
-              style="width: 42%"
-              type="textarea"
-              :rows="5"
-              placeholder="请输入审核意见"
-              maxlength="300"
-              show-word-limit
-              v-model="reviewForm.opinion"
-            >
-            </el-input>
-          </el-form-item>
-          <el-form-item
-            v-else-if="reviewForm.status === 0"
-            label="请填写审核意见"
-            prop="opinion"
-            :rules="rule.input"
-          >
-            <el-input
-              style="width: 42%"
-              type="textarea"
-              :rows="5"
-              placeholder="请输入审核意见"
-              maxlength="300"
-              show-word-limit
-              v-model="reviewForm.opinion"
-            >
-            </el-input>
-          </el-form-item>
-          <el-form-item
-            v-if="userInfo.roleId === 2"
-            label="审核意见附件"
-            prop="processFilesArr"
-            :rules="rule.upload"
-          >
-            <p style="width: 42%; color: #FF6B00" class="py-4 leading-5">
-              <i class="el-icon-warning"></i>上传《未来乡村创建申报表》市级盖章扫描件
-            </p>
-            <UploadFile2
-              tip="支持格式：.doc, .docx, .pdf"
-              accept=".doc,.docx,.pdf"
-              :data="reviewForm.processFilesArr"
-              @add="onFileAdd($event, 'processFilesArr')"
-              @remove="onFileRemove($event, 'processFilesArr')"
-            />
-          </el-form-item>
+          </el-input>
+        </el-form-item>
+        <!-- <el-form-item
+          v-if="userInfo.roleId === 2"
+          label="审核意见附件"
+          prop="processFilesArr"
+          :rules="rule.upload"
+        >
+          <p style="width: 42%; color: #FF6B00" class="py-4 leading-5">
+            <i class="el-icon-warning"></i>上传《未来乡村创建申报表》市级盖章扫描件
+          </p>
+          <UploadFile2
+            tip="支持格式：.doc, .docx, .pdf"
+            accept=".doc,.docx,.pdf"
+            :data="reviewForm.processFilesArr"
+            @add="onFileAdd($event, 'processFilesArr')"
+            @remove="onFileRemove($event, 'processFilesArr')"
+          />
+        </el-form-item> -->
 <!--          <el-form-item-->
 <!--            v-else-->
 <!--            label="审核意见附件"-->
@@ -309,12 +287,11 @@
 <!--              @remove="onFileRemove($event, 'processFilesArr')"-->
 <!--            />-->
 <!--          </el-form-item>-->
-          <el-form-item style="text-align: center">
-            <el-button @click="$router.back()">取消</el-button>
-            <el-button type="primary" @click="validateForm">确定</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+        <el-form-item style="text-align: center">
+          <el-button @click="$router.back()">取消</el-button>
+          <el-button type="primary" @click="validateForm">确定</el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -327,6 +304,8 @@ import { getVillageItemDetail, getvillageDetailExport,
 } from "@/api2/villageManage";
 import { downloadFile } from "@/utils/data"
 import { mapGetters } from "vuex";
+
+import { FINAL_STATUS } from '@/views2/utils/constants';
 
 export default {
   mixins: [rule],
@@ -345,6 +324,7 @@ export default {
   },
   data() {
     return {
+      FINAL_STATUS,
       form: {
         annexFiles: [], // 附件
         cityAuditFile: [], // 附件
@@ -376,12 +356,13 @@ export default {
         projectFilingPhone: "", //联系电话
         projectFilingAudit: "", //审核人
         projects: [], //项目列表
+        richText: '23333', //
       },
       reviewForm: {
         status: null,
         rejectType: null,
         opinion: '',
-        processFilesArr: [],
+        // processFilesArr: [],
       },
       finalStatus: null,
       cityVerify: false,
@@ -453,7 +434,7 @@ export default {
           // processFilesArr: [],
           this.reviewForm.status = 1;
           this.reviewForm.opinion = res.cityOpinion;
-          this.reviewForm.processFilesArr = [res.cityAuditFile];
+          // this.reviewForm.processFilesArr = [res.cityAuditFile];
         }
         //console.log(res);
       });
@@ -500,7 +481,7 @@ export default {
       const { id } = this.$route.query;
       await verify({
         id: id, // 村庄id
-        fileId: this.reviewForm.processFilesArr.map(i => i.fileId).toString(), // 审核意见附件id
+        // fileId: this.reviewForm.processFilesArr.map(i => i.fileId).toString(), // 审核意见附件id
         status: this.reviewForm.status, // 审核状态 通过:1 不通过:0
         opinion: this.reviewForm.opinion, // 审核意见
         rejectType: this.reviewForm.rejectType, // 审核意见
@@ -514,10 +495,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.export {
-  margin-bottom: 25px;
-  .export-button{
-    float: right;
+.nav-root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .export-button {
+    flex-shrink: 0;
+  }
+
+  ::v-deep .router-back{
+    margin-bottom: 0 !important;
   }
 }
 .box-title {

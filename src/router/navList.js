@@ -507,8 +507,17 @@ export const defaultRoutes2 = [
         path: '/villageApplication2/index',
         name: 'VillageApplyList2',
         meta: {
-          title: '省级（市级）审核',
-          menuIds: [410002],
+          title: '市级比选',
+          menuIds: [41002],
+        },
+        component: () => import('@/views2/VillageApplication/index.vue'),
+      },
+      {
+        path: '/villageApplication2/index',
+        name: 'VillageApplyList2',
+        meta: {
+          title: '省级审核',
+          menuIds: [410003],
         },
         component: () => import('@/views2/VillageApplication/index.vue'),
       },

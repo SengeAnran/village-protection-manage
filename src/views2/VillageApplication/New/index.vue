@@ -11,58 +11,42 @@
       <div class="detail-top">
         <el-row :gutter="20">
           <el-col :span="12">
-            <div class="mb-8">
-              <el-form-item label="申报类型" prop="decType" :rules="rule.select">
+            <el-form-item label="申报类型" prop="decType" :rules="rule.select">
 <!--                <el-radio v-model="form.decType" :label="1">创建村申报</el-radio>-->
 <!--                <el-radio v-model="form.decType" :label="2">片区申报</el-radio>-->
-                <el-radio-group v-model="form.decType" @change="changeDecType">
-                  <el-radio :label="1">创建村申报</el-radio>
-                  <el-radio :label="2">片区申报</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </div>
+              <el-radio-group v-model="form.decType" @change="changeDecType">
+                <el-radio :label="1">创建村申报</el-radio>
+                <el-radio :label="2">片区申报</el-radio>
+              </el-radio-group>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <div class="mb-8">
-              <el-form-item v-if="form.decType === 1" label="创建村名称" prop="villageName" :rules="rule.select">
+            <el-form-item v-if="form.decType === 1" label="创建村名称" prop="villageName" :rules="rule.select">
 <!--                <VillageSelect v-model="form.villageName" @change="changeAddress('villageName', $event)" />-->
-                <el-select v-model="form.villageName" placeholder="请选择">
-                  <el-option
-                    v-for="item in villageOptions1"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.label">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item v-if="showdecType2" label="片区申报" prop="villageName" :rules="rule.select">
-                <el-input
-                  v-model="form.area"
-                  placeholder="请输入片区名称"
-                  maxlength="20"
-                ></el-input>
-                <el-select v-model="form.villageName" :multiple="true" placeholder="请选择片区内村庄">
-                  <el-option
-                    v-for="(item, index) in villageOptions"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.label">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </div>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="推荐次序" prop="countrySortNum" :rules="rule.inputNumber">
+              <el-select v-model="form.villageName" placeholder="请选择">
+                <el-option
+                  v-for="item in villageOptions1"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.label">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item v-if="showdecType2" label="片区申报" prop="villageName" :rules="rule.select">
               <el-input
-                v-model.number="form.countrySortNum"
-                placeholder="请输入推荐次序"
-                maxlength="8"
+                v-model="form.area"
+                placeholder="请输入片区名称"
+                maxlength="20"
+                style="margin-right: 16px"
               ></el-input>
+              <el-select v-model="form.villageName" :multiple="true" placeholder="请选择片区内村庄">
+                <el-option
+                  v-for="(item, index) in villageOptions"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.label">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -139,21 +123,21 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="户籍人口数（人）" prop="huNum" :rules="rule.inputNumber">
-              <el-input
+            <el-form-item label="户籍人口数（万人）" prop="huNum" :rules="rule.inputNumber">
+              <el-input-number
                 v-model="form.huNum"
                 placeholder="请输入"
                 maxlength="8"
-              ></el-input>
+              ></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="常住人口数（人）" prop="personNum" :rules="rule.inputNumber">
-              <el-input
+            <el-form-item label="常住人口数（万人）" prop="personNum" :rules="rule.inputNumber">
+              <el-input-number
                 v-model="form.personNum"
                 placeholder="请输入"
                 maxlength="8"
-              ></el-input>
+              ></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -271,23 +255,19 @@
           >
           </el-input>
         </el-form-item>
-        <el-form-item
-          label="上传附件："
-          :rules="rule.upload"
-          prop="annexFiles"
-        >
-          <p style="width: 42%; color: #FF6B00" class="py-4 leading-5">
-            <i class="el-icon-warning"></i>请上传以上内容的盖章扫描件
-          </p>
-          <UploadFile2
-            tip="支持格式：.doc, .docx, .pdf"
-            accept=".doc,.docx,.pdf"
-            :data="form.annexFiles"
-            @add="onFileAdd($event, 'annexFiles')"
-            @remove="onFileRemove($event, 'annexFiles')"
-          />
-        </el-form-item>
-
+        
+        <h4 class="block-tit">浙江省未来乡村创建方案</h4>
+        <div class="detail-top">
+          <el-row :gutter="20">
+            <el-col :span="24">
+              <el-form-item label="浙江省未来乡村创建方案" prop="createScenario" :rules="rule.richText">
+                <div style="width: 90%">
+                  <rich-text-editor v-model="form.createScenario" />
+                </div>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </div>
         <h4 class="block-tit">未来乡村创建项目备案表</h4>
         <div class="detail-top">
           <el-row :gutter="20">
@@ -325,7 +305,6 @@
           <div class="import">
             <el-button type="primary" @click="importDialogVisible = true">批量导入</el-button>
           </div>
-
           <VilliageListTable
             :data="form.projects"
             :hiddenEdit="false"
@@ -353,9 +332,10 @@
     <el-dialog
       title="添加"
       :visible.sync="dialogVisible"
-      width="600px"
+      width="800px"
+      :lock-scroll="true"
       @close="resetForm">
-      <el-form :rules="rule" ref="projectForm" :model="projectForm" label-width="150px">
+      <el-form :rules="rule" ref="projectForm" :model="projectForm" label-width="260px">
         <el-form-item label="项目名称：" prop="projectName" :rules="rule.input">
           <el-input v-model="projectForm.projectName" maxlength="20"></el-input>
         </el-form-item>
@@ -374,8 +354,19 @@
         <el-form-item label="用地情况：" prop="landUse" :rules="rule.input">
           <el-input v-model="projectForm.landUse" maxlength="20"></el-input>
         </el-form-item>
-        <el-form-item label="投资额（万元）：" prop="investmentAmount" :rules="rule.input">
-          <el-input v-model="projectForm.investmentAmount" maxlength="8"></el-input>
+        <el-form-item label="计划投资其中政府投资（万元）：" prop="planGovInvestment" :rules="rule.inputNumber">
+          <el-input-number v-model="projectForm.planGovInvestment" maxlength="8"></el-input-number>
+        </el-form-item>
+         <el-form-item label="计划投资其中社会投资（万元）：" prop="planSocialInvestment" :rules="rule.inputNumber">
+          <el-input-number v-model="projectForm.planSocialInvestment" maxlength="8"></el-input-number>
+        </el-form-item>
+        <el-form-item label="计划投资其中自筹投资（万元）：" prop="planSelfInvestment" :rules="rule.inputNumber">
+          <el-input-number v-model="projectForm.planSelfInvestment" maxlength="8"></el-input-number>
+        </el-form-item>
+        <el-form-item label="类型：" prop="type" :rules="rule.select">
+          <el-select v-model="projectForm.type" placeholder="请选择">
+            <el-option v-for="(item, index) of types" :key="index" :label="item.name" :value="item.value"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="运行维护管理安排：" prop="arrangements" :rules="rule.input">
           <el-input v-model="projectForm.arrangements" maxlength="20"></el-input>
@@ -404,7 +395,6 @@
         :upload-method="uploadMethod"
         returnData
         @returnData="returnDatas($event)"
-        @remove="onFileRemove2($event, 'annexFiles')"
       />
       <div style="margin: 0 auto; text-align: center">
         <el-button
@@ -417,15 +407,15 @@
         <div>请根据模板进行信息填写</div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="importDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="importDialogVisible = false">确 定</el-button>
+        <!-- <el-button @click="importDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="importDialogVisible = false">确 定</el-button> -->
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
 // import VillageSelect from '../Components/VillageSelect.vue';
-import VilliageListTable from "../Components/VilliageListTable";
+import VilliageListTable from "../Components/VilliageListTable.vue";
 
 
 import rule from "@/mixins/rule";
@@ -437,6 +427,9 @@ import {updateVillageItem} from "../../../api2/villageManage";
 import {getVillageArea} from "@/api2/acceptanceEvaluation";
 import {mapGetters} from "vuex";
 import {downloadFile} from "@/utils/data";
+
+import { types } from '@/views2/utils/project';
+
 const imgs = (rule, value, callback) => {
   if (value.length < 1) {
     callback(new Error("需要上传1张以上图片"));
@@ -462,19 +455,21 @@ export default {
   mixins: [rule],
   components: {
     VilliageListTable,
-    // VillageSelect,
-  },
+},
   data() {
     return {
       uploadMethod: importBatch,
+      types,
       showdecType2: false, // 展示区域选择
       form: {
         decType: 1, // 申报类型
+        // todo: be remove
         annexFiles: [], // 附件
         villageName: "", //村庄地址
         areaId: "", //村庄地址
         town: "", //村庄地址
         villageId: "", //村庄地址
+        // todo: be remove
         countrySortNum: "", //推荐次序
         declarationBatch: "", //申报批次
         startTime: "", //创建周期 开始
@@ -499,6 +494,7 @@ export default {
         projectFilingPhone: "", //联系电话
         projectFilingAudit: "", //审核人
         projects: [], //项目列表
+        createScenario: "", // 未来乡村创建方案
       },
       importFiles: [],
       type: "add",
@@ -511,9 +507,13 @@ export default {
         constructDetail: "", // 建设内容和规模
         schedule: "", // 进度安排
         landUse: "", // 用地情况
-        investmentAmount: "", // 投资额（万元）
+        govInvestment: "", // 投资额（万元）
+        selfInvestment: "", // 投资额（万元）
+        socialInvestment: "", // 投资额（万元）
         arrangements: "", // 运行维护管理安排
         remark: "", // 备注
+        type: null,
+        // 富文本
       },
       editIndex: "",
       editProjectForm: false, // 编辑表格
@@ -601,32 +601,12 @@ export default {
       downloadFile(res, '批量导入模版');
       this.$notify.success("下载成功！");
     },
-    onFileAdd(file, key) {
-      this.form[key].push(file);
-    },
-    onFileRemove(file, key) {
-      const index = this.form[key].findIndex((item) => {
-        return item.uid === file.uid || item.filePath === file.url;
-      });
-      if (index !== -1) {
-        this.form[key].splice(index, 1);
-      }
-    },
-    onFileAdd2(file, key) {
-      this.form[key].push(file);
-    },
     returnDatas(data) {
       console.log(data);
       this.form.projects = this.form.projects.concat(...data);
+      this.importDialogVisible = false;
+      this.importFiles = [];
       // this.importFiles.push(file);
-    },
-    onFileRemove2(file, key) {
-      const index = this.form[key].findIndex((item) => {
-        return item.uid === file.uid || item.filePath === file.url;
-      });
-      if (index !== -1) {
-        this.form[key].splice(index, 1);
-      }
     },
     // 添加 项目
     onSubmit() {
@@ -654,9 +634,12 @@ export default {
         constructDetail: "", // 建设内容和规模
         schedule: "", // 进度安排
         landUse: "", // 用地情况
-        investmentAmount: "", // 投资额（万元）
+        govInvestment: "", // 投资额（万元）
+        selfInvestment: "", // 投资额（万元）
+        socialInvestment: "", // 投资额（万元）
         arrangements: "", // 运行维护管理安排
         remark: "", // 备注
+        type: null,
       };
       // this.$refs.projectForm.resetFields();
       this.dialogVisible = false;
@@ -859,6 +842,9 @@ export default {
   .import-dialog {
     &::v-deep .upload-img-wrp {
       text-align: center;
+    }
+    ::v-deep .el-dialog__footer {
+      padding: 0;
     }
   }
 }
