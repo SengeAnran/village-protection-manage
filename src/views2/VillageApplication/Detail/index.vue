@@ -151,39 +151,17 @@
         <div class="examine-item">
           <div class="examine-title">设区市比选意见</div>
           <div class="input-item-wrp">
-            <el-form-item label="审核结果" prop="introduction">
+            <el-form-item label="比选结果" prop="introduction">
               <p class="content">{{ verifyRes(form.cityVerify) }}</p>
             </el-form-item>
           </div>
           <div class="input-item-wrp">
-            <el-form-item label="审核意见" prop="introduction">
+            <el-form-item label="比选意见" prop="introduction">
               <p class="content">{{ form.cityOpinion }}</p>
             </el-form-item>
           </div>
           <div class="input-item-wrp">
-            <el-form-item label="审核意见附件" prop="introduction">
-<!--                <div v-if="form.cityAuditFile && form.cityAuditFile.length > 0">-->
-<!--                  <p class="content fu-file" v-for="(item, index) in form.cityAuditFile" :key="index">-->
-<!--                    <a :href="item.filePath">-->
-<!--                      <i class="el-icon-link"></i>-->
-<!--                      <span>-->
-<!--                    {{ item.fileName }}-->
-<!--                  </span>-->
-<!--                    </a>-->
-<!--                  </p>-->
-<!--                </div>-->
-              <p class="content fu-file" v-if="form.cityAuditFile">
-                <a :href="form.cityAuditFile.filePath">
-                  <i class="el-icon-link"></i>
-                  <span>
-                  {{ form.cityAuditFile.fileName }}
-                </span>
-                </a>
-              </p>
-            </el-form-item>
-          </div>
-          <div class="input-item-wrp">
-            <el-form-item label="审核时间" prop="introduction">
+            <el-form-item label="比选时间" prop="introduction">
               <p class="content">{{ form.cityAuditTime }}</p>
             </el-form-item>
           </div>
@@ -250,7 +228,7 @@
         :model="reviewForm"
         label-width="80px"
       >
-        <el-form-item label="审核结果" prop="status" :rules="rule.select">
+        <el-form-item :label="userInfo.roleId === 1 ? '审核结果' : '比选结果'" prop="status" :rules="rule.select">
           <el-radio-group v-model="reviewForm.status">
             <el-radio :label="1">通过</el-radio>
             <el-radio :label="0">不通过</el-radio>
@@ -264,7 +242,7 @@
         </el-form-item>
         <el-form-item
           v-if="userInfo.roleId === 2 || reviewForm.status === 0"
-          label="请填写审核意见"
+          :label="userInfo.roleId === 2 ? '请填写比选意见' : '请填写审核意见'"
           prop="opinion"
           :rules="rule.input"
         >
@@ -272,14 +250,14 @@
             style="width: 42%"
             type="textarea"
             :rows="5"
-            placeholder="请输入审核意见"
+            :placeholder="userInfo.roleId === 2 ? '请输入比选意见' : '请输入审核意见'"
             maxlength="300"
             show-word-limit
             v-model="reviewForm.opinion"
           >
           </el-input>
         </el-form-item>
-        <el-form-item
+        <!-- <el-form-item
           v-if="userInfo.roleId === 2"
           label="审核意见附件"
           prop="processFilesArr"
@@ -295,7 +273,7 @@
             @add="onFileAdd($event, 'processFilesArr')"
             @remove="onFileRemove($event, 'processFilesArr')"
           />
-        </el-form-item>
+        </el-form-item> -->
 <!--          <el-form-item-->
 <!--            v-else-->
 <!--            label="审核意见附件"-->
@@ -384,7 +362,7 @@ export default {
         status: null,
         rejectType: null,
         opinion: '',
-        processFilesArr: [],
+        // processFilesArr: [],
       },
       finalStatus: null,
       cityVerify: false,
@@ -456,7 +434,7 @@ export default {
           // processFilesArr: [],
           this.reviewForm.status = 1;
           this.reviewForm.opinion = res.cityOpinion;
-          this.reviewForm.processFilesArr = [res.cityAuditFile];
+          // this.reviewForm.processFilesArr = [res.cityAuditFile];
         }
         //console.log(res);
       });
@@ -503,7 +481,7 @@ export default {
       const { id } = this.$route.query;
       await verify({
         id: id, // 村庄id
-        fileId: this.reviewForm.processFilesArr.map(i => i.fileId).toString(), // 审核意见附件id
+        // fileId: this.reviewForm.processFilesArr.map(i => i.fileId).toString(), // 审核意见附件id
         status: this.reviewForm.status, // 审核状态 通过:1 不通过:0
         opinion: this.reviewForm.opinion, // 审核意见
         rejectType: this.reviewForm.rejectType, // 审核意见
