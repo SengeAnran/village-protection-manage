@@ -1,10 +1,15 @@
+export const USER_TYPE = {
+  PROVINCE: 1, // 省级
+  CITY: 2, // 市级
+  COUNTRY: 3, // 县级
+};
 
 // 审核状态。0未通过， 1通过, -1未处理
 export const VERIFY_STATE = {
   PASSED: 1,
   REJECTED: 0,
   PENDING: -1,
-}
+};
 
 // 最终审核状态	
 export const FINAL_STATUS = {

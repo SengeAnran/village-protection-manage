@@ -499,18 +499,18 @@ export const defaultRoutes2 = [
         name: 'VillageApplyList2',
         meta: {
           title: '县级申报',
-          menuIds: [410001, 430002],
+          menuIds: [410001],
         },
-        component: () => import('@/views2/VillageApplication/index.vue'),
+        component: () => import('@/views2/VillageApplication/index/index.vue'),
       },
       {
         path: '/villageApplication2/index',
         name: 'VillageApplyList2',
         meta: {
           title: '市级比选',
-          menuIds: [41002],
+          menuIds: [41002, 430002],
         },
-        component: () => import('@/views2/VillageApplication/index.vue'),
+        component: () => import('@/views2/VillageApplication/index/index.vue'),
       },
       {
         path: '/villageApplication2/index',
@@ -519,7 +519,7 @@ export const defaultRoutes2 = [
           title: '省级审核',
           menuIds: [410003],
         },
-        component: () => import('@/views2/VillageApplication/index.vue'),
+        component: () => import('@/views2/VillageApplication/index/index.vue'),
       },
       {
         path: '/villageApplication2/new',
@@ -541,6 +541,7 @@ export const defaultRoutes2 = [
           menuIds: [],
         },
         component: () => import('@/views2/VillageApplication/Detail/index.vue'),
+        props: (route) => ({ cityVerify: route.query.cityVerify || false }),
       },
       {
         path: '/villageApplication2/declarationBatch',
