@@ -35,12 +35,7 @@
           <div class="import">
             <el-button type="primary" @click="lookHistory" >历史数据</el-button>
           </div>
-          <VilliageListTable
-            :data="form.detailLists"
-            :hiddenEdit="false"
-            :hiddenDetail="true"
-            hiddenOperation
-          />
+          <VilliageListTable type="look" :data="form.detailLists" />
         </el-form-item>
         <div id="verify"></div>
         <el-button @click="$router.back()">返回</el-button>
@@ -51,17 +46,13 @@
       :visible.sync="dialogVisible"
       width="90%"
     >
-      <VilliageListTable
-        :data="historyList"
-        history
-        :hiddenEdit="true"
-        :hiddenDetail="true"
-      />
+      <VillageListHistoryTable :data="historyList" />
     </el-dialog>
   </div>
 </template>
 <script>
 import VilliageListTable from "../Components/VilliageListTable";
+import VillageListHistoryTable from "../Components/VillageListHistoryTable";
 import rule from "@/mixins/rule";
 import { HISTORY_BUILDINGS } from "../constants";
 import { mapGetters } from "vuex";
@@ -71,6 +62,7 @@ export default {
   mixins: [rule],
   components: {
     VilliageListTable,
+    VillageListHistoryTable,
   },
   data() {
     return {

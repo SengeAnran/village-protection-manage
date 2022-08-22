@@ -78,16 +78,13 @@ export const ADMIN_ACTION = {
  */
 export function checkCountryUnifiedReport(list) {
   const r = (list || []).some((i) => isNaN(i.countrySortNum));
-  console.log('checkCountryUnifiedReport 000 ', r);
   if (r) {
     return false;
   }
   const grouped = _.groupBy(list || [], 'declarationBatch');
-  console.log('checkCountryUnifiedReport', grouped);
   return Object.values(grouped).every((arr) => {
     const dest = arr.map((i) => i.countrySortNum).sort();
     const unied = _.uniq(dest);
-    console.log('checkCountryUnifiedReport 2222 ', dest.length === unied.length);
     return dest.length === unied.length;
   });
 }
