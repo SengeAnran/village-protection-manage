@@ -32,79 +32,55 @@
       </template>
     </div>
     <el-dialog title="编辑" label-position="top" :visible.sync="dialogFormVisible" width="30%">
-      <el-form :model="form">
+      <el-form :model="form" ref="form">
         <el-form-item label="地区">杭州市</el-form-item>
         <el-form-item label="第一批申报名额配置:"> </el-form-item>
         <el-form-item>
-          <el-col :span="11">
-            <el-form-item prop="date1">
+          <el-col :span="10">
+            <el-form-item prop="name" :rules="[{ type: 'number', message: '最低名额必须为数字值' }]">
               <el-input
-                v-model="form.name"
                 placeholder="请输入最低名额"
+                type="name"
+                v-model.number="form.name"
                 autocomplete="off"
-                style="width: 140px"
               ></el-input>
             </el-form-item>
           </el-col>
-          ----
-          <el-col :span="11">
-            <el-form-item>
+          <el-col :span="2"> ---- </el-col>
+
+          <el-col :span="10">
+            <el-form-item prop="name1" :rules="[{ type: 'number', message: '最低名额必须为数字值' }]">
               <el-input
-                v-model="form.name1"
                 placeholder="请输入最高名额"
+                type="name1"
+                v-model.number="form.name1"
                 autocomplete="off"
-                style="width: 140px"
               ></el-input> </el-form-item
           ></el-col>
         </el-form-item>
         <el-form-item label="第一批验收名额配置:"> </el-form-item>
         <el-form-item>
-          <el-input
-            v-model="form.name2"
-            placeholder="请输入最低名额"
-            autocomplete="off"
-            style="width: 140px"
-          ></el-input>
-          ----
-          <el-input
-            v-model="form.name3"
-            placeholder="请输入最高名额"
-            autocomplete="off"
-            style="width: 140px"
-          ></el-input>
-        </el-form-item>
+          <el-col :span="10">
+            <el-form-item prop="name2" :rules="[{ type: 'number', message: '最低名额必须为数字值' }]">
+              <el-input
+                placeholder="请输入最低名额"
+                type="name2"
+                v-model.number="form.name2"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="2"> ---- </el-col>
 
-        <el-form-item label="第二批申报名额配置:"> </el-form-item>
-        <el-form-item>
-          <el-input
-            v-model="form.name4"
-            placeholder="请输入最低名额"
-            autocomplete="off"
-            style="width: 140px"
-          ></el-input>
-          ----
-          <el-input
-            v-model="form.name5"
-            placeholder="请输入最高名额"
-            autocomplete="off"
-            style="width: 140px"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="第二批验收名额配置:"> </el-form-item>
-        <el-form-item>
-          <el-input
-            v-model="form.name6"
-            placeholder="请输入最低名额"
-            autocomplete="off"
-            style="width: 140px"
-          ></el-input>
-          ----
-          <el-input
-            v-model="form.name7"
-            placeholder="请输入最高名额"
-            autocomplete="off"
-            style="width: 140px"
-          ></el-input>
+          <el-col :span="10">
+            <el-form-item prop="name3" :rules="[{ type: 'number', message: '最低名额必须为数字值' }]">
+              <el-input
+                placeholder="请输入最高名额"
+                type="name3"
+                v-model.number="form.name3"
+                autocomplete="off"
+              ></el-input> </el-form-item
+          ></el-col>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

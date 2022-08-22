@@ -28,11 +28,12 @@
           </el-form-item>
           <el-form-item label="申报批次：" prop="NewTime">
             <el-date-picker
-              v-model="form.NewTime"
+              v-model="value1"
               type="daterange"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
+              @change="changeTime"
             >
             </el-date-picker>
           </el-form-item>
@@ -81,13 +82,14 @@ export default {
       form: {
         type: type, //type 1：验收时间，2：申报批次
         acceptanceTime: '',
-        NewTime: '',
+        endTime: '',
+        startTime: '',
       },
       addMethod: setAdd,
       deleteMethod: setDelete,
       updateMethod: setUpdate,
       getMethod: getSetList,
-
+      value1: '',
       dialogVisible: false,
     };
   },
@@ -113,10 +115,14 @@ export default {
       });
     },
     beforeEditMethod(item) {
-      console.log(item);
+      console.log(item, 11111);
       this.form.acceptanceTime = item.acceptanceTime;
       this.form.type = type; //type 1：验收时间，2：申报批次
       this.form.id = item.id;
+    },
+    changeTime(item) {
+      debugger;
+      console.log(item);
     },
   },
 };

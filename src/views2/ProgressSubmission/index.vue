@@ -89,8 +89,8 @@
           <el-table-column label="村（片区）名称" prop="name"></el-table-column>
           <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
           <el-table-column label="项目数" prop="projectNum"></el-table-column>
-          <el-table-column label="已开工项目数" prop="projectNum"></el-table-column>
-          <el-table-column label="项目开工比例" prop="projectNum"></el-table-column>
+          <el-table-column label="已开工项目数" prop="startNum"></el-table-column>
+          <el-table-column label="项目开工比例" prop="startRate"></el-table-column>
           <el-table-column label="计划投资（万元）" prop="investNum"></el-table-column>
           <el-table-column label="完成投资(万元)" prop="completeTotalInvestment"></el-table-column>
           <el-table-column label="投资完成率" sortable prop="rate"></el-table-column>
