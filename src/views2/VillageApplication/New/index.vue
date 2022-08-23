@@ -52,7 +52,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="申报批次" prop="declarationBatch" :rules="rule.input">
+            <el-form-item label="创建批次" prop="declarationBatch" :rules="rule.input">
               <el-select v-model="form.declarationBatch" placeholder="请选择">
                 <el-option
                   v-for="(item, index) in batchOptions"
@@ -420,7 +420,7 @@ import VilliageListTable from "../Components/VilliageListTable.vue";
 
 import rule from "@/mixins/rule";
 import {
-  getSetListAll, getTemplate,
+  queryBatchInfo, getTemplate,
 } from "@/api2/villageManage";
 import { villageDeclaration, getVillageItemDetail, importBatch } from '@/api2/villageManage'
 import {updateVillageItem} from "../../../api2/villageManage";
@@ -585,7 +585,7 @@ export default {
     },
     // 获取批次列表
     getBatchList() {
-      getSetListAll(2).then((res) => {
+      queryBatchInfo(2).then((res) => {
         console.log(res);
         this.batchOptions = res.map((c) => {
           return {

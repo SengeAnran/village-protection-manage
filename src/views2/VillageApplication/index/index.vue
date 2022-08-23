@@ -15,7 +15,7 @@
               </el-input>
             </div>
             <div class="search-item">
-              <span class="label">申报批次：</span>
+              <span class="label">创建批次：</span>
               <el-select v-model="query.declarationBatch" placeholder="请选择">
                 <el-option v-for="item in queryDeclareTypeOpt" :key="item.value" :label="item.label"
                   :value="item.value">
@@ -91,7 +91,7 @@
         </template>
 
         <template v-slot:table>
-          <el-table-column label="申报批次" prop="declarationBatch"></el-table-column>
+          <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
           <el-table-column v-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.PROVINCE"
             :label="roleId === USER_TYPE.CITY ? '市推荐次序' : '推荐次序'" align="center" width="100" prop="citySortNum">
             <template slot-scope="scope">

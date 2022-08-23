@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <div>
-      <div class="text-lg mb-4">申报批次配置</div>
+      <div class="text-lg mb-4">创建批次配置</div>
       <Crud
         ref="crud"
         :add-method="addMethod"
@@ -23,10 +23,10 @@
         :permission-delete="4100"
       >
         <template v-slot:form>
-          <el-form-item label="申报批次：" prop="acceptanceTime" :rules="rule.input">
+          <el-form-item label="创建批次：" prop="acceptanceTime" :rules="rule.input">
             <el-input v-model="form.acceptanceTime" maxlength="20"></el-input>
           </el-form-item>
-          <el-form-item label="申报批次：" prop="NewTime">
+          <el-form-item label="创建批次：" prop="NewTime">
             <el-date-picker
               v-model="value1"
               type="daterange"
@@ -55,7 +55,7 @@
         </template>
 
         <template v-slot:table>
-          <el-table-column label="申报批次" prop="acceptanceTime"></el-table-column>
+          <el-table-column label="创建批次" prop="acceptanceTime"></el-table-column>
           <el-table-column label="创建时间" prop="gmtCreate">
             <template slot-scope="scope">
               <p>{{ scope.row.gmtCreate.slice(0, 10) }}</p>

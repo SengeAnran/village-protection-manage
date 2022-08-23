@@ -231,7 +231,7 @@
         <template v-slot:search>
           <div class="inline-flex mb-6 pl-0">
 <!--            <div class="search-item">-->
-<!--              <span class="label">申报批次：</span>-->
+<!--              <span class="label">创建批次：</span>-->
 <!--              <el-date-picker-->
 <!--                v-model="dialogQuery.declareYear"-->
 <!--                type="year"-->
@@ -241,7 +241,7 @@
 <!--              </el-date-picker>-->
 <!--            </div>-->
             <div class="search-item">
-              <span class="label">申报批次：</span>
+              <span class="label">创建批次：</span>
               <el-select v-model="dialogQuery.declareYear" placeholder="请选择">
                 <el-option
                   v-for="item in dialogDeclareYearOpt"

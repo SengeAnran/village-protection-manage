@@ -15,6 +15,7 @@ const roleIdType = {
   32: 2,
   43: 3,
   33: 3,
+  46: 6,
 };
 export default {
   namespaced: true,
