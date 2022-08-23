@@ -1,7 +1,9 @@
 export const USER_TYPE = {
   PROVINCE: 1, // 省级
   CITY: 2, // 市级
+  CITY_LEADER: 5, // 市级领导
   COUNTRY: 3, // 县级
+  COUNTRY_LEADER: 6, // 县级领到
 };
 
 // 审核状态。0未通过， 1通过, -1未处理

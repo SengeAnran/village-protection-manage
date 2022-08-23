@@ -32,13 +32,13 @@
           </div>
         </template>
         <template v-slot:crudAction>
-          <el-button v-if="roleId === 3" type="primary" icon="el-icon-plus" @click="newApplications">
+          <el-button v-if="roleId === USER_TYPE.COUNTRY" type="primary" icon="el-icon-plus" @click="newApplications">
             新建申报</el-button>
         </template>
         <template v-slot:export>
-          <el-button v-if="roleId !== 1" icon="el-icon-download" type="primary" plain @click="exportDatas">材料打印
+          <el-button icon="el-icon-download" type="primary" plain @click="exportDatas">材料打印
           </el-button>
-          <el-button v-if="roleId === 3 || roleId === 2" type="primary" @click="UnifiedReport"> 统一上报</el-button>
+          <el-button v-if="roleId === USER_TYPE.COUNTRY_LEADER || roleId === USER_TYPE.CITY_LEADER" type="primary" @click="UnifiedReport"> 统一上报</el-button>
         </template>
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
@@ -92,14 +92,14 @@
 
         <template v-slot:table>
           <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
-          <el-table-column v-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.PROVINCE"
-            :label="roleId === USER_TYPE.CITY ? '市推荐次序' : '推荐次序'" align="center" width="100" prop="citySortNum">
+          <el-table-column v-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER || roleId === USER_TYPE.PROVINCE"
+            :label="(roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) ? '市推荐次序' : '推荐次序'" align="center" width="100" prop="citySortNum">
             <template slot-scope="scope">
               <p>{{ scope.row.citySortNum || '-' }}</p>
             </template>
           </el-table-column>
-          <el-table-column v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.CITY"
-            :label="roleId === USER_TYPE.COUNTRY ? '推荐次序' : '县推荐次序'" align="center" width="100" prop="countrySortNum">
+          <el-table-column v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER || roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER"
+            :label="(roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) ? '推荐次序' : '县推荐次序'" align="center" width="100" prop="countrySortNum">
             <template slot-scope="scope">
               <p>{{ scope.row.countrySortNum || '-' }}</p>
             </template>
@@ -109,18 +109,18 @@
               <p>{{ scope.row.villageName }}</p>
             </template>
           </el-table-column>
-          <el-table-column v-if="roleId < 3" label="地区" prop="gmtCreate">
+          <el-table-column v-if="roleId === USER_TYPE.PROVINCE || roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER" label="地区" prop="gmtCreate">
             <template slot-scope="scope">
               <p>{{ scope.row.country }}</p>
             </template>
           </el-table-column>
-          <el-table-column v-if="roleId < 2" label="申报市" prop="gmtCreate">
+          <el-table-column v-if="roleId === USER_TYPE.PROVINCE" label="申报市" prop="gmtCreate">
             <template slot-scope="scope">
               <p>{{ scope.row.city }}</p>
             </template>
           </el-table-column>
           <el-table-column label="计划总投资（万元）" prop="investNum"></el-table-column>
-          <el-table-column label="申报时间" prop="gmtCreate">
+          <el-table-column label="上报时间" prop="gmtCreate">
             <template slot-scope="scope">
               <p>{{ scope.row.gmtCreate }}</p>
             </template>
@@ -246,7 +246,7 @@ export default {
   computed: {
     ...mapGetters(['userInfo']),
     roleId() {
-      return this.userInfo.roleId;
+      return this.userInfo?.roleId;
     },
   },
   beforeMount() {
@@ -313,7 +313,7 @@ export default {
         this.$notify.error('请选择需要上报的申报信息');
         return;
       }
-      if (this.roleId === USER_TYPE.COUNTRY) {
+      if (this.roleId === USER_TYPE.COUNTRY_LEADER) {
         //县级
         if (!this.selections.every((i) => i.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING)) {
           // 5县级待上报
@@ -323,7 +323,7 @@ export default {
           this.$notify.error('请先对选中的申报信息进行推荐次序排序');
           return;
         }
-      } else if (this.roleId === USER_TYPE.CITY) {
+      } else if (this.roleId === USER_TYPE.CITY_LEADER) {
         // 市级
         if (!this.selections.every((i) => i.finalStatus === FINAL_STATUS.CITY_REPORT_PENDING)) {
           // 6市级待上报
@@ -422,7 +422,7 @@ export default {
       });
     },
     handleEdit(scope) {
-      if (this.roleId === USER_TYPE.CITY) {
+      if (this.roleId === USER_TYPE.CITY || this.roleId === USER_TYPE.CITY_LEADER) {
         this.goAuditVerify(scope);
       } else {
         this.edit(scope.data);
@@ -446,13 +446,14 @@ export default {
      * @param {Object} data 数据
      */
     actionControl(actionName, data) {
-      if (this.roleId === USER_TYPE.COUNTRY) {
+      const roleId = this.roleId;
+      if (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) {
         // 县级
         return XIANJI_ACTION[actionName] && XIANJI_ACTION[actionName](data);
-      } else if (this.roleId === USER_TYPE.CITY) {
+      } else if (roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) {
         // 市级
         return SHIJI_ACTION[actionName] && SHIJI_ACTION[actionName](data);
-      } else if (this.roleId === USER_TYPE.PROVINCE) {
+      } else if (roleId === USER_TYPE.PROVINCE) {
         // 省
         return ADMIN_ACTION[actionName] && ADMIN_ACTION[actionName](data);
       }
