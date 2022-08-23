@@ -2,23 +2,49 @@
   <div class="village-manage block">
     <div v-if="$route.name === 'VillageApplyList2'">
       <div class="text-lg mb-4">申报列表</div>
-      <Crud ref="crud" :get-method="getMethod" :delete-method="deleteMethod" :query.sync="query" selection id-key="id"
-        actionWidth="200px" :multiple-delete="userInfo.roleId === USER_TYPE.COUNTRY" showExport
-        :export-method="exportMethod" :hideAdd="true" :hideEdit="true" :hideView="true" :hideDelete="true"
-        :permission-add="0" :permission-edit="0" :permission-delete="10004" :export-file-name="exportFileName"
-        exportName="导出信息汇总表" @selectionChange="selectionChange">
+      <Crud
+        ref="crud"
+        :get-method="getMethod"
+        :delete-method="deleteMethod"
+        :query.sync="query"
+        selection
+        id-key="id"
+        actionWidth="200px"
+        :multiple-delete="userInfo.roleId === USER_TYPE.COUNTRY"
+        showExport
+        :export-method="exportMethod"
+        :hideAdd="true"
+        :hideEdit="true"
+        :hideView="true"
+        :hideDelete="true"
+        :permission-add="0"
+        :permission-edit="0"
+        :permission-delete="10004"
+        :export-file-name="exportFileName"
+        exportName="导出信息汇总表"
+        @selectionChange="selectionChange"
+      >
         <template v-slot:search>
           <div class="inline-flex mb-6 pl-0">
             <div class="search-item">
               <span class="label">村（片区）名称：</span>
-              <el-input style="width: 200px" v-model="query.villageName" :maxlength="50" placeholder="请输入村（片区）名称">
+              <el-input
+                style="width: 200px"
+                v-model="query.villageName"
+                :maxlength="50"
+                placeholder="请输入村（片区）名称"
+              >
               </el-input>
             </div>
             <div class="search-item">
               <span class="label">申报批次：</span>
               <el-select v-model="query.declarationBatch" placeholder="请选择">
-                <el-option v-for="item in queryDeclareTypeOpt" :key="item.value" :label="item.label"
-                  :value="item.value">
+                <el-option
+                  v-for="item in queryDeclareTypeOpt"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
                 </el-option>
               </el-select>
             </div>
@@ -33,10 +59,12 @@
         </template>
         <template v-slot:crudAction>
           <el-button v-if="roleId === 3" type="primary" icon="el-icon-plus" @click="newApplications">
-            新建申报</el-button>
+            新建申报</el-button
+          >
         </template>
         <template v-slot:export>
-          <el-button v-if="roleId !== 1" icon="el-icon-download" type="primary" plain @click="exportDatas">材料打印
+          <el-button v-if="roleId !== 1" icon="el-icon-download" type="primary" plain @click="exportDatas"
+            >材料打印
           </el-button>
           <el-button v-if="roleId === 3 || roleId === 2" type="primary" @click="UnifiedReport"> 统一上报</el-button>
         </template>
@@ -48,43 +76,56 @@
               <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
             </span>
             <span v-if="actionControl('审核', scope.data)">
-              <el-divider v-if="actionControl('排序', scope.data) || actionControl('详情', scope.data)"
-                direction="vertical"></el-divider>
+              <el-divider
+                v-if="actionControl('排序', scope.data) || actionControl('详情', scope.data)"
+                direction="vertical"
+              ></el-divider>
               <el-link @click="goAudit(scope)" type="primary"> 审核 </el-link>
             </span>
 
             <!--            市级审核修改-->
             <span v-if="actionControl('修改', scope.data)">
-              <el-divider v-if="
-                actionControl('排序', scope.data) ||
-                actionControl('详情', scope.data) ||
-                actionControl('审核', scope.data)
-              " direction="vertical"></el-divider>
+              <el-divider
+                v-if="
+                  actionControl('排序', scope.data) ||
+                  actionControl('详情', scope.data) ||
+                  actionControl('审核', scope.data)
+                "
+                direction="vertical"
+              ></el-divider>
               <el-link @click="handleEdit(scope)" type="primary"> 修改</el-link>
             </span>
 
             <span v-if="actionControl('删除', scope.data.finalStatus)">
-              <el-divider direction="vertical" v-if="
-                actionControl('排序', scope.data) ||
-                actionControl('详情', scope.data) ||
-                actionControl('审核', scope.data) ||
-                actionControl('修改', scope.data.finalStatus)
-              "></el-divider>
+              <el-divider
+                direction="vertical"
+                v-if="
+                  actionControl('排序', scope.data) ||
+                  actionControl('详情', scope.data) ||
+                  actionControl('审核', scope.data) ||
+                  actionControl('修改', scope.data.finalStatus)
+                "
+              ></el-divider>
               <el-link @click="deleteItem(scope.data.id)" type="danger"> 删除 </el-link>
             </span>
 
-            <span v-if="
-              roleId === USER_TYPE.COUNTRY &&
-              scope.data.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED &&
-              !scope.data.multipartFileVO
-            ">
-              <el-divider v-if="
-                actionControl('排序', scope.data) ||
-                actionControl('详情', scope.data) ||
-                actionControl('审核', scope.data) ||
-                actionControl('修改', scope.data.finalStatus) ||
-                actionControl('删除', scope.data.finalStatus)
-              " direction="vertical"></el-divider>
+            <span
+              v-if="
+                roleId === USER_TYPE.COUNTRY &&
+                scope.data.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED &&
+                !scope.data.multipartFileVO
+              "
+            >
+              <el-divider
+                v-if="
+                  actionControl('排序', scope.data) ||
+                  actionControl('详情', scope.data) ||
+                  actionControl('审核', scope.data) ||
+                  actionControl('修改', scope.data.finalStatus) ||
+                  actionControl('删除', scope.data.finalStatus)
+                "
+                direction="vertical"
+              ></el-divider>
               <el-link @click="uploadScan(scope)" type="primary"> 扫描件上传 </el-link>
             </span>
           </div>
@@ -92,14 +133,24 @@
 
         <template v-slot:table>
           <el-table-column label="申报批次" prop="declarationBatch"></el-table-column>
-          <el-table-column v-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.PROVINCE"
-            :label="roleId === USER_TYPE.CITY ? '市推荐次序' : '推荐次序'" align="center" width="100" prop="citySortNum">
+          <el-table-column
+            v-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.PROVINCE"
+            :label="roleId === USER_TYPE.CITY ? '市推荐次序' : '推荐次序'"
+            align="center"
+            width="100"
+            prop="citySortNum"
+          >
             <template slot-scope="scope">
               <p>{{ scope.row.citySortNum || '-' }}</p>
             </template>
           </el-table-column>
-          <el-table-column v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.CITY"
-            :label="roleId === USER_TYPE.COUNTRY ? '推荐次序' : '县推荐次序'" align="center" width="100" prop="countrySortNum">
+          <el-table-column
+            v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.CITY"
+            :label="roleId === USER_TYPE.COUNTRY ? '推荐次序' : '县推荐次序'"
+            align="center"
+            width="100"
+            prop="countrySortNum"
+          >
             <template slot-scope="scope">
               <p>{{ scope.row.countrySortNum || '-' }}</p>
             </template>
@@ -151,8 +202,14 @@
     <el-dialog title="扫描件上传" :visible.sync="ScanDocDialogVisible" width="600px">
       <el-form ref="form" :model="form2" label-width="80px">
         <el-form-item label="" :rules="rule.upload" prop="annexFiles">
-          <UploadFile2 tip="支持格式：.doc, .docx, .pdf" accept=".doc,.docx,.pdf" :data="form2.annexFiles" :limit="1"
-            @add="onFileAdd($event, 'annexFiles')" @remove="onFileRemove($event, 'annexFiles')" />
+          <UploadFile2
+            tip="支持格式：.doc, .docx, .pdf"
+            accept=".doc,.docx,.pdf"
+            :data="form2.annexFiles"
+            :limit="1"
+            @add="onFileAdd($event, 'annexFiles')"
+            @remove="onFileRemove($event, 'annexFiles')"
+          />
           <p style="width: 100%; color: #ff6b00" class="py-4 leading-5">
             <i class="el-icon-warning"></i>请上传已盖章完成的《浙江省未来乡村创建申报表》盖章扫描件
           </p>
@@ -254,7 +311,7 @@ export default {
     this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(DECLEAR_STATUS));
     this.getBatchInfo();
   },
-  mounted() { },
+  mounted() {},
   methods: {
     ...mapMutations('villageMange', ['changeDeclareList']),
     normalizeSelectOptions(obj) {

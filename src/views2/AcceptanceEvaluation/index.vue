@@ -47,6 +47,7 @@
         </template>
 
         <template v-slot:table>
+          <el-table-column label="地区" prop="name"></el-table-column>
           <el-table-column label="村(片区)名称" prop="name"></el-table-column>
           <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
           <el-table-column label="总投资（万元）" prop="investNum"></el-table-column>

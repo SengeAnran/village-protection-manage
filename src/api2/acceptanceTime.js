@@ -26,5 +26,16 @@ export const setUpdate = (data) => {
     method: 'POST',
     url: apiHost2 + `/api/workbench/declarationConfig/time/update`,
     data,
+    headers: { 'APPLICATION-ID': 4 },
+  });
+}
+
+//新增 
+export const setAdd = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/declarationConfig/time/add`,
+    data,
+    headers: { 'APPLICATION-ID': 4 },
   });
 }
