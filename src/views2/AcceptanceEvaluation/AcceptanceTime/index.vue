@@ -33,11 +33,11 @@
 
         <template v-slot:table>
           <el-table-column label="验收时间" prop="acceptanceTime"></el-table-column>
-          <el-table-column label="创建时间" prop="gmtCreate">
+          <!-- <el-table-column label="创建时间" prop="gmtCreate">
             <template slot-scope="scope">
               <p>{{ scope.row.gmtCreate.slice(0, 10) }}</p>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </template>
       </Crud>
     </div>
@@ -46,7 +46,7 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex';
-import { deleteVillageItem, getSetList, setAdd, setDelete, setUpdate } from '@/api2/villageManage';
+import { deleteVillageItem, getSetList, setAdd, setDelete, setUpdate } from '@/api2/acceptanceTime';
 import rule from '@/mixins/rule';
 import { recVerify } from '../../../api/villageManage';
 const type = 1; //type 1：验收时间，2：申报批次
@@ -58,7 +58,7 @@ export default {
         type: type,
       },
       form: {
-        type: type, //type 1：验收时间，2：申报批次
+        // type: type, //type 1：验收时间，2：申报批次
         acceptanceTime: '',
       },
       addMethod: setAdd,
@@ -92,7 +92,7 @@ export default {
     },
     beforeEditMethod(item) {
       this.form.acceptanceTime = item.acceptanceTime;
-      this.form.type = type; //type 1：验收时间，2：申报批次
+      // this.form.type = type; //type 1：验收时间，2：申报批次
       this.form.id = item.id;
     },
   },
