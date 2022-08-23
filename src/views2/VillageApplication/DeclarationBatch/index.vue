@@ -23,19 +23,30 @@
         :permission-delete="4100"
       >
         <template v-slot:form>
-          <el-form-item label="创建批次：" prop="acceptanceTime" :rules="rule.input">
-            <el-input v-model="form.acceptanceTime" maxlength="20"></el-input>
+          <el-form-item label="创建批次：" prop="batch" :rules="rule.input">
+            <el-input v-model="form.batch" maxlength="20"></el-input>
           </el-form-item>
-          <el-form-item label="创建批次：" prop="NewTime">
-            <el-date-picker
-              v-model="value1"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              @change="changeTime"
-            >
-            </el-date-picker>
+          <el-form-item label="创建批次：">
+            <el-col :span="11">
+              <!-- <el-date-picker type="date" placeholder="选择日期" v-model="form.startTime"> </el-date-picker> -->
+              <el-date-picker
+                type="date"
+                placeholder="选择日期"
+                v-model="form.startTime"
+                style="width: 100%"
+                value-format="yyyy-MM-dd"
+              ></el-date-picker>
+            </el-col>
+            <el-col class="line" :span="2">至</el-col>
+            <el-col :span="11">
+              <el-date-picker
+                type="date"
+                placeholder="选择日期"
+                v-model="form.endTime"
+                style="width: 100%"
+                value-format="yyyy-MM-dd"
+              ></el-date-picker>
+            </el-col>
           </el-form-item>
         </template>
         <!--        <template v-slot:tableAction="scope">-->
@@ -55,10 +66,10 @@
         </template>
 
         <template v-slot:table>
-          <el-table-column label="创建批次" prop="acceptanceTime"></el-table-column>
-          <el-table-column label="创建时间" prop="gmtCreate">
+          <el-table-column label="创建批次" prop="batch"></el-table-column>
+          <el-table-column label="申报时间">
             <template slot-scope="scope">
-              <p>{{ scope.row.gmtCreate.slice(0, 10) }}</p>
+              <p>{{ scope.row.startTime.slice(0, 10) }}——{{ scope.row.endTime.slice(0, 10) }}</p>
             </template>
           </el-table-column>
         </template>
@@ -69,7 +80,7 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex';
-import { deleteVillageItem, getSetList, setAdd, setDelete, setUpdate } from '@/api2/villageManage';
+import { deleteVillageItem, getSetList, setAdd, setDelete, setUpdate } from '@/api2/declarationBatch';
 import rule from '@/mixins/rule';
 const type = 2; //type 1：验收时间，2：申报批次
 export default {
@@ -80,8 +91,8 @@ export default {
         type: type,
       },
       form: {
-        type: type, //type 1：验收时间，2：申报批次
-        acceptanceTime: '',
+        // type: type, //type 1：验收时间，2：申报批次
+        batch: '',
         endTime: '',
         startTime: '',
       },
@@ -116,12 +127,14 @@ export default {
     },
     beforeEditMethod(item) {
       console.log(item, 11111);
-      this.form.acceptanceTime = item.acceptanceTime;
-      this.form.type = type; //type 1：验收时间，2：申报批次
+      this.form.batch = item.batch;
+      // this.form.type = type; //type 1：验收时间，2：申报批次
       this.form.id = item.id;
+      this.form.endTime = item.endTime;
+      this.form.startTime = item.startTime;
     },
+
     changeTime(item) {
-      debugger;
       console.log(item);
     },
   },

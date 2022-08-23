@@ -5,7 +5,7 @@ const { apiHost2 } = config;
 
 // 导出信息汇总表
 export const getInforExport = (params) => {
-  console.log('params',params)
+  console.log('params', params)
   return axios.request({
     method: "get",
     url: apiHost2 + "/api/workbench/progressReport/export/list?ids=" + params.ids.toString(),
@@ -16,7 +16,7 @@ export const getInforExport = (params) => {
 
 // 报送详情 - 导出
 export const exportDetail = (data) => {
-  console.log('data',data)
+  console.log('data', data)
   return axios.request({
     method: "POST",
     url: apiHost2 + "/api/workbench/progressReport/detailExport",
