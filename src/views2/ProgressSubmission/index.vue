@@ -24,10 +24,9 @@
         :permission-add="0"
         :permission-edit="0"
         :permission-delete="10004"
-        :tableRowClassName="tableRowClassName"
       >
         <template v-slot:search>
-          <div class="inline-flex mb-2 pl-0" style="flex-wrap: wrap">
+          <div class="inline-flex mb-6 pl-0">
             <div v-if="roleId !== 3" class="search-item">
               <span class="label">地区：</span>
               <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea" />
@@ -41,24 +40,16 @@
               <!--                </el-option>-->
               <!--              </el-select>-->
             </div>
-            <div class="search-item mb-4">
+            <div class="search-item">
               <span class="label">村（片区）名称：</span>
               <el-input
-                style="width: 180px"
+                style="width: 200px"
                 v-model="query.name"
                 :maxlength="50"
                 placeholder="请输入村庄名称"
               ></el-input>
             </div>
-            <div class="search-item  mb-4" v-if="roleId !== USER_TYPE.COUNTRY">
-              <span class="label">创建批次：</span>
-              <el-select v-model="query.declarationBatch" placeholder="请选择">
-                <el-option v-for="item in queryDeclareTypeOpt" :key="item.value" :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </div>
-            <div class="search-item  mb-4">
+            <div class="search-item">
               <span class="label">报送更新时间：</span>
               <el-date-picker
                 v-model="query.date"
@@ -103,7 +94,9 @@
           <el-table-column label="计划投资（万元）" prop="investNum"></el-table-column>
           <el-table-column label="完成投资(万元)" prop="completeTotalInvestment">
             <template slot-scope="scope">
-              {{ scope.row.completeTotalInvestment || 0 }}
+              <span :class="scope.row.completeTotalInvestment > scope.row.investNum ? 'cell-warn' : ''">
+                {{ scope.row.completeTotalInvestment || 0 }}
+              </span>
             </template>
           </el-table-column>
           <el-table-column label="投资完成率" sortable prop="rate"></el-table-column>
@@ -128,7 +121,6 @@ import {
 import { recVerify } from '../../api/villageManage';
 
 import { exportDetail, getInforExport, getList } from '@/api2/progressSubmission';
-import { USER_TYPE } from '@/views2/utils/constants';
 // import qs from "qs";
 export default {
   data() {
@@ -137,7 +129,6 @@ export default {
     //console.log(year);
 
     return {
-      USER_TYPE,
       query: {
         declarationBatch: '',
         finalStatus: '',
@@ -211,10 +202,6 @@ export default {
     // this.lookUp();
   },
   methods: {
-    tableRowClassName({ row }) {
-      const warn = row.completeTotalInvestment > row.investNum;
-      return warn ? 'warning-row' : '';
-    },
     // 时间范围
     setDate(val) {
       console.log(val);
@@ -408,24 +395,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.block {
-
-  ::v-deep .el-table {
-    .warning-row {
-      background-color:  rgb(245, 108, 108);
-
-      &.hover-row {
-        background-color:  rgb(244, 82, 82);
-        >td.el-table__cell {
-          background-color:  rgb(244, 82, 82);
-        }
-      }
-    }
-  }
-}
 .search-item {
   margin-right: 20px;
-  display: inline-block;
 
   .label {
     font-weight: 400;
@@ -444,6 +415,10 @@ export default {
   &.active {
     background: #15be50;
   }
+}
+
+.cell-warn {
+  color: rgb(245, 108, 108);
 }
 
 .tip {

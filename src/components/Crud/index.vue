@@ -50,7 +50,6 @@
         lineHeight: '22px',
       }"
       v-loading="loading"
-      :row-class-name="tableRowClassName"
       :data="items"
       @selection-change="selectionChange"
     >
@@ -402,11 +401,6 @@ export default {
     moveTop: {
       type: Boolean,
       default: false,
-    },
-    // 参考element-ui: table
-    tableRowClassName: {
-      type: Function,
-      default: () => '',
     },
   },
   data() {

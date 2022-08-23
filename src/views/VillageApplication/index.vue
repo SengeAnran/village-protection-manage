@@ -35,23 +35,13 @@
             </div>
             <div class="search-item">
               <span class="label">申报年度：</span>
-              <el-date-picker
-                v-model="query.declareYear"
-                type="year"
-                placeholder="选择年"
-                value-format="yyyy"
-              >
+              <el-date-picker v-model="query.declareYear" type="year" placeholder="选择年" value-format="yyyy">
               </el-date-picker>
             </div>
             <div class="search-item">
               <span class="label">状态：</span>
               <el-select v-model="query.declareStatus" placeholder="请选择">
-                <el-option
-                  v-for="item in declareStatusOpt"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
+                <el-option v-for="item in declareStatusOpt" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </div>
@@ -69,13 +59,14 @@
         <template v-slot:insert>
           <div class="tip" v-if="roleId === 2 && batchInfo.pici">
             <div class="tip-left">
-              <img src="@/assets/imgs/u15.png" alt="">
+              <img src="@/assets/imgs/u15.png" alt="" />
             </div>
             <div class="tip-right">
               <div class="tip-title">排序提示</div>
-              <div class="tip-content">当前正在申报的
-                <span>{{ batchInfo.pici }}</span>个批次中，有
-                <span>{{ batchInfo.import || 0}}</span>个重点村、
+              <div class="tip-content">
+                当前正在申报的 <span>{{ batchInfo.pici }}</span
+                >个批次中，有 <span>{{ batchInfo.import || 0 }}</span
+                >个重点村、
                 <span>{{ batchInfo.general || 0 }}</span>
                 个一般村申报已审核通过，您需要分批次排序后提交至省级审核。
               </div>
@@ -87,9 +78,7 @@
         </template>
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
-            <el-link v-if="roleId !== 1" type="primary" @click="goDeclareRouter(scope)" >
-              申报详情
-            </el-link>
+            <el-link v-if="roleId !== 1" type="primary" @click="goDeclareRouter(scope)"> 申报详情 </el-link>
             <el-divider v-if="roleId !== 1" direction="vertical"></el-divider>
             <el-link
               @click="goAuditResult(scope)"
@@ -112,25 +101,21 @@
               v-permission="10003"
             >
               <el-link @click="edit(scope.data)" type="primary"> 修改 </el-link>
-<!--              <el-divider direction="vertical"></el-divider>-->
+              <!--              <el-divider direction="vertical"></el-divider>-->
             </div>
-<!--            <el-link-->
-<!--              @click="deleteItem(scope.data.id)"-->
-<!--              v-if="actionControl('删除', scope.data.declareStatus)"-->
-<!--              type="danger"-->
-<!--              v-permission="10003"-->
-<!--            >-->
-<!--              删除-->
-<!--            </el-link>-->
+            <!--            <el-link-->
+            <!--              @click="deleteItem(scope.data.id)"-->
+            <!--              v-if="actionControl('删除', scope.data.declareStatus)"-->
+            <!--              type="danger"-->
+            <!--              v-permission="10003"-->
+            <!--            >-->
+            <!--              删除-->
+            <!--            </el-link>-->
           </div>
         </template>
 
         <template v-slot:crudAction>
-          <el-dropdown
-            v-permission="310001"
-            class="mr-3"
-            @command="newApplications"
-          >
+          <el-dropdown v-permission="310001" class="mr-3" @command="newApplications">
             <el-button type="primary" icon="el-icon-plus"> 新建申报 </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
@@ -147,10 +132,7 @@
         </template>
 
         <template v-slot:table>
-          <el-table-column
-            label="申报年度"
-            prop="declareYear"
-          ></el-table-column>
+          <el-table-column label="申报年度" prop="declareYear"></el-table-column>
           <el-table-column label="申报类型" prop="declareType">
             <template slot-scope="scope">
               <p>{{ declareType[scope.row.declareType] }}</p>
@@ -161,7 +143,7 @@
               <p>{{ scope.row.villageName }}</p>
             </template>
           </el-table-column>
-          <el-table-column v-if="roleId ===1" label="推荐次序" align="center" width="100" prop="citySortNum">
+          <el-table-column v-if="roleId === 1" label="推荐次序" align="center" width="100" prop="citySortNum">
             <template slot-scope="scope">
               <p>{{ scope.row.citySortNum }}</p>
             </template>
@@ -189,10 +171,7 @@
           <el-table-column label="状态" prop="declareStatus">
             <template slot-scope="scope">
               <p>
-                <i
-                  class="status"
-                  :class="{ active: scope.row.declareStatus === 2999 }"
-                ></i>
+                <i class="status" :class="{ active: scope.row.declareStatus === 2999 }"></i>
                 {{ declareStatus[scope.row.declareStatus] }}
               </p>
             </template>
@@ -200,11 +179,7 @@
         </template>
       </Crud>
     </div>
-    <el-dialog
-      title="村庄推荐排序"
-      :visible.sync="dialogVisible"
-      width="800px"
-    >
+    <el-dialog title="村庄推荐排序" :visible.sync="dialogVisible" width="800px">
       <Crud
         ref="dialogCrud"
         :custom-get-method="getDialogDataList"
@@ -230,18 +205,18 @@
       >
         <template v-slot:search>
           <div class="inline-flex mb-6 pl-0">
-<!--            <div class="search-item">-->
-<!--              <span class="label">创建批次：</span>-->
-<!--              <el-date-picker-->
-<!--                v-model="dialogQuery.declareYear"-->
-<!--                type="year"-->
-<!--                placeholder="选择年"-->
-<!--                value-format="yyyy"-->
-<!--              >-->
-<!--              </el-date-picker>-->
-<!--            </div>-->
+            <!--            <div class="search-item">-->
+            <!--              <span class="label">申报批次：</span>-->
+            <!--              <el-date-picker-->
+            <!--                v-model="dialogQuery.declareYear"-->
+            <!--                type="year"-->
+            <!--                placeholder="选择年"-->
+            <!--                value-format="yyyy"-->
+            <!--              >-->
+            <!--              </el-date-picker>-->
+            <!--            </div>-->
             <div class="search-item">
-              <span class="label">创建批次：</span>
+              <span class="label">申报批次：</span>
               <el-select v-model="dialogQuery.declareYear" placeholder="请选择">
                 <el-option
                   v-for="item in dialogDeclareYearOpt"
@@ -287,39 +262,41 @@
   </div>
 </template>
 <script>
-import { mapMutations, mapGetters } from "vuex";
-import { queryBatchInfo, queryTypeDeclaration, getRecVillages, getVillageList, deleteVillageItem } from "@/api/villageManage";
+import { mapMutations, mapGetters } from 'vuex';
 import {
-  DECLEAR_TYPE,
-  DECLEAR_STATUS,
-  VILLAGE_LIST_ROUTER_NAME, PRO_DECLEAR_STATUS,
-} from "./constants";
-import {recVerify} from "../../api/villageManage";
+  queryBatchInfo,
+  queryTypeDeclaration,
+  getRecVillages,
+  getVillageList,
+  deleteVillageItem,
+} from '@/api/villageManage';
+import { DECLEAR_TYPE, DECLEAR_STATUS, VILLAGE_LIST_ROUTER_NAME, PRO_DECLEAR_STATUS } from './constants';
+import { recVerify } from '../../api/villageManage';
 
 export default {
   data() {
     const date = new Date();
     const year = date.getFullYear().toString();
-    //console.log(year);
+    console.log(year);
 
     return {
       query: {
-        declareType: "",
-        declareStatus: "",
-        declareYear: "",
-        createBy: "",
+        declareType: '',
+        declareStatus: '',
+        declareYear: '',
+        createBy: '',
       },
       declareYearOpt: [
         {
-          value: "",
-          label: "2021",
-        }
+          value: '',
+          label: '2021',
+        },
       ],
       queryDeclareTypeOpt: [
         {
-          label: "全部",
-          value: ""
-        }
+          label: '全部',
+          value: '',
+        },
       ],
       dialogDeclareYearOpt: [
         // {
@@ -327,13 +304,12 @@ export default {
         //   label: "2021",
         // }
       ],
-      dialogDeclareTypeOpt2: [
-      ],
+      dialogDeclareTypeOpt2: [],
       declareStatusOpt: [
         {
-          label: "全部",
-          value: ""
-        }
+          label: '全部',
+          value: '',
+        },
       ],
       getMethod: getVillageList,
       deleteMethod: deleteVillageItem,
@@ -342,13 +318,13 @@ export default {
       submitSortMethod: recVerify,
       batchInfo: {},
       dialogQuery: {
-        declareType: "",
-        declareYear: "",
+        declareType: '',
+        declareYear: '',
       },
     };
   },
   computed: {
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(['userInfo']),
     roleId() {
       console.log(this.userInfo.roleId);
       return this.userInfo.roleId;
@@ -364,7 +340,6 @@ export default {
     } else {
       this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(PRO_DECLEAR_STATUS));
     }
-
 
     this.XIANJI_ACTION = {
       申报详情: () => true,
@@ -385,13 +360,11 @@ export default {
   },
   mounted() {
     this.lookUp();
-
   },
   methods: {
-    ...mapMutations("villageMange", ["changeDeclareList"]),
+    ...mapMutations('villageMange', ['changeDeclareList']),
     normalizeSelectOptions(obj) {
-      if (!Object.prototype.toString.call(obj).slice(8, -1) === "Object")
-        return [];
+      if (!Object.prototype.toString.call(obj).slice(8, -1) === 'Object') return [];
       return Object.keys(obj).map((key) => {
         return {
           label: obj[key],
@@ -417,55 +390,52 @@ export default {
       console.log(res);
       if (res.type) {
         this.dialogDeclareTypeOpt2 = res.type.map((item) => {
-          if (item === "1002") {
+          if (item === '1002') {
             return {
-              label: "重点村",
-              value: "1002",
+              label: '重点村',
+              value: '1002',
             };
           } else {
-            return { label: "一般村", value: "1001" };
+            return { label: '一般村', value: '1001' };
           }
         });
         this.dialogQuery.declareType = this.dialogDeclareTypeOpt2[0].value;
       } else {
-        this.dialogQuery.declareType = "";
+        this.dialogQuery.declareType = '';
       }
       if (res.years) {
         this.dialogDeclareYearOpt = res.years.map((item) => {
           return {
-            label: item + "年度",
+            label: item + '年度',
             value: item,
           };
         });
         this.dialogQuery.declareYear = this.dialogDeclareYearOpt[0].value;
       } else {
-        this.dialogQuery.declareYear = "";
+        this.dialogQuery.declareYear = '';
       }
-
-
     },
     // 市级汇总申报排序提示
     async queryBatchInfo() {
       const res = await queryBatchInfo();
       if (res && res.pici) {
         this.batchInfo = res;
-        this.$confirm('审核已完成！\n'  +
-          '您需要分批次排序后提交至省级审核。', '提示', {
+        this.$confirm('审核已完成！\n' + '您需要分批次排序后提交至省级审核。', '提示', {
           confirmButtonText: '前往排序',
           cancelButtonText: '暂不排序',
-          type: 'warning'
-        }).then(() => {
-          this.showDialog();
-        }).catch(() => {
-        });
+          type: 'warning',
+        })
+          .then(() => {
+            this.showDialog();
+          })
+          .catch(() => {});
       } else {
         this.batchInfo = {};
       }
       console.log(res);
-
     },
     showDialog() {
-      this.dialogVisible = true
+      this.dialogVisible = true;
     },
     onSubmit() {
       this.$refs.dialogCrud.submitSort();
@@ -476,7 +446,6 @@ export default {
       const res = await getRecVillages(params);
       console.log(res);
       return res;
-
     },
     // 申报详情
     goDeclareRouter(scope) {
@@ -484,7 +453,7 @@ export default {
 
       this.changeDeclareList({ id, declareYear, declareType });
       this.$router.push({
-        name: "declareList",
+        name: 'declareList',
       });
     },
     // 审核详情
@@ -492,27 +461,27 @@ export default {
       const { id, declareYear, declareType, detailId } = scope.data;
       if (this.roleId !== 1) {
         this.$router.push({
-          name: "auditList",
+          name: 'auditList',
           query: { id, declareYear, declareType: DECLEAR_TYPE[declareType] },
         });
       } else {
-        this.$router.push({ name: "villageDetail", query: { id: detailId, goVerify: true } });
+        this.$router.push({ name: 'villageDetail', query: { id: detailId, goVerify: true } });
       }
     },
     // 审核
     goAudit(scope) {
       const { id, declareYear, declareType, detailId } = scope.data;
-      console.log( scope.data);
+      console.log(scope.data);
       // if (this.roleId === 1) {
       //   id = detailId
       // }
       this.changeDeclareList({ id, declareYear, declareType });
       if (this.roleId === 2) {
         this.$router.push({
-          name: "audit",
+          name: 'audit',
         });
       } else {
-        this.$router.push({ name: "villageDetail", query: { id: detailId, verifyKey: true } });
+        this.$router.push({ name: 'villageDetail', query: { id: detailId, verifyKey: true } });
       }
     },
     // 修改
@@ -526,11 +495,11 @@ export default {
     },
     // 删除
     deleteItem(id) {
-      this.$confirm("是否删除该条数据？", "提示", {
-        type: "warning",
+      this.$confirm('是否删除该条数据？', '提示', {
+        type: 'warning',
       }).then(async () => {
         deleteVillageItem([id]).then(() => {
-          this.$notify.success("删除成功");
+          this.$notify.success('删除成功');
           this.$refs.crud.getItems();
         });
       });
@@ -543,20 +512,11 @@ export default {
      */
     actionControl(actionName, declareStatus) {
       if (this.roleId === 3) {
-        return (
-          this.XIANJI_ACTION[actionName] &&
-          this.XIANJI_ACTION[actionName](declareStatus)
-        );
+        return this.XIANJI_ACTION[actionName] && this.XIANJI_ACTION[actionName](declareStatus);
       } else if (this.roleId === 2) {
-        return (
-          this.SHIJI_ACTION[actionName] &&
-          this.SHIJI_ACTION[actionName](declareStatus)
-        );
+        return this.SHIJI_ACTION[actionName] && this.SHIJI_ACTION[actionName](declareStatus);
       } else if (this.roleId === 1) {
-        return (
-          this.ADMIN_ACTION[actionName] &&
-          this.ADMIN_ACTION[actionName](declareStatus)
-        );
+        return this.ADMIN_ACTION[actionName] && this.ADMIN_ACTION[actionName](declareStatus);
       }
       return false;
     },
@@ -608,8 +568,8 @@ export default {
   }
 }
 .tip {
-  background: #EDF4FF;
-  border: 1px solid #99CBF9;
+  background: #edf4ff;
+  border: 1px solid #99cbf9;
   border-radius: 4px;
   padding: 12px 16px;
   margin-bottom: 20px;
@@ -639,14 +599,14 @@ export default {
       line-height: 22px;
       margin-bottom: 8px;
       span {
-        color: #1492FF;
+        color: #1492ff;
       }
     }
     .tip-button {
       font-size: 14px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
-      color: #1492FF;
+      color: #1492ff;
       line-height: 22px;
     }
   }

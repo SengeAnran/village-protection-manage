@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <div>
-      <div class="text-lg mb-4">创建批次配置</div>
+      <div class="text-lg mb-4">申报批次配置</div>
       <Crud
         ref="crud"
         :add-method="addMethod"
@@ -23,10 +23,10 @@
         :permission-delete="4100"
       >
         <template v-slot:form>
-          <el-form-item label="创建批次：" prop="batch" :rules="rule.input">
+          <el-form-item label="申报批次：" prop="batch" :rules="rule.input">
             <el-input v-model="form.batch" maxlength="20"></el-input>
           </el-form-item>
-          <el-form-item label="创建批次：">
+          <el-form-item label="申报批次：">
             <el-col :span="11">
               <!-- <el-date-picker type="date" placeholder="选择日期" v-model="form.startTime"> </el-date-picker> -->
               <el-date-picker
@@ -66,7 +66,7 @@
         </template>
 
         <template v-slot:table>
-          <el-table-column label="创建批次" prop="batch"></el-table-column>
+          <el-table-column label="申报批次" prop="batch"></el-table-column>
           <el-table-column label="申报时间">
             <template slot-scope="scope">
               <p>{{ scope.row.startTime.slice(0, 10) }}——{{ scope.row.endTime.slice(0, 10) }}</p>

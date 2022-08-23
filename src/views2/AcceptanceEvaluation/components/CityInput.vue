@@ -31,25 +31,11 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <file-attach
-          desc1="《浙江省未来乡村创建成效评价申请表》"
-          desc2="《浙江省未来乡村创建成效评分》市级审核盖章扫描件"
-          verifyProp="citySaveAnnex"
-          :data="form.citySaveAnnex"
-          @addFile="onFileAdd"
-          @removeFile="onFileRemove"
-        ></file-attach>
+        <file-attach desc1="《浙江省未来乡村创建成效评价申请表》" desc2="《浙江省未来乡村创建成效评分》市级审核盖章扫描件" verifyProp="citySaveAnnex" :data="form.citySaveAnnex" @addFile="onFileAdd" @removeFile="onFileRemove"></file-attach>
       </section>
       <section v-if="form.cityVerify === 0">
         <el-form-item label="驳回说明" prop="cityOpinion" :rules="rule.input">
-          <el-input
-            type="textarea"
-            :rows="5"
-            placeholder="请输入"
-            maxlength="800"
-            show-word-limit
-            v-model="form.cityOpinion"
-          />
+          <el-input type="textarea" :rows="5" placeholder="请输入" maxlength="800" show-word-limit v-model="form.cityOpinion" />
         </el-form-item>
       </section>
     </div>
@@ -61,8 +47,8 @@ import rule from '@/mixins/rule';
 import FileAttach from '../components/FileAttach.vue'; // 附件上传
 import SubTit from '../components/SubTit.vue';
 
-import { getSetList } from '@/api2/villageManage';
-
+// import { getSetList } from '@/api2/villageManage';
+import { getSetList } from '@/api2/acceptanceTime';
 export default {
   name: 'CityInput',
   mixins: [rule],
@@ -70,7 +56,7 @@ export default {
   props: {
     form: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
   data() {

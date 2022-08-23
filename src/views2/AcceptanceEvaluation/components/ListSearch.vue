@@ -41,8 +41,10 @@
   </div>
 </template>
 <script>
-import { getSetList } from '@/api2/villageManage';
-
+// import { getSetList } from '@/api2/villageManage';
+import { getSetList } from '@/api2/declarationBatch';
+// eslint-disable-next-line no-unused-vars
+import { getSetList as getSetListTime } from '@/api2/acceptanceTime';
 import { DECLEAR_STATUS } from '../constants';
 export default {
   props: {
@@ -80,7 +82,7 @@ export default {
   methods: {
     setBatchOpt() {
       getSetList({ type: 2, pageNum: 1, pageSize: 50 }).then((res) => {
-        this.batchOpt = res.content.map((c) => ({ label: c.acceptanceTime, value: c.id }));
+        this.batchOpt = res.content.map((c) => ({ label: c.batch, value: c.id }));
       });
     },
     setCityLevelOpt() {
@@ -93,7 +95,7 @@ export default {
       });
     },
     setAcceptTimeOpt() {
-      getSetList({ type: 1, pageNum: 1, pageSize: 50 }).then((res) => {
+      getSetListTime({ type: 1, pageNum: 1, pageSize: 50 }).then((res) => {
         this.acceptTimeOpt = res.content.map((c) => ({ label: c.acceptanceTime, value: c.acceptanceTime }));
       });
     },
