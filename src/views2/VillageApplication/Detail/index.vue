@@ -29,7 +29,7 @@
           <p class="content">{{ form.declarationBatch }}</p>
         </el-form-item>
         <el-form-item label="创建周期" prop="resPopulation">
-          <p class="content">{{ form.startTime.slice(0,7) }} 至 {{ form.endTime.slice(0,7) }}</p>
+          <p class="content">{{ (form.startTime || '').slice(0,7) }} 至 {{( form.endTime || '').slice(0,7) }}</p>
         </el-form-item>
         <el-form-item label="领办领导">
           <p class="content">{{ form.leader }}</p>
@@ -178,7 +178,7 @@
               <p class="content">{{ verifyRes(form.provinceVerify) }}</p>
             </el-form-item>
           </div>
-          <div class="input-item-wrp">
+          <div class="input-item-wrp" v-if="form.provinceOpinion">
             <el-form-item label="审核意见" prop="introduction">
               <p class="content">{{ form.provinceOpinion }}</p>
             </el-form-item>
@@ -210,15 +210,22 @@
           </div>
         </div>
       </el-form>
+      <div v-if="finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED && form.multipartFileVO">
+        <div class="box-title">扫描件下载</div>
+        <el-link :href="form.multipartFileVO.filePath" target="_blank">
+          {{ form.multipartFileVO.fileName }}
+          <i class="el-icon--right" style="color: #1492FF;">下载</i>
+        </el-link>
+      </div>
     </div>
+    <!-- 表单展示逻辑。市级角色：市级待审核、市级待申报、省级已驳回；省级角色：省级待审核 -->
     <div
       v-if="
-        (userInfo.roleId === 2 &&
-          (finalStatus === 0 || (finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED && cityVerify))) ||
-        (userInfo.roleId === 1 && finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PENDING)
+        (userInfo.roleId === USER_TYPE.CITY && cityVerify &&
+          (finalStatus === FINAL_STATUS.CITY_VERIFY_PENDING || finalStatus === FINAL_STATUS.CITY_REPORT_PENDING || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED)) ||
+        (userInfo.roleId === USER_TYPE.PROVINCE && finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PENDING)
       "
     >
-<!--      <div>-->
       <div class="box-title" v-text="userInfo.roleId === 1? '审核':'设区市比选意见'"></div>
       <el-form
         style="padding-left: 14px"
@@ -229,7 +236,7 @@
         label-width="80px"
       >
         <el-form-item :label="userInfo.roleId === 1 ? '审核结果' : '比选结果'" prop="status" :rules="rule.select">
-          <el-radio-group v-model="reviewForm.status">
+          <el-radio-group v-model="reviewForm.status" :disabled="userInfo.roleId === 2 && finalStatus === FINAL_STATUS.CITY_REPORT_PENDING">
             <el-radio :label="1">通过</el-radio>
             <el-radio :label="0">不通过</el-radio>
           </el-radio-group>
@@ -305,7 +312,7 @@ import { getVillageItemDetail, getvillageDetailExport,
 import { downloadFile } from "@/utils/data"
 import { mapGetters } from "vuex";
 
-import { FINAL_STATUS } from '@/views2/utils/constants';
+import { FINAL_STATUS, USER_TYPE } from '@/views2/utils/constants';
 
 export default {
   mixins: [rule],
@@ -318,6 +325,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    cityVerify: {
+      type: [String, Boolean],
+      default: false,
+    },
   },
   components: {
     VilliageListTable,
@@ -325,6 +336,7 @@ export default {
   data() {
     return {
       FINAL_STATUS,
+      USER_TYPE,
       form: {
         annexFiles: [], // 附件
         cityAuditFile: [], // 附件
@@ -365,7 +377,7 @@ export default {
         // processFilesArr: [],
       },
       finalStatus: null,
-      cityVerify: false,
+      // cityVerify: false,
       total: 0,
 
       tips: "",
@@ -393,7 +405,6 @@ export default {
   },
   mounted() {
     this.init();
-    //console.log(this.declareType);
   },
   methods: {
     onFileAdd(file, key) {
@@ -416,13 +427,8 @@ export default {
         }
       });
     },
-
-
     init() {
-      const { id, cityVerify } = this.$route.query;
-      if (cityVerify) {
-        this.cityVerify = cityVerify;
-      }
+      const { id } = this.$route.query;
       if (!id) return;
       getVillageItemDetail({ id }).then((res) => {
         this.form = res;

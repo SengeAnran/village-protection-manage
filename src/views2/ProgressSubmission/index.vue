@@ -92,7 +92,13 @@
           <el-table-column label="已开工项目数" prop="startNum"></el-table-column>
           <el-table-column label="项目开工比例" prop="startRate"></el-table-column>
           <el-table-column label="计划投资（万元）" prop="investNum"></el-table-column>
-          <el-table-column label="完成投资(万元)" prop="completeTotalInvestment"></el-table-column>
+          <el-table-column label="完成投资(万元)" prop="completeTotalInvestment">
+            <template slot-scope="scope">
+              <span :class="scope.row.completeTotalInvestment > scope.row.investNum ? 'cell-warn' : ''">
+                {{ scope.row.completeTotalInvestment || 0 }}
+              </span>
+            </template>
+          </el-table-column>
           <el-table-column label="投资完成率" sortable prop="rate"></el-table-column>
           <el-table-column label="报送更新时间" prop="gmtCreate">
             <template slot-scope="scope">
@@ -316,7 +322,7 @@ export default {
     // 详情
     goDetail(scope) {
       const { id } = scope.data;
-      this.$router.push({ name: 'ProgressSubmissionDetails', query: { id: id, type: 'look' } });
+      this.$router.push({ name: 'ProgressSubmissionDetails', query: { id: id } });
     },
     // 修改
     edit(data) {
@@ -409,6 +415,10 @@ export default {
   &.active {
     background: #15be50;
   }
+}
+
+.cell-warn {
+  color: rgb(245, 108, 108);
 }
 
 .tip {
