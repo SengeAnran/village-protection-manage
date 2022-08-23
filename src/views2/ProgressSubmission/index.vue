@@ -121,6 +121,7 @@ import {
 import { recVerify } from '../../api/villageManage';
 
 import { exportDetail, getInforExport, getList } from '@/api2/progressSubmission';
+import { USER_TYPE } from '@/views2/utils/constants';
 // import qs from "qs";
 export default {
   data() {
@@ -129,6 +130,7 @@ export default {
     //console.log(year);
 
     return {
+      USER_TYPE,
       query: {
         declarationBatch: '',
         finalStatus: '',

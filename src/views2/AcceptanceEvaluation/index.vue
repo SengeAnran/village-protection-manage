@@ -10,7 +10,7 @@
         selection
         id-key="id"
         actionWidth="180px"
-        :multiple-delete="userInfo.roleId === 3"
+        :multiple-delete="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER"
         :hideAdd="true"
         :hideEdit="true"
         :hideView="true"
@@ -34,20 +34,20 @@
         </template>
 
         <template v-slot:crudAction>
-          <el-button v-if="roleId === 3" type="primary" icon="el-icon-plus" @click="newApplications">
+          <el-button v-if="isCounty" type="primary" icon="el-icon-plus" @click="newApplications">
             新建申报
           </el-button>
         </template>
 
         <template v-slot:export>
           <el-button icon="el-icon-download" type="primary" plain @click="exportList"> 导出 </el-button>
-          <el-button icon="el-icon-download" v-if="roleId !== 3" type="primary" plain @click="exportEnclosure">
+          <el-button icon="el-icon-download" v-if="!isCounty" type="primary" plain @click="exportEnclosure">
             导出附件
           </el-button>
         </template>
 
         <template v-slot:table>
-          <el-table-column label="地区" prop="name"></el-table-column>
+          <el-table-column label="地区" prop="name" v-if="isCounty"></el-table-column>
           <el-table-column label="村(片区)名称" prop="name"></el-table-column>
           <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
           <el-table-column label="总投资（万元）" prop="investNum"></el-table-column>
@@ -93,11 +93,13 @@ import { getAuditList, getReportList, deleteItem, exportList, exportAnnex } from
 import { DECLEAR_STATUS } from './constants';
 import { downloadFile } from '@/utils/data';
 import { CITY_LEVEL_RATING } from './constants';
+import { USER_TYPE } from '@/views2/utils/constants';
 
 export default {
   components: { ListSearch },
   data() {
     return {
+      USER_TYPE,
       query: {
         areaId: '',
         villageName: '',
@@ -123,7 +125,8 @@ export default {
       return this.userInfo.roleId;
     },
     isCounty() {
-      return this.userInfo && this.userInfo.roleId === 3;
+      const roleId = this.roleId;
+      return roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER;
     },
     getMethod() {
       return this.isCounty ? getReportList : getAuditList;
@@ -261,23 +264,27 @@ export default {
       this.selections = val;
     },
     showDetail(data) {
+      const roleId = this.roleId;
       return (
-        this.roleId === 3 ||
-        (this.roleId === 2 && data.finalStatus !== 0) ||
-        (this.roleId === 1 && data.finalStatus !== 2)
+        roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER ||
+        ((roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) && data.finalStatus !== 0) ||
+        (roleId === USER_TYPE.PROVINCE && data.finalStatus !== 2)
       );
     },
     showAudit(data) {
-      return (this.roleId === 2 && data.finalStatus === 0) || (this.roleId === 1 && data.finalStatus === 2);
+      const roleId = this.roleId;
+      return ((roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) && data.finalStatus === 0) || (roleId === USER_TYPE.PROVINCE && data.finalStatus === 2);
     },
     showModify(data) {
+      const roleId = this.roleId;
       return (
-        (this.roleId === 3 && (data.finalStatus === 0 || data.finalStatus === 1)) ||
-        (this.roleId === 2 && data.finalStatus === 3)
+        ((roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) && (data.finalStatus === 0 || data.finalStatus === 1)) ||
+        ((roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) && data.finalStatus === 3)
       );
     },
     showDelete(data) {
-      return this.roleId === 3 && [0, 1].includes(data.finalStatus);
+      const roleId = this.roleId;
+      return (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) && [0, 1].includes(data.finalStatus);
     },
   },
 };
