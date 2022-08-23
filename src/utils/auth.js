@@ -74,7 +74,7 @@ export function verifyAuth() {
   // removeLocationSearch();
 }
 
-function _setPortalInfo() {
+function _setPortalInfo(token) {
   // 设置token
   setToken(token);
   // 重新设置loginType

@@ -67,7 +67,7 @@ export default {
 .table-custom {
   display: block !important;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
-  width: 90%;
+  width: 100%;
 
   ::v-deep tr th {
     background-color: #f3f3f3;

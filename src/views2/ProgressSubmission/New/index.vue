@@ -124,7 +124,7 @@ export default {
           return {
             ...i,
             state: Boolean(i.isStart),
-            lstState: Boolean(i.isStart),
+            lastState: Boolean(i.isStart),
             completeSelfInvestmentNow: null,
             completeGovInvestmentNow: null,
             completeSocialInvestmentNow: null,

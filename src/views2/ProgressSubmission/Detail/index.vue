@@ -35,7 +35,7 @@
           <div class="import">
             <el-button type="primary" @click="lookHistory" >历史数据</el-button>
           </div>
-          <VilliageListTable type="look" :data="form.detailLists" />
+          <VilliageListTable v-if="showTable" type="look" :data="form.detailLists" />
         </el-form-item>
         <div id="verify"></div>
         <el-button @click="$router.back()">返回</el-button>
@@ -85,15 +85,8 @@ export default {
       dialogId: "",
       textarea: "",
       status: null,
-      type: false,
+      showTable: false,
     };
-  },
-  watch: {
-    type(val) {
-      if (val === "edit") {
-        this.form = this.data;
-      }
-    },
   },
   computed: {
     ...mapGetters(["userInfo", "declareType"]),
@@ -110,13 +103,11 @@ export default {
   },
   methods: {
     init() {
-      const { id, type } = this.$route.query;
-      if (type) {
-        this.type = type;
-      }
+      const { id } = this.$route.query;
       if (!id) return;
       getDetail({ id }).then((res) => {
         this.form = res;
+        this.showTable = true;
       });
     },
     async lookHistory() {
@@ -129,8 +120,6 @@ export default {
     //   const res = await getvillageDetailExport({id})
     //   downloadFile(res, "浙江省未来乡村创建申报表", "application/msword")
     // },
-
-
   },
 };
 </script>

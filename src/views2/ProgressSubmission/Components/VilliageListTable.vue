@@ -23,8 +23,18 @@
       <el-table-column prop="planSocialInvestment" label="社会投资（万元）" width="150"> </el-table-column>
       <el-table-column prop="planSelfInvestment" label="自筹投资（万元）" width="150"> </el-table-column>
     </el-table-column>
-    <el-table-column v-if="!isFirstTimeReport && lastUpdateTime" :label="'完成投资 ' + lastUpdateTime" width="250">
-      <el-table-column prop="completeTotalInvestment" label="总投资（万元）" width="120"></el-table-column>
+    <el-table-column v-if="!isFirstTimeReport && lastUpdateTime" :label="'完成投资 ' + lastUpdateTime" width="250" header-align="center">
+      <el-table-column prop="completeTotalInvestment" label="总投资（万元）" width="120">
+        <template slot-scope="scope">
+          <span>
+            {{
+                (scope.row.completeGovInvestment || 0) +
+                (scope.row.completeSocialInvestment || 0) +
+                (scope.row.completeSelfInvestment || 0)
+            }}
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column prop="completeGovInvestment" label="其中政府投资（万元）" width="120"></el-table-column>
       <el-table-column prop="completeSocialInvestment" label="其中社会投资（万元）" width="120"></el-table-column>
       <el-table-column prop="completeSelfInvestment" label="其中自筹投资（万元）" width="120"></el-table-column>
@@ -157,7 +167,6 @@ export default {
         const firstTimeValue = this.data[0] && this.data[0].gmtModified || '';
         this.lastUpdateTime = firstTimeValue.slice(0, 10);
       }
-      console.log(this.isFirstTimeReport);
     },
     removeItem(index) {
       this.$myConfirm({
