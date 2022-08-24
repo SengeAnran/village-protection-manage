@@ -1,5 +1,5 @@
 <template>
-  <el-table class="table-custom" :data="data" border>
+  <el-table class="table-custom" :data="[displayData]" border>
     <el-table-column label="序号" type="index" fixed> </el-table-column>
     <el-table-column prop="projectName" label="项目名称" width="120"> </el-table-column>
     <el-table-column prop="constructUnit" label="建设单位" width="120"> </el-table-column>
@@ -19,29 +19,30 @@
       <el-table-column prop="planSocialInvestment" label="社会投资（万元）" width="150"> </el-table-column>
       <el-table-column prop="planSelfInvestment" label="自筹投资（万元）" width="120"> </el-table-column>
     </el-table-column>
-    <el-table-column label="完成投资" width="250">
+    <el-table-column v-for="(item, index) of displayData.history" :key="index" :label="'完成投资 ' + item.lastUpdateTime"
+      width="250" header-align="center">
       <el-table-column label="总投资（万元）" width="120">
         <template slot-scope="scope">
           <span>{{
-                (scope.row.completeGovInvestment || 0) +
-                (scope.row.completeSocialInvestment || 0) +
-                (scope.row.completeSelfInvestment || 0)
-            }}</span>
+              (scope.row.history[index].completeGovInvestment || 0) +
+              (scope.row.history[index].completeSocialInvestment || 0) +
+              (scope.row.history[index].completeSelfInvestment || 0)
+          }}</span>
         </template>
       </el-table-column>
       <el-table-column label="其中政府投资（万元）" width="120">
         <template slot-scope="scope">
-          <span>{{ scope.row.completeGovInvestment || 0 }}</span>
+          <span>{{ scope.row.history[index].completeGovInvestment || 0 }}</span>
         </template>
       </el-table-column>
       <el-table-column label="其中社会投资（万元）" width="120">
         <template slot-scope="scope">
-          <span>{{ scope.row.completeSocialInvestment || 0 }}</span>
+          <span>{{ scope.row.history[index].completeSocialInvestment || 0 }}</span>
         </template>
       </el-table-column>
       <el-table-column label="其中自筹投资（万元）" width="120">
         <template slot-scope="scope">
-          <span>{{ scope.row.completeSelfInvestment || 0 }}</span>
+          <span>{{ scope.row.history[index].completeSelfInvestment || 0 }}</span>
         </template>
       </el-table-column>
     </el-table-column>
@@ -59,6 +60,29 @@ export default {
     data: {
       type: Array,
       default: () => [],
+    },
+  },
+  data() {
+    return {
+      length: 0,
+    };
+  },
+  computed: {
+    displayData() {
+      const data = this.data || [];
+      if (!data.length) {
+        return data;
+      }
+      const result = { ...data[0] };
+      result.history = data.map((ele) => {
+        return {
+          completeGovInvestment: ele.completeGovInvestment,
+          completeSocialInvestment: ele.completeSocialInvestment,
+          completeSelfInvestment: ele.completeSelfInvestment,
+          lastUpdateTime: (ele?.gmtModified || '').slice(0, 10)
+        };
+      });
+      return result;
     },
   },
 };

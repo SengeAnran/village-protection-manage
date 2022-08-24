@@ -25,8 +25,8 @@
         @selectionChange="selectionChange"
       >
         <template v-slot:search>
-          <div class="inline-flex mb-6 pl-0">
-            <div class="search-item">
+          <div class="inline-flex pl-0" style="flex-wrap: wrap">
+            <div class="search-item mb-6">
               <span class="label">村（片区）名称：</span>
               <el-input
                 style="width: 200px"
@@ -36,7 +36,7 @@
               >
               </el-input>
             </div>
-            <div class="search-item">
+            <div class="search-item mb-6">
               <span class="label">申报批次：</span>
               <el-select v-model="query.declarationBatch" placeholder="请选择">
                 <el-option
@@ -48,7 +48,7 @@
                 </el-option>
               </el-select>
             </div>
-            <div class="search-item">
+            <div class="search-item mb-6">
               <span class="label">状态：</span>
               <el-select v-model="query.finalStatus" placeholder="请选择">
                 <el-option v-for="item in declareStatusOpt" :key="item.value" :label="item.label" :value="item.value">
@@ -509,10 +509,15 @@ export default {
 <style lang="scss" scoped>
 .search-item {
   margin-right: 20px;
+  white-space: nowrap;
 
   .label {
     font-weight: 400;
     color: #333333;
+  }
+
+  >div{
+    display: inline-block;
   }
 }
 
