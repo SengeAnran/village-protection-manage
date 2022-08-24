@@ -586,7 +586,7 @@ export default {
           };
           const res = await this.exportMethod(data);
           downloadFile(res, this.exportFileName);
-          this.$notify.success('导出成功');
+          // this.$notify.success('导出成功');
         } finally {
           this.loading = false;
         }
@@ -613,7 +613,7 @@ export default {
           const res = await this.exportMethod2(data);
           downloadFile(res, '浙江省未来乡村申报汇总');
           downloadFile(res, this.exportFileName2);
-          this.$notify.success('导出成功');
+          // this.$notify.success('导出成功');
         } finally {
           this.loading = false;
         }

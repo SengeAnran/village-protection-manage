@@ -32,8 +32,8 @@
       </template>
     </div>
     <el-dialog :title="title" label-position="top" :visible.sync="dialogFormVisible" width="30%">
-      <el-form :model="form" ref="form">
-        <el-form-item label="地区">杭州市</el-form-item>
+      <el-form ref="form">
+        <el-form-item label="地区">{{ city }}</el-form-item>
         <div v-for="(item, index) in detailList" :key="item.batch">
           <el-form-item :label="`第${index + 1}批申报名额配置:`"> </el-form-item>
           <el-form-item>
@@ -107,10 +107,7 @@ export default {
       tableData: [],
       dialogFormVisible: false,
       loading: true,
-      form: {
-        minimumQuota: '',
-        highestQuota: '',
-      },
+      city: '',
       list: {
         pageNum: 1,
         pageSize: 20,
@@ -143,6 +140,7 @@ export default {
     editClick(item) {
       this.title = '编辑';
       this.disabled = false;
+      this.city = item.city;
       getdetail(item.city).then((res) => {
         console.log(res);
         this.detailList = res.filter((res) => {
@@ -189,6 +187,7 @@ export default {
       this.dialogFormVisible = true;
       this.title = '详情';
       this.disabled = true;
+      this.city = item.city;
     },
   },
 };

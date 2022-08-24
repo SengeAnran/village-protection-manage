@@ -21,12 +21,20 @@ export const queryTypeDeclaration = (params) => {
 };
 
 // 查询批次信息
-export const queryBatchInfo = (data) => {
+export const queryBatchInfo = () => {
   return axios.request({
     method: 'POST',
-    url: apiHost2 + '/api/workbench/villageDeclaration/queryBatchInfo',
-    data,
+    url: apiHost2 + `/api/workbench/declarationConfig/batch/list`,
+    data: {
+      pageNum: 1,
+      pageSize: 2000,
+    },
   });
+  // return axios.request({
+  //   method: 'POST',
+  //   url: apiHost2 + '/api/workbench/villageDeclaration/queryBatchInfo',
+  //   data,
+  // });
 };
 // 村庄推荐排序审核
 export const recVerify = (data) => {

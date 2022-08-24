@@ -50,6 +50,18 @@
               ></el-input>
             </div>
             <div class="search-item">
+              <span class="label">申报批次：</span>
+              <el-select v-model="query.declarationBatch" placeholder="请选择">
+                <el-option
+                  v-for="item in queryDeclareTypeOpt"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <div class="search-item">
               <span class="label">报送更新时间：</span>
               <el-date-picker
                 v-model="query.date"
@@ -248,10 +260,10 @@ export default {
     // 批次
     async getBatchInfo() {
       const res = await queryBatchInfo();
-      const opt = res.map((i) => {
+      const opt = res?.content.map((i) => {
         return {
-          label: i,
-          value: i,
+          label: i.batch,
+          value: i.id,
         };
       });
       this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(opt);

@@ -23,7 +23,12 @@
               </el-select>
             </el-form-item>
             <el-form-item v-if="showdecType2" label="片区申报" prop="villageName" :rules="rule.select">
-              <el-input v-model="form.area" placeholder="请输入片区名称" maxlength="20" style="margin-right: 16px"></el-input>
+              <el-input
+                v-model="form.area"
+                placeholder="请输入片区名称"
+                maxlength="20"
+                style="margin-right: 16px"
+              ></el-input>
               <el-select v-model="form.villageName" :multiple="true" placeholder="请选择片区内村庄">
                 <el-option v-for="(item, index) in villageOptions" :key="index" :label="item.label" :value="item.label">
                 </el-option>
@@ -43,10 +48,20 @@
           <el-col :span="12">
             <el-form-item label="创建周期" prop="startTime" :rules="rule.date">
               计划从
-              <el-date-picker v-model="form.startTime" type="month" placeholder="选择月" value-format="yyyy-MM-DD HH:mm:ss">
+              <el-date-picker
+                v-model="form.startTime"
+                type="month"
+                placeholder="选择月"
+                value-format="yyyy-MM-DD HH:mm:ss"
+              >
               </el-date-picker>
               至
-              <el-date-picker v-model="form.endTime" type="month" placeholder="选择月" value-format="yyyy-MM-DD HH:mm:ss">
+              <el-date-picker
+                v-model="form.endTime"
+                type="month"
+                placeholder="选择月"
+                value-format="yyyy-MM-DD HH:mm:ss"
+              >
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -110,27 +125,71 @@
       </el-form-item>
       <div>
         <el-form-item label="基本情况" prop="basicText" :rules="rule.input">
-          <el-input style="width: 42%" type="textarea" :rows="5" placeholder="请输入创建村基本情况" maxlength="300" show-word-limit v-model="form.basicText">
+          <el-input
+            style="width: 42%"
+            type="textarea"
+            :rows="5"
+            placeholder="请输入创建村基本情况"
+            maxlength="300"
+            show-word-limit
+            v-model="form.basicText"
+          >
           </el-input>
           <p style="width: 42%; color: #ff6b00" class="py-4 leading-5">
             <i class="el-icon-warning"></i>要求：简述创建村基本情况、优劣势、必要性和创建目标定位等情况，要求300字以内。
           </p>
         </el-form-item>
-        <el-form-item label="村民代表会议（村民会议）关于未来乡村建设方案决议情况" prop="meetingText" :rules="rule.input">
-          <el-input style="width: 42%" type="textarea" :rows="5" placeholder="请输入村民代表会议（村民会议）关于未来乡村建设方案决议情况" maxlength="300" show-word-limit v-model="form.meetingText">
+        <el-form-item
+          label="村民代表会议（村民会议）关于未来乡村建设方案决议情况"
+          prop="meetingText"
+          :rules="rule.input"
+        >
+          <el-input
+            style="width: 42%"
+            type="textarea"
+            :rows="5"
+            placeholder="请输入村民代表会议（村民会议）关于未来乡村建设方案决议情况"
+            maxlength="300"
+            show-word-limit
+            v-model="form.meetingText"
+          >
           </el-input>
         </el-form-item>
         <el-form-item label="乡、镇（街道）人民政府（办事处）意见" prop="townText" :rules="rule.input">
-          <el-input style="width: 42%" type="textarea" :rows="5" placeholder="请输入乡、镇（街道）人民政府（办事处）意见" maxlength="300" show-word-limit v-model="form.townText">
+          <el-input
+            style="width: 42%"
+            type="textarea"
+            :rows="5"
+            placeholder="请输入乡、镇（街道）人民政府（办事处）意见"
+            maxlength="300"
+            show-word-limit
+            v-model="form.townText"
+          >
           </el-input>
         </el-form-item>
         <el-form-item label="县（市、区）部门审核意见" prop="departmentText" :rules="rule.input">
-          <el-input style="width: 42%" type="textarea" :rows="5" placeholder="请输入乡、镇（街道）人民政府（办事处）意见" maxlength="300" show-word-limit v-model="form.departmentText">
+          <el-input
+            style="width: 42%"
+            type="textarea"
+            :rows="5"
+            placeholder="请输入乡、镇（街道）人民政府（办事处）意见"
+            maxlength="300"
+            show-word-limit
+            v-model="form.departmentText"
+          >
           </el-input>
         </el-form-item>
 
         <el-form-item label="县（市、区）人民政府意见" prop="governmentText" :rules="rule.input">
-          <el-input style="width: 42%" type="textarea" :rows="5" placeholder="请输入乡、镇（街道）人民政府（办事处）意见" maxlength="300" show-word-limit v-model="form.governmentText">
+          <el-input
+            style="width: 42%"
+            type="textarea"
+            :rows="5"
+            placeholder="请输入乡、镇（街道）人民政府（办事处）意见"
+            maxlength="300"
+            show-word-limit
+            v-model="form.governmentText"
+          >
           </el-input>
         </el-form-item>
 
@@ -172,7 +231,15 @@
           <div class="import">
             <el-button type="primary" @click="importDialogVisible = true">批量导入</el-button>
           </div>
-          <VilliageListTable :data="form.projects" :hiddenEdit="false" :hiddenDetail="true" @remove="removeListItem" @editForm="editListItem" @moveUp="moveUpItem" @moveDown="moveDownItem" />
+          <VilliageListTable
+            :data="form.projects"
+            :hiddenEdit="false"
+            :hiddenDetail="true"
+            @remove="removeListItem"
+            @editForm="editListItem"
+            @moveUp="moveUpItem"
+            @moveDown="moveDownItem"
+          />
         </el-form-item>
         <el-button class="add-wrp" plain size="small" @click="dialogVisible = true">
           <i class="el-icon-plus"></i> 添加
@@ -229,10 +296,26 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog class="import-dialog" title="批量导入" :visible.sync="importDialogVisible" width="504px" @close="resetForm" center>
-      <UploadFile2 tip="支持格式：.xlsx" accept=".xlsx,.xlw" :data="importFiles" :upload-method="uploadMethod" returnData @returnData="returnDatas($event)" />
+    <el-dialog
+      class="import-dialog"
+      title="批量导入"
+      :visible.sync="importDialogVisible"
+      width="504px"
+      @close="resetForm"
+      center
+    >
+      <UploadFile2
+        tip="支持格式：.xlsx"
+        accept=".xlsx,.xlw"
+        :data="importFiles"
+        :upload-method="uploadMethod"
+        returnData
+        @returnData="returnDatas($event)"
+      />
       <div style="margin: 0 auto; text-align: center">
-        <el-button icon="el-icon-download" type="primary" plain @click="downLoad" style="margin: 32px 0 8px">模板下载</el-button>
+        <el-button icon="el-icon-download" type="primary" plain @click="downLoad" style="margin: 32px 0 8px"
+          >模板下载</el-button
+        >
         <div>请根据模板进行信息填写</div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -418,10 +501,10 @@ export default {
         pageSize: 1000,
       }).then((res) => {
         console.log(res);
-        this.batchOptions = res.map((c) => {
+        this.batchOptions = res.content.map((c) => {
           return {
-            label: c,
-            value: c,
+            label: c.batch,
+            value: c.id,
           };
         });
       });
@@ -512,7 +595,7 @@ export default {
         .then(() => {
           done();
         })
-        .catch(() => { });
+        .catch(() => {});
     },
 
     validateForm() {
