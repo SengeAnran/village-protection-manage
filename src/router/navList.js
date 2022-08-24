@@ -508,7 +508,7 @@ export const defaultRoutes2 = [
         name: 'VillageApplyList2',
         meta: {
           title: '市级比选',
-          menuIds: [41004],
+          menuIds: [410004],
         },
         component: () => import('@/views2/VillageApplication/index/index.vue'),
       },
@@ -693,7 +693,7 @@ export const defaultRoutes2 = [
         hidden: false,
         meta: {
           // activeMenu: "/acceptanceEvaluation/index",
-          title: '申报批次配置',
+          title: '创建批次配置',
           menuIds: [450001],
         },
         component: () => import('@/views2/VillageApplication/DeclarationBatch/index'),

@@ -7,6 +7,7 @@
         :get-method="getMethod"
         :delete-method="deleteMethod"
         :query.sync="query"
+        :showOrder="false"
         selection
         id-key="id"
         actionWidth="180px"
@@ -25,13 +26,13 @@
         </template>
 
         <template v-slot:crudAction>
-          <el-button v-if="isCounty" type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报 </el-button>
+          <el-button v-if="roleId === USER_TYPE.COUNTRY" type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报 </el-button>
         </template>
 
         <template v-slot:export>
           <el-button v-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER || roleId === USER_TYPE.PROVINCE" icon="el-icon-download" type="primary" plain @click="exportList" > 导出信息汇总表 </el-button>
           <el-button v-if="roleId !== USER_TYPE.PROVINCE" icon="el-icon-download" type="primary" plain @click="printFile" > 材料打印 </el-button>
-          <el-button v-if="roleId !== USER_TYPE.PROVINCE" type="primary" @click="UnifiedReport"> 统一上报</el-button>
+          <el-button v-if="roleId === USER_TYPE.CITY_LEADER || roleId === USER_TYPE.COUNTRY_LEADER" type="primary" @click="UnifiedReport"> 统一上报</el-button>
           <!-- 
           <el-button icon="el-icon-download" v-if="!isCounty" type="primary" plain @click="exportEnclosure">
             导出附件
@@ -373,7 +374,7 @@ export default {
     },
     showDelete(data) {
       const roleId = this.roleId;
-      return (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) && data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING;
+      return (roleId === USER_TYPE.COUNTRY) && data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING;
     },
     showUploadScanFile(data) {
       if (data.fileId) {

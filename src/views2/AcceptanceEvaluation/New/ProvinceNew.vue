@@ -10,8 +10,8 @@
 
     <div style="margin-top: 50px; text-align: center">
       <el-button @click="onBack">返回</el-button>
-      <el-button type="primary" @click="onSubmit">提交</el-button>
-      <el-button type="primary" @click="onSave">保存待发</el-button>
+      <el-button type="primary" @click="onSubmit">保存</el-button>
+      <!-- <el-button type="primary" @click="onSave">保存待发</el-button> -->
     </div>
   </div>
 </template>
@@ -52,7 +52,7 @@ export default {
     onSubmit() {
       this.$refs.form.validate(async (valid) => {
         if (!valid) return;
-        await this._beforeSubmit('是否确认提交？');
+        await this._beforeSubmit('是否确认保存？');
 
         // const form = { ...this.form };
         const form = this._assignForm();
@@ -73,7 +73,7 @@ export default {
       provinceAudit(form).then((res) => {
         console.log(res, 'res-----');
         this.$notify.success({
-          title: message || '提交成功！',
+          title: message || '保存成功！',
         });
 
         this.$router.back();

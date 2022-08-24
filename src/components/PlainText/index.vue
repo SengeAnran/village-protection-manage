@@ -1,5 +1,5 @@
 <template>
-  <span>{{ value }}</span>
+  <span>{{ displayText }}</span>
 </template>
 
 <script>
@@ -11,6 +11,10 @@ export default {
     value: {
       type: [String, Number],
     },
+    formatter: {
+      type: Function,
+      default: (v) => v,
+    },
   },
   computed: {
     displayText: {
@@ -19,14 +23,13 @@ export default {
         this.$emit('change', val);
       },
       get: function () {
-        return this.value;
+        return this.formatter(this.value);
       },
     },
   },
   watch: {
     value(val) {
       this.dispatch('ElFormItem', 'el.form.change', [val]);
-      console.log(this.$parent, val);
     },
   },
 };

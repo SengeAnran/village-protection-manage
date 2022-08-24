@@ -54,7 +54,7 @@
       @selection-change="selectionChange"
     >
       <el-table-column v-if="selection" type="selection" width="50" align="center" fixed="left"></el-table-column>
-      <el-table-column :label="order ? '推荐次序' : '序号'" width="80" align="center" fixed="left">
+      <el-table-column v-if="showOrder" :label="order ? '推荐次序' : '序号'" width="80" align="center" fixed="left">
         <template slot-scope="scope">
           {{ scope.$index + 1 + (page - 1) * size }}
         </template>
@@ -381,6 +381,10 @@ export default {
     labelWidth: {
       type: String,
       default: '95px',
+    },
+    showOrder: {
+      default: true,
+      type: Boolean,
     },
     // 推荐次序
     order: {

@@ -30,7 +30,7 @@
               <template v-if="row.title === '合计'" #error="{ error }">
                 <span class="el-form-item__error common-reset-form-error-message">{{ error }}</span>
               </template>
-              <plain-text v-if="row.title === '合计'" v-model="form[row.countyScoreProp]" />
+              <plain-text v-if="row.title === '合计'" v-model="form[row.countyScoreProp]" :formatter="displayScore" />
               <el-input-number
                 v-else
                 v-model="form[row.countyScoreProp]"
@@ -42,7 +42,9 @@
               />
             </el-form-item>
             <span v-else-if="item.prop === 'cityScore'">--</span>
-            <span v-else class="cell">{{ row[item.prop] }}</span>
+            <span v-else class="cell">
+              {{ row[item.prop] }}
+            </span>
           </div>
           <!-- 市级用户 -->
           <div v-else-if="(userInfo.roleId === USER_TYPE.CITY || userInfo.roleId === USER_TYPE.CITY_LEADER) && !disabled">
@@ -57,7 +59,7 @@
               <template v-if="row.title === '合计'" #error="{ error }">
                 <span class="el-form-item__error common-reset-form-error-message">{{ error }}</span>
               </template>
-              <plain-text v-if="row.title === '合计'" v-model="form[row.cityScoreProp]" />
+              <plain-text v-if="row.title === '合计'" v-model="form[row.cityScoreProp]" :formatter="displayScore" />
               <el-input-number
                 v-else
                 v-model="form[row.cityScoreProp]"
@@ -68,15 +70,15 @@
                 @change="setTotalScore('cityScoreProp', row.cityScoreProp)"
               />
             </el-form-item>
-            <span v-else-if="item.prop === 'countyScore'">{{ form[row.countyScoreProp] }}</span>
+            <span v-else-if="item.prop === 'countyScore'">{{ displayScore(form[row.countyScoreProp]) }}</span>
             <span v-else class="cell">{{ row[item.prop] }}</span>
           </div>
           <!-- 省级用户 -->
           <div v-else>
             <!-- <span class="cell">{{ row[item.prop] }}</span> -->
             <!-- <div v-if="userInfo.roleId === 1 || !disabled"> -->
-            <span v-if="item.prop === 'countyScore'">{{ form[row.countyScoreProp] }}</span>
-            <span v-else-if="item.prop === 'cityScore'">{{ form[row.cityScoreProp] }}</span>
+            <span v-if="item.prop === 'countyScore'">{{ displayScore(form[row.countyScoreProp]) }}</span>
+            <span v-else-if="item.prop === 'cityScore'">{{ displayScore(form[row.cityScoreProp]) }}</span>
             <span v-else class="cell">{{ row[item.prop] }}</span>
             <!-- </div> -->
           </div>
@@ -142,6 +144,9 @@ export default {
     });
   },
   methods: {
+    displayScore(score) {
+      return Number(score || 0).toFixed(2);
+    },
     arraySpanMethod({ rowIndex, columnIndex }) {
       if (columnIndex === 0) {
         if (rowIndex % 2 === 0 && rowIndex < 6) {

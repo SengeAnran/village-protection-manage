@@ -52,7 +52,7 @@
     </el-form>
     <div>
       <el-button @click="$router.back()">返回</el-button>
-      <el-button type="primary" @click="onSubmit">提交</el-button>
+      <el-button type="primary" @click="onSubmit">保存</el-button>
     </div>
     <el-dialog title="详情" :visible.sync="dialogVisible" width="90%">
       <VillageListHistoryTable :data="historyList" />

@@ -7,6 +7,7 @@
         :get-method="getMethod"
         :delete-method="deleteMethod"
         :query.sync="query"
+        :showOrder="false"
         selection
         id-key="id"
         actionWidth="200px"
@@ -37,7 +38,7 @@
               </el-input>
             </div>
             <div class="search-item mb-6">
-              <span class="label">申报批次：</span>
+              <span class="label">创建批次：</span>
               <el-select v-model="query.declarationBatch" placeholder="请选择">
                 <el-option
                   v-for="item in queryDeclareTypeOpt"
@@ -130,19 +131,19 @@
         </template>
 
         <template v-slot:table>
-          <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
-          <el-table-column v-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER || roleId === USER_TYPE.PROVINCE"
-            :label="(roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) ? '市推荐次序' : '推荐次序'" align="center" width="100" prop="citySortNum">
-            <template slot-scope="scope">
-              <p>{{ scope.row.citySortNum || '-' }}</p>
-            </template>
-          </el-table-column>
           <el-table-column v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER || roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER"
             :label="(roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) ? '推荐次序' : '县推荐次序'" align="center" width="100" prop="countrySortNum">
             <template slot-scope="scope">
               <p>{{ scope.row.countrySortNum || '-' }}</p>
             </template>
           </el-table-column>
+          <el-table-column v-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER || roleId === USER_TYPE.PROVINCE"
+            :label="(roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) ? '市推荐次序' : '推荐次序'" align="center" width="100" prop="citySortNum">
+            <template slot-scope="scope">
+              <p>{{ scope.row.citySortNum || '-' }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
           <el-table-column label="村（片区）名称" prop="villageName">
             <template slot-scope="scope">
               <p>{{ scope.row.villageName }}</p>
@@ -183,7 +184,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="sortDialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="onSubmit">提交</el-button>
+          <el-button type="primary" @click="onSubmit">保存</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -204,7 +205,7 @@
         </el-form-item>
         <el-form-item>
           <el-button>取消</el-button>
-          <el-button type="primary" @click="onSubmitUploadScan">提交</el-button>
+          <el-button type="primary" @click="onSubmitUploadScan">保存</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -316,10 +317,10 @@ export default {
     // 批次
     async getBatchInfo() {
       const res = await queryBatchInfo();
-      const opt = res.map((i) => {
+      const opt = (res?.content || []).map((ele) => {
         return {
-          label: i,
-          value: i,
+          label: ele.batch,
+          value: ele.id,
         };
       });
       this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(opt);

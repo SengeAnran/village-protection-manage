@@ -7,6 +7,7 @@
         :get-method="getMethod"
         :delete-method="deleteMethod"
         :query.sync="query"
+        :showOrder="false"
         selection
         id-key="id"
         actionWidth="180px"
@@ -50,7 +51,7 @@
               ></el-input>
             </div>
             <div class="search-item">
-              <span class="label">申报批次：</span>
+              <span class="label">创建批次：</span>
               <el-select v-model="query.declarationBatch" placeholder="请选择">
                 <el-option
                   v-for="item in queryDeclareTypeOpt"
@@ -262,7 +263,7 @@ export default {
     // 批次
     async getBatchInfo() {
       const res = await queryBatchInfo();
-      const opt = res?.content.map((i) => {
+      const opt = (res?.content || []).map((i) => {
         return {
           label: i.batch,
           value: i.id,

@@ -38,7 +38,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="申报批次" prop="declarationBatch" :rules="rule.input">
+            <el-form-item label="创建批次" prop="declarationBatch" :rules="rule.input">
               <el-select v-model="form.declarationBatch" placeholder="请选择">
                 <el-option v-for="(item, index) in batchOptions" :key="index" :label="item.label" :value="item.label">
                 </el-option>
@@ -248,7 +248,7 @@
     </el-form>
     <div>
       <el-button @click="$router.back()">取消</el-button>
-      <el-button type="primary" @click="validateForm">提交</el-button>
+      <el-button type="primary" @click="validateForm">保存</el-button>
     </div>
     <el-dialog title="添加" :visible.sync="dialogVisible" width="800px" :lock-scroll="true" @close="resetForm">
       <el-form :rules="rule" ref="projectForm" :model="projectForm" label-width="260px">

@@ -25,7 +25,7 @@
         <el-form-item label="推荐次序" prop="countrySortNum">
           <p class="content">{{ form.countrySortNum }}</p>
         </el-form-item>
-        <el-form-item label="申报批次" prop="declarationBatch">
+        <el-form-item label="创建批次" prop="declarationBatch">
           <p class="content">{{ form.declarationBatch }}</p>
         </el-form-item>
         <el-form-item label="创建周期" prop="resPopulation">

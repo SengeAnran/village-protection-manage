@@ -33,11 +33,11 @@ export default {
     // 批次
     async getBatchInfo() {
       const res = await queryBatchInfo();
-      const opt = res.map(i => {
+      const opt = (res?.content || []).map(ele => {
         return {
-          label: i,
-          value: i,
-        }
+          label: ele.batch,
+          value: ele.id,
+        };
       });
       this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(opt);
     },

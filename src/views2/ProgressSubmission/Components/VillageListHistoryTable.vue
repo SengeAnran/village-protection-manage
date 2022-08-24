@@ -1,5 +1,5 @@
 <template>
-  <el-table class="table-custom" :data="[displayData]" border>
+  <el-table class="table-custom" :data="displayData" border>
     <el-table-column label="序号" type="index" fixed> </el-table-column>
     <el-table-column prop="projectName" label="项目名称" width="120"> </el-table-column>
     <el-table-column prop="constructUnit" label="建设单位" width="120"> </el-table-column>
@@ -19,7 +19,7 @@
       <el-table-column prop="planSocialInvestment" label="社会投资（万元）" width="150"> </el-table-column>
       <el-table-column prop="planSelfInvestment" label="自筹投资（万元）" width="120"> </el-table-column>
     </el-table-column>
-    <el-table-column v-for="(item, index) of displayData.history" :key="index" :label="'完成投资 ' + item.lastUpdateTime"
+    <el-table-column v-for="(item, index) of (displayData[0] && displayData[0].history)" :key="index" :label="'完成投资 ' + item.lastUpdateTime"
       width="250" header-align="center">
       <el-table-column label="总投资（万元）" width="120">
         <template slot-scope="scope">
@@ -55,6 +55,7 @@
   </el-table>
 </template>
 <script>
+import _ from 'lodash';
 export default {
   props: {
     data: {
@@ -73,16 +74,19 @@ export default {
       if (!data.length) {
         return data;
       }
-      const result = { ...data[0] };
-      result.history = data.map((ele) => {
-        return {
-          completeGovInvestment: ele.completeGovInvestment,
-          completeSocialInvestment: ele.completeSocialInvestment,
-          completeSelfInvestment: ele.completeSelfInvestment,
-          lastUpdateTime: (ele?.gmtModified || '').slice(0, 10)
-        };
+      const grouped = _.groupBy(data || [], 'projectId');
+      return Object.values(grouped).map((array) => {
+        const result = { ...array[0] };
+        result.history = array.map((ele) => {
+          return {
+            completeGovInvestment: ele.completeGovInvestment,
+            completeSocialInvestment: ele.completeSocialInvestment,
+            completeSelfInvestment: ele.completeSelfInvestment,
+            lastUpdateTime: (ele?.gmtModified || '').slice(0, 10),
+          };
+        });
+        return result;
       });
-      return result;
     },
   },
 };
