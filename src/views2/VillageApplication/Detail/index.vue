@@ -305,7 +305,6 @@
 <script>
 import VilliageListTable from "../Components/VilliageListTable";
 import rule from "@/mixins/rule";
-import { HISTORY_BUILDINGS } from "../constants";
 import { getVillageItemDetail, getvillageDetailExport,
    verify,
 } from "@/api2/villageManage";
@@ -399,9 +398,6 @@ export default {
     roleId() {
       return this.userInfo.roleId;
     },
-  },
-  created() {
-    this.historyBuildings = HISTORY_BUILDINGS;
   },
   mounted() {
     this.init();

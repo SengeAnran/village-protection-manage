@@ -3,13 +3,8 @@
     <!-- 工具栏 -->
     <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" />
     <!-- 编辑器 -->
-    <Editor
-      style="height: 400px; overflow-y: hidden"
-      :defaultConfig="editorConfig"
-      v-model="html"
-      @onChange="onChange"
-      @onCreated="onCreated"
-    />
+    <Editor class="editor-com-content" style="height: 400px; overflow-y: hidden" :defaultConfig="editorConfig"
+      v-model="html" @onChange="onChange" @onCreated="onCreated" />
   </div>
 </template>
 
@@ -81,7 +76,7 @@ export default {
         this.dispatch('ElFormItem', 'el.form.change', [val]);
       },
       get: function () {
-        return this.value;
+        return this.value || '';
       },
     },
   },
@@ -90,7 +85,6 @@ export default {
   methods: {
     onCreated(editor) {
       this.editor = Object.seal(editor); // 【注意】一定要用 Object.seal() 否则会报错
-      editor.setHtml(this.value);
     },
     onChange(editor) {
       this.$emit('change', editor.getHtml());
@@ -115,10 +109,10 @@ export default {
   z-index: 1000;
   pointer-events: all;
 }
+
 </style>
 
 <style lang="scss">
-
 .el-form-item.is-error {
   .editor-com-root {
     border-color: red;

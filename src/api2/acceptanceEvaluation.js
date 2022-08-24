@@ -110,12 +110,11 @@ export const getCountyTempData = (params) => {
 };
 
 // 获取本次验收全市排名
-export const getCityRanking = (params) => {
+export const getCityRanking = (data) => {
   return axios.request({
-    method: 'GET',
-    url:
-      apiHost2 + `/api/workbench/createReports/ranking/${params.areaId}/${params.cityAcceptTime}/${params.totalCity}`,
-    params,
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/createReports/ranking`,
+    data,
   });
 };
 
@@ -153,3 +152,22 @@ export const filterVillageArea = (params) => {
     params,
   });
 };
+
+// 统一上报
+export const unifiedReporting = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/createReports/unifiedReporting`,
+    data,
+  });
+};
+
+// 验收上传扫描件
+export const uploadScan = (params) => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/createReports/uploadScan`,
+    params,
+  });
+};
+

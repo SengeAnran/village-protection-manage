@@ -13,7 +13,7 @@ export const VERIFY_STATE = {
   PENDING: -1,
 };
 
-// 最终审核状态	
+// 最终审核状态
 export const FINAL_STATUS = {
   //5县级待上报、0:市级未审核、1:市级已驳回、6市级待上报、2:省级未审核、3:省级已驳回、4:审核通过
   COUNTRY_REPORT_PENDING: 5,
@@ -24,3 +24,19 @@ export const FINAL_STATUS = {
   PROVINCE_VERIFY_REJECTED: 3,
   PROVINCE_VERIFY_PASSED: 4,
 };
+
+// 最终审核状态: 状态码->文案
+export const DECLARE_STATUS = {
+  //0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过 5县级待上报 6市级待上报
+  5: '县级待上报',
+  0: '市级未审核',
+  6: '市级待上报',
+  1: '市级已驳回',
+  2: '省级未审核',
+  3: '省级已驳回',
+  4: '审核通过',
+};
+
+// 最终审核状态个状态对应的颜色值
+export const FINAL_STATUE_COLOR = ['#E6A23C', '#F56C6C', '#E6A23C', '#F56C6C', '#67C23A', '#E6A23C', '#E6A23C']
+

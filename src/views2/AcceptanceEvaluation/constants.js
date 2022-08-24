@@ -1,12 +1,4 @@
-// 审核状态码
-export const DECLEAR_STATUS = {
-  // 0:市级未审核、1:市级审核不通过、2:省级未审核、3:省级审核不通过、4:审核通过
-  0: '市级未审核',
-  1: '市级审核不通过',
-  2: '省级未审核',
-  3: '省级审核不通过',
-  4: '审核通过',
-};
+
 // 省级审核状态码
 export const PRO_DECLEAR_STATUS = {
   2004: '省级未审核',
@@ -43,6 +35,7 @@ export const COUNTY_DEFAULT_FORM = {
   workBoardCounty: '',
   workGuideCounty: '',
   workMechanismCounty: '',
+  selfAssessmentSummary: '',
 };
 
 // 市级默认表单

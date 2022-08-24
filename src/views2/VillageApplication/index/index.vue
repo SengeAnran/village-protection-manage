@@ -221,13 +221,12 @@ import {
   unifiedReporting,
   uploadScan,
 } from '@/api2/villageManage';
-import { DECLEAR_STATUS } from '../constants';
 import { recVerify } from '@/api/villageManage';
 import { getvillagesExport } from '@/api2/villageManage';
 import { downloadWordFile } from '@/utils/data';
 import rule from '@/mixins/rule';
 
-import { FINAL_STATUS, USER_TYPE } from '@/views2/utils/constants';
+import { FINAL_STATUS, USER_TYPE, FINAL_STATUE_COLOR, DECLARE_STATUS } from '@/views2/utils/constants';
 import { XIANJI_ACTION, SHIJI_ACTION, ADMIN_ACTION, checkCountryUnifiedReport, checkCityUnifiedReport } from './utils';
 
 const sort = (rule, value, callback) => {
@@ -278,7 +277,7 @@ export default {
       ],
       // 最终审核状态（0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过 5县级待上报 6市级待上报
       // 0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过
-      textColor: ['#E6A23C', '#F56C6C', '#E6A23C', '#F56C6C', '#67C23A', '#E6A23C', '#E6A23C'],
+      textColor: FINAL_STATUE_COLOR,
       sortDialogVisible: false, // 排序框
       ScanDocDialogVisible: false, // 扫描件上传
       sortRule: { required: true, validator: sort, trigger: 'blur' },
@@ -295,8 +294,8 @@ export default {
     },
   },
   beforeMount() {
-    this.declareStatus = DECLEAR_STATUS;
-    this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(DECLEAR_STATUS));
+    this.declareStatus = DECLARE_STATUS;
+    this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(DECLARE_STATUS));
     this.getBatchInfo();
   },
   mounted() {},

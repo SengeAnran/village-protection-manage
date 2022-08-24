@@ -46,22 +46,29 @@
           </div>
           <!-- 市级用户 -->
           <div v-else-if="(userInfo.roleId === USER_TYPE.CITY || userInfo.roleId === USER_TYPE.CITY_LEADER) && !disabled">
-            <span v-if="item.prop === 'cityScore' && row.title === '合计'">{{ form[row.cityScoreProp] }}</span>
             <el-form-item
-              v-if="item.prop === 'cityScore' && row.title !== '合计'"
+              v-if="item.prop === 'cityScore'"
               label=""
-              :rules="rule.input"
+              :style="{ 'margin-bottom': row.title === '合计' ? 0 : undefined }"
+              :rules="row.title === '合计' ? rule.maxScore : rule.input"
               :prop="row.cityScoreProp"
-              :show-message="false"
+              :show-message="row.title === '合计'"
             >
-              <el-input
+              <template v-if="row.title === '合计'" #error="{ error }">
+                <span class="el-form-item__error common-reset-form-error-message">{{ error }}</span>
+              </template>
+              <plain-text v-if="row.title === '合计'" v-model="form[row.cityScoreProp]" />
+              <el-input-number
+                v-else
                 v-model="form[row.cityScoreProp]"
+                :max="row.max"
+                :precision="2"
                 size="mini"
                 placeholder="请输入"
                 @change="setTotalScore('cityScoreProp', row.cityScoreProp)"
               />
             </el-form-item>
-            <span v-if="item.prop === 'countyScore'">{{ form[row.countyScoreProp] }}</span>
+            <span v-else-if="item.prop === 'countyScore'">{{ form[row.countyScoreProp] }}</span>
             <span v-else class="cell">{{ row[item.prop] }}</span>
           </div>
           <!-- 省级用户 -->

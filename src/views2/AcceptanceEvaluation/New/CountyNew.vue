@@ -193,7 +193,8 @@ export default {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
         this.form = res;
-        console.log('getDetail', res);
+        // console.log('getDetail', JSON.stringify(res), JSON.stringify(res.selfAssessmentSummary));
+        this.form.selfAssessmentSummary = res.selfAssessmentSummary || '';
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
       });
     },

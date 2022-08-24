@@ -5,11 +5,11 @@
       <el-row :gutter="20">
         <el-form-item prop="provinceVerify" label="复核意见" :rules="rule.select">
           <el-radio v-model="form.provinceVerify" :label="1">通过</el-radio>
-          <el-radio v-model="form.provinceVerify" :label="0">驳回市级重填</el-radio>
+          <el-radio v-model="form.provinceVerify" :label="0">不通过</el-radio>
         </el-form-item>
       </el-row>
-      <section v-if="!form.provinceVerify">
-        <el-form-item label="驳回说明" prop="provinceOpinion" :rules="rule.input">
+      <el-row :gutter="20">
+        <el-form-item label="意见说明" prop="provinceOpinion" :rules="rule.input">
           <el-input
             type="textarea"
             :rows="5"
@@ -19,7 +19,7 @@
             v-model="form.provinceOpinion"
           />
         </el-form-item>
-      </section>
+      </el-row>
     </div>
   </div>
 </template>

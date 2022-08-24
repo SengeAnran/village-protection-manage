@@ -22,6 +22,9 @@ import ProvinceInfo from '../components/ProvinceInfo.vue';
 import SubTit from '../components/SubTit.vue';
 
 import { getDetail } from '@/api2/acceptanceEvaluation';
+
+import { FINAL_STATUS } from '@/views2/utils/constants';
+
 export default {
   name: 'index',
   components: { BaseInfo, ScoreTable, CityInfo, ProvinceInfo, SubTit },
@@ -32,10 +35,12 @@ export default {
   },
   computed: {
     showCity() {
-      return this.form.finalStatus > 0;
+      const finalStatus = this.form.finalStatus;
+      return finalStatus !== FINAL_STATUS.COUNTRY_REPORT_PENDING && finalStatus != FINAL_STATUS.CITY_VERIFY_PENDING;
     },
     showProvince() {
-      return this.form.finalStatus > 2;
+      const finalStatus = this.form.finalStatus;
+      return finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED;
     },
   },
   methods: {

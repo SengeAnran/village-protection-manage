@@ -84,16 +84,49 @@ export default {
       this._getCityRanking();
     },
     onSubmit() {
-      this.$refs.form.validate(async (valid) => {
-        if (!valid) return;
-        await this._beforeSubmit('是否确认提交？');
+      //  如果只是驳回操作的话，不上传评分，也不校验评分
+      if (this.form.cityVerify === 0) {
+        this.$refs.form.validateField(['cityOpinion'], async (message) => {
+          if (message) return;
+          await this._beforeSubmit('是否确认提交？');
 
-        // const form = { ...this.form };
-        const form = this._assignForm();
-        form.citySaveAnnex = this.form.citySaveAnnex.map((c) => c.fileId).join(',');
-        form.saveToGoCity = 0;
-        this._saveInfo(form);
-      });
+          // const form = { ...this.form };
+          const form = this._assignForm();
+          form.citySaveAnnex = this.form.citySaveAnnex.map((c) => c.fileId).join(',');
+          form.saveToGoCity = 0;
+
+          form.carryOutCreateCity = null;
+          form.carryOutConstructionCity = null;
+          form.indicatorsCommonalityCity = null;
+          form.indicatorsPersonalityCity = null;
+          form.digitalSocietyCity = null;
+          form.digitalScenesCity = null;
+          form.scenesBasicCity = null;
+          form.scenesBuildCity = null;
+          form.scenesEmphasisCity = null;
+          form.buildPutInCity = null;
+          form.buildSupportCity = null;
+          form.buildUseCity = null;
+          form.workMechanismCity = null;
+          form.workBoardCity = null;
+          form.workGuideCity = null;
+          form.featureCity = null;
+          form.negativeCity = null;
+
+          this._saveInfo(form);
+        });
+      } else {
+        this.$refs.form.validate(async (valid) => {
+          if (!valid) return;
+          await this._beforeSubmit('是否确认提交？');
+
+          // const form = { ...this.form };
+          const form = this._assignForm();
+          form.citySaveAnnex = this.form.citySaveAnnex.map((c) => c.fileId).join(',');
+          form.saveToGoCity = 0;
+          this._saveInfo(form);
+        });
+      }
     },
     async onSave() {
       await this._beforeSubmit('是否保存待发？');

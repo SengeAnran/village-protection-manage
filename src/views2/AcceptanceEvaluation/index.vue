@@ -24,6 +24,20 @@
           <list-search @changeArea="changeArea" :query="query"></list-search>
         </template>
 
+        <template v-slot:crudAction>
+          <el-button v-if="isCounty" type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报 </el-button>
+        </template>
+
+        <template v-slot:export>
+          <el-button v-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER || roleId === USER_TYPE.PROVINCE" icon="el-icon-download" type="primary" plain @click="exportList" > 导出信息汇总表 </el-button>
+          <el-button v-if="roleId !== USER_TYPE.PROVINCE" icon="el-icon-download" type="primary" plain @click="printFile" > 材料打印 </el-button>
+          <el-button v-if="roleId !== USER_TYPE.PROVINCE" type="primary" @click="UnifiedReport"> 统一上报</el-button>
+          <!-- 
+          <el-button icon="el-icon-download" v-if="!isCounty" type="primary" plain @click="exportEnclosure">
+            导出附件
+          </el-button> -->
+        </template>
+
         <template v-slot:tableAction="scope">
           <el-link class="link" @click="goDetail(scope)" type="primary" v-if="showDetail(scope.data)"> 详情 </el-link>
           <el-link class="link" @click="goAudit(scope)" type="primary" v-if="showAudit(scope.data)"> 审核 </el-link>
@@ -31,23 +45,13 @@
           <el-link class="link" @click="deleteItem(scope.data.id)" type="danger" v-if="showDelete(scope.data)">
             删除
           </el-link>
-        </template>
-
-        <template v-slot:crudAction>
-          <el-button v-if="isCounty" type="primary" icon="el-icon-plus" @click="newApplications">
-            新建申报
-          </el-button>
-        </template>
-
-        <template v-slot:export>
-          <el-button icon="el-icon-download" type="primary" plain @click="exportList"> 导出 </el-button>
-          <el-button icon="el-icon-download" v-if="!isCounty" type="primary" plain @click="exportEnclosure">
-            导出附件
-          </el-button>
+          <el-link class="link" @click="(form2.id = scope.data.id) && (ScanDocDialogVisible = true)" type="primary" v-if="showUploadScanFile(scope.data)">
+            扫描件上传
+          </el-link>
         </template>
 
         <template v-slot:table>
-          <el-table-column label="地区" prop="name" v-if="isCounty"></el-table-column>
+          <el-table-column label="地区" prop="areaPosition" v-if="!isCounty"></el-table-column>
           <el-table-column label="村(片区)名称" prop="name"></el-table-column>
           <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
           <el-table-column label="总投资（万元）" prop="investNum"></el-table-column>
@@ -74,32 +78,57 @@
           <el-table-column label="状态" prop="finalStatus">
             <!--  0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过-->
             <template slot-scope="scope">
-              <p>
-                <i class="status" :class="{ active: scope.row.finalStatus === 4 }"></i>
-                {{ DECLEAR_STATUS[scope.row.finalStatus] || '--' }}
+              <p :style="{ color: textColor[scope.row.finalStatus] }">
+                <!--                <i class="status" :class="{ active: scope.row.finalStatus === 4 }"></i>-->
+                {{ DECLARE_STATUS[scope.row.finalStatus] || '--' }}
               </p>
             </template>
           </el-table-column>
         </template>
       </Crud>
     </div>
+    <el-dialog title="扫描件上传" :visible.sync="ScanDocDialogVisible" width="600px">
+      <el-form ref="form" :model="form2" label-width="80px">
+        <el-form-item label="" :rules="rule.upload" prop="annexFiles">
+          <UploadFile2
+            tip="支持格式：.doc, .docx, .pdf"
+            accept=".doc,.docx,.pdf"
+            :data="form2.annexFiles"
+            :limit="1"
+            @add="onFileAdd($event, 'annexFiles')"
+            @remove="onFileRemove($event, 'annexFiles')"
+          />
+          <p style="width: 100%; color: #ff6b00" class="py-4 leading-5">
+            <i class="el-icon-warning"></i>请上传已盖章完成的《浙江省未来乡村创建成效申请表》盖章扫描件
+          </p>
+        </el-form-item>
+        <el-form-item>
+          <el-button>取消</el-button>
+          <el-button type="primary" @click="onSubmitUploadScan">提交</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { mapMutations, mapGetters } from 'vuex';
+import rule from '@/mixins/rule';
 import ListSearch from './components/ListSearch.vue';
 
-import { getAuditList, getReportList, deleteItem, exportList, exportAnnex } from '@/api2/acceptanceEvaluation';
-import { DECLEAR_STATUS } from './constants';
+import { getAuditList, getReportList, deleteItem, exportList, exportAnnex, unifiedReporting, uploadScan } from '@/api2/acceptanceEvaluation';
 import { downloadFile } from '@/utils/data';
 import { CITY_LEVEL_RATING } from './constants';
-import { USER_TYPE } from '@/views2/utils/constants';
+import { USER_TYPE, FINAL_STATUE_COLOR, DECLARE_STATUS, FINAL_STATUS } from '@/views2/utils/constants';
 
 export default {
   components: { ListSearch },
+  mixins: [rule],
   data() {
     return {
       USER_TYPE,
+      DECLARE_STATUS,
+      CITY_LEVEL_RATING,
+      textColor: FINAL_STATUE_COLOR,
       query: {
         areaId: '',
         villageName: '',
@@ -111,12 +140,14 @@ export default {
       // getMethod: getAuditList,
       deleteMethod: deleteItem,
       exportMethod: exportList,
-      DECLEAR_STATUS,
 
       selections: [], // 表格选中数据
-
       loading: false,
-      CITY_LEVEL_RATING,
+      ScanDocDialogVisible: false, // 扫描件上传
+      form2: {
+        id: null,
+        annexFiles: [],
+      },
     };
   },
   computed: {
@@ -142,6 +173,34 @@ export default {
           value: key,
         };
       });
+    },
+    onFileAdd(file, key) {
+      this.form2[key].push(file);
+    },
+    onFileRemove(file, key) {
+      const index = this.form2[key].findIndex((item) => {
+        return item.uid === file.uid || item.filePath === file.url;
+      });
+      if (index !== -1) {
+        this.form2[key].splice(index, 1);
+      }
+    },
+    // 提交排序
+    onSubmitUploadScan() {
+      const data = {
+        id: this.form2.id,
+        fileId: this.form2.annexFiles[0].fileId,
+      };
+      uploadScan(data).then(() => {
+        this.form2.id = null;
+        this.form2.annexFiles = [];
+        this.ScanDocDialogVisible = false;
+        this.$refs.crud.getItems();
+        this.$notify.success('扫描件上传成功！');
+      });
+    },
+    printFile() {
+      console.log('xxxxx print File');
     },
     exportList() {
       this._exportFiles(exportList, '导出信息汇总表.xlsx');
@@ -223,6 +282,37 @@ export default {
         iframe.remove();
       }, 5 * 60 * 1000);
     },
+    // 统一上报
+    async UnifiedReport() {
+      if (this.selections.length === 0) {
+        this.$notify.error('请选择需要上报的申报信息');
+        return;
+      }
+      if (this.roleId === USER_TYPE.COUNTRY_LEADER || this.roleId === USER_TYPE.COUNTRY) {
+        //县级
+        if (!this.selections.every((i) => i.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING)) {
+          // 5县级待上报
+          this.$notify.error('选中的申报信息状态有误');
+          return;
+        }
+      } else if (this.roleId === USER_TYPE.CITY_LEADER || this.roleId === USER_TYPE.CITY) {
+        // 市级
+        if (!this.selections.every((i) => i.finalStatus === FINAL_STATUS.CITY_REPORT_PENDING)) {
+          // 6市级待上报
+          this.$notify.error('选中的申报信息状态有误');
+          return;
+        }
+      }
+      this.$confirm('是否确认上报选中的申报信息？', '提示', {
+        type: 'warning',
+      }).then(() => {
+        const data = this.selections.map((item) => item.id);
+        unifiedReporting(data).then(() => {
+          this.$notify.success('统一上报成功！');
+          this.$refs.crud.getItems();
+        });
+      });
+    },
 
     newApplications() {
       this.$router.push({ name: 'NewAcceptanceEvaluation' });
@@ -277,14 +367,20 @@ export default {
     },
     showModify(data) {
       const roleId = this.roleId;
-      return (
-        ((roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) && (data.finalStatus === 0 || data.finalStatus === 1)) ||
-        ((roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) && data.finalStatus === 3)
-      );
+      const countryShow = (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) && (data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING || data.finalStatus === FINAL_STATUS.CITY_VERIFY_REJECTED);
+      const cityShow = (roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) && data.finalStatus === FINAL_STATUS.CITY_REPORT_PENDING;
+      return countryShow || cityShow;
     },
     showDelete(data) {
       const roleId = this.roleId;
-      return (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) && [0, 1].includes(data.finalStatus);
+      return (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) && data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING;
+    },
+    showUploadScanFile(data) {
+      if (data.fileId) {
+        return false;
+      }
+      const roleId = this.roleId;
+      return (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) && data.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED;
     },
   },
 };
