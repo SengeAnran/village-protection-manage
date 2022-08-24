@@ -10,39 +10,51 @@
     <el-table-column label="计划投资" header-align="center">
       <el-table-column prop="investmentAmount" label="总投资（万元）" width="120">
         <template slot-scope="scope">
-          <span>{{ (scope.row.planGovInvestment || 0) + (scope.row.planSocialInvestment || 0) +
-              (scope.row.planSelfInvestment || 0)
+          <span>{{ displayScore((scope.row.planGovInvestment || 0) + (scope.row.planSocialInvestment || 0) +
+              (scope.row.planSelfInvestment || 0))
           }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="planGovInvestment" label="政府投资（万元）" width="150"> </el-table-column>
-      <el-table-column prop="planSocialInvestment" label="社会投资（万元）" width="150"> </el-table-column>
-      <el-table-column prop="planSelfInvestment" label="自筹投资（万元）" width="120"> </el-table-column>
+      <el-table-column prop="planGovInvestment" label="政府投资（万元）" width="150">
+        <template slot-scope="scope">
+          <span>{{ displayScore((scope.row.planGovInvestment || 0))}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="planSocialInvestment" label="社会投资（万元）" width="150">
+        <template slot-scope="scope">
+          <span>{{ displayScore((scope.row.planSocialInvestment || 0))}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="planSelfInvestment" label="自筹投资（万元）" width="120">
+        <template slot-scope="scope">
+          <span>{{ displayScore((scope.row.planSelfInvestment || 0))}}</span>
+        </template>
+      </el-table-column>
     </el-table-column>
     <el-table-column v-for="(item, index) of (displayData[0] && displayData[0].history)" :key="index" :label="'完成投资 ' + item.lastUpdateTime"
       width="250" header-align="center">
       <el-table-column label="总投资（万元）" width="120">
         <template slot-scope="scope">
           <span>{{
-              (scope.row.history[index].completeGovInvestment || 0) +
-              (scope.row.history[index].completeSocialInvestment || 0) +
-              (scope.row.history[index].completeSelfInvestment || 0)
+            displayScore((scope.row.history[index].completeGovInvestment || 0) +
+            (scope.row.history[index].completeSocialInvestment || 0) +
+            (scope.row.history[index].completeSelfInvestment || 0))
           }}</span>
         </template>
       </el-table-column>
       <el-table-column label="其中政府投资（万元）" width="120">
         <template slot-scope="scope">
-          <span>{{ scope.row.history[index].completeGovInvestment || 0 }}</span>
+          <span>{{ displayScore(scope.row.history[index].completeGovInvestment || 0) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="其中社会投资（万元）" width="120">
         <template slot-scope="scope">
-          <span>{{ scope.row.history[index].completeSocialInvestment || 0 }}</span>
+          <span>{{ displayScore(scope.row.history[index].completeSocialInvestment || 0) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="其中自筹投资（万元）" width="120">
         <template slot-scope="scope">
-          <span>{{ scope.row.history[index].completeSelfInvestment || 0 }}</span>
+          <span>{{ displayScore(scope.row.history[index].completeSelfInvestment || 0) }}</span>
         </template>
       </el-table-column>
     </el-table-column>
@@ -89,6 +101,11 @@ export default {
       });
     },
   },
+  methods: {
+    displayScore(score) {
+      return Number(score || 0).toFixed(2);
+    },
+  }
 };
 </script>
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page-new">
     <CountyNew v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER" />
     <CityNew v-else-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER" />
     <ProvinceNew v-else />
@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.page {
+.page-new {
   padding: 20px;
   background-color: #fff;
 

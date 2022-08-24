@@ -12,7 +12,7 @@
     <div style="margin-top: 50px; text-align: center">
       <el-button @click="onBack">返回</el-button>
       <el-button type="primary" @click="onSubmit">保存</el-button>
-      <el-button type="primary" @click="onSave">保存待发</el-button>
+      <!-- <el-button type="primary" @click="onSave">保存待发</el-button> -->
     </div>
   </div>
 </template>

@@ -140,7 +140,7 @@
           <el-table-column v-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER || roleId === USER_TYPE.PROVINCE"
             :label="(roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) ? '市推荐次序' : '推荐次序'" align="center" width="100" prop="citySortNum">
             <template slot-scope="scope">
-              <p>{{ scope.row.citySortNum || '-' }}</p>
+              <p>{{ (scope.row.citySortNum && scope.row.citySortNum < 0) ? '-'  : (scope.row.citySortNum || '-') }}</p>
             </template>
           </el-table-column>
           <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>

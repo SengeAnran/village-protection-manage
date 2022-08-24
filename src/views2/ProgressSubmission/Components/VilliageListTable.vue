@@ -10,75 +10,98 @@
     <el-table-column label="计划投资" width="350" header-align="center">
       <el-table-column prop="investmentAmount" label="总投资（万元）" width="120">
         <template slot-scope="scope">
-          <span>
-            {{
-                (scope.row.planGovInvestment || 0) +
-                (scope.row.planSocialInvestment || 0) +
-                (scope.row.planSelfInvestment || 0)
-            }}
-          </span>
+          <span>{{ displayScore((scope.row.planGovInvestment || 0) + (scope.row.planSocialInvestment || 0) +
+              (scope.row.planSelfInvestment || 0))
+          }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="planGovInvestment" label="政府投资（万元）" width="150"> </el-table-column>
-      <el-table-column prop="planSocialInvestment" label="社会投资（万元）" width="150"> </el-table-column>
-      <el-table-column prop="planSelfInvestment" label="自筹投资（万元）" width="150"> </el-table-column>
+      <el-table-column prop="planGovInvestment" label="政府投资（万元）" width="150">
+        <template slot-scope="scope">
+          <span>{{ displayScore((scope.row.planGovInvestment || 0))}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="planSocialInvestment" label="社会投资（万元）" width="150">
+        <template slot-scope="scope">
+          <span>{{ displayScore((scope.row.planSocialInvestment || 0))}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="planSelfInvestment" label="自筹投资（万元）" width="120">
+        <template slot-scope="scope">
+          <span>{{ displayScore((scope.row.planSelfInvestment || 0))}}</span>
+        </template>
+      </el-table-column>
     </el-table-column>
     <el-table-column v-if="!isFirstTimeReport && lastUpdateTime" :label="'完成投资 ' + lastUpdateTime" width="250" header-align="center">
       <el-table-column prop="completeTotalInvestment" label="总投资（万元）" width="120">
         <template slot-scope="scope">
           <span>
             {{
-                (scope.row.completeGovInvestment || 0) +
+              displayScore((scope.row.completeGovInvestment || 0) +
                 (scope.row.completeSocialInvestment || 0) +
-                (scope.row.completeSelfInvestment || 0)
+                (scope.row.completeSelfInvestment || 0))
             }}
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="completeGovInvestment" label="其中政府投资（万元）" width="120"></el-table-column>
-      <el-table-column prop="completeSocialInvestment" label="其中社会投资（万元）" width="120"></el-table-column>
-      <el-table-column prop="completeSelfInvestment" label="其中自筹投资（万元）" width="120"></el-table-column>
+      <el-table-column prop="completeGovInvestment" label="其中政府投资（万元）" width="120">
+        <template slot-scope="scope">
+          <span>{{ displayScore((scope.row.completeGovInvestment || 0))}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="completeSocialInvestment" label="其中社会投资（万元）" width="120">
+        <template slot-scope="scope">
+          <span>{{ displayScore((scope.row.completeSocialInvestment || 0))}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="completeSelfInvestment" label="其中自筹投资（万元）" width="120">
+        <template slot-scope="scope">
+          <span>{{ displayScore((scope.row.completeSelfInvestment || 0))}}</span>
+        </template>
+      </el-table-column>
     </el-table-column>
     <el-table-column v-if="type === 'edit'" label="完成投资" width="250" header-align="center">
-      <el-table-column prop="completeTotalInvestmentNow" label="总投资（万元）" width="150">
+      <el-table-column label="总投资（万元）" width="150">
         <template slot-scope="scope">
           <!-- 县级用户 -->
           <span>
-            {{ (scope.row.completeGovInvestmentNow || 0) + (scope.row.completeSocialInvestmentNow || 0) +
-                (scope.row.completeSelfInvestmentNow || 0)
+            {{  displayScore(((form[`tmpKey-gov-${scope.$index}`] || 0) + (form[`tmpKey-social-${scope.$index}`] || 0) +
+                (form[`tmpKey-self-${scope.$index}`] || 0)))
             }}
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="completeGovInvestmentNow" label="其中政府投资（万元）" width="150">
+      <el-table-column label="其中政府投资（万元）" width="150">
         <template slot-scope="scope">
           <!-- 县级用户 -->
           <div>
-            <el-form-item label="" :show-message="false">
-              <el-input-number v-model="form.detailLists[scope.$index].completeGovInvestmentNow" size="mini"
-                :min="form.detailLists[scope.$index].completeGovInvestment || 0" maxlength="20" placeholder="请输入" />
+            <el-form-item :prop="`tmpKey-gov-${scope.$index}`" label="" :show-message="false" :rules="rules[`tmpKey-gov-${scope.$index}`]" >
+              <el-input-number v-model="form[`tmpKey-gov-${scope.$index}`]" size="mini"
+                maxlength="20" placeholder="请输入" :controls="false" :precision="2"
+                />
             </el-form-item>
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="completeSocialInvestmentNow" label="其中社会投资（万元）" width="150">
+      <el-table-column label="其中社会投资（万元）" width="150">
         <template slot-scope="scope">
           <!-- 县级用户 -->
           <div>
-            <el-form-item label="" :show-message="false">
-              <el-input-number v-model="form.detailLists[scope.$index].completeSocialInvestmentNow" size="mini"
-                :min="form.detailLists[scope.$index].completeSocialInvestment || 0" maxlength="20" placeholder="请输入" />
+            <el-form-item :prop="`tmpKey-social-${scope.$index}`" label="" :show-message="false" :rules="rules[`tmpKey-social-${scope.$index}`]">
+              <el-input-number v-model="form[`tmpKey-social-${scope.$index}`]" size="mini"
+                maxlength="20" placeholder="请输入" :controls="false" :precision="2"
+                />
             </el-form-item>
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="completeSelfInvestmentNow" label="其中自筹投资（万元）" width="150">
+      <el-table-column label="其中自筹投资（万元）" width="150">
         <template slot-scope="scope">
           <!-- 县级用户 -->
           <div>
-            <el-form-item label="" :show-message="false">
-              <el-input-number v-model="form.detailLists[scope.$index].completeSelfInvestmentNow" size="mini"
-                :min="form.detailLists[scope.$index].completeSelfInvestment || 0" maxlength="20" placeholder="请输入" />
+            <el-form-item :prop="`tmpKey-self-${scope.$index}`" label="" :show-message="false" :rules="rules[`tmpKey-self-${scope.$index}`]">
+              <el-input-number v-model="form[`tmpKey-self-${scope.$index}`]" size="mini"
+                maxlength="20" placeholder="请输入" :controls="false" :precision="2"
+                />
             </el-form-item>
           </div>
         </template>
@@ -127,6 +150,8 @@
 <script>
 import { mapGetters } from "vuex";
 import { USER_TYPE } from '@/views2/utils/constants';
+import _ from 'lodash';
+
 
 export default {
   props: {
@@ -149,6 +174,7 @@ export default {
       refill: false,
       isFirstTimeReport: false,
       lastUpdateTime: '',
+      rules: {},
     };
   },
   computed: {
@@ -158,6 +184,37 @@ export default {
     this.init();
   },
   methods: {
+    displayScore(score) {
+      return Number(score || 0).toFixed(2);
+    },
+    showMessage: _.debounce(function (message) {
+      this.$message.error(message);
+    }, 0),
+    createRule(min, obj, arg) {
+      const result = [
+        {
+          required: true,
+          trigger: 'blur',
+          validator: (rule, value, callback) => {
+            obj[arg] = value;
+            if (!value) {
+              callback(new Error("填写不能为空"))
+              this.showMessage('填写不能为空');
+              // }else if((typeof value === String && value.indexOf(".") !== -1 && value.split('.').length > 2) || !parseFloat(value) || parseFloat(value).toString() !== value){
+            } else if (isNaN(value)) {
+              callback(new Error("请输入正确格式的数字")) //防止输入多个小数点
+              this.showMessage('请输入正确格式的数字');
+            } else if (Number(value) < min) {
+              callback(new Error("不能小于上次申报值"));
+              this.showMessage('不能小于上次申报值');
+            } else {
+              callback();
+            }
+          },
+        },
+      ];
+      return result;
+    },
     init() {
       console.log(this.data);
       if (this.data && this.data.length > 0) {
@@ -166,6 +223,23 @@ export default {
         });
         const firstTimeValue = this.data[0] && this.data[0].gmtModified || '';
         this.lastUpdateTime = firstTimeValue.slice(0, 10);
+
+        const length = this.data.length;
+        for (let index = 0; index < length; index++) {
+          const element = this.data[index];
+          // (scope.row.completeGovInvestmentNow || 0) + (scope.row.completeSocialInvestmentNow || 0) +
+          //       (scope.row.completeSelfInvestmentNow || 0)
+          const key1 = `tmpKey-gov-${index}`;
+          const key2 = `tmpKey-self-${index}`;
+          const key3 = `tmpKey-social-${index}`;
+          this.$set(this.form, key1, 0);
+          this.$set(this.form, key2, 0);
+          this.$set(this.form, key3, 0);
+
+          this.rules[key1] = this.createRule(element.completeGovInvestment || 0, element, 'completeGovInvestmentNow');
+          this.rules[key2] = this.createRule(element.completeSelfInvestment || 0, element, 'completeSelfInvestmentNow');
+          this.rules[key3] = this.createRule(element.completeSocialInvestment || 0, element, 'completeSocialInvestmentNow');
+        }
       }
     },
     removeItem(index) {
@@ -173,7 +247,7 @@ export default {
         content: "确认删除该数据？"
       }).then(() => {
         this.$emit("remove", index);
-      })
+      });
     },
     onClick(scope) {
       console.log(scope);

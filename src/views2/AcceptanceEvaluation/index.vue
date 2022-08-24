@@ -61,16 +61,17 @@
           <el-table-column label="评价等次" prop="cityLevelRating" v-if="!isCounty">
             <template slot-scope="scope">
               <p>
-                {{ CITY_LEVEL_RATING[scope.row.cityLevelRating] || '' }}
+                {{ CITY_LEVEL_RATING[scope.row.cityLevelRating] || '-' }}
               </p>
             </template>
           </el-table-column>
-          <el-table-column label="全市排名" prop="cityRanking" v-if="!isCounty">
+          <el-table-column label="全市排名" prop="cityRanking" v-if="!isCounty" width="100">
             <template slot-scope="scope">
               <p v-if="scope.row.cityRanking">
                 {{ scope.row.cityAcceptTime && scope.row.cityAcceptTime.replace('-', '') }} -
                 {{ scope.row.cityRanking }}
               </p>
+              <span v-else>-</span>
             </template>
           </el-table-column>
           <el-table-column label="县申请时间" prop="gmtModified" v-if="!isCounty"> </el-table-column>

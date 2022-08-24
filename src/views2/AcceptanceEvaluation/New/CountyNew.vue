@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div>
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
       <sub-tit> {{ (isEdit && '修改') || '创建' }}成效评价申请 </sub-tit>
       <basic-input :form="form" @change="villageChange"></basic-input>
@@ -27,7 +27,7 @@
     <div class="action-wrp">
       <el-button @click="onBack">返回</el-button>
       <el-button type="primary" @click="onSubmit">保存</el-button>
-      <el-button type="primary" @click="onSave">保存待发</el-button>
+      <!-- <el-button type="primary" @click="onSave">保存待发</el-button> -->
     </div>
   </div>
 </template>
@@ -227,13 +227,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.page {
-  padding: 20px;
-  background-color: #fff;
-
-  .action-wrp {
-    margin-top: 50px;
-    text-align: center;
-  }
+.action-wrp {
+  margin-top: 50px;
+  text-align: center;
 }
 </style>

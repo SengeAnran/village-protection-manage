@@ -36,7 +36,7 @@
                 v-model="form[row.countyScoreProp]"
                 size="mini"
                 placeholder="请输入"
-                :max="row.max"
+                :max="row.max || undefined"
                 :precision="2"
                 @change="setTotalScore('countyScoreProp', row.countyScoreProp)"
               />
@@ -63,7 +63,7 @@
               <el-input-number
                 v-else
                 v-model="form[row.cityScoreProp]"
-                :max="row.max"
+                :max="row.max || undefined"
                 :precision="2"
                 size="mini"
                 placeholder="请输入"
@@ -178,13 +178,13 @@ export default {
       x[1].style.display = 'none';
     },
 
-    setTotalScore(type) {
+    setTotalScore(type, propsName) {
       // 设置输入为数字
       // this.form[propsName] = this.form[propsName];
       // 扣分项转化
-      // if (propsName.indexOf('negative') !== -1) {
-      //   this.form[propsName] = this.form[propsName] > 0 ? -this.form[propsName] : this.form[propsName];
-      // }
+      if (propsName.indexOf('negative') !== -1) {
+        this.form[propsName] = this.form[propsName] > 0 ? -this.form[propsName] : this.form[propsName];
+      }
 
       // 计算总值
       if (type === 'countyScoreProp') {
