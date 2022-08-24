@@ -221,7 +221,7 @@
     <!-- 表单展示逻辑。市级角色：市级待审核、市级待申报、省级已驳回；省级角色：省级待审核 -->
     <div
       v-if="
-        (userInfo.roleId === USER_TYPE.CITY && cityVerify &&
+        ((userInfo.roleId === USER_TYPE.CITY || userInfo.roleId === USER_TYPE.CITY_LEADER) && cityVerify &&
           (finalStatus === FINAL_STATUS.CITY_VERIFY_PENDING || finalStatus === FINAL_STATUS.CITY_REPORT_PENDING || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED)) ||
         (userInfo.roleId === USER_TYPE.PROVINCE && finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PENDING)
       "
@@ -236,7 +236,7 @@
         label-width="80px"
       >
         <el-form-item :label="userInfo.roleId === 1 ? '审核结果' : '比选结果'" prop="status" :rules="rule.select">
-          <el-radio-group v-model="reviewForm.status" :disabled="userInfo.roleId === 2 && finalStatus === FINAL_STATUS.CITY_REPORT_PENDING">
+          <el-radio-group v-model="reviewForm.status" :disabled="finalStatus === FINAL_STATUS.CITY_REPORT_PENDING">
             <el-radio :label="1">通过</el-radio>
             <el-radio :label="0">不通过</el-radio>
           </el-radio-group>
@@ -248,8 +248,8 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item
-          v-if="userInfo.roleId === 2 || reviewForm.status === 0"
-          :label="userInfo.roleId === 2 ? '请填写比选意见' : '请填写审核意见'"
+          v-if="(userInfo.roleId === USER_TYPE.CITY || userInfo.roleId === USER_TYPE.CITY_LEADER) || reviewForm.status === 0"
+          :label="(userInfo.roleId === USER_TYPE.CITY || userInfo.roleId === USER_TYPE.CITY_LEADER) ? '请填写比选意见' : '请填写审核意见'"
           prop="opinion"
           :rules="rule.input"
         >
@@ -257,7 +257,7 @@
             style="width: 42%"
             type="textarea"
             :rows="5"
-            :placeholder="userInfo.roleId === 2 ? '请输入比选意见' : '请输入审核意见'"
+            :placeholder="(userInfo.roleId === USER_TYPE.CITY || userInfo.roleId === USER_TYPE.CITY_LEADER) ? '请输入比选意见' : '请输入审核意见'"
             maxlength="300"
             show-word-limit
             v-model="reviewForm.opinion"
@@ -305,7 +305,6 @@
 <script>
 import VilliageListTable from "../Components/VilliageListTable";
 import rule from "@/mixins/rule";
-import { HISTORY_BUILDINGS } from "../constants";
 import { getVillageItemDetail, getvillageDetailExport,
    verify,
 } from "@/api2/villageManage";
@@ -400,9 +399,6 @@ export default {
       return this.userInfo.roleId;
     },
   },
-  created() {
-    this.historyBuildings = HISTORY_BUILDINGS;
-  },
   mounted() {
     this.init();
   },
@@ -433,14 +429,16 @@ export default {
       getVillageItemDetail({ id }).then((res) => {
         this.form = res;
         this.finalStatus = res.finalStatus;
-        if (this.cityVerify) {
-          // status: null,
-          // rejectType: null,
-          // opinion: '',
-          // processFilesArr: [],
-          this.reviewForm.status = 1;
-          this.reviewForm.opinion = res.cityOpinion;
-          // this.reviewForm.processFilesArr = [res.cityAuditFile];
+        if (this.roleId === USER_TYPE.CITY_LEADER || this.roleId === USER_TYPE.CITY) {
+          if (this.cityVerify > 0) {
+            this.reviewForm.status = 1;
+            this.reviewForm.opinion = res.cityOpinion;
+          }
+        } else if (this.roleId === USER_TYPE.PROVINCE) {
+          if (this.cityVerify > 0) {
+            this.reviewForm.status = 1;
+            this.reviewForm.opinion = res.provinceOpinion;
+          }
         }
         //console.log(res);
       });
@@ -485,13 +483,14 @@ export default {
     async submit() {
       //console.log(this.reviewForm.processFilesArr);
       const { id } = this.$route.query;
+      const verifyType = (this.roleId === USER_TYPE.CITY || this.roleId === USER_TYPE.CITY_LEADER) ? 1 : 2;//1:市级审核，2：省级审核
       await verify({
         id: id, // 村庄id
         // fileId: this.reviewForm.processFilesArr.map(i => i.fileId).toString(), // 审核意见附件id
         status: this.reviewForm.status, // 审核状态 通过:1 不通过:0
         opinion: this.reviewForm.opinion, // 审核意见
         rejectType: this.reviewForm.rejectType, // 审核意见
-        verifyType: this.roleId === 2 ? 1 : 2, //1:市级审核，2：省级审核
+        verifyType, //1:市级审核，2：省级审核
       });
       this.$notify.success("操作成功");
       this.$router.back();

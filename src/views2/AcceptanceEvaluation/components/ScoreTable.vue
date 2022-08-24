@@ -18,7 +18,7 @@
       >
         <template slot-scope="{ row }">
           <!-- 县级用户 -->
-          <div v-if="userInfo.roleId === 3 && !disabled">
+          <div v-if="(userInfo.roleId === USER_TYPE.COUNTRY || userInfo.roleId === USER_TYPE.COUNTRY_LEADER) && !disabled">
             <el-form-item
               v-if="item.prop === 'countyScore'"
               :style="{ 'margin-bottom': row.title === '合计' ? 0 : undefined }"
@@ -31,11 +31,13 @@
                 <span class="el-form-item__error common-reset-form-error-message">{{ error }}</span>
               </template>
               <plain-text v-if="row.title === '合计'" v-model="form[row.countyScoreProp]" />
-              <el-input
+              <el-input-number
                 v-else
                 v-model="form[row.countyScoreProp]"
                 size="mini"
                 placeholder="请输入"
+                :max="row.max"
+                :precision="2"
                 @change="setTotalScore('countyScoreProp', row.countyScoreProp)"
               />
             </el-form-item>
@@ -43,23 +45,30 @@
             <span v-else class="cell">{{ row[item.prop] }}</span>
           </div>
           <!-- 市级用户 -->
-          <div v-else-if="userInfo.roleId === 2 && !disabled">
-            <span v-if="item.prop === 'cityScore' && row.title === '合计'">{{ form[row.cityScoreProp] }}</span>
+          <div v-else-if="(userInfo.roleId === USER_TYPE.CITY || userInfo.roleId === USER_TYPE.CITY_LEADER) && !disabled">
             <el-form-item
-              v-if="item.prop === 'cityScore' && row.title !== '合计'"
+              v-if="item.prop === 'cityScore'"
               label=""
-              :rules="rule.input"
+              :style="{ 'margin-bottom': row.title === '合计' ? 0 : undefined }"
+              :rules="row.title === '合计' ? rule.maxScore : rule.input"
               :prop="row.cityScoreProp"
-              :show-message="false"
+              :show-message="row.title === '合计'"
             >
-              <el-input
+              <template v-if="row.title === '合计'" #error="{ error }">
+                <span class="el-form-item__error common-reset-form-error-message">{{ error }}</span>
+              </template>
+              <plain-text v-if="row.title === '合计'" v-model="form[row.cityScoreProp]" />
+              <el-input-number
+                v-else
                 v-model="form[row.cityScoreProp]"
+                :max="row.max"
+                :precision="2"
                 size="mini"
                 placeholder="请输入"
                 @change="setTotalScore('cityScoreProp', row.cityScoreProp)"
               />
             </el-form-item>
-            <span v-if="item.prop === 'countyScore'">{{ form[row.countyScoreProp] }}</span>
+            <span v-else-if="item.prop === 'countyScore'">{{ form[row.countyScoreProp] }}</span>
             <span v-else class="cell">{{ row[item.prop] }}</span>
           </div>
           <!-- 省级用户 -->
@@ -79,6 +88,9 @@
 <script>
 import rule from '@/mixins/rule';
 import { TABLE_SCORE_DATA } from '../New/data';
+
+import { USER_TYPE } from '@/views2/utils/constants';
+
 export default {
   mixins: [rule],
   props: {
@@ -93,13 +105,14 @@ export default {
   },
   data() {
     return {
+      USER_TYPE,
       TABLE_TITLE: [
         { prop: 'content', label: '评价内容' },
-        { prop: 'standard', label: '评价标准', width: 440, align: 'left' },
+        { prop: 'standard', label: '评价标准', width: 400, align: 'left' },
         { prop: 'totalScore', label: '分值', width: 80 },
         { prop: 'accordance', label: '评价依据' },
-        { prop: 'countyScore', label: '县自评得分' },
-        { prop: 'cityScore', label: '市自评得分' },
+        { prop: 'countyScore', label: '县自评得分', width: undefined },
+        { prop: 'cityScore', label: '市自评得分', width: undefined },
       ],
       tableData: TABLE_SCORE_DATA,
     };
@@ -108,6 +121,25 @@ export default {
     userInfo() {
       return this.$store.getters.userInfo;
     },
+  },
+  created() {
+    if (this.disabled) {
+      return;
+    }
+    const roleId = this.userInfo.roleId;
+    const isCOUNTRY = roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER;
+    const isCITY = roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER;
+    if (isCOUNTRY) {
+      this.TABLE_TITLE[4].width = 160;
+    } else if (isCITY) {
+      this.TABLE_TITLE[5].width = 160;
+    }
+  },
+  mounted() {
+    // 注意一定要保证DOM渲染完成后在进行合并操作，否则会找不到元素
+    this.$nextTick(function () {
+      this.setColSpan();
+    });
   },
   methods: {
     arraySpanMethod({ rowIndex, columnIndex }) {
@@ -141,13 +173,13 @@ export default {
       x[1].style.display = 'none';
     },
 
-    setTotalScore(type, propsName) {
+    setTotalScore(type) {
       // 设置输入为数字
-      this.form[propsName] = this._transNumber(this.form[propsName]);
+      // this.form[propsName] = this.form[propsName];
       // 扣分项转化
-      if (propsName.indexOf('negative') !== -1) {
-        this.form[propsName] = this.form[propsName] > 0 ? -this.form[propsName] : this.form[propsName];
-      }
+      // if (propsName.indexOf('negative') !== -1) {
+      //   this.form[propsName] = this.form[propsName] > 0 ? -this.form[propsName] : this.form[propsName];
+      // }
 
       // 计算总值
       if (type === 'countyScoreProp') {
@@ -170,15 +202,9 @@ export default {
       }, 0);
       return sums;
     },
-    _transNumber(val) {
-      return val.replace(/^(?:0\d|\D)*(\d*(?:\.\d{0,2})?).*$/g, '$1');
-    },
-  },
-  mounted() {
-    // 注意一定要保证DOM渲染完成后在进行合并操作，否则会找不到元素
-    this.$nextTick(function () {
-      this.setColSpan();
-    });
+    // _transNumber(val) {
+    //   return val.replace(/^(?:0\d|\D)*(\d*(?:\.\d{0,2})?).*$/g, '$1');
+    // },
   },
 };
 </script>

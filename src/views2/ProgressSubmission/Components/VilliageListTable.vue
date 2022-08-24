@@ -87,7 +87,7 @@
     <el-table-column prop="rate" width="130" :key="100" label="是否开工">
       <template slot-scope="scope">
         <!-- 县级用户 -->
-        <div v-if="userInfo.roleId === USER_TYPE.COUNTRY && type === 'edit'">
+        <div v-if="(userInfo.roleId === USER_TYPE.COUNTRY || userInfo.roleId === USER_TYPE.COUNTRY_LEADER) && type === 'edit'">
           <el-form-item label="" :show-message="false">
             <el-radio-group v-model="form.detailLists[scope.$index].state"
               :disabled="form.detailLists[scope.$index].lastState">
@@ -105,7 +105,7 @@
     <el-table-column prop="rate" width="120" :key="101" label="完成率">
       <template slot-scope="scope">
         <!-- 县级用户 -->
-        <div v-if="userInfo.roleId === USER_TYPE.COUNTRY && type === 'edit'">
+        <div v-if="(userInfo.roleId === USER_TYPE.COUNTRY || userInfo.roleId === USER_TYPE.COUNTRY_LEADER) && type === 'edit'">
           <span class="cell">{{
               (
                 ((scope.row.completeGovInvestmentNow || 0) + (scope.row.completeSocialInvestmentNow || 0) +

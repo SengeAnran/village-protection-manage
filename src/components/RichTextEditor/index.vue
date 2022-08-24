@@ -1,6 +1,6 @@
 <template>
   <Editor v-if="mode === 'edit'" v-model="html" />
-  <Viewer v-else :value="html" />
+  <Viewer v-else :value="html" class="rich-text-editor-root" />
 </template>
 
 <script>
@@ -32,3 +32,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.rich-text-editor-root {
+  font-size: 14px;
+  font-weight: 400;
+}
+</style>

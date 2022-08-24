@@ -43,7 +43,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'indicatorsCommonalityCounty',
     cityScoreProp: 'indicatorsCommonalityCity',
-    max: 15,
+    max: 10,
   },
   {
     title: '重要指标完成情况15分',
@@ -246,6 +246,7 @@ export const TABLE_SCORE_DATA = [
     cityScore: '',
     countyScoreProp: 'negativeCounty',
     cityScoreProp: 'negativeCity',
+    max: 0,
   },
 
   //****** 合计 *******

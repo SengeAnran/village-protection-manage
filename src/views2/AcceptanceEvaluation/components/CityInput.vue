@@ -5,7 +5,7 @@
       <el-row :gutter="20">
         <el-form-item prop="cityVerify" label="比选意见" :rules="rule.select">
           <el-radio v-model="form.cityVerify" :label="1">通过</el-radio>
-          <el-radio v-model="form.cityVerify" :label="0">驳回县级重填</el-radio>
+          <el-radio v-model="form.cityVerify" :label="0">驳回县级</el-radio>
         </el-form-item>
       </el-row>
       <section v-if="form.cityVerify === 1">
@@ -18,7 +18,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item prop="cityAcceptTime" label="验收时间" :rules="rule.select">
+            <el-form-item prop="cityAcceptTime" label="审核比选时间" :rules="rule.select">
               <el-select v-model="form.cityAcceptTime" placeholder="请选择">
                 <el-option v-for="item in timeOptions" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
@@ -26,12 +26,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="本次验收全市排名">
+            <el-form-item label="本次审核比选排名">
               <el-input style="width: 180px" disabled v-model="form.cityRanking" placeholder="自动排序"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <file-attach desc1="《浙江省未来乡村创建成效评价申请表》" desc2="《浙江省未来乡村创建成效评分》市级审核盖章扫描件" verifyProp="citySaveAnnex" :data="form.citySaveAnnex" @addFile="onFileAdd" @removeFile="onFileRemove"></file-attach>
+        <!-- <file-attach desc1="《浙江省未来乡村创建成效评价申请表》" desc2="《浙江省未来乡村创建成效评分》市级审核盖章扫描件" verifyProp="citySaveAnnex" :data="form.citySaveAnnex" @addFile="onFileAdd" @removeFile="onFileRemove"></file-attach> -->
       </section>
       <section v-if="form.cityVerify === 0">
         <el-form-item label="驳回说明" prop="cityOpinion" :rules="rule.input">
@@ -44,7 +44,7 @@
 <script>
 import rule from '@/mixins/rule';
 
-import FileAttach from '../components/FileAttach.vue'; // 附件上传
+// import FileAttach from '../components/FileAttach.vue'; // 附件上传
 import SubTit from '../components/SubTit.vue';
 
 // import { getSetList } from '@/api2/villageManage';
@@ -52,7 +52,7 @@ import { getSetList } from '@/api2/acceptanceTime';
 export default {
   name: 'CityInput',
   mixins: [rule],
-  components: { FileAttach, SubTit },
+  components: { SubTit },
   props: {
     form: {
       type: Object,

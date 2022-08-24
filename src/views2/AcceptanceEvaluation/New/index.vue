@@ -1,7 +1,7 @@
 <template>
   <div class="page">
-    <CountyNew v-if="roleId === 3" />
-    <CityNew v-else-if="roleId === 2" />
+    <CountyNew v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER" />
+    <CityNew v-else-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER" />
     <ProvinceNew v-else />
   </div>
 </template>
@@ -10,6 +10,7 @@
 import CountyNew from './CountyNew.vue';
 import CityNew from './CityNew.vue';
 import ProvinceNew from './ProvinceNew.vue';
+import { USER_TYPE } from '@/views2/utils/constants';
 
 export default {
   name: 'index',
@@ -25,6 +26,7 @@ export default {
   },
   data() {
     return {
+      USER_TYPE,
       form: {},
     };
   },

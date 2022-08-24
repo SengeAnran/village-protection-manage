@@ -45,7 +45,7 @@
 import { getSetList } from '@/api2/declarationBatch';
 // eslint-disable-next-line no-unused-vars
 import { getSetList as getSetListTime } from '@/api2/acceptanceTime';
-import { DECLEAR_STATUS } from '../constants';
+import { DECLARE_STATUS } from '@/views2/utils/constants';
 export default {
   props: {
     query: {
@@ -100,9 +100,9 @@ export default {
       });
     },
     setFinalStatusOpt() {
-      this.finalStatusOpt = Object.keys(DECLEAR_STATUS).map((c) => {
+      this.finalStatusOpt = Object.keys(DECLARE_STATUS).map((c) => {
         return {
-          label: DECLEAR_STATUS[c],
+          label: DECLARE_STATUS[c],
           value: c,
         };
       });

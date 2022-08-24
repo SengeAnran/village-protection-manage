@@ -79,9 +79,9 @@
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
             <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
-            <el-divider v-if="roleId === 3" direction="vertical"></el-divider>
+            <el-divider v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER" direction="vertical"></el-divider>
             <div style="display: inline-block">
-              <el-link v-if="roleId === 3" @click="edit(scope.data)" type="primary"> 进度报送</el-link>
+              <el-link v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER" @click="edit(scope.data)" type="primary"> 进度报送</el-link>
             </div>
           </div>
         </template>
@@ -133,6 +133,7 @@ import {
 import { recVerify } from '../../api/villageManage';
 
 import { exportDetail, getInforExport, getList } from '@/api2/progressSubmission';
+import { USER_TYPE } from '@/views2/utils/constants';
 // import qs from "qs";
 export default {
   data() {
@@ -141,6 +142,7 @@ export default {
     //console.log(year);
 
     return {
+      USER_TYPE,
       query: {
         declarationBatch: '',
         finalStatus: '',

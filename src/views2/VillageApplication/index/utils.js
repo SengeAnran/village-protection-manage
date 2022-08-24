@@ -4,23 +4,23 @@ import _ from 'lodash';
 function canSort(data, roleId) {
   const { finalStatus: declareStatus } = data;
   if (
-    (roleId === USER_TYPE.COUNTRY && declareStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING) ||
-    (roleId === USER_TYPE.CITY && declareStatus === FINAL_STATUS.CITY_REPORT_PENDING)
+    ((roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) && declareStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING) ||
+    ((roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) && declareStatus === FINAL_STATUS.CITY_REPORT_PENDING)
   ) {
     return true;
   }
   return false;
 }
 
-// 修改、删除 *******
+// 修改 *******
 function canModify(data, roleId) {
   const { finalStatus: declareStatus, rejectType } = data;
-  if (roleId === USER_TYPE.CITY) {
+  if (roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) {
     return (
       declareStatus === FINAL_STATUS.CITY_REPORT_PENDING ||
       (rejectType === 2 && declareStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED)
     );
-  } else if (roleId === USER_TYPE.COUNTRY) {
+  } else if (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) {
     return (
       declareStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING ||
       declareStatus === FINAL_STATUS.CITY_VERIFY_REJECTED ||
@@ -30,12 +30,20 @@ function canModify(data, roleId) {
   return false;
 }
 
+// 删除 *******
+function canDelete(data, roleId) {
+  if (roleId === USER_TYPE.CITY_LEADER || roleId === USER_TYPE.COUNTRY_LEADER) {
+    return false;
+  }
+  return canModify(data, roleId);
+}
+
 // 审核详情
 function canViewDeclare(data, roleId) {
   const { finalStatus: declareStatus } = data;
-  if (roleId === USER_TYPE.COUNTRY) {
+  if (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) {
     return true;
-  } else if (roleId === USER_TYPE.CITY) {
+  } else if (roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) {
     return declareStatus !== FINAL_STATUS.CITY_VERIFY_PENDING;
   } else if (roleId === USER_TYPE.PROVINCE) {
     return declareStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED || declareStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED;
@@ -56,7 +64,7 @@ function canDeclare(data, roleId) {
 
 export const XIANJI_ACTION = {
   修改: (declareStatus) => canModify(declareStatus, 3),
-  删除: (declareStatus) => canModify(declareStatus, 3),
+  删除: (declareStatus) => canDelete(declareStatus, 3),
   详情: (declareStatus) => canViewDeclare(declareStatus, 3),
   排序: (declareStatus) => canSort(declareStatus, 3),
 };
