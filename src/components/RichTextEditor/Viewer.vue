@@ -61,6 +61,7 @@ export default {
     min-height: 200px !important;
     max-height: 400px !important;
     overflow: auto !important;
+    user-select: auto !important;
   }
 }
 

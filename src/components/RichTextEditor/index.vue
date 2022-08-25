@@ -38,6 +38,7 @@ export default {
 
 .rich-text-editor-lock {
   overflow: hidden;
+  user-select: none;
 }
 
 .w-e-text-container {
