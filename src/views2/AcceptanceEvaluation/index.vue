@@ -117,10 +117,11 @@ import { mapMutations, mapGetters } from 'vuex';
 import rule from '@/mixins/rule';
 import ListSearch from './components/ListSearch.vue';
 
-import { getAuditList, getReportList, deleteItem, exportList, exportAnnex, unifiedReporting, uploadScan } from '@/api2/acceptanceEvaluation';
+import { getAuditList, getReportList, deleteItem, exportList, exportAnnex, unifiedReporting, uploadScan, materialPrinting } from '@/api2/acceptanceEvaluation';
 import { downloadFile } from '@/utils/data';
 import { CITY_LEVEL_RATING } from './constants';
 import { USER_TYPE, FINAL_STATUE_COLOR, DECLARE_STATUS, FINAL_STATUS } from '@/views2/utils/constants';
+import { downloadWordFile } from "@/utils/data"
 
 export default {
   components: { ListSearch },
@@ -202,7 +203,27 @@ export default {
       });
     },
     printFile() {
-      console.log('xxxxx print File');
+      if (this.selections.length === 0) {
+        this.$notify.error('请选择需要导出的数据');
+        return;
+      }
+      if (!this.selections.every((i) => i.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED || i.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PENDING)) {
+        this.$notify.error('该条示范带信息市级还未通过审核，无法导出打印');
+        return;
+      } else {
+        this.$confirm('是否批量导出所选数据？', '提示', {
+          type: 'warning',
+        }).then(async () => {
+          this.selections.forEach(async (item) => {
+            const data = {
+              id: item.id,
+            };
+            const res = await materialPrinting(data);
+            downloadWordFile(res, '浙江省未来乡村创建成效评价申请表');
+            this.$notify.success('导出成功');
+          });
+        });
+      }
     },
     exportList() {
       this._exportFiles(exportList, '导出信息汇总表.xlsx');
