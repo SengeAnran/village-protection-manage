@@ -35,6 +35,11 @@ export default {
 </script>
 
 <style lang="scss">
+
+.rich-text-editor-lock {
+  overflow: hidden;
+}
+
 .w-e-text-container {
   word-wrap: break-word;
   border-top: 1px solid transparent;

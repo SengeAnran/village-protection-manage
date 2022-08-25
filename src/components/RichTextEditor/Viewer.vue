@@ -22,9 +22,28 @@ export default {
       isFull: false,
     };
   },
+  beforeDestroy() {
+    this.lock(false);
+  },
   methods: {
+    isLocked() {
+      const isLock = document.body.classList.contains('rich-text-editor-lock');
+      return isLock;
+    },
+    lock(lock) {
+      if (this.isLocked()) {
+        if (!lock) {
+          document.body.classList.remove('rich-text-editor-lock');
+        }
+      } else {
+        if (lock) {
+          document.body.classList.add('rich-text-editor-lock');
+        }
+      }
+    },
     handleFull() {
       this.isFull = !this.isFull;
+      this.lock(this.isFull);
     }
   }
 };
