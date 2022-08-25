@@ -97,6 +97,8 @@ export default {
             lastUpdateTime: (ele?.gmtModified || '').slice(0, 10),
           };
         });
+        const isStart = array.some((ele) => ele.isStart);
+        result.isStart = isStart;
         return result;
       });
     },
