@@ -12,7 +12,7 @@
 import emitter from 'element-ui/lib/mixins/emitter.js';
 import { uploadFile2 } from '@/api/common.js';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
-import '@wangeditor/editor/dist/css/style.css';
+
 const defaultRichText = '<p style="text-align: left;"><span style="color: rgb(170, 170, 170);">一、基本情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">二、创建方案的实施情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">三、数字化建设与应用情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">四、场景特别是“一老一小”场景建设情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">五、建设投入情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">六、工作推进情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">七、特色和创新情况</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">八、相关附件</span></p><p style="text-align: left;"><span style="color: rgb(170, 170, 170);">报告中涉及到的支撑材料可作为附件单独提供，并需提供附件清单方便查阅。</span></p>';
 export default {
   name: 'RichTextEditor',
@@ -109,7 +109,6 @@ export default {
   z-index: 1000;
   pointer-events: all;
 }
-
 </style>
 
 <style lang="scss">
