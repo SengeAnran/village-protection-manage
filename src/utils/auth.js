@@ -36,6 +36,11 @@ const systemTitleType = {
   1: '未来乡村小程序管理后台',
   2: '跟着节气游乡村管理后台',
 };
+
+export function updateDocumentTitle() {
+  const systemType = localStorage.getItem('systemType');
+  document.title = systemTitleType[systemType] || systemTitleType['3'];
+}
 export function verifyAuth() {
   // 获取url search token
   const token = getQueryToken('token');
@@ -45,9 +50,9 @@ export function verifyAuth() {
     localStorage.setItem('systemType', systemType);
     localStorage.setItem('systemTitle', systemTitleType[systemType]);
     localStorage.setItem('systemCToken', c_token); // 存储c_token 驾驶舱跳转时使用
-    document.title = systemTitleType[systemType];
     // setLoginType('in');
   }
+  updateDocumentTitle();
 
   return new Promise((resolve) => {
     // 移除链接中token
