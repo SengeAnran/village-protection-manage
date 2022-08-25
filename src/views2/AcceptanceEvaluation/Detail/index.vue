@@ -6,6 +6,12 @@
       <score-table :form="form" disabled></score-table>
       <city-info v-if="showCity" :form="form"></city-info>
       <province-info v-if="showProvince" :form="form"></province-info>
+      <div class="extra-content" v-if="form.multipartFileVO && form.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED">
+        <sub-tit class="mb-4"> 扫描件下载 </sub-tit>
+        <div class="extra-content">
+          <view-file :data="[form.multipartFileVO]"></view-file>
+        </div>
+      </div>
     </el-form>
 
     <div style="text-align: center; padding: 40px">
@@ -61,5 +67,8 @@ export default {
 .page {
   padding: 20px;
   background-color: #fff;
+}
+.extra-content {
+  padding: 0 20px;
 }
 </style>

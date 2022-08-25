@@ -85,7 +85,7 @@ export const ADMIN_ACTION = {
  * @returns true: valid; false: others,
  */
 export function checkCountryUnifiedReport(list) {
-  const r = (list || []).some((i) => isNaN(i.countrySortNum));
+  const r = (list || []).some((i) => !Number(i.countrySortNum));
   if (r) {
     return false;
   }
@@ -102,7 +102,7 @@ export function checkCountryUnifiedReport(list) {
  * @returns true: valid; false: others,
  */
 export function checkCityUnifiedReport(list) {
-  const r = (list || []).some((i) => isNaN(i.citySortNum));
+  const r = (list || []).some((i) => !Number(i.citySortNum));
   if (r) {
     return false;
   }

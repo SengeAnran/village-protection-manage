@@ -210,12 +210,11 @@
           </div>
         </div>
       </el-form>
-      <div v-if="finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED && form.multipartFileVO">
+      <div v-if="finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED && form.multipartFileVO" class="mb-2">
         <div class="box-title">扫描件下载</div>
-        <el-link :href="form.multipartFileVO.filePath" target="_blank">
-          {{ form.multipartFileVO.fileName }}
-          <i class="el-icon--right" style="color: #1492FF;">下载</i>
-        </el-link>
+        <div style="padding: 0 10px">
+          <view-file :data="[form.multipartFileVO]"></view-file>
+        </div>
       </div>
     </div>
     <!-- 表单展示逻辑。市级角色：市级待审核、市级待申报、省级已驳回；省级角色：省级待审核 -->

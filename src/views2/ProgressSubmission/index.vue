@@ -27,8 +27,8 @@
         :permission-delete="10004"
       >
         <template v-slot:search>
-          <div class="inline-flex mb-6 pl-0">
-            <div v-if="roleId !== 3" class="search-item">
+          <div class="inline-flex mb-2 pl-0" style="flex-wrap: wrap;">
+            <div v-if="roleId !== 3" class="search-item mb-4">
               <span class="label">地区：</span>
               <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea" />
               <!--              <el-select v-model="query.declarationBatch" placeholder="请选择">-->
@@ -41,7 +41,7 @@
               <!--                </el-option>-->
               <!--              </el-select>-->
             </div>
-            <div class="search-item">
+            <div class="search-item mb-4">
               <span class="label">村（片区）名称：</span>
               <el-input
                 style="width: 200px"
@@ -50,7 +50,7 @@
                 placeholder="请输入村庄名称"
               ></el-input>
             </div>
-            <div class="search-item">
+            <div class="search-item mb-4">
               <span class="label">创建批次：</span>
               <el-select v-model="query.declarationBatch" placeholder="请选择">
                 <el-option
@@ -62,7 +62,7 @@
                 </el-option>
               </el-select>
             </div>
-            <div class="search-item">
+            <div class="search-item mb-4">
               <span class="label">报送更新时间：</span>
               <el-date-picker
                 v-model="query.date"
@@ -412,7 +412,8 @@ export default {
 <style lang="scss" scoped>
 .search-item {
   margin-right: 20px;
-
+  white-space: nowrap;
+  
   .label {
     font-weight: 400;
     color: #333333;

@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <el-form ref="form" class="form" label-position="top" :model="form" label-width="80px">
-      <h3 class="text-gray-800 text-2xl mb-8">新建申报</h3>
+      <h3 class="text-gray-800 text-2xl mb-3"> {{ type === 'add' ? '新建申报' : '修改申报' }}</h3>
       <div class="detail-top">
         <el-row :gutter="20">
           <el-col :span="12">
