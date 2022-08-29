@@ -1,4 +1,5 @@
 import BlankRouteNode from './BlankRouteNode';
+import { USER_TYPE } from '@/views2/utils/constants';
 
 export const constantRoutes = [
   {
@@ -473,7 +474,7 @@ export const defaultRoutes2 = [
     component: () => import('@/views2/HomePage/index'),
     name: 'HomePage',
     meta: {
-      menuIds: [4050],
+      menuIds: [USER_TYPE.PROVINCE],
       title: '首页',
       hideChild: true,
       icon: 'shouye',
@@ -488,7 +489,6 @@ export const defaultRoutes2 = [
       name: 'VillageApplyList2',
     },
     meta: {
-      menuIds: [4100],
       title: '未来乡村创建申报',
       hideChild: false,
       icon: 'cunzhuangshenbao',
@@ -499,7 +499,7 @@ export const defaultRoutes2 = [
         name: 'VillageApplyList2',
         meta: {
           title: '县级申报',
-          menuIds: [410001],
+          menuIds: [USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER, USER_TYPE.VILLAGE],
         },
         component: () => import('@/views2/VillageApplication/index/index.vue'),
       },
@@ -508,7 +508,7 @@ export const defaultRoutes2 = [
         name: 'VillageApplyList2',
         meta: {
           title: '市级比选',
-          menuIds: [410004],
+          menuIds: [USER_TYPE.CITY, USER_TYPE.CITY_LEADER],
         },
         component: () => import('@/views2/VillageApplication/index/index.vue'),
       },
@@ -517,7 +517,7 @@ export const defaultRoutes2 = [
         name: 'VillageApplyList2',
         meta: {
           title: '省级审核',
-          menuIds: [410002],
+          menuIds: [USER_TYPE.PROVINCE],
         },
         component: () => import('@/views2/VillageApplication/index/index.vue'),
       },
@@ -554,7 +554,6 @@ export const defaultRoutes2 = [
       name: 'ProgressSubmissionList',
     },
     meta: {
-      menuIds: [4200],
       title: '项目进度报送',
       hideChild: false,
       icon: 'jindushangbao',
@@ -565,7 +564,7 @@ export const defaultRoutes2 = [
         name: 'ProgressSubmissionList',
         meta: {
           // icon: "cunzhuangshenbao",
-          menuIds: [420001],
+          menuIds: [USER_TYPE.VILLAGE, USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER],
           title: '县级报送',
         },
         component: () => import('@/views2/ProgressSubmission/index.vue'),
@@ -575,7 +574,7 @@ export const defaultRoutes2 = [
         name: 'ProgressSubmissionList',
         meta: {
           // icon: "cunzhuangshenbao",
-          menuIds: [420002],
+          menuIds: [USER_TYPE.PROVINCE, USER_TYPE.CITY, USER_TYPE.CITY_LEADER],
           title: '省级（市级）审阅',
         },
         component: () => import('@/views2/ProgressSubmission/index.vue'),
@@ -587,7 +586,6 @@ export const defaultRoutes2 = [
         meta: {
           activeMenu: '/progressSubmission/index',
           title: '进度报送',
-          menuIds: [],
         },
         component: () => import('@/views2/ProgressSubmission/New/index'),
       },
@@ -598,7 +596,6 @@ export const defaultRoutes2 = [
         meta: {
           activeMenu: '/progressSubmission/index',
           title: '详情',
-          menuIds: [],
         },
         component: () => import('@/views2/ProgressSubmission/Detail/index'),
       },
@@ -613,7 +610,6 @@ export const defaultRoutes2 = [
       name: 'AcceptanceEvaluationList',
     },
     meta: {
-      menuIds: [4300],
       title: '验收评价',
       hideChild: false,
       icon: 'xiangmuyanshou',
@@ -624,7 +620,7 @@ export const defaultRoutes2 = [
         name: 'AcceptanceEvaluationList',
         meta: {
           // icon: "cunzhuangshenbao",
-          menuIds: [430001],
+          menuIds: [USER_TYPE.VILLAGE, USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER],
           title: '县级自评申报',
         },
         component: () => import('@/views2/AcceptanceEvaluation/index.vue'),
@@ -634,7 +630,7 @@ export const defaultRoutes2 = [
         name: 'AcceptanceEvaluationList',
         meta: {
           // icon: "cunzhuangshenbao",
-          menuIds: [430002],
+          menuIds: [USER_TYPE.CITY, USER_TYPE.CITY_LEADER],
           title: '市级审核比选',
         },
         component: () => import('@/views2/AcceptanceEvaluation/index.vue'),
@@ -644,7 +640,7 @@ export const defaultRoutes2 = [
         name: 'AcceptanceEvaluationList',
         meta: {
           // icon: "cunzhuangshenbao",
-          menuIds: [430003],
+          menuIds: [USER_TYPE.PROVINCE],
           title: '省级复核评价',
         },
         component: () => import('@/views2/AcceptanceEvaluation/index.vue'),
@@ -656,7 +652,6 @@ export const defaultRoutes2 = [
         meta: {
           activeMenu: '/acceptanceEvaluation/index',
           title: '新增',
-          menuIds: [],
         },
         component: () => import('@/views2/AcceptanceEvaluation/New/index'),
       },
@@ -667,7 +662,6 @@ export const defaultRoutes2 = [
         meta: {
           activeMenu: '/acceptanceEvaluation/index',
           title: '详情',
-          menuIds: [],
         },
         component: () => import('@/views2/AcceptanceEvaluation/Detail/index'),
       },
@@ -681,7 +675,7 @@ export const defaultRoutes2 = [
       name: 'DeclarationBatch',
     },
     meta: {
-      menuIds: [4500],
+      menuIds: [USER_TYPE.PROVINCE],
       title: '申报配置',
       hideChild: false,
       icon: 'xiangmuyanshou',
@@ -694,7 +688,7 @@ export const defaultRoutes2 = [
         meta: {
           // activeMenu: "/acceptanceEvaluation/index",
           title: '创建批次配置',
-          menuIds: [450001],
+          menuIds: [USER_TYPE.PROVINCE],
         },
         component: () => import('@/views2/VillageApplication/DeclarationBatch/index'),
       },
@@ -705,7 +699,7 @@ export const defaultRoutes2 = [
         meta: {
           // activeMenu: "/acceptanceEvaluation/index",
           title: '申报名额配置',
-          menuIds: [450002],
+          menuIds: [USER_TYPE.PROVINCE],
         },
         component: () => import('@/views2/VillageApplication/ApplicationQuota/index'),
       },
@@ -716,7 +710,7 @@ export const defaultRoutes2 = [
         meta: {
           // activeMenu: "/acceptanceEvaluation/index",
           title: '审核比选时间配置',
-          menuIds: [450003],
+          menuIds: [USER_TYPE.PROVINCE],
         },
         component: () => import('@/views2/AcceptanceEvaluation/AcceptanceTime/index'),
       },
@@ -731,7 +725,7 @@ export const defaultRoutes2 = [
       name: 'CockpitProgressList',
     },
     meta: {
-      menuIds: [4400],
+      menuIds: [USER_TYPE.PROVINCE, USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER],
       title: '驾驶舱进度',
       hideChild: false,
       icon: 'xiangmuyanshou',
@@ -742,7 +736,7 @@ export const defaultRoutes2 = [
         name: 'CockpitProgressList',
         meta: {
           // icon: "cunzhuangshenbao",
-          menuIds: [440001],
+          menuIds: [USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER],
           title: '县级初审',
         },
         component: () => import('@/views2/CockpitProgress/index.vue'),
@@ -752,7 +746,7 @@ export const defaultRoutes2 = [
         name: 'CockpitProgressList',
         meta: {
           // icon: "cunzhuangshenbao",
-          menuIds: [440002],
+          menuIds: [USER_TYPE.PROVINCE],
           title: '省级终审',
         },
         component: () => import('@/views2/CockpitProgress/index.vue'),
