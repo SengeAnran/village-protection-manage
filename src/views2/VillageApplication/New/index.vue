@@ -115,12 +115,14 @@
           </el-col>
         </el-row>
       </div>
-      <el-form-item label="村庄属性（可多选）：" prop="villageId">
+      <el-form-item label="村庄属性（可多选）：" prop="villageProperty" :rules="rule.select">
         <el-checkbox-group v-model="form.villageProperty">
           <el-checkbox label="县域风貌样板区内"></el-checkbox>
           <el-checkbox label="3A级景区村庄"></el-checkbox>
           <el-checkbox label="驻乡镇村规划师规划村庄"></el-checkbox>
-          <el-checkbox label="下山移民新村"></el-checkbox>>
+          <el-checkbox label="下山移民新村"></el-checkbox>
+          <el-checkbox label="法制村"></el-checkbox>
+          <el-checkbox label="文明村"></el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <div>
@@ -250,79 +252,8 @@
       <el-button @click="$router.back()">取消</el-button>
       <el-button type="primary" @click="validateForm">保存</el-button>
     </div>
-    <el-dialog title="添加" :visible.sync="dialogVisible" width="800px" :lock-scroll="true" @close="resetForm">
-      <el-form :rules="rule" ref="projectForm" :model="projectForm" label-width="260px">
-        <el-form-item label="项目名称：" prop="projectName" :rules="rule.input">
-          <el-input v-model="projectForm.projectName" maxlength="20"></el-input>
-        </el-form-item>
-        <el-form-item label="建设单位：" prop="constructUnit" :rules="rule.input">
-          <el-input v-model="projectForm.constructUnit" maxlength="20"></el-input>
-        </el-form-item>
-        <el-form-item label="建设地点：" prop="constructAddress" :rules="rule.input">
-          <el-input v-model="projectForm.constructAddress" maxlength="20"></el-input>
-        </el-form-item>
-        <el-form-item label="建设内容和规模：" prop="constructDetail" :rules="rule.input">
-          <el-input v-model="projectForm.constructDetail" maxlength="20"></el-input>
-        </el-form-item>
-        <el-form-item label="进度安排：" prop="schedule" :rules="rule.input">
-          <el-input v-model="projectForm.schedule" maxlength="20"></el-input>
-        </el-form-item>
-        <el-form-item label="用地情况：" prop="landUse" :rules="rule.input">
-          <el-input v-model="projectForm.landUse" maxlength="20"></el-input>
-        </el-form-item>
-        <el-form-item label="计划投资其中政府投资（万元）：" prop="planGovInvestment" :rules="rule.inputNumber">
-          <el-input-number v-model="projectForm.planGovInvestment" maxlength="8"></el-input-number>
-        </el-form-item>
-        <el-form-item label="计划投资其中社会投资（万元）：" prop="planSocialInvestment" :rules="rule.inputNumber">
-          <el-input-number v-model="projectForm.planSocialInvestment" maxlength="8"></el-input-number>
-        </el-form-item>
-        <el-form-item label="计划投资其中自筹投资（万元）：" prop="planSelfInvestment" :rules="rule.inputNumber">
-          <el-input-number v-model="projectForm.planSelfInvestment" maxlength="8"></el-input-number>
-        </el-form-item>
-        <el-form-item label="类型：" prop="type" :rules="rule.select">
-          <el-select v-model="projectForm.type" placeholder="请选择">
-            <el-option v-for="(item, index) of types" :key="index" :label="item.name" :value="item.value"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="运行维护管理安排：" prop="arrangements" :rules="rule.input">
-          <el-input v-model="projectForm.arrangements" maxlength="20"></el-input>
-        </el-form-item>
-        <el-form-item label="备注：">
-          <el-input v-model="projectForm.remark" maxlength="20"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">确定</el-button>
-          <el-button @click="resetForm">取消</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
-    <el-dialog
-      class="import-dialog"
-      title="批量导入"
-      :visible.sync="importDialogVisible"
-      width="504px"
-      @close="resetForm"
-      center
-    >
-      <UploadFile2
-        tip="支持格式：.xlsx"
-        accept=".xlsx,.xlw"
-        :data="importFiles"
-        :upload-method="uploadMethod"
-        returnData
-        @returnData="returnDatas($event)"
-      />
-      <div style="margin: 0 auto; text-align: center">
-        <el-button icon="el-icon-download" type="primary" plain @click="downLoad" style="margin: 32px 0 8px"
-          >模板下载</el-button
-        >
-        <div>请根据模板进行信息填写</div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <!-- <el-button @click="importDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="importDialogVisible = false">确 定</el-button> -->
-      </span>
-    </el-dialog>
+    <CreateProjectDialog v-model="dialogVisible" :editData="editProjectForm" @change="handleAdd" @closed="handleAddClose" />
+    <ImportDialog v-model="importDialogVisible" @add="handleImportAdd" />
   </div>
 </template>
 <script>
@@ -330,16 +261,15 @@
 import VilliageListTable from '../Components/VilliageListTable.vue';
 
 import rule from '@/mixins/rule';
-import { getTemplate } from '@/api2/villageManage';
-
 import { getSetList } from '@/api2/declarationBatch';
-import { villageDeclaration, getVillageItemDetail, importBatch } from '@/api2/villageManage';
+import { villageDeclaration, getVillageItemDetail } from '@/api2/villageManage';
 import { updateVillageItem } from '../../../api2/villageManage';
 import { getVillageArea } from '@/api2/acceptanceEvaluation';
 import { mapGetters } from 'vuex';
-import { downloadFile } from '@/utils/data';
 
 import { types } from '@/views2/utils/project';
+import CreateProjectDialog from './CreateProjectDialog.vue';
+import ImportDialog from './ImportDialog.vue';
 
 const imgs = (rule, value, callback) => {
   if (value.length < 1) {
@@ -366,10 +296,11 @@ export default {
   mixins: [rule],
   components: {
     VilliageListTable,
+    CreateProjectDialog,
+    ImportDialog,
   },
   data() {
     return {
-      uploadMethod: importBatch,
       types,
       showdecType2: false, // 展示区域选择
       form: {
@@ -407,28 +338,12 @@ export default {
         projects: [], //项目列表
         createScenario: '', // 未来乡村创建方案
       },
-      importFiles: [],
       type: 'add',
       dialogVisible: false,
       importDialogVisible: false,
-      projectForm: {
-        // 项目表单
-        projectName: '', // 项目名称
-        constructUnit: '', // 建设单位
-        constructAddress: '', // 建设地点
-        constructDetail: '', // 建设内容和规模
-        schedule: '', // 进度安排
-        landUse: '', // 用地情况
-        govInvestment: '', // 投资额（万元）
-        selfInvestment: '', // 投资额（万元）
-        socialInvestment: '', // 投资额（万元）
-        arrangements: '', // 运行维护管理安排
-        remark: '', // 备注
-        type: null,
-        // 富文本
-      },
+      
       editIndex: '',
-      editProjectForm: false, // 编辑表格
+      editProjectForm: null, // 编辑表格
       listRules: { required: true, validator: tableList, trigger: 'blur' },
       villageSelects: { required: true, validator: villageSelect, trigger: 'blur' },
 
@@ -509,75 +424,36 @@ export default {
         });
       });
     },
-    // 下载模版
-    async downLoad() {
-      const res = await getTemplate();
-      downloadFile(res, '批量导入模版');
-      this.$notify.success('下载成功！');
-    },
-    returnDatas(data) {
-      console.log(data);
+    handleImportAdd(data) {
       this.form.projects = this.form.projects.concat(...data);
-      this.importDialogVisible = false;
-      this.importFiles = [];
-      // this.importFiles.push(file);
     },
     // 添加 项目
-    onSubmit() {
-      this.$refs.projectForm.validate((valid) => {
-        if (valid) {
-          console.log(this.projectForm);
-          if (!this.editProjectForm) {
-            console.log('push');
-            this.form.projects.push(this.projectForm);
-          } else {
-            this.editProjectForm = false;
-          }
-          this.resetForm();
-        } else {
-          console.log('error submit!!');
-          return false;
-        }
-      });
-    },
-    resetForm() {
-      this.projectForm = {
-        // 项目表单
-        projectName: '', // 项目名称
-        construct: '', // 建设单位
-        constructAddress: '', // 建设地点
-        constructDetail: '', // 建设内容和规模
-        schedule: '', // 进度安排
-        landUse: '', // 用地情况
-        govInvestment: '', // 投资额（万元）
-        selfInvestment: '', // 投资额（万元）
-        socialInvestment: '', // 投资额（万元）
-        arrangements: '', // 运行维护管理安排
-        remark: '', // 备注
-        type: null,
-      };
-      // this.$refs.projectForm.resetFields();
-      this.dialogVisible = false;
-    },
-
-    addListItem(params) {
-      if (this.editType === 'add') {
-        this.form.detail.push(params);
-        this.showForm = false;
-      } else if (this.editType === 'edit') {
-        this.form.detail.splice(this.editIndex, 1, params);
-        this.showForm = false;
+    handleAdd(value) {
+      if (this.editProjectForm) {
+        this.form.projects.splice(this.editIndex, 1, value);
+      } else {
+        this.form.projects.push(value);
       }
     },
-
+    handleAddClose() {
+      this.editProjectForm = null;
+      this.editIndex = null;
+    },
+    // addListItem(params) {
+    //   if (this.editType === 'add') {
+    //     this.form.detail.push(params);
+    //     this.showForm = false;
+    //   } else if (this.editType === 'edit') {
+    //     this.form.detail.splice(this.editIndex, 1, params);
+    //     this.showForm = false;
+    //   }
+    // },
     removeListItem(index) {
       this.form.projects.splice(index, 1);
     },
-
     editListItem({ data, index }) {
-      this.editProjectForm = true;
+      this.editProjectForm = data;
       this.editIndex = index;
-      this.projectForm = data;
       this.dialogVisible = true;
     },
     moveUpItem({ data, index }) {

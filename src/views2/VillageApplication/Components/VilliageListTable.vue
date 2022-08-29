@@ -8,9 +8,14 @@
     <el-table-column prop="schedule" label="进度安排"> </el-table-column>
     <el-table-column prop="landUse" label="用地情况"> </el-table-column>
     <el-table-column label="计划总投资（万元）" header-align="center" >
-      <el-table-column prop="planSelfInvestment" label="自筹投资" width="100" :resizable="false"> </el-table-column>
-      <el-table-column prop="planSocialInvestment" label="社会投资" width="100" :resizable="false"> </el-table-column>
-      <el-table-column prop="planGovInvestment" label="政府投资" width="100" :resizable="false"> </el-table-column>
+       <el-table-column :label="firstYear + ''" header-align="center" >
+        <el-table-column prop="planFirstGov" label="政府投资" width="100" :resizable="false"> </el-table-column>
+        <el-table-column prop="planFirstDrive" label="带动投资" width="100" :resizable="false"> </el-table-column>
+      </el-table-column>
+      <el-table-column :label="firstYear + 1 + ''" header-align="center" >
+        <el-table-column prop="planSecondGov" label="政府投资" width="100" :resizable="false"> </el-table-column>
+        <el-table-column prop="planSecondDrive" label="带动投资" width="100" :resizable="false"> </el-table-column>
+      </el-table-column>
     </el-table-column>
     <el-table-column prop="arrangements" label="运行维护管理安排"> </el-table-column>
     <el-table-column prop="type" label="类型">
@@ -86,6 +91,9 @@ export default {
   },
   computed: {
     ...mapGetters(["userInfo"]),
+    firstYear() {
+      return this.data.find((ele) => ele.firstYear)?.firstYear || new Date().getFullYear();
+    },
   },
   methods: {
     mapType,
