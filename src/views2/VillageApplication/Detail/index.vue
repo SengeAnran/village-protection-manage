@@ -20,7 +20,9 @@
     >
       <div class="input-item-wrp">
         <el-form-item label="创建村（片区）名称" prop="villageId">
-          <p class="content">{{ form.area || form.villageName }}</p>
+          <p class="content">
+            {{ form.name }}
+          </p>
         </el-form-item>
         <el-form-item label="推荐次序" prop="countrySortNum">
           <p class="content">{{ form.countrySortNum || '--'}}</p>

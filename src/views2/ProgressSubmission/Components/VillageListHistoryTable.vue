@@ -59,18 +59,18 @@
       </el-table-column>
       <el-table-column :label="'总体进度（%） ' + item.reportingTime" header-align="center" width="110" :key="index + 'g'">
         <template slot-scope="scope">
-          <span>{{ displayScore(scope.row.historyLists[index].overallProgress || 0) }}%</span>
+          <span>{{ displayScore(scope.row.historyLists[index].overallProgress || 0, 1) }}%</span>
         </template>
       </el-table-column>
     </template>
     <el-table-column prop="rate" label="年度投资完成率（%）">
       <template slot-scope="scope">
-        <span class="cell">{{ scope.row.yearRate || 0 }}%</span>
+        <span class="cell">{{ displayScore(scope.row.yearRate || 0, 1) }}%</span>
       </template>
     </el-table-column>
     <el-table-column prop="rate" label="计划投资完成率（%）">
       <template slot-scope="scope">
-        <span class="cell">{{ scope.row.planRate || 0}}%</span>
+        <span class="cell">{{ displayScore(scope.row.planRate || 0, 1) }}%</span>
       </template>
     </el-table-column>
     <el-table-column prop="rate" width="120" :key="100" label="是否开工">
@@ -109,8 +109,8 @@ export default {
   },
   methods: {
     mapType,
-    displayScore(score) {
-      return Number(score || 0).toFixed(2);
+    displayScore(score, precision = 4) {
+      return Number(score || 0).toFixed(precision);
     },
   }
 };

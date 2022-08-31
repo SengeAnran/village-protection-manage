@@ -51,6 +51,7 @@
       }"
       v-loading="loading"
       :data="items"
+      :row-class-name="tableRowClassName"
       @selection-change="selectionChange"
     >
       <el-table-column v-if="selection" type="selection" width="50" align="center" fixed="left"></el-table-column>
@@ -405,6 +406,10 @@ export default {
     moveTop: {
       type: Boolean,
       default: false,
+    },
+    tableRowClassName: {
+      type: Function,
+      default: () => '',
     },
   },
   data() {

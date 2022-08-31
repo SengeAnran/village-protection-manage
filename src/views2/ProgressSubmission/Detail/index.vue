@@ -12,7 +12,7 @@
     >
       <div class="input-item-wrp">
         <el-form-item label="创建村/片区名称" prop="villageId">
-          <p class="content">{{ form.area || form.villageName }}</p>
+          <p class="content">{{ form.name }}</p>
         </el-form-item>
         <el-form-item label="创建批次" prop="declarationBatch">
           <p class="content">{{ form.declarationBatch }}</p>

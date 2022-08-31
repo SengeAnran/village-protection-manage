@@ -52,13 +52,13 @@
       </el-table-column>
     </el-table-column>
     <el-table-column v-if="!isFirstTimeReport && lastUpdateTime" prop="overallProgress" :label="'总体进度（%） ' + lastUpdateTime" header-align="center" width="120">
-      <template slot-scope="scope"> {{ displayScore(scope.row.overallProgress || 0) }}% </template>
+      <template slot-scope="scope"> {{ displayScore(scope.row.overallProgress || 0, 1) }}% </template>
     </el-table-column>
     <el-table-column v-if="type === 'edit'" label="完成投资（万元）" header-align="center">
       <!-- 村级用户 -->
       <el-table-column label="总投资" width="100">
         <template slot-scope="scope">
-          <span> {{ (form[`tmpKey-gov-first-${scope.$index}`] || 0) + (form[`tmpKey-drive-first-${scope.$index}`] || 0) }} </span>
+          <span> {{ displayScore((form[`tmpKey-gov-first-${scope.$index}`] || 0) + (form[`tmpKey-drive-first-${scope.$index}`] || 0)) }} </span>
         </template>
       </el-table-column>
       <el-table-column label="政府投资" width="150">
@@ -66,7 +66,7 @@
           <div>
             <el-form-item :prop="`tmpKey-gov-first-${scope.$index}`" label="" :show-message="false" :rules="rules[`tmpKey-gov-first-${scope.$index}`]" >
               <el-input-number v-model="form[`tmpKey-gov-first-${scope.$index}`]" size="mini"
-                maxlength="20" placeholder="请输入" :controls="false" :precision="2"
+                maxlength="20" placeholder="请输入" :controls="false" :precision="4"
                 />
             </el-form-item>
           </div>
@@ -77,7 +77,7 @@
           <div>
             <el-form-item :prop="`tmpKey-drive-first-${scope.$index}`" label="" :show-message="false" :rules="rules[`tmpKey-drive-first-${scope.$index}`]">
               <el-input-number v-model="form[`tmpKey-drive-first-${scope.$index}`]" size="mini"
-                maxlength="20" placeholder="请输入" :controls="false" :precision="2"
+                maxlength="20" placeholder="请输入" :controls="false" :precision="4"
                 />
             </el-form-item>
           </div>
@@ -89,13 +89,13 @@
         <div v-if="userInfo.roleId === USER_TYPE.VILLAGE && type === 'edit'">
           <el-form-item :prop="`tmpKey-global-first-${scope.$index}`" label="" :show-message="false" :rules="rules[`tmpKey-global-first-${scope.$index}`]">
             <el-input-number v-model="form[`tmpKey-global-first-${scope.$index}`]" size="mini"
-              maxlength="20" placeholder="请输入" :controls="false" :precision="2"
+              maxlength="20" placeholder="请输入" :controls="false" :precision="1"
             >
             </el-input-number> %
           </el-form-item>
         </div>
         <div v-else>
-          <span class="cell">{{ scope.row.globalRate || '--' }}</span>
+          <span class="cell">{{ displayScore(scope.row.globalRate || 0, 1) }}%</span>
         </div>
       </template>
     </el-table-column>
@@ -107,7 +107,7 @@
         </div>
         <!-- 省市级用户 -->
         <div v-else>
-          <span class="cell">{{ scope.row.yearRate || '--' }}</span>
+          <span class="cell">{{ displayScore(scope.row.yearRate || 0, 1) }}%</span>
         </div>
       </template>
     </el-table-column>
@@ -119,7 +119,7 @@
         </div>
         <!-- 省市级用户 -->
         <div v-else>
-          <span class="cell">{{ scope.row.planRate || '--'}}</span>
+          <span class="cell">{{ displayScore(scope.row.planRate || 0, 1)}}%</span>
         </div>
       </template>
     </el-table-column>
@@ -188,9 +188,9 @@ export default {
       const { planFirstDrive, planFirstGov, planSecondDrive, planSecondGov } = data;
       const plantTotal = Number(planFirstDrive) + Number(planFirstGov) + Number(planSecondDrive) + Number(planSecondGov);
       const currentTotal = Number(form[`tmpKey-gov-first-${scope.$index}`] || 0) + Number(form[`tmpKey-drive-first-${scope.$index}`] || 0);
-      const result = (currentTotal / plantTotal * 100).toFixed(2);
+      const result = (currentTotal / plantTotal * 100).toFixed(1);
       data.planRate = result;
-      return result ? result + '%' : '--';
+      return result ? result + '%' : '0%';
     },
     calcRateCurrentYear(scope) {
       const data = scope.row;
@@ -199,12 +199,12 @@ export default {
       const isFirstYear = this.firstYear === new Date().getFullYear();
       const plantTotal = isFirstYear ? Number(planFirstDrive) + Number(planFirstGov) : Number(planSecondDrive) + Number(planSecondGov);
       const currentTotal = Number(form[`tmpKey-gov-first-${scope.$index}`] || 0) + Number(form[`tmpKey-drive-first-${scope.$index}`] || 0);
-      const result = (currentTotal / plantTotal * 100).toFixed(2);
+      const result = (currentTotal / plantTotal * 100).toFixed(1);
       data.yearRate = result;
-      return result ? result + '%' : '--';
+      return result ? result + '%' : '0%';
     },
-    displayScore(score) {
-      return Number(score || 0).toFixed(2);
+    displayScore(score, precision = 4) {
+      return Number(score || 0).toFixed(precision);
     },
     showMessage: _.debounce(function (message) {
       this.$message.error(message);

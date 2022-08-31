@@ -250,9 +250,6 @@
           </el-row>
         </div>
         <el-form-item class="list-table" label="" prop="projects" :rules="listRules">
-          <div class="import">
-            <el-button type="primary" @click="importDialogVisible = true">批量导入</el-button>
-          </div>
           <VilliageListTable
             :data="form.projects"
             :hiddenEdit="false"
@@ -273,7 +270,6 @@
       <el-button type="primary" @click="validateForm">保存</el-button>
     </div>
     <CreateProjectDialog v-model="dialogVisible" :editData="editProjectForm" @change="handleAdd" @closed="handleAddClose" />
-    <ImportDialog v-model="importDialogVisible" @add="handleImportAdd" />
   </div>
 </template>
 <script>
@@ -289,7 +285,6 @@ import { mapGetters } from 'vuex';
 
 import { types } from '@/views2/utils/project';
 import CreateProjectDialog from './CreateProjectDialog.vue';
-import ImportDialog from './ImportDialog.vue';
 
 const imgs = (rule, value, callback) => {
   if (value.length < 1) {
@@ -317,7 +312,6 @@ export default {
   components: {
     VilliageListTable,
     CreateProjectDialog,
-    ImportDialog,
   },
   data() {
     return {
@@ -361,7 +355,6 @@ export default {
       villageName: [],
       type: 'add',
       dialogVisible: false,
-      importDialogVisible: false,
       
       editIndex: '',
       editProjectForm: null, // 编辑表格
@@ -492,9 +485,6 @@ export default {
           };
         });
       });
-    },
-    handleImportAdd(data) {
-      this.form.projects = this.form.projects.concat(...data);
     },
     // 添加 项目
     handleAdd(value) {

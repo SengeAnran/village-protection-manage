@@ -25,6 +25,7 @@
         :permission-add="0"
         :permission-edit="0"
         :permission-delete="10004"
+        :tableRowClassName="tableRowClassName"
       >
         <template v-slot:search>
           <div class="inline-flex mb-2 pl-0" style="flex-wrap: wrap;">
@@ -47,7 +48,7 @@
                 style="width: 200px"
                 v-model="query.name"
                 :maxlength="50"
-                placeholder="请输入村庄名称"
+                placeholder="请输入村（片区）名称"
               ></el-input>
             </div>
             <div class="search-item mb-4">
@@ -250,6 +251,9 @@ export default {
     changeArea(val) {
       console.log(val);
       this.query.areaId = val.areaId;
+    },
+    tableRowClassName({ row }) {
+      return row.completeTotalInvestment > row.investNum ? 'row-danger' : '';
     },
     ...mapMutations('villageMange', ['changeDeclareList']),
     normalizeSelectOptions(obj) {
@@ -504,5 +508,17 @@ export default {
       line-height: 22px;
     }
   }
+}
+
+::v-deep .row-danger {
+  background-color: #f39e9e;
+
+  &.hover-row {
+    background-color: rgb(244, 121, 121);
+    td.el-table__cell {
+      background-color: rgb(244, 121, 121);
+    }
+  }
+  
 }
 </style>

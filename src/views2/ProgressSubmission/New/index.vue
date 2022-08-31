@@ -5,8 +5,8 @@
       <div class="detail-top">
         <el-row :gutter="20">
           <el-col :span="8">
-            <el-form-item v-if="form.area" label="创建村/片区名称" prop="area">
-              <el-input v-model="form.area" placeholder="请输入创建村/片区名称" disabled></el-input>
+            <el-form-item v-if="form.name" label="创建村/片区名称" prop="area">
+              <el-input v-model="form.name" placeholder="请输入创建村/片区名称" disabled></el-input>
             </el-form-item>
             <el-form-item v-else label="创建村/片区名称" prop="villageName">
               <el-input v-model="form.villageName" placeholder="请输入创建村/片区名称" disabled></el-input>

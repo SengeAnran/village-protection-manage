@@ -1,6 +1,7 @@
 <template>
   <div class="page">
     <el-form ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
+      <RouterBack>详情</RouterBack>
       <sub-tit> 申报详情 </sub-tit>
       <BaseInfo :form="form" />
       <score-table :form="form" disabled></score-table>
