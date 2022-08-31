@@ -84,9 +84,9 @@
         </template>
       </el-table-column>
     </el-table-column>
-    <el-table-column label="总体进度（%）" width="170">
+    <el-table-column v-if="type === 'edit'" label="总体进度（%）" width="170">
       <template slot-scope="scope">
-        <div v-if="userInfo.roleId === USER_TYPE.VILLAGE && type === 'edit'">
+        <div v-if="userInfo.roleId === USER_TYPE.VILLAGE">
           <el-form-item :prop="`tmpKey-global-first-${scope.$index}`" label="" :show-message="false" :rules="rules[`tmpKey-global-first-${scope.$index}`]">
             <el-input-number v-model="form[`tmpKey-global-first-${scope.$index}`]" size="mini"
               maxlength="20" placeholder="请输入" :controls="false" :precision="1"
