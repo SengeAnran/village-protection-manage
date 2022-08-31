@@ -23,7 +23,7 @@
           <p class="content">{{ form.area || form.villageName }}</p>
         </el-form-item>
         <el-form-item label="推荐次序" prop="countrySortNum">
-          <p class="content">{{ form.countrySortNum }}</p>
+          <p class="content">{{ form.countrySortNum || '--'}}</p>
         </el-form-item>
         <el-form-item label="创建批次" prop="declarationBatch">
           <p class="content">{{ form.declarationBatch }}</p>
@@ -120,7 +120,7 @@
           <p class="content">{{ form.projectFilingAudit }}</p>
         </el-form-item>
       </div>
-      <el-form-item>
+      <el-form-item v-if="!loading">
         <VilliageListTable
           :data="form.projects"
           :hiddenEdit="false"
@@ -383,6 +383,7 @@ export default {
       dialogId: "",
       textarea: "",
       status: null,
+      loading: true,
     };
   },
   watch: {
@@ -423,6 +424,7 @@ export default {
       });
     },
     init() {
+      this.loading = true;
       const { id } = this.$route.query;
       if (!id) return;
       getVillageItemDetail({ id }).then((res) => {
@@ -439,6 +441,7 @@ export default {
             this.reviewForm.opinion = res.provinceOpinion;
           }
         }
+        this.loading = false;
         //console.log(res);
       });
     },

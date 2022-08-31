@@ -1,46 +1,44 @@
 <template>
-  <div  class="block">
-    <div class="block">
-      <RouterBack>详情</RouterBack>
-      <div class="box-title">未来乡村项目进度报送</div>
-      <el-form
-        style="padding-left: 14px"
-        ref="form"
-        class="form"
-        label-position="top"
-        :model="form"
-        label-width="80px"
-      >
-        <div class="input-item-wrp">
-          <el-form-item label="创建村/片区名称" prop="villageId">
-            <p class="content">{{ form.area || form.villageName }}</p>
-          </el-form-item>
-          <el-form-item label="创建批次" prop="declarationBatch">
-            <p class="content">{{ form.declarationBatch }}</p>
-          </el-form-item>
-          <el-form-item label="总投资（万元）" prop="investNum">
-            <p class="content">{{ form.investNum }}</p>
-          </el-form-item>
-          <el-form-item label="领办领导">
-            <p class="content">{{ form.leader }}</p>
-          </el-form-item>
-          <el-form-item label="联系人">
-            <p class="content">{{ form.contactPerson }}</p>
-          </el-form-item>
-          <el-form-item label="联系方式" prop="resPopulation">
-            <p class="content">{{ form.phone }}</p>
-          </el-form-item>
-        </div>
-        <el-form-item>
-          <div class="import">
-            <el-button type="primary" @click="lookHistory" >历史数据</el-button>
-          </div>
-          <VilliageListTable v-if="showTable" type="look" :data="form.detailLists" />
+  <div class="block">
+    <RouterBack>详情</RouterBack>
+    <div class="box-title">未来乡村项目进度报送</div>
+    <el-form
+      style="padding-left: 14px"
+      ref="form"
+      class="form"
+      label-position="top"
+      :model="form"
+      label-width="80px"
+    >
+      <div class="input-item-wrp">
+        <el-form-item label="创建村/片区名称" prop="villageId">
+          <p class="content">{{ form.area || form.villageName }}</p>
         </el-form-item>
-        <div id="verify"></div>
-        <el-button @click="$router.back()">返回</el-button>
-      </el-form>
-    </div>
+        <el-form-item label="创建批次" prop="declarationBatch">
+          <p class="content">{{ form.declarationBatch }}</p>
+        </el-form-item>
+        <el-form-item label="总投资（万元）" prop="investNum">
+          <p class="content">{{ form.investNum }}</p>
+        </el-form-item>
+        <el-form-item label="领办领导">
+          <p class="content">{{ form.leader }}</p>
+        </el-form-item>
+        <el-form-item label="联系人">
+          <p class="content">{{ form.contactPerson }}</p>
+        </el-form-item>
+        <el-form-item label="联系方式" prop="resPopulation">
+          <p class="content">{{ form.phone }}</p>
+        </el-form-item>
+      </div>
+      <el-form-item>
+        <div class="import">
+          <el-button type="primary" @click="lookHistory" >历史数据</el-button>
+        </div>
+        <VilliageListTable v-if="showTable" type="look" :data="form.detailLists" />
+      </el-form-item>
+      <div id="verify"></div>
+      <el-button @click="$router.back()">返回</el-button>
+    </el-form>
     <el-dialog
       title="详情"
       :visible.sync="dialogVisible"

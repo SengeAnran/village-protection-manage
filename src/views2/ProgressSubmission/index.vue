@@ -80,9 +80,9 @@
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
             <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
-            <el-divider v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER" direction="vertical"></el-divider>
+            <el-divider v-if="canReport(scope.data)" direction="vertical"></el-divider>
             <div style="display: inline-block">
-              <el-link v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER" @click="edit(scope.data)" type="primary"> 进度报送</el-link>
+              <el-link v-if="canReport(scope.data)" @click="edit(scope.data)" type="primary"> 进度报送</el-link>
             </div>
           </div>
         </template>
@@ -112,10 +112,10 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column label="投资完成率" sortable prop="rate"></el-table-column>
-          <el-table-column label="报送更新时间" prop="gmtCreate">
+          <el-table-column label="计划投资完成率" sortable prop="rate"></el-table-column>
+          <el-table-column label="状态" prop="status">
             <template slot-scope="scope">
-              <p>{{ scope.row.gmtModified }}</p>
+              <p :style="{ color: REPORT_STATUS_COLOR[scope.row.reportStatus]}">{{ getStatusName(scope.row.reportStatus) }}</p>
             </template>
           </el-table-column>
         </template>
@@ -129,6 +129,9 @@ import { queryBatchInfo, queryTypeDeclaration, getRecVillages, deleteVillageItem
 import {
   DECLEAR_TYPE,
   DECLEAR_STATUS,
+  getStatusName,
+  REPORT_STATUS_COLOR,
+  REPORT_STATUS
   // PRO_DECLEAR_STATUS,
 } from './constants';
 import { recVerify } from '../../api/villageManage';
@@ -144,6 +147,7 @@ export default {
 
     return {
       USER_TYPE,
+      REPORT_STATUS_COLOR,
       query: {
         declarationBatch: '',
         finalStatus: '',
@@ -217,6 +221,20 @@ export default {
     // this.lookUp();
   },
   methods: {
+    getStatusName,
+    canReport(data) {
+      const roleId = this.roleId;
+      const hasPerm = roleId === USER_TYPE.VILLAGE;
+      if (data.reportStatus === REPORT_STATUS.REPORTED) {
+        // 已报送则不可在报送
+        return false;
+      }
+      // const day = new Date().getDate();
+      const day = 18;
+      if (hasPerm && day <= 18) {
+        return true;
+      }
+    },
     // 时间范围
     setDate(val) {
       console.log(val);

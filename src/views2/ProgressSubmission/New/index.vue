@@ -70,7 +70,7 @@ import { addData, getDetail, getHistory } from "@/api2/progressSubmission";
 const tableList = (rule, value, callback) => {
   if (value.length) {
     const notNum = value.some((i) => {
-      return isNaN(i.completeGovInvestmentNow) || isNaN(i.completeSelfInvestmentNow) || isNaN(i.completeSocialInvestmentNow)
+      return isNaN(i.completeDriveNow) || isNaN(i.completeGovNow);
     });
     if (notNum) {
       callback(new Error("请填写的数据都为数字"));
@@ -125,9 +125,9 @@ export default {
             ...i,
             state: Boolean(i.isStart),
             lastState: Boolean(i.isStart),
-            completeSelfInvestmentNow: null,
-            completeGovInvestmentNow: null,
-            completeSocialInvestmentNow: null,
+            completeDriveNow: 0,
+            completeGovNow: 0,
+            overallProgressNow: 0,
           };
         });
         this.firstTime = this.form.detailLists.every(i => {
@@ -140,13 +140,15 @@ export default {
     onSubmit() {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
-          console.log(valid);
           console.log(this.form);
           const data = this.form.detailLists.map((item) => {
             return {
-              completeGovInvestment: Number(item.completeGovInvestmentNow),
-              completeSocialInvestment: Number(item.completeSocialInvestmentNow),
-              completeSelfInvestment: Number(item.completeSelfInvestmentNow),
+              completeDrive: Number(item.completeDriveNow),
+              completeGov: Number(item.completeGovNow),
+              completeTotal: Number(item.completeDriveNow) + Number(item.completeGovNow),
+              overallProgress: Number(item.overallProgressNow),
+              planRate: Number(item.planRate),
+              yearRate: Number(item.yearRate),
               projectId: item.projectId,
               isStart: item.state ? 1 : 0,
             };

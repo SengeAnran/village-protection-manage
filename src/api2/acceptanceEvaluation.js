@@ -2,6 +2,15 @@ import axios from '@/utils/request';
 import config from '@/utils/config';
 const { apiHost2 } = config;
 
+// 获取村级下拉
+export const getCountyVillages = (params) => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + '/api/workbench/area/code/countyVillages',
+    params,
+  });
+};
+
 // 镇村二级联动
 export const getVillageArea = (params) => {
   return axios.request({

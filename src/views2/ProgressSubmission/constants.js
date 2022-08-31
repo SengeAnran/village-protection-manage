@@ -54,3 +54,19 @@ export const HISTORY_BUILDINGS = [
   { label: "特色建材", value: "featureNum" },
   { label: "其他", value: "other" },
 ];
+
+
+export const REPORT_STATUS = Object.freeze({
+  UNREPORTED: '本月待报送',
+  REPORTED: '本月已报送',
+  TIMEOUT: '本月未报送',
+});
+
+export function getStatusName(status) {
+  return status;
+}
+export const REPORT_STATUS_COLOR = Object.freeze({
+  '本月待报送': '#E6A23C', 
+  '本月已报送': '#67C23A', 
+  '本月未报送': '#F56C6C',
+});

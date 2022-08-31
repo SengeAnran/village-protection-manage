@@ -1,73 +1,89 @@
 <template>
-  <el-table class="table-custom" :data="displayData" border>
+  <el-table class="table-custom" :data="data" border>
     <el-table-column label="序号" type="index" fixed> </el-table-column>
     <el-table-column prop="projectName" label="项目名称" width="120"> </el-table-column>
     <el-table-column prop="constructUnit" label="建设单位" width="120"> </el-table-column>
     <el-table-column prop="constructAddress" label="建设地点" width="120"> </el-table-column>
     <el-table-column prop="constructDetail" label="建设内容和规模" width="120"> </el-table-column>
+    <el-table-column prop="type" label="类型">
+      <template slot-scope="scope">
+        {{ mapType(scope.row.type) }}
+      </template>
+    </el-table-column>
     <el-table-column prop="schedule" label="进度安排" width="120"> </el-table-column>
     <el-table-column prop="landUse" label="用地情况" width="120"> </el-table-column>
-    <el-table-column label="计划投资" header-align="center">
-      <el-table-column prop="investmentAmount" label="总投资（万元）" width="120">
-        <template slot-scope="scope">
-          <span>{{ displayScore((scope.row.planGovInvestment || 0) + (scope.row.planSocialInvestment || 0) +
-              (scope.row.planSelfInvestment || 0))
-          }}</span>
-        </template>
+    <el-table-column label="计划总投资（万元）" header-align="center">
+      <el-table-column :label="`${firstYear}年`" header-align="center">
+        <el-table-column prop="planFirstGov" label="政府投资">
+          <template slot-scope="scope">
+            <span>{{ displayScore((scope.row.planFirstGov || 0))}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="planFirstDrive" label="带动投资">
+          <template slot-scope="scope">
+            <span>{{ displayScore((scope.row.planFirstDrive || 0))}}</span>
+          </template>
+        </el-table-column>
       </el-table-column>
-      <el-table-column prop="planGovInvestment" label="政府投资（万元）" width="150">
-        <template slot-scope="scope">
-          <span>{{ displayScore((scope.row.planGovInvestment || 0)) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="planSocialInvestment" label="社会投资（万元）" width="150">
-        <template slot-scope="scope">
-          <span>{{ displayScore((scope.row.planSocialInvestment || 0)) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="planSelfInvestment" label="自筹投资（万元）" width="120">
-        <template slot-scope="scope">
-          <span>{{ displayScore((scope.row.planSelfInvestment || 0)) }}</span>
-        </template>
+
+      <el-table-column :label="`${firstYear + 1}年`" header-align="center">
+        <el-table-column prop="planSecondGov" label="政府投资">
+          <template slot-scope="scope">
+            <span>{{ displayScore((scope.row.planSecondGov || 0))}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="planSecondDrive" label="带动投资">
+          <template slot-scope="scope">
+            <span>{{ displayScore((scope.row.planSecondDrive || 0))}}</span>
+          </template>
+        </el-table-column>
       </el-table-column>
     </el-table-column>
-    <el-table-column v-for="(item, index) of (displayData[0] && displayData[0].history)" :key="index"
-      :label="'完成投资 ' + item.lastUpdateTime" width="250" header-align="center">
-      <el-table-column label="总投资（万元）" width="120">
+    <template v-for="(item, index) of (data[0] && data[0].historyLists)">
+      <el-table-column :label="'完成投资 ' + item.reportingTime" header-align="center" :key="index">
+        <el-table-column label="总投资">
+          <template slot-scope="scope">
+            <span>{{ displayScore(scope.row.historyLists[index].completeTotal || 0) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="政府投资">
+          <template slot-scope="scope">
+            <span>{{ displayScore(scope.row.historyLists[index].completeGov || 0) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="带动投资">
+          <template slot-scope="scope">
+            <span>{{ displayScore(scope.row.historyLists[index].completeDrive || 0) }}</span>
+          </template>
+        </el-table-column>
+      </el-table-column>
+      <el-table-column :label="'总体进度（%） ' + item.reportingTime" header-align="center" width="110" :key="index + 'g'">
         <template slot-scope="scope">
-          <span>{{
-              displayScore((scope.row.history[index].completeGovInvestment || 0) +
-                (scope.row.history[index].completeSocialInvestment || 0) +
-                (scope.row.history[index].completeSelfInvestment || 0))
-          }}</span>
+          <span>{{ displayScore(scope.row.historyLists[index].overallProgress || 0) }}%</span>
         </template>
       </el-table-column>
-      <el-table-column label="其中政府投资（万元）" width="120">
-        <template slot-scope="scope">
-          <span>{{ displayScore(scope.row.history[index].completeGovInvestment || 0) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="其中社会投资（万元）" width="120">
-        <template slot-scope="scope">
-          <span>{{ displayScore(scope.row.history[index].completeSocialInvestment || 0) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="其中自筹投资（万元）" width="120">
-        <template slot-scope="scope">
-          <span>{{ displayScore(scope.row.history[index].completeSelfInvestment || 0) }}</span>
-        </template>
-      </el-table-column>
+    </template>
+    <el-table-column prop="rate" label="年度投资完成率（%）">
+      <template slot-scope="scope">
+        <span class="cell">{{ scope.row.yearRate || 0 }}%</span>
+      </template>
+    </el-table-column>
+    <el-table-column prop="rate" label="计划投资完成率（%）">
+      <template slot-scope="scope">
+        <span class="cell">{{ scope.row.planRate || 0}}%</span>
+      </template>
     </el-table-column>
     <el-table-column prop="rate" width="120" :key="100" label="是否开工">
       <template slot-scope="scope">
         <span class="cell">{{ scope.row.isStart ? '是' : '否' }}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="rate" width="120" :key="101" label="完成率"></el-table-column>
   </el-table>
 </template>
 <script>
 import _ from 'lodash';
+import { types, mapType } from '@/views2/utils/project';
+
 export default {
   props: {
     data: {
@@ -77,35 +93,22 @@ export default {
   },
   data() {
     return {
-      length: 0,
+      types,
     };
   },
   computed: {
-    displayData() {
-      const data = this.data || [];
-      if (!data.length) {
-        return data;
+    firstYear() {
+      const data = this.data;
+      console.log('data', data);
+      if (data && data.length) {
+        const tmp = data[0];
+        return tmp?.firstYear || 2022;
       }
-      const grouped = _.groupBy(data || [], 'projectId');
-      return Object.values(grouped).map((array) => {
-        const result = { ...array[0] };
-        result.history = array.map((ele) => {
-          return {
-            completeGovInvestment: ele.completeGovInvestment,
-            completeSocialInvestment: ele.completeSocialInvestment,
-            completeSelfInvestment: ele.completeSelfInvestment,
-            lastUpdateTime: (ele?.gmtModified || '').slice(0, 10),
-          };
-        });
-        const isStart = array.some((ele) => ele.isStart);
-        result.isStart = isStart;
-        const maxRate = _.max(array.map((ele => parseFloat(ele.rate))));
-        result.rate = Number(maxRate || 0).toFixed(2) + '%';
-        return result;
-      });
+      return 2022;
     },
   },
   methods: {
+    mapType,
     displayScore(score) {
       return Number(score || 0).toFixed(2);
     },

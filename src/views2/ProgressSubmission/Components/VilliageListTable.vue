@@ -1,105 +1,82 @@
 <template>
   <el-table class="table-custom" :data="data" border style="width: 90%">
     <el-table-column label="序号" type="index" fixed> </el-table-column>
-    <el-table-column prop="projectName" label="项目名称" width="120"> </el-table-column>
-    <el-table-column prop="constructUnit" label="建设单位" width="120"> </el-table-column>
-    <el-table-column prop="constructAddress" label="建设地点" width="120"> </el-table-column>
-    <el-table-column prop="constructDetail" label="建设内容和规模" width="120"> </el-table-column>
-    <el-table-column prop="schedule" label="进度安排" width="120"> </el-table-column>
-    <el-table-column prop="landUse" label="用地情况" width="120"> </el-table-column>
-    <el-table-column label="计划投资" width="350" header-align="center">
-      <el-table-column prop="investmentAmount" label="总投资（万元）" width="120">
+    <el-table-column prop="projectName" label="项目名称"> </el-table-column>
+    <el-table-column prop="type" label="类型">
+      <template slot-scope="scope">
+        {{ mapType(scope.row.type) }}
+      </template>
+    </el-table-column>
+    <el-table-column label="计划总投资（万元）" header-align="center">
+      <el-table-column :label="`${firstYear}年`" header-align="center">
+        <el-table-column prop="planFirstGov" label="政府投资">
+          <template slot-scope="scope">
+            <span>{{ displayScore((scope.row.planFirstGov || 0))}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="planFirstDrive" label="带动投资">
+          <template slot-scope="scope">
+            <span>{{ displayScore((scope.row.planFirstDrive || 0))}}</span>
+          </template>
+        </el-table-column>
+      </el-table-column>
+
+      <el-table-column :label="`${firstYear + 1}年`" header-align="center">
+        <el-table-column prop="planSecondGov" label="政府投资">
+          <template slot-scope="scope">
+            <span>{{ displayScore((scope.row.planSecondGov || 0))}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="planSecondDrive" label="带动投资">
+          <template slot-scope="scope">
+            <span>{{ displayScore((scope.row.planSecondDrive || 0))}}</span>
+          </template>
+        </el-table-column>
+      </el-table-column>
+    </el-table-column>
+    <el-table-column v-if="!isFirstTimeReport && lastUpdateTime" :label="'完成投资（万元） ' + lastUpdateTime" header-align="center">
+      <el-table-column prop="completeTotal" label="总投资" >
         <template slot-scope="scope">
-          <span>{{ displayScore((scope.row.planGovInvestment || 0) + (scope.row.planSocialInvestment || 0) +
-              (scope.row.planSelfInvestment || 0))
-          }}</span>
+          {{ displayScore(scope.row.completeTotal || 0) }}
         </template>
       </el-table-column>
-      <el-table-column prop="planGovInvestment" label="政府投资（万元）" width="150">
+      <el-table-column prop="completeGov" label="政府投资" >
         <template slot-scope="scope">
-          <span>{{ displayScore((scope.row.planGovInvestment || 0))}}</span>
+          <span>{{ displayScore((scope.row.completeGov || 0))}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="planSocialInvestment" label="社会投资（万元）" width="150">
+      <el-table-column prop="completeDrive" label="带动投资" >
         <template slot-scope="scope">
-          <span>{{ displayScore((scope.row.planSocialInvestment || 0))}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="planSelfInvestment" label="自筹投资（万元）" width="120">
-        <template slot-scope="scope">
-          <span>{{ displayScore((scope.row.planSelfInvestment || 0))}}</span>
+          <span>{{ displayScore((scope.row.completeDrive || 0))}}</span>
         </template>
       </el-table-column>
     </el-table-column>
-    <el-table-column v-if="!isFirstTimeReport && lastUpdateTime" :label="'完成投资 ' + lastUpdateTime" width="250" header-align="center">
-      <el-table-column prop="completeTotalInvestment" label="总投资（万元）" width="120">
-        <template slot-scope="scope">
-          <span>
-            {{
-              displayScore((scope.row.completeGovInvestment || 0) +
-                (scope.row.completeSocialInvestment || 0) +
-                (scope.row.completeSelfInvestment || 0))
-            }}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="completeGovInvestment" label="其中政府投资（万元）" width="120">
-        <template slot-scope="scope">
-          <span>{{ displayScore((scope.row.completeGovInvestment || 0))}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="completeSocialInvestment" label="其中社会投资（万元）" width="120">
-        <template slot-scope="scope">
-          <span>{{ displayScore((scope.row.completeSocialInvestment || 0))}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="completeSelfInvestment" label="其中自筹投资（万元）" width="120">
-        <template slot-scope="scope">
-          <span>{{ displayScore((scope.row.completeSelfInvestment || 0))}}</span>
-        </template>
-      </el-table-column>
+    <el-table-column v-if="!isFirstTimeReport && lastUpdateTime" prop="overallProgress" :label="'总体进度（%） ' + lastUpdateTime" header-align="center" width="120">
+      <template slot-scope="scope"> {{ displayScore(scope.row.overallProgress || 0) }}% </template>
     </el-table-column>
-    <el-table-column v-if="type === 'edit'" label="完成投资" width="250" header-align="center">
-      <el-table-column label="总投资（万元）" width="150">
+    <el-table-column v-if="type === 'edit'" label="完成投资（万元）" header-align="center">
+      <!-- 村级用户 -->
+      <el-table-column label="总投资" width="100">
         <template slot-scope="scope">
-          <!-- 县级用户 -->
-          <span>
-            {{  displayScore(((form[`tmpKey-gov-${scope.$index}`] || 0) + (form[`tmpKey-social-${scope.$index}`] || 0) +
-                (form[`tmpKey-self-${scope.$index}`] || 0)))
-            }}
-          </span>
+          <span> {{ (form[`tmpKey-gov-first-${scope.$index}`] || 0) + (form[`tmpKey-drive-first-${scope.$index}`] || 0) }} </span>
         </template>
       </el-table-column>
-      <el-table-column label="其中政府投资（万元）" width="150">
+      <el-table-column label="政府投资" width="150">
         <template slot-scope="scope">
-          <!-- 县级用户 -->
           <div>
-            <el-form-item :prop="`tmpKey-gov-${scope.$index}`" label="" :show-message="false" :rules="rules[`tmpKey-gov-${scope.$index}`]" >
-              <el-input-number v-model="form[`tmpKey-gov-${scope.$index}`]" size="mini"
+            <el-form-item :prop="`tmpKey-gov-first-${scope.$index}`" label="" :show-message="false" :rules="rules[`tmpKey-gov-first-${scope.$index}`]" >
+              <el-input-number v-model="form[`tmpKey-gov-first-${scope.$index}`]" size="mini"
                 maxlength="20" placeholder="请输入" :controls="false" :precision="2"
                 />
             </el-form-item>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="其中社会投资（万元）" width="150">
+      <el-table-column label="带动投资" width="150">
         <template slot-scope="scope">
-          <!-- 县级用户 -->
           <div>
-            <el-form-item :prop="`tmpKey-social-${scope.$index}`" label="" :show-message="false" :rules="rules[`tmpKey-social-${scope.$index}`]">
-              <el-input-number v-model="form[`tmpKey-social-${scope.$index}`]" size="mini"
-                maxlength="20" placeholder="请输入" :controls="false" :precision="2"
-                />
-            </el-form-item>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="其中自筹投资（万元）" width="150">
-        <template slot-scope="scope">
-          <!-- 县级用户 -->
-          <div>
-            <el-form-item :prop="`tmpKey-self-${scope.$index}`" label="" :show-message="false" :rules="rules[`tmpKey-self-${scope.$index}`]">
-              <el-input-number v-model="form[`tmpKey-self-${scope.$index}`]" size="mini"
+            <el-form-item :prop="`tmpKey-drive-first-${scope.$index}`" label="" :show-message="false" :rules="rules[`tmpKey-drive-first-${scope.$index}`]">
+              <el-input-number v-model="form[`tmpKey-drive-first-${scope.$index}`]" size="mini"
                 maxlength="20" placeholder="请输入" :controls="false" :precision="2"
                 />
             </el-form-item>
@@ -107,10 +84,49 @@
         </template>
       </el-table-column>
     </el-table-column>
-    <el-table-column prop="rate" width="130" :key="100" label="是否开工">
+    <el-table-column label="总体进度（%）" width="170">
+      <template slot-scope="scope">
+        <div v-if="userInfo.roleId === USER_TYPE.VILLAGE && type === 'edit'">
+          <el-form-item :prop="`tmpKey-global-first-${scope.$index}`" label="" :show-message="false" :rules="rules[`tmpKey-global-first-${scope.$index}`]">
+            <el-input-number v-model="form[`tmpKey-global-first-${scope.$index}`]" size="mini"
+              maxlength="20" placeholder="请输入" :controls="false" :precision="2"
+            >
+            </el-input-number> %
+          </el-form-item>
+        </div>
+        <div v-else>
+          <span class="cell">{{ scope.row.globalRate || '--' }}</span>
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column prop="rate" label="年度投资完成率（%）">
+      <template slot-scope="scope">
+        <!-- 村级用户 -->
+        <div v-if="userInfo.roleId === USER_TYPE.VILLAGE && type === 'edit'">
+          {{ calcRateCurrentYear(scope) }}
+        </div>
+        <!-- 省市级用户 -->
+        <div v-else>
+          <span class="cell">{{ scope.row.yearRate || '--' }}</span>
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column prop="rate" label="计划投资完成率（%）">
       <template slot-scope="scope">
         <!-- 县级用户 -->
-        <div v-if="(userInfo.roleId === USER_TYPE.COUNTRY || userInfo.roleId === USER_TYPE.COUNTRY_LEADER) && type === 'edit'">
+        <div v-if="userInfo.roleId === USER_TYPE.VILLAGE && type === 'edit'">
+          {{calcRateTotal(scope)}}
+        </div>
+        <!-- 省市级用户 -->
+        <div v-else>
+          <span class="cell">{{ scope.row.planRate || '--'}}</span>
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column prop="rate" label="是否开工" width="130">
+      <template slot-scope="scope">
+        <!-- 村级用户 -->
+        <div v-if="userInfo.roleId === USER_TYPE.VILLAGE && type === 'edit'">
           <el-form-item label="" :show-message="false">
             <el-radio-group v-model="form.detailLists[scope.$index].state"
               :disabled="form.detailLists[scope.$index].lastState">
@@ -119,29 +135,9 @@
             </el-radio-group>
           </el-form-item>
         </div>
-        <!-- 省市级用户 -->
+        <!-- 省市县级级用户 -->
         <div v-else>
           <span class="cell">{{ scope.row.state ? '是' : '否' }}</span>
-        </div>
-      </template>
-    </el-table-column>
-    <el-table-column prop="rate" width="120" :key="101" label="完成率">
-      <template slot-scope="scope">
-        <!-- 县级用户 -->
-        <div v-if="(userInfo.roleId === USER_TYPE.COUNTRY || userInfo.roleId === USER_TYPE.COUNTRY_LEADER) && type === 'edit'">
-          <span class="cell">{{
-              (
-                ((scope.row.completeGovInvestmentNow || 0) + (scope.row.completeSocialInvestmentNow || 0) +
-                  (scope.row.completeSelfInvestmentNow || 0)) /
-                ((scope.row.planGovInvestment || 0) +
-                  (scope.row.planSocialInvestment || 0) +
-                  (scope.row.planSelfInvestment || 0) || 1) * 100
-              ).toFixed(2) + '%' || '--'
-          }}</span>
-        </div>
-        <!-- 省市级用户 -->
-        <div v-else>
-          <span class="cell">{{ scope.row.rate }}</span>
         </div>
       </template>
     </el-table-column>
@@ -150,8 +146,8 @@
 <script>
 import { mapGetters } from "vuex";
 import { USER_TYPE } from '@/views2/utils/constants';
+import { mapType } from '@/views2/utils/project';
 import _ from 'lodash';
-
 
 export default {
   props: {
@@ -174,6 +170,7 @@ export default {
       refill: false,
       isFirstTimeReport: false,
       lastUpdateTime: '',
+      firstYear: 2022,
       rules: {},
     };
   },
@@ -184,6 +181,28 @@ export default {
     this.init();
   },
   methods: {
+    mapType,
+    calcRateTotal(scope) {
+      const data = scope.row;
+      const form = this.form;
+      const { planFirstDrive, planFirstGov, planSecondDrive, planSecondGov } = data;
+      const plantTotal = Number(planFirstDrive) + Number(planFirstGov) + Number(planSecondDrive) + Number(planSecondGov);
+      const currentTotal = Number(form[`tmpKey-gov-first-${scope.$index}`] || 0) + Number(form[`tmpKey-drive-first-${scope.$index}`] || 0);
+      const result = (currentTotal / plantTotal * 100).toFixed(2);
+      data.planRate = result;
+      return result ? result + '%' : '--';
+    },
+    calcRateCurrentYear(scope) {
+      const data = scope.row;
+      const form = this.form;
+      const { planFirstDrive, planFirstGov, planSecondDrive, planSecondGov } = data;
+      const isFirstYear = this.firstYear === new Date().getFullYear();
+      const plantTotal = isFirstYear ? Number(planFirstDrive) + Number(planFirstGov) : Number(planSecondDrive) + Number(planSecondGov);
+      const currentTotal = Number(form[`tmpKey-gov-first-${scope.$index}`] || 0) + Number(form[`tmpKey-drive-first-${scope.$index}`] || 0);
+      const result = (currentTotal / plantTotal * 100).toFixed(2);
+      data.yearRate = result;
+      return result ? result + '%' : '--';
+    },
     displayScore(score) {
       return Number(score || 0).toFixed(2);
     },
@@ -219,26 +238,27 @@ export default {
       console.log(this.data);
       if (this.data && this.data.length > 0) {
         this.isFirstTimeReport = this.data.some(i => {
-          return i.completeGovInvestment === null && i.completeSelfInvestment === null && i.completeSocialInvestment === null;
+          return i.completeDrive === null && i.completeGov === null && i.completeTotal === null;
         });
         const firstTimeValue = this.data[0] && this.data[0].gmtModified || '';
         this.lastUpdateTime = firstTimeValue.slice(0, 10);
+        this.firstYear = this.data[0] && this.data[0].firstYear || 2022;
+        if (this.type === 'edit') {
+          const length = this.data.length;
+          for (let index = 0; index < length; index++) {
+            const element = this.data[index];
+            const key1 = `tmpKey-gov-first-${index}`;
+            const key2 = `tmpKey-drive-first-${index}`;
+            const key3 = `tmpKey-global-first-${index}`;
 
-        const length = this.data.length;
-        for (let index = 0; index < length; index++) {
-          const element = this.data[index];
-          // (scope.row.completeGovInvestmentNow || 0) + (scope.row.completeSocialInvestmentNow || 0) +
-          //       (scope.row.completeSelfInvestmentNow || 0)
-          const key1 = `tmpKey-gov-${index}`;
-          const key2 = `tmpKey-self-${index}`;
-          const key3 = `tmpKey-social-${index}`;
-          this.$set(this.form, key1, 0);
-          this.$set(this.form, key2, 0);
-          this.$set(this.form, key3, 0);
+            this.$set(this.form, key1, 0);
+            this.$set(this.form, key2, 0);
+            this.$set(this.form, key3, 0);
 
-          this.rules[key1] = this.createRule(element.completeGovInvestment || 0, element, 'completeGovInvestmentNow');
-          this.rules[key2] = this.createRule(element.completeSelfInvestment || 0, element, 'completeSelfInvestmentNow');
-          this.rules[key3] = this.createRule(element.completeSocialInvestment || 0, element, 'completeSocialInvestmentNow');
+            this.rules[key1] = this.createRule(element.completeDrive || 0, element, 'completeDriveNow');
+            this.rules[key2] = this.createRule(element.completeGov || 0, element, 'completeGovNow');
+            this.rules[key3] = this.createRule(element.overallProgress || 0, element, 'overallProgressNow');
+          }
         }
       }
     },

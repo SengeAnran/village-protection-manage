@@ -1,8 +1,8 @@
 <template>
-  <div class="block">
+  <div class="block" v-loading="initLoading">
     <el-form ref="form" class="form" label-position="top" :model="form" label-width="80px">
       <h3 class="text-gray-800 text-2xl mb-3"> {{ type === 'add' ? '新建申报' : '修改申报' }}</h3>
-      <div class="detail-top">
+      <div class="detail-top" >
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="申报类型" prop="decType" :rules="rule.select">
@@ -14,13 +14,23 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="12" v-if="!initLoading">
             <el-form-item v-if="form.decType === 1" label="创建村名称" prop="villageName" :rules="rule.select">
               <!--                <VillageSelect v-model="form.villageName" @change="changeAddress('villageName', $event)" />-->
-              <el-select v-model="form.villageName" placeholder="请选择">
+              <!-- <el-select v-model="form.villageName" placeholder="请选择">
                 <el-option v-for="item in villageOptions1" :key="item.value" :label="item.label" :value="item.label">
                 </el-option>
-              </el-select>
+              </el-select> -->
+              <el-cascader
+                ref="cascader"
+                :props="villageProp"
+                :show-all-levels="false"
+                collapse-tags 
+                :options="villageOPtions"
+                v-model="villageName"
+                @change="handleChange"
+                placeholder="请选择"
+              ></el-cascader>
             </el-form-item>
             <el-form-item v-if="showdecType2" label="片区申报" prop="villageName" :rules="rule.select">
               <el-input
@@ -29,10 +39,20 @@
                 maxlength="20"
                 style="margin-right: 16px"
               ></el-input>
-              <el-select v-model="form.villageName" :multiple="true" placeholder="请选择片区内村庄">
+              <!-- <el-select v-model="form.villageName" :multiple="true" placeholder="请选择片区内村庄">
                 <el-option v-for="(item, index) in villageOptions" :key="index" :label="item.label" :value="item.label">
                 </el-option>
-              </el-select>
+              </el-select> -->
+              <el-cascader
+                ref="cascader"
+                :props="village2Prop"
+                :show-all-levels="false"
+                collapse-tags
+                :options="villageOPtions"
+                v-model="villageName"
+                @change="handleChange"
+                placeholder="请选择片区内村庄">
+              </el-cascader>
             </el-form-item>
           </el-col>
         </el-row>
@@ -264,7 +284,7 @@ import rule from '@/mixins/rule';
 import { getSetList } from '@/api2/declarationBatch';
 import { villageDeclaration, getVillageItemDetail } from '@/api2/villageManage';
 import { updateVillageItem } from '../../../api2/villageManage';
-import { getVillageArea } from '@/api2/acceptanceEvaluation';
+import { getCountyVillages } from '@/api2/acceptanceEvaluation';
 import { mapGetters } from 'vuex';
 
 import { types } from '@/views2/utils/project';
@@ -307,7 +327,7 @@ export default {
         decType: 1, // 申报类型
         // todo: be remove
         annexFiles: [], // 附件
-        villageName: '', //村庄地址
+        villageName: [], //村庄地址
         areaId: '', //村庄地址
         town: '', //村庄地址
         villageId: '', //村庄地址
@@ -338,6 +358,7 @@ export default {
         projects: [], //项目列表
         createScenario: '', // 未来乡村创建方案
       },
+      villageName: [],
       type: 'add',
       dialogVisible: false,
       importDialogVisible: false,
@@ -348,9 +369,23 @@ export default {
       villageSelects: { required: true, validator: villageSelect, trigger: 'blur' },
 
       imgRule: { required: true, validator: imgs, trigger: 'change' },
-      villageOptions1: [],
-      villageOptions: [],
       batchOptions: [],
+
+      villageOPtions: [],
+      villageProp: {
+        emitPath: false,
+        value: 'name',
+        label: 'name',
+        children: 'child',
+      },
+      village2Prop: {
+        multiple: true,
+        emitPath: false,
+        value: 'name',
+        label: 'name',
+        children: 'child',
+      },
+      initLoading: true,
     };
   },
   computed: {
@@ -362,51 +397,85 @@ export default {
     //   this.form = this.data;
     //   this.imageList = [...this.data.villagePicturesFiles];
     // }
-    this.getVillages();
+    this.getVillageList();
     this.getBatchList();
-    this.getDetail();
   },
   methods: {
+    handleChange(value) {
+      this.form.villageName = value;
+      console.log('handleChange', this.form.villageName, value);
+    },
     changeDecType() {
-      console.log(this.form.decType);
+      console.log('changeDecType', this.form.decType);
+      this.form.villageName = [];
+      this.villageName = [];
       if (this.form.decType === 1) {
-        this.form.villageName = '';
         this.showdecType2 = false;
       } else {
-        this.form.villageName = [];
         this.showdecType2 = true;
       }
     },
-    getDetail() {
-      const { id } = this.$route.query;
-      if (!id) return;
-      this.type = 'edit';
-      getVillageItemDetail({ id }).then((res) => {
-        this.form = res;
-        // this.form.annexFiles = [];
-        this.finalStatus = res.finalStatus;
-        console.log(res);
-        if (res.decType === 2) {
-          this.form.villageName = res.villageName.split(',');
-          this.showdecType2 = true;
-        }
+    getVillageList() {
+      getCountyVillages({ county: this.userInfo.areaName }).then((res) => {
+        this.villageOPtions = res;
+        this.getDetail();
       });
     },
-    // 获取村列表
-    getVillages() {
-      getVillageArea({ areaId: this.userInfo.areaId }).then((res) => {
-        this.villageOptions = res[0].children.map((c) => {
-          return {
-            label: c.areaName,
-            value: c,
-          };
-        });
-        this.villageOptions1 = res[0].children.map((c) => {
-          return {
-            label: c.areaName,
-            value: c.areaId,
-          };
-        });
+    getDetail() {
+      const { id } = this.$route.query;
+      if (!id) {
+        this.initLoading = false;
+        return;
+      };
+      this.type = 'edit';
+      getVillageItemDetail({ id }).then((res) => {
+        const data = {
+          ...res,
+        };
+        if (res.decType === 2) {
+          this.showdecType2 = true;
+        }
+        const villageNameOrigin = (res.villageName || '').split(',');
+        const villageOPtions = this.villageOPtions;
+        let villageName = [];
+        if (villageOPtions && villageOPtions.length) {
+          // 在这里将真个下拉菜单初始化。主要是为了在编辑的时候能够回显上一次的选中内容
+          const mapCode = new Map();
+          const mapValue = new Map();
+          villageOPtions.forEach((ele) => {
+            const child = ele.child || [];
+            child.forEach((el) => {
+              mapCode.set(el.code, el);
+              mapValue.set(el.name, el);
+            });
+            mapCode.set(ele.code, ele);
+            mapValue.set(ele.name, ele);
+          });
+
+          villageName = villageNameOrigin.map((ele) => {
+            const tmp = mapValue.get(ele);
+            if (!tmp) {
+              return null;
+            }
+            const parent = mapCode.get(tmp.pcode);
+            if (!parent) {
+              return null;
+            }
+            return [parent?.name, tmp?.name];
+          }).flat(2);
+          const empty = villageName.some((ele) => !ele);
+          if (!empty) {
+            this.villageName = villageName;
+          }
+        }
+
+        this.form = data;
+        data.villageName = villageNameOrigin;
+        console.log('village name', res.villageName, villageNameOrigin, villageName);
+        // this.form.annexFiles = [];
+        this.finalStatus = res.finalStatus;
+      }).finally(() => {
+        this.initLoading = false;
       });
     },
     // 获取批次列表
@@ -477,16 +546,23 @@ export default {
     validateForm() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          this.form.annexIds = this.form.annexFiles.map((i) => i.fileId).toString();
-          if (this.form.decType === 2) {
-            this.form.villageName = this.form.villageName.toString();
-          }
-          console.log(this.form.annexIds);
+          const annexIds = this.form.annexFiles.map((i) => i.fileId).toString();
+          const villageName = this.form.villageName.toString();
+          const params = {
+            ...this.form,
+            annexIds,
+            villageName,
+          };
+          console.log(this.form.villageName);
+          console.log(params);
+          // if (this.form.villageName) {
+          //   return;
+          // }
           if (this.type === 'edit') {
             // this.form.id = this.$route.query.id;
-            this.update(this.form);
+            this.update(params);
           } else {
-            this.submit(this.form);
+            this.submit(params);
           }
         } else {
           return false;
@@ -496,37 +572,23 @@ export default {
 
     // 新增申报item
     submit(params) {
-      console.log(params);
-      villageDeclaration(params)
-        .then(() => {
-          this.$message({
-            message: '添加成功！',
-            type: 'success',
-          });
-          this.$router.back();
-        })
-        .catch(() => {
-          if (this.form.decType === 2) {
-            this.form.villageName = this.form.villageName.split(',');
-          }
+      villageDeclaration(params).then(() => {
+        this.$message({
+          message: '添加成功！',
+          type: 'success',
         });
+        this.$router.back();
+      });
     },
     // 修改item
     update(params) {
-      console.log(params);
-      updateVillageItem(params)
-        .then(() => {
-          this.$message({
-            message: '修改成功！',
-            type: 'success',
-          });
-          this.$router.back();
-        })
-        .catch(() => {
-          if (this.form.decType === 2) {
-            this.form.villageName = this.form.villageName.split(',');
-          }
+      updateVillageItem(params).then(() => {
+        this.$message({
+          message: '修改成功！',
+          type: 'success',
         });
+        this.$router.back();
+      });
     },
 
     // 选择村庄地址

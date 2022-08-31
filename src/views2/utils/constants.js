@@ -4,7 +4,7 @@ export const USER_TYPE = Object.freeze({
   CITY_LEADER: 5, // 市级领导
   COUNTRY: 3, // 县级
   COUNTRY_LEADER: 6, // 县级领导
-  VILLAGE: 7, // 村级
+  VILLAGE: 4, // 村级
 });
 
 // 审核状态。0未通过， 1通过, -1未处理
