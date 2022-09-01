@@ -160,7 +160,6 @@ export default {
           return res.type == '1';
         });
       });
-
       this.dialogFormVisible = true;
       this.title = '详情';
       this.disabled = true;
