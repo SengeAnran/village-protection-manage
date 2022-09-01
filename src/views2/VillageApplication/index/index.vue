@@ -320,7 +320,7 @@ export default {
       const opt = (res?.content || []).map((ele) => {
         return {
           label: ele.batch,
-          value: ele.id,
+          value: ele.batch,
         };
       });
       this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(opt);

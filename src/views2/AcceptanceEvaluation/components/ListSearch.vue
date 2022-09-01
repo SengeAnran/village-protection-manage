@@ -82,7 +82,7 @@ export default {
   methods: {
     setBatchOpt() {
       getSetList({ type: 2, pageNum: 1, pageSize: 50 }).then((res) => {
-        this.batchOpt = res.content.map((c) => ({ label: c.batch, value: c.id }));
+        this.batchOpt = res.content.map((c) => ({ label: c.batch, value: c.batch }));
       });
     },
     setCityLevelOpt() {
