@@ -121,7 +121,6 @@ import { getAuditList, getReportList, deleteItem, exportList, exportAnnex, unifi
 import { downloadFile } from '@/utils/data';
 import { CITY_LEVEL_RATING } from './constants';
 import { USER_TYPE, FINAL_STATUE_COLOR, DECLARE_STATUS, FINAL_STATUS } from '@/views2/utils/constants';
-import { downloadWordFile } from "@/utils/data"
 
 export default {
   components: { ListSearch },
@@ -219,7 +218,7 @@ export default {
               id: item.id,
             };
             const res = await materialPrinting(data);
-            downloadWordFile(res, '浙江省未来乡村创建成效评价申请表');
+            downloadFile(res, "浙江省未来乡村创建成效评价申请表", "application/msword")
             this.$notify.success('导出成功');
           });
         });

@@ -185,5 +185,6 @@ export const materialPrinting = (params) => {
   return axios.request({
     method: 'GET',
     url: apiHost2 + `/api/workbench/createReports/materialPrinting/${params.id}`,
+    responseType: 'blob',
   });
 };

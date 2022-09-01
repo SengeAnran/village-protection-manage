@@ -26,7 +26,7 @@
       </el-select>
     </div>
     <div class="search-item" v-if="!isCounty">
-      <span class="label">验收时间：</span>
+      <span class="label">审核比选时间：</span>
       <el-select v-model="query.cityAcceptTime" placeholder="请选择">
         <el-option v-for="item in acceptTimeOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>

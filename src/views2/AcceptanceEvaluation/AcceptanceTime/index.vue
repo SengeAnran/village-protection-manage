@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <div>
-      <div class="text-lg mb-4">验收时间配置</div>
+      <div class="text-lg mb-4">审批比选时间配置</div>
       <Crud
         ref="crud"
         :add-method="addMethod"
@@ -23,7 +23,7 @@
         :permission-delete="4100"
       >
         <template v-slot:form>
-          <el-form-item label="验收时间：" prop="acceptanceTime" :rules="rule.input">
+          <el-form-item label="比选时间：" prop="acceptanceTime" :rules="rule.input">
             <el-date-picker v-model="form.acceptanceTime" type="month" placeholder="选择月" value-format="yyyy-MM">
             </el-date-picker>
           </el-form-item>
@@ -32,7 +32,7 @@
         <template v-slot:crudAction> </template>
 
         <template v-slot:table>
-          <el-table-column label="验收时间" prop="acceptanceTime"></el-table-column>
+          <el-table-column label="比选时间" prop="acceptanceTime"></el-table-column>
           <!-- <el-table-column label="创建时间" prop="gmtCreate">
             <template slot-scope="scope">
               <p>{{ scope.row.gmtCreate.slice(0, 10) }}</p>

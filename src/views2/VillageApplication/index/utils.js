@@ -32,7 +32,7 @@ function canModify(data, roleId) {
 
 // 删除 *******
 function canDelete(data, roleId) {
-  if (roleId === USER_TYPE.CITY_LEADER || roleId === USER_TYPE.COUNTRY_LEADER) {
+  if (roleId !== USER_TYPE.COUNTRY && roleId !== USER_TYPE.COUNTRY_LEADER) {
     return false;
   }
   return canModify(data, roleId);

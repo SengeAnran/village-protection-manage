@@ -12,12 +12,6 @@
         id-key="id"
         actionWidth="180px"
         :multiple-delete="userInfo.roleId === 3"
-        showExport
-        showExport2
-        :export-method="exportMethod"
-        :export-method2="exportMethod2"
-        export-name="导出信息汇总表"
-        export-name2="导出项目进度表"
         :hideAdd="true"
         :hideEdit="true"
         :hideView="true"
@@ -26,6 +20,7 @@
         :permission-edit="0"
         :permission-delete="10004"
         :tableRowClassName="tableRowClassName"
+        @selectionChange="selectionChange"
       >
         <template v-slot:search>
           <div class="inline-flex mb-2 pl-0" style="flex-wrap: wrap;">
@@ -77,6 +72,10 @@
               </el-date-picker>
             </div>
           </div>
+        </template>
+        <template v-slot:export>
+          <el-button icon="el-icon-download" type="primary" plain @click="exportMethod"> 导出信息汇总表 </el-button>
+          <el-button icon="el-icon-download" type="primary" plain @click="exportMethod2"> 导出项目进度表 </el-button>
         </template>
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
@@ -136,6 +135,7 @@ import {
   // PRO_DECLEAR_STATUS,
 } from './constants';
 import { recVerify } from '../../api/villageManage';
+import { downloadFile } from '@/utils/data';
 
 import { exportDetail, getInforExport, getList } from '@/api2/progressSubmission';
 import { USER_TYPE } from '@/views2/utils/constants';
@@ -185,9 +185,6 @@ export default {
       ],
       getMethod: getList,
       deleteMethod: deleteVillageItem,
-      exportMethod: getInforExport,
-      exportMethod2: exportDetail,
-
       dialogVisible: false,
       submitSortMethod: recVerify,
       batchInfo: {},
@@ -195,6 +192,7 @@ export default {
         declareType: '',
         declareYear: '',
       },
+      selections: [],
     };
   },
   computed: {
@@ -265,9 +263,43 @@ export default {
         };
       });
     },
-    // 导出附件
-    exportEnclosure() {
-      console.log('导出附件');
+    selectionChange(val) {
+      this.selections = val;
+    },
+    // 导出信息汇总表
+    async exportMethod() {
+      if (this.selections.length === 0) {
+        this.$notify.error('请选择需要导出的数据');
+        return;
+      }
+      this.$confirm('是否批量导出所选数据？', '提示', {
+        type: 'warning',
+      }).then(async () => {
+        const data = {
+          ids: this.selections.map((item) => item.id),
+        };
+        const res = await getInforExport(data);
+        downloadFile(res, '浙江省未来乡村申报汇总.xlsx');
+        this.$notify.success('导出成功');
+      });
+    },
+    // 导出项目进度表
+    async exportMethod2() {
+      if (this.selections.length === 0) {
+        this.$notify.error('请选择需要导出的数据');
+        return;
+      }
+      this.$confirm('是否批量导出所选数据？', '提示', {
+        type: 'warning',
+      }).then(async () => {
+        this.loading = true;
+        const data = {
+          ids: this.selections.map((item) => item.id),
+        };
+        const res = await exportDetail(data);
+        downloadFile(res, '浙江省未来乡村项目进度表.xlsx');
+        this.$notify.success('导出成功');
+      });
     },
     // newApplications(val) {
     //   const routerName = VILLAGE_LIST_ROUTER_NAME[Number(val)];

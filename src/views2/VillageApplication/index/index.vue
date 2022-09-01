@@ -95,14 +95,14 @@
               <el-link @click="handleEdit(scope)" type="primary"> 修改</el-link>
             </span>
 
-            <span v-if="actionControl('删除', scope.data.finalStatus)">
+            <span v-if="actionControl('删除', scope.data)">
               <el-divider
                 direction="vertical"
                 v-if="
                   actionControl('排序', scope.data) ||
                   actionControl('详情', scope.data) ||
                   actionControl('审核', scope.data) ||
-                  actionControl('修改', scope.data.finalStatus)
+                  actionControl('修改', scope.data)
                 "
               ></el-divider>
               <el-link @click="deleteItem(scope.data.id)" type="danger"> 删除 </el-link>
@@ -110,7 +110,7 @@
 
             <span
               v-if="
-                roleId === USER_TYPE.COUNTRY &&
+                (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER || roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER ) &&
                 scope.data.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED &&
                 !scope.data.multipartFileVO
               "
@@ -120,8 +120,8 @@
                   actionControl('排序', scope.data) ||
                   actionControl('详情', scope.data) ||
                   actionControl('审核', scope.data) ||
-                  actionControl('修改', scope.data.finalStatus) ||
-                  actionControl('删除', scope.data.finalStatus)
+                  actionControl('修改', scope.data) ||
+                  actionControl('删除', scope.data)
                 "
                 direction="vertical"
               ></el-divider>
