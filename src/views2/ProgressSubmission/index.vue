@@ -59,17 +59,16 @@
               </el-select>
             </div>
             <div class="search-item mb-4">
-              <span class="label">报送更新时间：</span>
-              <el-date-picker
-                v-model="query.date"
-                type="datetimerange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                @change="setDate"
-              >
-              </el-date-picker>
+              <span class="label">状态：</span>
+              <el-select v-model="query.reportStatus" placeholder="请选择">
+                <el-option
+                  v-for="(item, index) of reportStateOPt"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
             </div>
           </div>
         </template>
@@ -154,9 +153,8 @@ export default {
         finalStatus: '',
         name: '',
         date: '',
-        endDate: '',
-        startDate: '',
         areaId: '',
+        reportStatus: '',
       },
       declareYearOpt: [
         {
@@ -182,6 +180,9 @@ export default {
           label: '全部',
           value: '',
         },
+      ],
+      reportStateOPt: [
+       
       ],
       getMethod: getList,
       deleteMethod: deleteVillageItem,
@@ -217,33 +218,35 @@ export default {
     console.log([12, 13].toString());
   },
   mounted() {
-    // this.lookUp();
+    const opts = Object.values(REPORT_STATUS).map((ele) => {
+      return {
+        label: ele,
+        value: ele,
+      };
+    });
+    opts.unshift({
+      label: '全部',
+      value: '',
+    });
+    this.reportStateOPt = opts;
   },
   methods: {
     getStatusName,
     canReport(data) {
       const roleId = this.roleId;
       const hasPerm = roleId === USER_TYPE.VILLAGE;
-      if (data.reportStatus === REPORT_STATUS.REPORTED) {
+      if (data.reportStatus !== REPORT_STATUS.UNREPORTED) {
         // 已报送则不可在报送
         return false;
       }
-      // const day = new Date().getDate();
-      const day = 18;
-      if (hasPerm && day <= 18) {
-        return true;
+      if (!hasPerm) {
+        return false;
       }
-    },
-    // 时间范围
-    setDate(val) {
-      console.log(val);
-      if (val && val.length === 2) {
-        this.query.startDate = val[0];
-        this.query.endDate = val[1];
-      } else {
-        this.query.startDate = '';
-        this.query.endDate = '';
+      const day = new Date().getDate();
+      if (day > 18) {
+        return false;
       }
+      return true;
     },
     // 地区
     changeArea(val) {
