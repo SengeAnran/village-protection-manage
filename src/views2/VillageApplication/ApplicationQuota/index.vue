@@ -5,19 +5,13 @@
     </span>
     <div>
       <template>
-        <el-table
-          class="table"
-          :header-row-style="{
-            fontSize: '14px',
-            fontFamily: 'PingFangSC-Medium, PingFang SC',
-            fontWeight: 500,
-            color: ' #333333',
-            lineHeight: '22px',
-          }"
-          v-loading="loading"
-          :data="tableData"
-          style="width: 100%"
-        >
+        <el-table class="table" :header-row-style="{
+          fontSize: '14px',
+          fontFamily: 'PingFangSC-Medium, PingFang SC',
+          fontWeight: 500,
+          color: ' #333333',
+          lineHeight: '22px',
+        }" v-loading="loading" :data="tableData" style="width: 100%">
           <el-table-column type="index" width="50" label="序号"> </el-table-column>
           <el-table-column prop="city" label="地区" width="180"> </el-table-column>
           <el-table-column prop="gmtModified" label="编辑时间"> </el-table-column>
@@ -39,26 +33,16 @@
           <el-form-item>
             <el-col :span="10">
               <el-form-item>
-                <el-input
-                  :disabled="disabled"
-                  placeholder="请输入最低名额"
-                  type="number"
-                  v-model.number="item.minimumQuota"
-                  autocomplete="off"
-                ></el-input>
+                <el-input :disabled="disabled" placeholder="请输入最低名额" type="number" v-model.number="item.minimumQuota"
+                  autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="2"> ---- </el-col>
 
             <el-col :span="10">
               <el-form-item>
-                <el-input
-                  :disabled="disabled"
-                  placeholder="请输入最高名额"
-                  type="number"
-                  v-model.number="item.highestQuota"
-                  autocomplete="off"
-                ></el-input>
+                <el-input :disabled="disabled" placeholder="请输入最高名额" type="number" v-model.number="item.highestQuota"
+                  autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-form-item>
@@ -66,26 +50,16 @@
           <el-form-item>
             <el-col :span="10">
               <el-form-item>
-                <el-input
-                  :disabled="disabled"
-                  placeholder="请输入最低名额"
-                  type="number"
-                  v-model.number="detailList1[index].minimumQuota"
-                  autocomplete="off"
-                ></el-input>
+                <el-input :disabled="disabled" placeholder="请输入最低名额" type="number"
+                  v-model.number="detailList1[index].minimumQuota" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="2"> ---- </el-col>
 
             <el-col :span="10">
               <el-form-item :rules="[{ type: 'number', message: '最高名额必须为数字值' }]">
-                <el-input
-                  :disabled="disabled"
-                  placeholder="请输入最高名额"
-                  type="number"
-                  v-model.number="detailList1[index].highestQuota"
-                  autocomplete="off"
-                ></el-input>
+                <el-input :disabled="disabled" placeholder="请输入最高名额" type="number"
+                  v-model.number="detailList1[index].highestQuota" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-form-item>
@@ -165,6 +139,8 @@ export default {
           type: 'success',
         });
         console.log(res);
+
+        this.getQuotaListData();
         this.dialogFormVisible = false;
       });
     },
@@ -184,6 +160,7 @@ export default {
           return res.type == '1';
         });
       });
+
       this.dialogFormVisible = true;
       this.title = '详情';
       this.disabled = true;
@@ -212,7 +189,7 @@ export default {
 }
 
 .table-action {
-  > * {
+  >* {
     margin: 0 4px;
   }
 }
