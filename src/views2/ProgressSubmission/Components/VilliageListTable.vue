@@ -255,8 +255,8 @@ export default {
             this.$set(this.form, key2, 0);
             this.$set(this.form, key3, 0);
 
-            this.rules[key1] = this.createRule(element.completeDrive || 0, element, 'completeDriveNow');
-            this.rules[key2] = this.createRule(element.completeGov || 0, element, 'completeGovNow');
+            this.rules[key1] = this.createRule(element.completeGov || 0, element, 'completeGovNow');
+            this.rules[key2] = this.createRule(element.completeDrive || 0, element, 'completeDriveNow');
             this.rules[key3] = this.createRule(element.overallProgress || 0, element, 'overallProgressNow');
           }
         }
