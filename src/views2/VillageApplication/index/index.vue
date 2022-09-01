@@ -331,7 +331,7 @@ export default {
     // 打印材料
     async exportDatas() {
       if (this.selections.length === 0) {
-        this.$notify.error('请选择需要导出的数据');
+        this.$notify.error('请选择需要打印的数据');
         return;
       }
       if (!this.selections.every((i) => i.finalStatus === 4)) {
