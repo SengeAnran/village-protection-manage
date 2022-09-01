@@ -137,7 +137,7 @@
         </div>
         <!-- 省市县级级用户 -->
         <div v-else>
-          <span class="cell">{{ scope.row.state ? '是' : '否' }}</span>
+          <span class="cell">{{ scope.row.isStart ? '是' : '否' }}</span>
         </div>
       </template>
     </el-table-column>
