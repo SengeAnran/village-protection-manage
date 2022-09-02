@@ -1,12 +1,12 @@
 <template>
   <div class="file-attach-module">
-    <el-form-item label="附件上传" :rules="rule.upload" :prop="verifyProp">
+    <el-form-item label="附件上传" :rules="required ? rule.upload : null" :prop="verifyProp">
       <p style="color: #ff6b00" class="py-4 leading-5">
         <span style="display: block">
           <i class="el-icon-warning"></i>
           {{ desc1 || '县级需上传浙江省未来乡村创建成效自评总结及相关支持材料电子版；' }}
         </span>
-        <span style="display: inline-block; padding-left: 10px">
+        <span v-if="showDesc2" style="display: inline-block; padding-left: 10px">
           {{
             desc2 || '《浙江省未来乡村创建成效评价申请表》《浙江省未来乡村创建成效评分》由市级审核盖章后统一上传扫描件'
           }}
@@ -29,6 +29,10 @@ export default {
   props: {
     desc1: String,
     desc2: String,
+    showDesc2: {
+      type: Boolean,
+      default: true,
+    },
     verifyProp: {
       type: String,
       default: 'countySaveAnnex',
@@ -36,6 +40,10 @@ export default {
     data: {
       type: Array,
       default: () => [],
+    },
+    required: {
+      type: Boolean,
+      default: true,
     },
   },
   methods: {

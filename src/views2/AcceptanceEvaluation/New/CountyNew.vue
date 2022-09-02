@@ -16,6 +16,9 @@
         </el-row>
         <file-attach
           :data="form.countySaveAnnex"
+          :required="false"
+          desc1="报告中涉及的支撑材料可作为附件单独提供，并需提供附件清单方便查阅"
+          :showDesc2="false"
           @addFile="onCountyFileAdd"
           @removeFile="onCountyFileRemove"
         ></file-attach>

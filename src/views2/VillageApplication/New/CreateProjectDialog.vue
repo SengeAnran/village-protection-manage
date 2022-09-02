@@ -2,52 +2,59 @@
   <el-dialog title="添加" :visible.sync="dialogVisible" width="800px" :lock-scroll="true" @close="resetForm"
     @closed="$emit('closed')">
     <el-form :rules="rule" ref="projectForm" :model="projectForm" label-width="260px">
-      <el-form-item label="项目名称：" prop="projectName" :rules="rule.input">
-        <el-input v-model="projectForm.projectName" maxlength="20"></el-input>
+      <el-form-item label="项目名称：" prop="projectName" :rules="rules.inputMaxRequire">
+        <el-input v-model="projectForm.projectName" ></el-input>
       </el-form-item>
-      <el-form-item label="建设单位：" prop="constructUnit" :rules="rule.input">
-        <el-input v-model="projectForm.constructUnit" maxlength="20"></el-input>
+      <el-form-item label="建设单位：" prop="constructUnit" :rules="rules.inputMax">
+        <el-input v-model="projectForm.constructUnit" ></el-input>
       </el-form-item>
-      <el-form-item label="建设地点：" prop="constructAddress" :rules="rule.input">
-        <el-input v-model="projectForm.constructAddress" maxlength="20"></el-input>
+      <el-form-item label="建设地点：" prop="constructAddress" :rules="rules.inputMaxRequire">
+        <el-input v-model="projectForm.constructAddress" ></el-input>
       </el-form-item>
-      <el-form-item label="建设内容和规模：" prop="constructDetail" :rules="rule.input">
-        <el-input v-model="projectForm.constructDetail" maxlength="20"></el-input>
+      <el-form-item label="建设内容和规模：" prop="constructDetail" :rules="rules.inputMaxRequire">
+        <el-input v-model="projectForm.constructDetail" ></el-input>
       </el-form-item>
-      <el-form-item label="进度安排：" prop="schedule" :rules="rule.input">
-        <el-input v-model="projectForm.schedule" maxlength="20"></el-input>
+      <el-form-item label="进度安排：" prop="schedule" :rules="rule.date">
+        <el-date-picker
+          v-model="projectForm.schedule"
+          type="month"
+          placeholder="选择日期"
+          value-format="yyyy-MM"
+          :picker-options="pickerOptions"
+          >
+        </el-date-picker>
       </el-form-item>
-      <el-form-item label="用地情况：" prop="landUse" :rules="rule.input">
-        <el-input v-model="projectForm.landUse" maxlength="20"></el-input>
+      <el-form-item label="用地情况（m²）：" prop="landUse">
+        <el-input-number v-model="projectForm.landUse" :maxlength="8" class="number"></el-input-number>
       </el-form-item>
       <el-form-item :label="`${projectForm.firstYear}年计划投资（万元）：`">
         <plain-text :value="projectForm.planFirstGov + projectForm.planFirstDrive" maxlength="8" />
       </el-form-item>
       <el-form-item label="其中政府投资：" prop="planFirstGov" :rules="rule.inputNumber">
-        <el-input-number v-model="projectForm.planFirstGov" maxlength="8"></el-input-number>
+        <el-input-number v-model="projectForm.planFirstGov" maxlength="8" class="number"></el-input-number>
       </el-form-item>
       <el-form-item label="其中带动投资：" prop="planFirstDrive" :rules="rule.inputNumber">
-        <el-input-number v-model="projectForm.planFirstDrive" maxlength="8"></el-input-number>
+        <el-input-number v-model="projectForm.planFirstDrive" maxlength="8" class="number"></el-input-number>
       </el-form-item>
       <el-form-item :label="`${projectForm.firstYear + 1}年计划投资（万元）：`">
         <plain-text :value="projectForm.planSecondGov + projectForm.planSecondDrive" maxlength="8" />
       </el-form-item>
       <el-form-item label="其中政府投资：" prop="planSecondGov" :rules="rule.inputNumber">
-        <el-input-number v-model="projectForm.planSecondGov" maxlength="8"></el-input-number>
+        <el-input-number v-model="projectForm.planSecondGov" maxlength="8" class="number"></el-input-number>
       </el-form-item>
       <el-form-item label="其中带动投资：" prop="planSecondDrive" :rules="rule.inputNumber">
-        <el-input-number v-model="projectForm.planSecondDrive" maxlength="8"></el-input-number>
+        <el-input-number v-model="projectForm.planSecondDrive" maxlength="8" class="number"></el-input-number>
       </el-form-item>
       <el-form-item label="类型：" prop="type" :rules="rule.select">
         <el-select v-model="projectForm.type" placeholder="请选择">
           <el-option v-for="(item, index) of types" :key="index" :label="item.name" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="运行维护管理安排：" prop="arrangements" :rules="rule.input">
-        <el-input v-model="projectForm.arrangements" maxlength="20"></el-input>
+      <el-form-item label="运行维护管理安排：" prop="arrangements" :rules="rules.inputMax">
+        <el-input v-model="projectForm.arrangements" ></el-input>
       </el-form-item>
-      <el-form-item label="备注：">
-        <el-input v-model="projectForm.remark" maxlength="20"></el-input>
+      <el-form-item label="备注：" prop="remark" :rules="rules.inputMax">
+        <el-input v-model="projectForm.remark" ></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">确定</el-button>
@@ -72,6 +79,10 @@ export default {
       type: Object,
       default: null,
     },
+    dateRange: {
+      type: Array,
+      default: null,
+    },
   },
   data() {
     return {
@@ -94,6 +105,19 @@ export default {
         firstYear: new Date().getFullYear(),
         // 富文本
       },
+      rules: {
+        inputMax: [
+          { message: '长度不得超过20个字符', trigger: 'change', max: 20 },
+          { message: '长度不得超过20个字符', trigger: 'blur', max: 20 },
+        ],
+        inputMaxRequire: [
+          { message: '长度不得超过20个字符', trigger: 'change', max: 20 },
+          { message: '长度不得超过20个字符', trigger: 'blur', max: 20 },
+          {
+            required: true, message: "请输入", trigger: "blur",
+          },
+        ]
+      }
     };
   },
   computed: {
@@ -104,6 +128,16 @@ export default {
       get: function () {
         return this.value;
       },
+    },
+    pickerOptions() {
+      const dataRange = this.dateRange;
+      const range = [Date.parse(dataRange[0]), Date.parse(dataRange[1])];
+      return {
+        disabledDate(time) {
+          const timeLong = time.getTime();
+          return timeLong > range[1] || timeLong < range[0];
+        },
+      };
     },
   },
   watch: {
@@ -157,3 +191,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+
+.number {
+  width: 230px;
+}
+
+</style>

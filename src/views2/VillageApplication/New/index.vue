@@ -260,7 +260,7 @@
             @moveDown="moveDownItem"
           />
         </el-form-item>
-        <el-button class="add-wrp" plain size="small" @click="dialogVisible = true">
+        <el-button class="add-wrp" plain size="small" @click="handleAddRow">
           <i class="el-icon-plus"></i> 添加
         </el-button>
       </div>
@@ -269,7 +269,7 @@
       <el-button @click="$router.back()">取消</el-button>
       <el-button type="primary" @click="validateForm">保存</el-button>
     </div>
-    <CreateProjectDialog v-model="dialogVisible" :editData="editProjectForm" @change="handleAdd" @closed="handleAddClose" />
+    <CreateProjectDialog v-model="dialogVisible" :editData="editProjectForm" :dateRange="[form.startTime, form.endTime]" @change="handleAdd" @closed="handleAddClose" />
   </div>
 </template>
 <script>
@@ -394,6 +394,13 @@ export default {
     this.getBatchList();
   },
   methods: {
+    handleAddRow() {
+      if (!this.form.startTime || !this.form.endTime) {
+        this.$notify.error('请先选择创建周期');
+        return;
+      }
+      this.dialogVisible = true;
+    },
     handleChange(value) {
       this.form.villageName = value;
       console.log('handleChange', this.form.villageName, value);

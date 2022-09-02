@@ -103,7 +103,11 @@
           <el-table-column label="项目数" prop="projectNum"></el-table-column>
           <el-table-column label="已开工项目数" prop="startNum"></el-table-column>
           <el-table-column label="项目开工比例" prop="startRate"></el-table-column>
-          <el-table-column label="计划投资（万元）" prop="investNum"></el-table-column>
+          <el-table-column label="计划投资（万元）" prop="investNum">
+            <template slot-scope="scope">
+              {{ scope.row.investNum || 0 }}
+            </template>
+          </el-table-column>
           <el-table-column label="完成投资(万元)" prop="completeTotalInvestment">
             <template slot-scope="scope">
               <span :class="scope.row.completeTotalInvestment > scope.row.investNum ? 'cell-warn' : ''">

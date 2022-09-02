@@ -1,7 +1,7 @@
 export const USER_TYPE = Object.freeze({
   PROVINCE: 1, // 省级
-  CITY: 2, // 市级
-  CITY_LEADER: 5, // 市级领导
+  CITY: 2, // 市级 当前市级角色合并为一个角色
+  CITY_LEADER: 2, // 市级领导
   COUNTRY: 3, // 县级
   COUNTRY_LEADER: 6, // 县级领导
   VILLAGE: 4, // 村级

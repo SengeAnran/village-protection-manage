@@ -216,7 +216,7 @@ export default {
           trigger: 'blur',
           validator: (rule, value, callback) => {
             obj[arg] = value;
-            if (!value) {
+            if (!value && value !== 0) {
               callback(new Error("填写不能为空"))
               this.showMessage('填写不能为空');
               // }else if((typeof value === String && value.indexOf(".") !== -1 && value.split('.').length > 2) || !parseFloat(value) || parseFloat(value).toString() !== value){

@@ -2,11 +2,19 @@
   <el-table class="table-custom" :data="data">
     <el-table-column label="序号" type="index"> </el-table-column>
     <el-table-column prop="projectName" label="项目名称"> </el-table-column>
-    <el-table-column prop="constructUnit" label="建设单位"> </el-table-column>
+    <el-table-column prop="constructUnit" label="建设单位">
+      <template slot-scope="scope">
+        {{ scope.row.constructUnit || '-' }}
+      </template>
+    </el-table-column>
     <el-table-column prop="constructAddress" label="建设地点"> </el-table-column>
     <el-table-column prop="constructDetail" label="建设内容和规模"> </el-table-column>
     <el-table-column prop="schedule" label="进度安排"> </el-table-column>
-    <el-table-column prop="landUse" label="用地情况"> </el-table-column>
+    <el-table-column prop="landUse" label="用地情况（m²）">
+      <template slot-scope="scope">
+        {{ scope.row.landUse || '-' }}
+      </template>
+    </el-table-column>
     <el-table-column label="计划总投资（万元）" header-align="center" >
        <el-table-column :label="firstYear + ''" header-align="center" >
         <el-table-column prop="planFirstGov" label="政府投资" width="100" :resizable="false"> </el-table-column>
@@ -17,13 +25,21 @@
         <el-table-column prop="planSecondDrive" label="带动投资" width="100" :resizable="false"> </el-table-column>
       </el-table-column>
     </el-table-column>
-    <el-table-column prop="arrangements" label="运行维护管理安排"> </el-table-column>
+    <el-table-column prop="arrangements" label="运行维护管理安排">
+      <template slot-scope="scope">
+        {{ scope.row.arrangements || '-' }}
+      </template>
+    </el-table-column>
     <el-table-column prop="type" label="类型">
       <template slot-scope="scope">
         <span>{{ mapType(scope.row.type) }}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="remark" label="备注"> </el-table-column>
+    <el-table-column prop="remark" label="备注">
+      <template slot-scope="scope">
+        {{ scope.row.remark || '-' }}
+      </template>
+    </el-table-column>
     <el-table-column v-if="!hiddenOperation" label="操作" min-width="164px">
       <template slot-scope="scope">
         <div>
