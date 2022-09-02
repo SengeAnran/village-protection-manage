@@ -110,9 +110,7 @@
           </el-table-column>
           <el-table-column label="完成投资(万元)" prop="completeTotalInvestment">
             <template slot-scope="scope">
-              <span :class="scope.row.completeTotalInvestment > scope.row.investNum ? 'cell-warn' : ''">
-                {{ scope.row.completeTotalInvestment || 0 }}
-              </span>
+              {{ scope.row.completeTotalInvestment || 0 }}
             </template>
           </el-table-column>
           <el-table-column label="计划投资完成率" sortable prop="rate"></el-table-column>
