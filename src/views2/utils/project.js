@@ -1,7 +1,7 @@
 /**
  * 项目类型
  */
-export const types = [
+export const types = Object.freeze([
   {
     name: '基建类',
     value: 0,
@@ -22,7 +22,7 @@ export const types = [
     name: '其他类',
     value: 4,
   },
-];
+]);
 
 const typeMap = new Map(types.map((ele) => [ele.value, ele.name]));
 

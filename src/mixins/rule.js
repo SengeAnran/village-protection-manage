@@ -87,9 +87,6 @@ export default {
         mobile: { required: true, validator: mobile, trigger: "blur" },
         email: { required: true, validator: email, trigger: "blur" },
         age: { required: true, validator: age, trigger: "blur" },
-        maxScore: {
-          required: true, type: 'number', max: 97, trigger: 'change', message: '分数不得超过97分'
-        },
         richText: {
           required: true, validator: richText, trigger: 'change',
         },

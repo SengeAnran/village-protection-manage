@@ -47,6 +47,7 @@ export default {
       },
       editorConfig: {
         html: this.value,
+        autoFocus: false,
         placeholder: this.placeholder,
         // autoFocus: false,
         // 所有的菜单配置，都要在 MENU_CONF 属性下

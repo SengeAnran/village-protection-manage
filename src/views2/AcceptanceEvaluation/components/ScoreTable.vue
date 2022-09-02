@@ -23,7 +23,7 @@
               v-if="item.prop === 'countyScore'"
               :style="{ 'margin-bottom': row.title === '合计' ? 0 : undefined }"
               label=""
-              :rules="row.title === '合计' ? rule.maxScore : rule.input"
+              :rules="row.title === '合计' ? rules.maxScore : rule.input"
               :prop="row.countyScoreProp"
               :show-message="row.title === '合计'"
             >
@@ -52,7 +52,7 @@
               v-if="item.prop === 'cityScore'"
               label=""
               :style="{ 'margin-bottom': row.title === '合计' ? 0 : undefined }"
-              :rules="row.title === '合计' ? rule.maxScore : rule.input"
+              :rules="row.title === '合计' ? rules.maxScore : rule.input"
               :prop="row.cityScoreProp"
               :show-message="row.title === '合计'"
             >
@@ -117,6 +117,21 @@ export default {
         { prop: 'cityScore', label: '市自评得分', width: undefined },
       ],
       tableData: TABLE_SCORE_DATA,
+      rules: {
+        maxScore: [
+          {
+            trigger: 'change',
+            validator: (rule, value, callback) => {
+              value = Number(value);
+              if (value > 97) {
+                callback(new Error("分数不得超过97分"));
+              } else {
+                callback();
+              }
+            },
+          },
+        ],
+      }
     };
   },
   computed: {

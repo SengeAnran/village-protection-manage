@@ -4,7 +4,7 @@
       <sub-tit> {{ (isEdit && '修改') || '创建' }}成效评价申请 </sub-tit>
       <basic-input :form="form" @change="villageChange"></basic-input>
       <sub-tit> 浙江省未来乡村创建成效自评总结 </sub-tit>
-      <div style="padding: 20px">
+      <div style="padding: 20px; padding-top: 4px;">
         <el-row :gutter="20">
           <el-col :span="24">
             <div class="mb-8 mt-2">
@@ -61,32 +61,7 @@ export default {
   data() {
     return {
       form: {
-        isSave: undefined,
-        areaId: '',
-        buildPutInCounty: '',
-        buildSupportCounty: '',
-        buildUseCounty: '',
-        carryOutConstructionCounty: '',
-        carryOutCreateCounty: '',
-        completionStatement: '',
-        conclusion: '',
-        countySaveAnnex: [],
-        declarationId: '',
-        digitalScenesCounty: '',
-        digitalSocietyCounty: '',
-        featureCounty: '',
-        indicatorsCommonalityCounty: '',
-        indicatorsPersonalityCounty: '',
-        negativeCounty: '',
-        saveToGo: '',
-        scenesBasicCounty: '',
-        scenesBuildCounty: '',
-        scenesEmphasisCounty: '',
-        totalCounty: '',
-        workBoardCounty: '',
-        workGuideCounty: '',
-        workMechanismCounty: '',
-        selfAssessmentSummary: '',
+        ...DEFAULT_FORM,
       },
       hasTempData: false,
     };
@@ -187,9 +162,7 @@ export default {
     villageChange(val) {
       this.form.areaId = val.areaId;
       this.form.declarationId = val.declarationId;
-
-      this.$refs.form.validateField('areaId');
-      this.$refs.form.validateField('declarationId');
+      this.$refs.form.validateField(['areaId', 'declarationId']);
     },
 
     getData() {
@@ -204,7 +177,7 @@ export default {
     // 获取保存待发数据
     getCountyTempData() {
       getCountyTempData().then((res) => {
-        // console.log(res, '获取保存待发数据');
+        console.log(res, '获取保存待发数据');
         this.hasTempData = Boolean(res);
         this.form = res || { ...DEFAULT_FORM };
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
@@ -222,7 +195,7 @@ export default {
       this.getData();
       this._modifyPageTitle('修改');
     } else {
-      this.getCountyTempData();
+      // this.getCountyTempData();
       this._modifyPageTitle('新增');
     }
   },

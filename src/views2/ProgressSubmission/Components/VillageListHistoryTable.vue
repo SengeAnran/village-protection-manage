@@ -81,7 +81,6 @@
   </el-table>
 </template>
 <script>
-import _ from 'lodash';
 import { types, mapType } from '@/views2/utils/project';
 
 export default {
