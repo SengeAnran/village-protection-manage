@@ -57,6 +57,7 @@ export default {
               const href = '';
               const formData = new FormData();
               formData.append('file', file);
+              formData.append("business", "history");
               const res = await uploadFile2(formData);
               const { filePath, fileName } = res;
               insertFn(filePath || '', fileName || '', href);

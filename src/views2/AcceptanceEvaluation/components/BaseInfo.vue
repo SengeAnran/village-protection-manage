@@ -45,7 +45,7 @@
     <el-form-item label="县（市、区）人民政府自评结论" prop="basicText">
       {{ form.conclusion }}
     </el-form-item>
-    <el-form-item label="浙江省未来乡村创建方案">
+    <el-form-item label="浙江省未来乡村创建成效自评总结">
       <rich-text-editor :value="form.selfAssessmentSummary" mode="view" />
     </el-form-item>
     <el-form-item label="附件">

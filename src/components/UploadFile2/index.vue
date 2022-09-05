@@ -81,6 +81,7 @@ export default {
       //console.log(info);
       const formData = new FormData();
       formData.append("file", info.file);
+      formData.append("business","history");
       let res;
       if (this.uploadMethod) {
         res = await this.uploadMethod(formData);
