@@ -13,7 +13,7 @@
       </el-col>
       <el-col :span="8">
         <el-form-item label="总投资（万元）" prop="investNum">
-          {{ saveVO.investNum }}
+          {{ formatMoney(saveVO.investNum) }}
         </el-form-item>
       </el-col>
     </el-row>
@@ -59,6 +59,8 @@
 <script>
 import ViewFile from './ViewFile.vue';
 // import { getDetail } from '@/api2/acceptanceEvaluation';
+import { formatMoney } from '@/views2/utils/formatter';
+
 export default {
   components: {
     ViewFile,
@@ -83,7 +85,9 @@ export default {
       return this.saveVO.decType;
     },
   },
-  methods: {},
+  methods: {
+    formatMoney,
+  },
   mounted() {},
 };
 </script>

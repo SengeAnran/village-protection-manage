@@ -18,7 +18,9 @@
           <p class="content">{{ form.declarationBatch }}</p>
         </el-form-item>
         <el-form-item label="总投资（万元）" prop="investNum">
-          <p class="content">{{ form.investNum }}</p>
+          <p class="content">
+            {{ formatMoney(form.investNum) }}
+          </p>
         </el-form-item>
         <el-form-item label="领办领导">
           <p class="content">{{ form.leader }}</p>
@@ -55,6 +57,7 @@ import rule from "@/mixins/rule";
 import { HISTORY_BUILDINGS } from "../constants";
 import { mapGetters } from "vuex";
 import {getDetail, getHistory} from "@/api2/progressSubmission";
+import { formatMoney } from '@/views2/utils/formatter';
 
 export default {
   mixins: [rule],
@@ -100,6 +103,7 @@ export default {
     //console.log(this.declareType);
   },
   methods: {
+    formatMoney,
     init() {
       const { id } = this.$route.query;
       if (!id) return;

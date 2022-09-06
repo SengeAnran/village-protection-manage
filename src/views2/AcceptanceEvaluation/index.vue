@@ -55,7 +55,11 @@
           <el-table-column label="地区" prop="areaPosition" v-if="!isCounty"></el-table-column>
           <el-table-column label="村(片区)名称" prop="name"></el-table-column>
           <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
-          <el-table-column label="总投资（万元）" prop="investNum"></el-table-column>
+          <el-table-column label="总投资（万元）" prop="investNum">
+            <template slot-scope="scope">
+              {{ formatMoney(scope.row.investNum) }}
+            </template>
+          </el-table-column>
           <el-table-column label="县自评得分" prop="totalCounty"></el-table-column>
           <el-table-column label="市评价得分" prop="totalCity" v-if="!isCounty"></el-table-column>
           <el-table-column label="评价等次" prop="cityLevelRating" v-if="!isCounty">
@@ -121,6 +125,7 @@ import { getAuditList, getReportList, deleteItem, exportList, exportAnnex, unifi
 import { downloadFile } from '@/utils/data';
 import { CITY_LEVEL_RATING } from './constants';
 import { USER_TYPE, FINAL_STATUE_COLOR, DECLARE_STATUS, FINAL_STATUS } from '@/views2/utils/constants';
+import { formatMoney } from '@/views2/utils/formatter';
 
 export default {
   components: { ListSearch },
@@ -166,6 +171,7 @@ export default {
     },
   },
   methods: {
+    formatMoney,
     ...mapMutations('villageMange', ['changeDeclareList']),
     normalizeSelectOptions(obj) {
       if (!Object.prototype.toString.call(obj).slice(8, -1) === 'Object') return [];

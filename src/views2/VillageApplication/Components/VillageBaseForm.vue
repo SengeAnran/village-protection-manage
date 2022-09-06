@@ -41,11 +41,13 @@
           </div>
         </el-popover>
       </div>
-      <el-input
+      <el-input-number
         v-model.number="form.income"
+        :precision="2"
+        :controls="false"
         placeholder="请输入内容"
         :disabled="disabled"
-      ></el-input>
+      ></el-input-number>
     </el-form-item>
     <el-form-item label="古建筑村落年代" prop="villageAge" :rules="rule.select">
       <div style="display: inline-block" slot="label">

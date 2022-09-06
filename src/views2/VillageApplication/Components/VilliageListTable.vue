@@ -16,13 +16,29 @@
       </template>
     </el-table-column>
     <el-table-column label="计划总投资（万元）" header-align="center" >
-       <el-table-column :label="firstYear + ''" header-align="center" >
-        <el-table-column prop="planFirstGov" label="政府投资" width="100" :resizable="false"> </el-table-column>
-        <el-table-column prop="planFirstDrive" label="带动投资" width="100" :resizable="false"> </el-table-column>
+      <el-table-column :label="firstYear + ''" header-align="center" >
+        <el-table-column prop="planFirstGov" label="政府投资" width="100" :resizable="false">
+          <template slot-scope="scope">
+            <span>{{ formatMoney(scope.row.planFirstGov) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="planFirstDrive" label="带动投资" width="100" :resizable="false">
+          <template slot-scope="scope">
+            <span>{{ formatMoney(scope.row.planFirstDrive) }}</span>
+          </template>
+        </el-table-column>
       </el-table-column>
       <el-table-column :label="firstYear + 1 + ''" header-align="center" >
-        <el-table-column prop="planSecondGov" label="政府投资" width="100" :resizable="false"> </el-table-column>
-        <el-table-column prop="planSecondDrive" label="带动投资" width="100" :resizable="false"> </el-table-column>
+        <el-table-column prop="planSecondGov" label="政府投资" width="100" :resizable="false">
+          <template slot-scope="scope">
+            <span>{{ formatMoney(scope.row.planSecondGov) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="planSecondDrive" label="带动投资" width="100" :resizable="false">
+          <template slot-scope="scope">
+            <span>{{ formatMoney(scope.row.planSecondDrive) }}</span>
+          </template>
+        </el-table-column>
       </el-table-column>
     </el-table-column>
     <el-table-column prop="arrangements" label="运行维护管理安排">
@@ -73,6 +89,8 @@
 <script>
 import { mapGetters } from "vuex";
 import { mapType } from '@/views2/utils/project';
+import { formatMoney } from '@/views2/utils/formatter';
+
 export default {
   props: {
     data: {
@@ -112,6 +130,7 @@ export default {
     },
   },
   methods: {
+    formatMoney,
     mapType,
     removeItem(index) {
       this.$myConfirm({

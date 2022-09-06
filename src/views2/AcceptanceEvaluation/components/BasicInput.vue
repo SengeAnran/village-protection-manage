@@ -26,7 +26,7 @@
       </el-col>
       <el-col :span="8">
         <el-form-item label="总投资（万元）">
-          <el-input disabled v-model="baseInfo.investNum" placeholder="请输入" maxlength="8"></el-input>
+          <el-input-number disabled v-model="baseInfo.investNum" :controls="false" :precision="2" placeholder="请输入" maxlength="8"></el-input-number>
         </el-form-item>
       </el-col>
     </el-row>

@@ -51,7 +51,6 @@ export default {
 
 <style lang="scss" scoped>
 .viewer-com-root {
-  padding: 10px;
   border: 1px solid #ccc;
   border-top: 1px solid #ccc !important;
   // z-index: 1000;

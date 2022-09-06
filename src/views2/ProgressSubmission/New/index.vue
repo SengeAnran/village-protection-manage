@@ -19,7 +19,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="总投资（万元）" prop="investNum">
-              <el-input v-model="form.investNum" placeholder="请输入总投资（万元）" disabled></el-input>
+              <el-input-number v-model="form.investNum" :precision="2" :controls="false" placeholder="请输入总投资（万元）" disabled />
             </el-form-item>
           </el-col>
         </el-row>
@@ -66,6 +66,7 @@ import VillageListHistoryTable from "../Components/VillageListHistoryTable";
 
 import rule from "@/mixins/rule";
 import { addData, getDetail, getHistory } from "@/api2/progressSubmission";
+import { formatMoney } from '@/views2/utils/formatter';
 
 const tableList = (rule, value, callback) => {
   if (value.length) {
@@ -117,6 +118,7 @@ export default {
     this.getDetail();
   },
   methods: {
+    formatMoney,
     getDetail() {
       getDetail({ id: this.$route.query.id }).then((res) => {
         this.form = res;

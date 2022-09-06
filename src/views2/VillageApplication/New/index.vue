@@ -125,12 +125,12 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="计划总投资（万元）" prop="investNum" :rules="rule.inputNumber">
-              <el-input v-model="form.investNum" placeholder="请输入" maxlength="8"></el-input>
+              <el-input-number v-model="form.investNum" :precision="2" :controls="false" placeholder="请输入" maxlength="8"></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="村级集体经济年经营性收入（万元）" prop="incomeNum" :rules="rule.inputNumber">
-              <el-input v-model="form.incomeNum" placeholder="请输入" maxlength="8"></el-input>
+              <el-input-number v-model="form.incomeNum"  :precision="2" :controls="false" placeholder="请输入" maxlength="8"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>

@@ -52,10 +52,10 @@
           <p class="content">{{ form.personNum }}</p>
         </el-form-item>
         <el-form-item label="计划总投资（万元）" prop="resPopulation">
-          <p class="content">{{ form.investNum }}</p>
+          <p class="content">{{ formatMoney(form.investNum) }}</p>
         </el-form-item>
         <el-form-item label="村级集体经济年经营性收入（万元）" prop="resPopulation">
-          <p class="content">{{ form.incomeNum }}</p>
+          <p class="content">{{ formatMoney(form.incomeNum) }}</p>
         </el-form-item>
         <el-form-item label="村庄属性：" prop="resPopulation">
           <p class="content">{{ form.villageProperty.toString() }}</p>
@@ -311,6 +311,7 @@ import { getVillageItemDetail, getvillageDetailExport,
 } from "@/api2/villageManage";
 import { downloadFile } from "@/utils/data"
 import { mapGetters } from "vuex";
+import { formatMoney } from '@/views2/utils/formatter';
 
 import { FINAL_STATUS, USER_TYPE } from '@/views2/utils/constants';
 
@@ -405,6 +406,7 @@ export default {
     this.init();
   },
   methods: {
+    formatMoney,
     onFileAdd(file, key) {
       this.reviewForm[key].push(file);
     },

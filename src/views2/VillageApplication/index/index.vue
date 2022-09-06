@@ -159,7 +159,11 @@
               <p>{{ scope.row.city }}</p>
             </template>
           </el-table-column>
-          <el-table-column label="计划总投资（万元）" prop="investNum"></el-table-column>
+          <el-table-column label="计划总投资（万元）" prop="investNum">
+            <template slot-scope="scope">
+              <p>{{ formatMoney(scope.row.investNum) }}</p>
+            </template>
+          </el-table-column>
           <el-table-column label="上报时间" prop="gmtCreate">
             <template slot-scope="scope">
               <p>{{ scope.row.gmtCreate }}</p>
@@ -229,6 +233,8 @@ import rule from '@/mixins/rule';
 
 import { FINAL_STATUS, USER_TYPE, FINAL_STATUE_COLOR, DECLARE_STATUS } from '@/views2/utils/constants';
 import { XIANJI_ACTION, SHIJI_ACTION, ADMIN_ACTION, checkCountryUnifiedReport, checkCityUnifiedReport } from './utils';
+
+import { formatMoney } from '@/views2/utils/formatter';
 
 const sort = (rule, value, callback) => {
   if (!value) {
@@ -301,6 +307,7 @@ export default {
   },
   mounted() {},
   methods: {
+    formatMoney,
     ...mapMutations('villageMange', ['changeDeclareList']),
     normalizeSelectOptions(obj) {
       if (!Object.prototype.toString.call(obj).slice(8, -1) === 'Object') return [];

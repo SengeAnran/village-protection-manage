@@ -2,16 +2,17 @@
   <div class="module-wrp">
     <TotalTitle name="投资完成率" unit="%" :count="rate" />
     <div class="gap"></div>
-    <TotalTitle name="计划投资" unit="万元" countSize="24" :icon="false" :count="Number(totalPlan)" />
+    <TotalTitle name="计划投资" unit="万元" countSize="24" :icon="false" :count="Number(formatMoney(totalPlan))" />
     <TotalItem :social="data.totalPlanSocialInvestment" :government="data.totalPlanGovInvestment" />
     <div class="gap"></div>
-    <TotalTitle name="完成投资" unit="万元" countSize="24" :icon="false" :count="Number(totalComplete)" />
+    <TotalTitle name="完成投资" unit="万元" countSize="24" :icon="false" :count="Number(formatMoney(totalComplete))" />
     <TotalItem :social="data.totalCompleteSocialInvestment" :government="data.totalCompleteGovInvestment" />
   </div>
 </template>
 <script>
 import TotalTitle from './TotalTitle.vue';
 import TotalItem from './TotalItem.vue';
+import { formatMoney } from '@/views2/utils/formatter';
 export default {
   name: 'TotalSummary',
   components: { TotalItem, TotalTitle },
@@ -34,6 +35,9 @@ export default {
       return totalPlanGovInvestment + totalPlanSocialInvestment || 0;
     },
   },
+  methods: {
+    formatMoney,
+  }
 };
 </script>
 

@@ -105,12 +105,12 @@
           <el-table-column label="项目开工比例" prop="startRate"></el-table-column>
           <el-table-column label="计划投资（万元）" prop="investNum">
             <template slot-scope="scope">
-              {{ scope.row.investNum || 0 }}
+              {{ formatMoney(scope.row.investNum || 0) }}
             </template>
           </el-table-column>
           <el-table-column label="完成投资(万元)" prop="completeTotalInvestment">
             <template slot-scope="scope">
-              {{ scope.row.completeTotalInvestment || 0 }}
+              {{ formatMoney(scope.row.completeTotalInvestment || 0) }}
             </template>
           </el-table-column>
           <el-table-column label="计划投资完成率" sortable prop="rate"></el-table-column>
@@ -140,6 +140,7 @@ import { downloadFile } from '@/utils/data';
 
 import { exportDetail, getInforExport, getList } from '@/api2/progressSubmission';
 import { USER_TYPE } from '@/views2/utils/constants';
+import { formatMoney } from '@/views2/utils/formatter';
 // import qs from "qs";
 export default {
   data() {
@@ -233,6 +234,7 @@ export default {
     this.reportStateOPt = opts;
   },
   methods: {
+    formatMoney,
     getStatusName,
     canReport(data) {
       const roleId = this.roleId;

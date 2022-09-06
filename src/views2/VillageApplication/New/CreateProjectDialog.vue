@@ -28,22 +28,22 @@
         <el-input-number v-model="projectForm.landUse" :maxlength="8" :min="0" class="number"></el-input-number>
       </el-form-item>
       <el-form-item :label="`${projectForm.firstYear}年计划投资（万元）：`">
-        <plain-text :value="projectForm.planFirstGov + projectForm.planFirstDrive" maxlength="8" />
+        <plain-text :value="projectForm.planFirstGov + projectForm.planFirstDrive" :formatter="formatMoney" maxlength="8" />
       </el-form-item>
       <el-form-item label="其中政府投资：" prop="planFirstGov" :rules="rule.inputNumber">
-        <el-input-number v-model="projectForm.planFirstGov" :maxlength="8" :min="0" class="number"></el-input-number>
+        <el-input-number v-model="projectForm.planFirstGov" :precision="2" :maxlength="8" :min="0" class="number"></el-input-number>
       </el-form-item>
       <el-form-item label="其中带动投资：" prop="planFirstDrive" :rules="rule.inputNumber">
-        <el-input-number v-model="projectForm.planFirstDrive" :maxlength="8" :min="0" class="number"></el-input-number>
+        <el-input-number v-model="projectForm.planFirstDrive" :precision="2" :maxlength="8" :min="0" class="number"></el-input-number>
       </el-form-item>
       <el-form-item :label="`${projectForm.firstYear + 1}年计划投资（万元）：`">
-        <plain-text :value="projectForm.planSecondGov + projectForm.planSecondDrive" maxlength="8" />
+        <plain-text :value="projectForm.planSecondGov + projectForm.planSecondDrive" :formatter="formatMoney" maxlength="8" />
       </el-form-item>
       <el-form-item label="其中政府投资：" prop="planSecondGov" :rules="rule.inputNumber">
-        <el-input-number v-model="projectForm.planSecondGov" :maxlength="8" :min="0" class="number"></el-input-number>
+        <el-input-number v-model="projectForm.planSecondGov" :precision="2" :maxlength="8" :min="0" class="number"></el-input-number>
       </el-form-item>
       <el-form-item label="其中带动投资：" prop="planSecondDrive" :rules="rule.inputNumber">
-        <el-input-number v-model="projectForm.planSecondDrive" :maxlength="8" :min="0" class="number"></el-input-number>
+        <el-input-number v-model="projectForm.planSecondDrive" :precision="2" :maxlength="8" :min="0" class="number"></el-input-number>
       </el-form-item>
       <el-form-item label="类型：" prop="type" :rules="rule.select">
         <el-select v-model="projectForm.type" placeholder="请选择">
@@ -67,6 +67,7 @@
 <script>
 import rule from '@/mixins/rule';
 import { types } from '@/views2/utils/project';
+import { formatMoney } from '@/views2/utils/formatter';
 
 export default {
   mixins: [rule],
@@ -153,6 +154,7 @@ export default {
     }
   },
   methods: {
+    formatMoney,
     // 添加 项目
     onSubmit() {
       this.$refs.projectForm.validate((valid) => {
