@@ -46,7 +46,7 @@
       {{ form.conclusion }}
     </el-form-item>
     <el-form-item label="浙江省未来乡村创建成效自评总结">
-      <rich-text-editor :value="form.selfAssessmentSummary" mode="view" />
+      {{ form.selfAssessmentSummary }}
     </el-form-item>
     <el-form-item label="附件">
       <div v-if="form.countySaveAnnexFiles && form.countySaveAnnexFiles.length">

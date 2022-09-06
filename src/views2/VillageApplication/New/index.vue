@@ -220,9 +220,23 @@
           <el-row :gutter="20">
             <el-col :span="24">
               <el-form-item label="浙江省未来乡村创建方案" prop="createScenario" :rules="rule.richText">
-                <div style="width: 90%">
-                  <rich-text-editor v-model="form.createScenario" />
-                </div>
+                <el-input
+                  style="min-width: 42%; max-width: 90%;"
+                  type="textarea"
+                  :rows="5"
+                  :autosize="{ minRows: 10 }"
+                  :placeholder="`一、基本情况
+二、创建方案的实施情况
+三、数字化建设与应用情况
+四、场景特别是“一老一小”场景建设情况
+五、建设投入情况
+六、工作推进情况
+七、特色和创新情况
+八、相关附件
+报告中涉及到的支撑材料可作为附件单独提供，并需提供附件清单方便查阅。`"
+                  show-word-limit
+                  v-model="form.createScenario"
+                />
               </el-form-item>
             </el-col>
           </el-row>

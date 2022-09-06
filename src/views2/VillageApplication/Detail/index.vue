@@ -93,7 +93,7 @@
           </el-form-item>
         </div>
         <h4 class="block-tit">浙江省未来乡村创建方案</h4>
-        <rich-text-editor class="mt-4" mode="view" :value="form.createScenario" />
+        <p class="content mt-4">{{ form.createScenario }}</p>
         <!-- <div class="input-item-wrp mt-4">
           <el-form-item label="附件：" prop="introduction">
             <div v-if="form.annexFiles && form.annexFiles.length > 0">
