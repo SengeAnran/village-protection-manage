@@ -31,7 +31,7 @@
 
         <template v-slot:export>
           <el-button v-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER || roleId === USER_TYPE.PROVINCE" icon="el-icon-download" type="primary" plain @click="exportList" > 导出信息汇总表 </el-button>
-          <el-button v-if="roleId !== USER_TYPE.PROVINCE" icon="el-icon-download" type="primary" plain @click="printFile" > 材料打印 </el-button>
+          <el-button v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER" icon="el-icon-download" type="primary" plain @click="printFile" > 材料打印 </el-button>
           <el-button v-if="roleId === USER_TYPE.CITY_LEADER || roleId === USER_TYPE.COUNTRY_LEADER" type="primary" @click="UnifiedReport"> 统一上报</el-button>
           <!-- 
           <el-button icon="el-icon-download" v-if="!isCounty" type="primary" plain @click="exportEnclosure">
@@ -212,7 +212,7 @@ export default {
         this.$notify.error('请选择需要打印的数据');
         return;
       }
-      if (!this.selections.every((i) => i.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED || i.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PENDING)) {
+      if (!this.selections.every((i) => i.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING)) {
         this.$notify.error('该条示范带信息市级还未通过审核，无法导出打印');
         return;
       } else {

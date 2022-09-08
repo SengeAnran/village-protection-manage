@@ -23,8 +23,15 @@
         :permission-delete="4100"
       >
         <template v-slot:form>
-          <el-form-item label="比选时间：" prop="acceptanceTime" :rules="rule.input">
-            <el-date-picker v-model="form.acceptanceTime" type="month" placeholder="选择月" value-format="yyyy-MM">
+          <el-form-item label="比选时间：" prop="acceptanceTime" :rules="rule.multiSelect">
+            <el-date-picker
+              v-model="form.acceptanceTime"
+              value-format="yyyy-MM"
+              type="monthrange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            >
             </el-date-picker>
           </el-form-item>
         </template>
@@ -32,12 +39,11 @@
         <template v-slot:crudAction> </template>
 
         <template v-slot:table>
-          <el-table-column label="比选时间" prop="acceptanceTime"></el-table-column>
-          <!-- <el-table-column label="创建时间" prop="gmtCreate">
+          <el-table-column label="比选时间">
             <template slot-scope="scope">
-              <p>{{ scope.row.gmtCreate.slice(0, 10) }}</p>
+              <p>{{ scope.row.acceptanceTimeStart }} 至 {{ scope.row.acceptanceTimeEnd }}</p>
             </template>
-          </el-table-column> -->
+          </el-table-column>
         </template>
       </Crud>
     </div>
@@ -59,11 +65,9 @@ export default {
       },
       form: {
         // type: type, //type 1：验收时间，2：申报批次
-        acceptanceTime: '',
+        acceptanceTime: [],
       },
-      addMethod: setAdd,
       deleteMethod: setDelete,
-      updateMethod: setUpdate,
       getMethod: getSetList,
 
       dialogVisible: false,
@@ -79,6 +83,23 @@ export default {
   mounted() {},
   methods: {
     ...mapMutations('villageMange', ['changeDeclareList']),
+    updateMethod(form) {
+      const { acceptanceTime, id } = form;
+      const [acceptanceTimeStart, acceptanceTimeEnd] = acceptanceTime;
+      return setUpdate({
+        acceptanceTimeStart,
+        acceptanceTimeEnd,
+        id,
+      });
+    },
+    addMethod(form) {
+      const { acceptanceTime } = form;
+      const [acceptanceTimeStart, acceptanceTimeEnd] = acceptanceTime;
+      return setAdd({
+        acceptanceTimeStart,
+        acceptanceTimeEnd,
+      });
+    },
     // 删除
     deleteItem(id) {
       this.$confirm('是否删除该条数据？', '提示', {
@@ -91,7 +112,7 @@ export default {
       });
     },
     beforeEditMethod(item) {
-      this.form.acceptanceTime = item.acceptanceTime;
+      this.form.acceptanceTime = [item.acceptanceTimeStart, item.acceptanceTimeEnd];
       // this.form.type = type; //type 1：验收时间，2：申报批次
       this.form.id = item.id;
     },

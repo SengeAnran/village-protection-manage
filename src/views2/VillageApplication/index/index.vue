@@ -63,7 +63,7 @@
             新建申报</el-button>
         </template>
         <template v-slot:export>
-          <el-button icon="el-icon-download" type="primary" plain @click="exportDatas">材料打印
+          <el-button v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER" icon="el-icon-download" type="primary" plain @click="exportDatas">材料打印
           </el-button>
           <el-button v-if="roleId === USER_TYPE.COUNTRY_LEADER || roleId === USER_TYPE.CITY_LEADER" type="primary" @click="UnifiedReport"> 统一上报</el-button>
         </template>
@@ -341,7 +341,7 @@ export default {
         this.$notify.error('请选择需要打印的数据');
         return;
       }
-      if (!this.selections.every((i) => i.finalStatus === 4)) {
+      if (!this.selections.every((i) => i.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING)) {
         this.$notify.error('该条示范带信息市级还未通过审核，无法导出打印');
         return;
       } else {
