@@ -7,7 +7,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="审核比选时间"> {{ form.cityAcceptTime }} </el-form-item>
+          <el-form-item label="审核比选时间"> {{ form.cityAcceptTimeStr }} </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="本次审核比选排名"> {{ form.cityRanking || '--' }} </el-form-item>

@@ -11,6 +11,14 @@ export const getSetList = (data) => {
   });
 }
 
+// 验收时间-不逮分页
+export const getAllSetList = (data) => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/declarationConfig/timeValues`,
+    data,
+  });
+}
 
 // 删除
 export const setDelete = (id) => {

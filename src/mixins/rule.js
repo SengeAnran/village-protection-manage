@@ -37,7 +37,7 @@ const age = (rule, value, callback) => {
 };
 
 const upload = (rule, value, callback) => {
-  if (value === "" || value.length === 0) {
+  if (!value || value === "" || value.length === 0) {
     callback(new Error("请上传"));
   } else {
     callback();

@@ -11,6 +11,14 @@ export const getSetList = (data) => {
   });
 }
 
+// 【申报批次】可选批次查询
+export const getActiveSetList = () => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/declarationConfig/optional/batch`,
+  });
+}
+
 export const setUpdate = (data) => {
   return axios.request({
     method: 'POST',

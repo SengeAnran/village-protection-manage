@@ -291,9 +291,8 @@
 import VilliageListTable from '../Components/VilliageListTable.vue';
 
 import rule from '@/mixins/rule';
-import { getSetList } from '@/api2/declarationBatch';
-import { villageDeclaration, getVillageItemDetail } from '@/api2/villageManage';
-import { updateVillageItem } from '../../../api2/villageManage';
+import { getActiveSetList } from '@/api2/declarationBatch';
+import { villageDeclaration, getVillageItemDetail, updateVillageItem } from '@/api2/villageManage';
 import { getCountyVillages } from '@/api2/acceptanceEvaluation';
 import { mapGetters } from 'vuex';
 
@@ -494,12 +493,9 @@ export default {
     },
     // 获取批次列表
     getBatchList() {
-      getSetList({
-        pageNum: 1,
-        pageSize: 1000,
-      }).then((res) => {
+      getActiveSetList().then((res) => {
         console.log(res);
-        this.batchOptions = res.content.map((c) => {
+        this.batchOptions = res.map((c) => {
           return {
             label: c.batch,
             value: c.id,

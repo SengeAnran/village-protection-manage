@@ -54,6 +54,17 @@
       </div>
       <div v-else>--</div>
     </el-form-item>
+    <el-form-item label="浙江省未来乡村“一老一小”服务场景验收自评报告">
+      {{ form.oldSmallSelfReport }}
+    </el-form-item>
+    <el-form-item label="“一老一小”服务场景照片">
+      <ViewImg v-if="form.oldSmallPics && form.oldSmallPics.length" :data="form.oldSmallPics"></ViewImg>
+      <div v-else>--</div>
+    </el-form-item>
+    <el-form-item label="“一老一小”服务场景的视频">
+      <ViewVideo v-if="form.oldSmallVideo && form.oldSmallVideo.length" :data="form.oldSmallVideo"></ViewVideo>
+      <div v-else>--</div>
+    </el-form-item>
   </div>
 </template>
 <script>

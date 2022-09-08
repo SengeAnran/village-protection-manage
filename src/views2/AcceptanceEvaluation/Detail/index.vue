@@ -54,7 +54,13 @@ export default {
     getData() {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
+        const { oldSmallVideoFile, createPerformanceAuditTimeDO } = res;
         this.form = res;
+        this.form.oldSmallPics = (res.oldSmallPics || '').split(',').map((ele) => ({ filePath: ele, url: ele }));
+        this.form.oldSmallVideo = oldSmallVideoFile ? [oldSmallVideoFile] : [];
+        this.form.cityAcceptTime = createPerformanceAuditTimeDO?.id;
+        this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd : '';
+        console.log('xxxxx', this.form.oldSmallPics, this.form.oldSmallVideo);
       });
     },
   },

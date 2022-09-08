@@ -48,7 +48,7 @@ import rule from '@/mixins/rule';
 import SubTit from '../components/SubTit.vue';
 
 // import { getSetList } from '@/api2/villageManage';
-import { getSetList } from '@/api2/acceptanceTime';
+import { getAllSetList } from '@/api2/acceptanceTime';
 export default {
   name: 'CityInput',
   mixins: [rule],
@@ -90,8 +90,11 @@ export default {
     },
 
     setAcceptTimeOpt() {
-      getSetList({ type: 1, pageNum: 1, pageSize: 50 }).then((res) => {
-        this.timeOptions = res.content.map((c) => ({ label: c.acceptanceTime, value: c.acceptanceTime }));
+      getAllSetList().then((res) => {
+        this.timeOptions = res.map((c) => {
+          const v = c.acceptanceTimeStart + ' 至 ' + c.acceptanceTimeEnd;
+          return { label: v, value: c.id };
+        });
       });
     },
   },

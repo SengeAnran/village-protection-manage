@@ -36,6 +36,9 @@ export const COUNTY_DEFAULT_FORM = {
   workGuideCounty: '',
   workMechanismCounty: '',
   selfAssessmentSummary: '',
+  oldSmallPics: [],
+  oldSmallSelfReport: '',
+  oldSmallVideo: [],
 };
 
 // 市级默认表单
