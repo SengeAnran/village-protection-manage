@@ -130,20 +130,13 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="村级集体经济年经营性收入（万元）" prop="incomeNum" :rules="rule.inputNumber">
-              <el-input-number v-model="form.incomeNum"  :precision="2" :controls="false" placeholder="请输入" maxlength="8"></el-input-number>
+              <el-input-number v-model="form.incomeNum" :precision="2" :controls="false" placeholder="请输入" maxlength="8"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
       </div>
       <el-form-item label="村庄属性（可多选）：" prop="villageProperty" :rules="rule.select">
-        <el-checkbox-group v-model="form.villageProperty">
-          <el-checkbox label="县域风貌样板区内"></el-checkbox>
-          <el-checkbox label="3A级景区村庄"></el-checkbox>
-          <el-checkbox label="驻乡镇村规划师规划村庄"></el-checkbox>
-          <el-checkbox label="下山移民新村"></el-checkbox>
-          <el-checkbox label="法制村"></el-checkbox>
-          <el-checkbox label="文明村"></el-checkbox>
-        </el-checkbox-group>
+        <VillageProperty v-model="form.villageProperty" />
       </el-form-item>
       <div>
         <el-form-item label="基本情况" prop="basicText" :rules="rule.input">
@@ -289,7 +282,7 @@
 <script>
 // import VillageSelect from '../Components/VillageSelect.vue';
 import VilliageListTable from '../Components/VilliageListTable.vue';
-
+import VillageProperty from '../Components/VillageProperty.vue';
 import rule from '@/mixins/rule';
 import { getActiveSetList } from '@/api2/declarationBatch';
 import { villageDeclaration, getVillageItemDetail, updateVillageItem } from '@/api2/villageManage';
@@ -325,6 +318,7 @@ export default {
   components: {
     VilliageListTable,
     CreateProjectDialog,
+    VillageProperty,
   },
   data() {
     return {
