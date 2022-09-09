@@ -92,7 +92,7 @@
                 "
                 direction="vertical"
               ></el-divider>
-              <el-link @click="handleEdit(scope)" type="primary"> 修改</el-link>
+              <el-link @click="handleEdit(scope)" type="primary"> {{ (COUNTRY || COUNTRY_LEADER) ? '审阅' : '修改' }} </el-link>
             </span>
 
             <span v-if="actionControl('删除', scope.data)">
