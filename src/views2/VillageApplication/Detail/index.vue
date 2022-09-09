@@ -133,8 +133,10 @@
       <div id="verify"></div>
     </el-form>
     <!-- 审核详情 -->
+    <!-- 市级审核详情。如果是市级角色，并且处于编辑模式则不展示此结果 -->
     <div
       v-if="
+        ((cityVerify && userInfo.roleId !== USER_TYPE.CITY && userInfo.roleId !== USER_TYPE.CITY_LEADER) || (!cityVerify)) && 
         finalStatus > FINAL_STATUS.CITY_VERIFY_PENDING &&
         finalStatus <= FINAL_STATUS.CITY_REPORT_PENDING &&
         finalStatus !== FINAL_STATUS.COUNTRY_REPORT_PENDING
@@ -149,7 +151,7 @@
         :model="form"
         label-width="80px"
       >
-<!--          市级审核结果-->
+        <!-- 市级审核结果-->
         <div class="examine-item">
           <div class="examine-title">设区市比选意见</div>
           <div class="input-item-wrp">
@@ -163,6 +165,12 @@
             </el-form-item>
           </div>
           <div class="input-item-wrp">
+            <el-form-item label="附件上传" prop="introduction">
+              <ViewFile v-if="form.stampedFile" :data="form.stampedFile" />
+              <span v-else>--</span>
+            </el-form-item>
+          </div>
+          <div class="input-item-wrp">
             <el-form-item label="比选时间" prop="introduction">
               <p class="content">{{ form.cityAuditTime }}</p>
             </el-form-item>
@@ -171,7 +179,8 @@
 <!--          省级审核结果-->
         <div
           v-if="
-            finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED
+            ((cityVerify && userInfo.roleId !== USER_TYPE.PROVINCE) || (!cityVerify)) && 
+            (finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED)
           "
           class="examine-item">
           <div class="examine-title">省级审核详情</div>
@@ -180,7 +189,8 @@
               <p class="content">{{ verifyRes(form.provinceVerify) }}</p>
             </el-form-item>
           </div>
-          <div class="input-item-wrp" v-if="form.provinceOpinion">
+          <div class="input-item-wrp" v-if="!form.provinceVerify && form.provinceOpinion">
+            <!-- 省级通过时无意见，所以这里不展示。如果provinceOpinion有内容，可能为上次驳回时填写的驳回原因 -->
             <el-form-item label="审核意见" prop="introduction">
               <p class="content">{{ form.provinceOpinion }}</p>
             </el-form-item>
@@ -222,9 +232,9 @@
     <!-- 表单展示逻辑。市级角色：市级待审核、市级待申报、省级已驳回；省级角色：省级待审核 -->
     <div
       v-if="
-        ((userInfo.roleId === USER_TYPE.CITY || userInfo.roleId === USER_TYPE.CITY_LEADER) && cityVerify &&
-          (finalStatus === FINAL_STATUS.CITY_VERIFY_PENDING || finalStatus === FINAL_STATUS.CITY_REPORT_PENDING || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED)) ||
-        (userInfo.roleId === USER_TYPE.PROVINCE && finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PENDING)
+        cityVerify &&
+        (((userInfo.roleId === USER_TYPE.CITY || userInfo.roleId === USER_TYPE.CITY_LEADER) && (finalStatus === FINAL_STATUS.CITY_VERIFY_PENDING || finalStatus === FINAL_STATUS.CITY_REPORT_PENDING || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED)) ||
+        (userInfo.roleId === USER_TYPE.PROVINCE && finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PENDING))
       "
     >
       <div class="box-title" v-text="userInfo.roleId === 1? '审核':'设区市比选意见'"></div>
@@ -264,6 +274,19 @@
             v-model="reviewForm.opinion"
           >
           </el-input>
+        </el-form-item>
+        <el-form-item v-if="(userInfo.roleId === USER_TYPE.CITY || userInfo.roleId === USER_TYPE.CITY_LEADER) && reviewForm.status === 1" label="附件上传" :rules="rule.upload" prop="stampedFiles">
+          <UploadFile2
+            tip="支持格式：.doc, .docx, .pdf"
+            accept=".doc,.docx,.pdf"
+            :data="reviewForm.stampedFiles"
+            :limit="1"
+            @add="onFileAdd($event, 'stampedFiles')"
+            @remove="onFileRemove($event, 'stampedFiles')"
+          />
+          <p style="width: 100%; color: #ff6b00" class="py-4 leading-5">
+            <i class="el-icon-warning"></i>请上传盖章完成的《未来乡村创建申报表》扫描件
+          </p>
         </el-form-item>
         <!-- <el-form-item
           v-if="userInfo.roleId === 2"
@@ -314,6 +337,7 @@ import { mapGetters } from "vuex";
 import { formatMoney } from '@/views2/utils/formatter';
 
 import { FINAL_STATUS, USER_TYPE } from '@/views2/utils/constants';
+import ViewFile from "@/views2/AcceptanceEvaluation/components/ViewFile.vue";
 
 export default {
   mixins: [rule],
@@ -326,14 +350,15 @@ export default {
       type: Object,
       default: () => {},
     },
-    cityVerify: {
+    cityVerify: { // true，编辑模式。FALSE查看模式
       type: [String, Boolean],
       default: false,
     },
   },
   components: {
     VilliageListTable,
-  },
+    ViewFile
+},
   data() {
     return {
       FINAL_STATUS,
@@ -341,6 +366,7 @@ export default {
       form: {
         annexFiles: [], // 附件
         cityAuditFile: [], // 附件
+        stampedFiles: [], // 附件
         provinceAuditFile: [], // 附件
         villageName: "", //村庄地址
         town: "", //村庄地址
@@ -375,6 +401,7 @@ export default {
         status: null,
         rejectType: null,
         opinion: '',
+        stampedFiles: [],
         // processFilesArr: [],
       },
       finalStatus: null,
@@ -403,6 +430,7 @@ export default {
     },
   },
   mounted() {
+    console.log('xxxxxx --->', this.type);
     this.init();
   },
   methods: {
@@ -445,6 +473,9 @@ export default {
             this.reviewForm.opinion = res.provinceOpinion;
           }
         }
+        this.form.stampedFile = res.stampedFile;
+        this.reviewForm.stampedFiles = res.stampedFile ? [res.stampedFile] : [];
+        console.log('xxxxxxx', this.form.stampedFile, res.stampedFile);
         this.loading = false;
         //console.log(res);
       });
@@ -489,14 +520,16 @@ export default {
     async submit() {
       //console.log(this.reviewForm.processFilesArr);
       const { id } = this.$route.query;
+      const { stampedFiles, status } = this.reviewForm;
+      const stampedFile = status && (stampedFiles && stampedFiles[0]) || {};
       const verifyType = (this.roleId === USER_TYPE.CITY || this.roleId === USER_TYPE.CITY_LEADER) ? 1 : 2;//1:市级审核，2：省级审核
       await verify({
         id: id, // 村庄id
-        // fileId: this.reviewForm.processFilesArr.map(i => i.fileId).toString(), // 审核意见附件id
-        status: this.reviewForm.status, // 审核状态 通过:1 不通过:0
+        status: status, // 审核状态 通过:1 不通过:0
         opinion: this.reviewForm.opinion, // 审核意见
         rejectType: this.reviewForm.rejectType, // 审核意见
         verifyType, //1:市级审核，2：省级审核
+        stampedFile: stampedFile.fileId || undefined,
       });
       this.$notify.success("操作成功");
       this.$router.back();

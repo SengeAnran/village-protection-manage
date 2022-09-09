@@ -107,26 +107,6 @@
               ></el-divider>
               <el-link @click="deleteItem(scope.data.id)" type="danger"> 删除 </el-link>
             </span>
-
-            <span
-              v-if="
-                (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER || roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER ) &&
-                scope.data.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED &&
-                !scope.data.multipartFileVO
-              "
-            >
-              <el-divider
-                v-if="
-                  actionControl('排序', scope.data) ||
-                  actionControl('详情', scope.data) ||
-                  actionControl('审核', scope.data) ||
-                  actionControl('修改', scope.data) ||
-                  actionControl('删除', scope.data)
-                "
-                direction="vertical"
-              ></el-divider>
-              <el-link @click="uploadScan(scope)" type="primary"> 扫描件上传 </el-link>
-            </span>
           </div>
         </template>
 
@@ -192,27 +172,6 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog title="扫描件上传" :visible.sync="ScanDocDialogVisible" width="600px">
-      <el-form ref="form" :model="form2" label-width="80px">
-        <el-form-item label="" :rules="rule.upload" prop="annexFiles">
-          <UploadFile2
-            tip="支持格式：.doc, .docx, .pdf"
-            accept=".doc,.docx,.pdf"
-            :data="form2.annexFiles"
-            :limit="1"
-            @add="onFileAdd($event, 'annexFiles')"
-            @remove="onFileRemove($event, 'annexFiles')"
-          />
-          <p style="width: 100%; color: #ff6b00" class="py-4 leading-5">
-            <i class="el-icon-warning"></i>请上传已盖章完成的《浙江省未来乡村创建申报表》盖章扫描件
-          </p>
-        </el-form-item>
-        <el-form-item>
-          <el-button>取消</el-button>
-          <el-button type="primary" @click="onSubmitUploadScan">保存</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -270,10 +229,6 @@ export default {
         id: null,
         sort: null,
       },
-      form2: {
-        id: null,
-        annexFiles: [],
-      },
       dialogDeclareYearOpt: [],
       dialogDeclareTypeOpt2: [],
       declareStatusOpt: [
@@ -286,7 +241,6 @@ export default {
       // 0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过
       textColor: FINAL_STATUE_COLOR,
       sortDialogVisible: false, // 排序框
-      ScanDocDialogVisible: false, // 扫描件上传
       sortRule: { required: true, validator: sort, trigger: 'blur' },
       getMethod: getVillageList,
       deleteMethod: deleteVillageItem,
@@ -396,24 +350,6 @@ export default {
         });
       });
     },
-    onFileAdd(file, key) {
-      this.form2[key].push(file);
-    },
-    onFileRemove(file, key) {
-      const index = this.form2[key].findIndex((item) => {
-        return item.uid === file.uid || item.filePath === file.url;
-      });
-      if (index !== -1) {
-        this.form2[key].splice(index, 1);
-      }
-    },
-    // 上传扫描件
-    uploadScan(scope) {
-      console.log(scope);
-      this.form2.id = scope.data.id;
-      this.form2.annexFiles = [];
-      this.ScanDocDialogVisible = true;
-    },
     // 排序
     sort(scope) {
       this.form.sort = null;
@@ -435,6 +371,7 @@ export default {
       });
     },
     // 提交排序
+    // todo delete
     onSubmitUploadScan() {
       const data = {
         id: this.form2.id,
