@@ -73,13 +73,8 @@
           </el-form-item>
         </div>
         <div class="input-item-wrp">
-          <el-form-item label="村民代表会议（村民会议）关于未来乡村建设方案决议情况" prop="introduction">
-            <p class="content">{{ form.townText }}</p>
-          </el-form-item>
-        </div>
-        <div class="input-item-wrp">
           <el-form-item label="乡、镇（街道）人民政府（办事处）意见" prop="introduction">
-            <p class="content">{{ form.departmentText }}</p>
+            <p class="content">{{ form.townText }}</p>
           </el-form-item>
         </div>
         <div class="input-item-wrp">
