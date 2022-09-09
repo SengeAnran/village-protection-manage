@@ -210,10 +210,11 @@ export const getTemplate = () => {
 //   });
 // };
 // 材料打印
-export const materialPrinting = (params) => {
+export const materialPrinting = (data) => {
   return axios.request({
-    method: 'GET',
-    url: apiHost2 + `/api/workbench/villageDeclaration/materialPrinting/${params.id}`,
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/villageDeclaration/materialPrinting`,
+    data,
     responseType: 'blob',
   });
 };

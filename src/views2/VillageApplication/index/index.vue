@@ -187,7 +187,7 @@ import {
 } from '@/api2/villageManage';
 import { recVerify } from '@/api/villageManage';
 import { getvillagesExport } from '@/api2/villageManage';
-import { downloadWordFile } from '@/utils/data';
+import { downloadFile } from '@/utils/data';
 import rule from '@/mixins/rule';
 import role from '@/views2/mixins/role';
 
@@ -213,7 +213,6 @@ export default {
       FINAL_STATUS,
       USER_TYPE,
       exportFileName: '创建申报信息汇总表',
-      exportFileName2: '浙江省未来乡村创建申报表',
       selections: [],
       query: {
         declarationBatch: '',
@@ -290,21 +289,17 @@ export default {
         this.$notify.error('请选择需要打印的数据');
         return;
       }
-      if (!this.selections.every((i) => i.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING)) {
-        this.$notify.error('该条示范带信息市级还未通过审核，无法导出打印');
+      if (this.selections.some((i) => i.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING)) {
+        this.$notify.error('需先上报后才可进行导出');
         return;
       } else {
         this.$confirm('是否批量导出所选数据？', '提示', {
           type: 'warning',
         }).then(async () => {
-          this.selections.forEach(async (item) => {
-            const data = {
-              id: item.id,
-            };
-            const res = await materialPrinting(data);
-            downloadWordFile(res, this.exportFileName2);
-            this.$notify.success('导出成功');
-          });
+          const data = this.selections.map((ele) => ele.id);
+          const res = await materialPrinting(data);
+          downloadFile(res, '未来乡村创建申报材料打印.zip', 'application/gzip');
+          // this.$notify.success('导出成功');
         });
       }
     },
