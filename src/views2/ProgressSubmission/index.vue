@@ -11,7 +11,7 @@
         selection
         id-key="id"
         actionWidth="180px"
-        :multiple-delete="userInfo.roleId === 3"
+        :multiple-delete="COUNTRY"
         :hideAdd="true"
         :hideEdit="true"
         :hideView="true"
@@ -24,7 +24,7 @@
       >
         <template v-slot:search>
           <div class="inline-flex mb-2 pl-0" style="flex-wrap: wrap;">
-            <div v-if="roleId !== 3" class="search-item mb-4">
+            <div v-if="!COUNTRY" class="search-item mb-4">
               <span class="label">地区：</span>
               <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea" />
               <!--              <el-select v-model="query.declarationBatch" placeholder="请选择">-->
@@ -125,7 +125,7 @@
   </div>
 </template>
 <script>
-import { mapMutations, mapGetters } from 'vuex';
+import { mapMutations } from 'vuex';
 import { queryBatchInfo, queryTypeDeclaration, getRecVillages, deleteVillageItem } from '@/api2/villageManage';
 import {
   DECLEAR_TYPE,
@@ -137,12 +137,14 @@ import {
 } from './constants';
 import { recVerify } from '../../api/villageManage';
 import { downloadFile } from '@/utils/data';
+import role from '@/views2/mixins/role';
 
 import { exportDetail, getInforExport, getList } from '@/api2/progressSubmission';
 import { USER_TYPE } from '@/views2/utils/constants';
 import { formatMoney } from '@/views2/utils/formatter';
 // import qs from "qs";
 export default {
+  mixins: [role],
   data() {
     // const date = new Date();
     // const year = date.getFullYear().toString();
@@ -199,13 +201,6 @@ export default {
       selections: [],
     };
   },
-  computed: {
-    ...mapGetters(['userInfo']),
-    roleId() {
-      console.log(this.userInfo.roleId);
-      return this.userInfo.roleId;
-    },
-  },
   beforeMount() {
     this.declareType = DECLEAR_TYPE;
     this.declareStatus = DECLEAR_STATUS;
@@ -237,8 +232,7 @@ export default {
     formatMoney,
     getStatusName,
     canReport(data) {
-      const roleId = this.roleId;
-      const hasPerm = roleId === USER_TYPE.VILLAGE;
+      const hasPerm = this.VILLAGE;
       if (data.reportStatus !== REPORT_STATUS.UNREPORTED) {
         // 已报送则不可在报送
         return false;
@@ -316,7 +310,7 @@ export default {
       this.$router.push({ name: 'NewAcceptanceEvaluation' });
     },
     lookUp() {
-      if (this.roleId === 2) {
+      if (this.CITY) {
         this.getTypeDeclaration();
         this.queryBatchInfo();
       }
@@ -426,44 +420,19 @@ export default {
      * @param {Number} declareStatus 审核状态码
      */
     actionControl(actionName, declareStatus) {
-      if (this.roleId === 3) {
+      if (this.COUNTRY) {
         // 县级
         return this.XIANJI_ACTION[actionName] && this.XIANJI_ACTION[actionName](declareStatus);
-      } else if (this.roleId === 2) {
+      } else if (this.CITY) {
         return (
           // 市级
           this.SHIJI_ACTION[actionName] && this.SHIJI_ACTION[actionName](declareStatus)
         );
-      } else if (this.roleId === 1) {
+      } else if (this.PROVINCE) {
         return (
           // 省
           this.ADMIN_ACTION[actionName] && this.ADMIN_ACTION[actionName](declareStatus)
         );
-      }
-      return false;
-    },
-
-    // 修改、删除 *******
-    _canModify(declareStatus, roleId) {
-      return roleId === 3 && (declareStatus === 0 || declareStatus === 1 || declareStatus === 3);
-    },
-    // 审核详情
-    _canViewDeclare(declareStatus, roleId) {
-      if (roleId === 3) {
-        return true;
-      } else if (roleId === 2) {
-        return declareStatus !== 0;
-      } else if (roleId === 1) {
-        return declareStatus !== 2;
-      }
-      return false;
-    },
-    // 审核
-    _canDeclare(declareStatus, roleId) {
-      if (roleId === 2) {
-        return declareStatus === 0;
-      } else if (roleId === 1) {
-        return declareStatus === 2;
       }
       return false;
     },

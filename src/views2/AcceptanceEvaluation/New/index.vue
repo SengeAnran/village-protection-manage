@@ -1,7 +1,7 @@
 <template>
   <div class="page-new">
-    <CountyNew v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER" />
-    <CityNew v-else-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER" />
+    <CountyNew v-if="COUNTRY || COUNTRY_LEADER" />
+    <CityNew v-else-if="CITY || CITY_LEADER" />
     <ProvinceNew v-else />
   </div>
 </template>
@@ -11,18 +11,15 @@ import CountyNew from './CountyNew.vue';
 import CityNew from './CityNew.vue';
 import ProvinceNew from './ProvinceNew.vue';
 import { USER_TYPE } from '@/views2/utils/constants';
+import role from '@/views2/mixins/role';
 
 export default {
   name: 'index',
+  mixins: [role],
   components: {
     CountyNew,
     CityNew,
     ProvinceNew,
-  },
-  computed: {
-    roleId() {
-      return this.$store.getters.userInfo && this.$store.getters.userInfo.roleId;
-    },
   },
   data() {
     return {

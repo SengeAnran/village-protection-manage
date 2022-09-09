@@ -19,7 +19,7 @@
       >
         <template v-slot:search>
           <div class="search-content inline-flex mb-6 pl-0">
-            <div class="search-item" v-if="roleId === 1">
+            <div class="search-item" v-if="PROVINCE">
               <span class="label">地区：</span>
               <el-cascader ref="cascader" :show-all-levels="false" :props="cascaderProps" @change="changeArea">
               </el-cascader>
@@ -95,7 +95,7 @@
   </div>
 </template>
 <script>
-import { mapMutations, mapGetters } from 'vuex';
+import { mapMutations } from 'vuex';
 import { DECLARE_STATUS, CASCADER_PROPS } from './constants';
 import { goCockpitEditUrl } from './utils';
 
@@ -103,8 +103,10 @@ import { pageQuery } from '@/api2/cockpitProgress';
 
 import AuditPopup from './AuditPopup.vue';
 import ReasonPopup from './ReasonPopup.vue';
+import role from '@/views2/mixins/role';
 
 export default {
+  mixins: [role],
   components: { AuditPopup, ReasonPopup },
   data() {
     return {
@@ -137,12 +139,6 @@ export default {
       getMethod: pageQuery,
     };
   },
-  computed: {
-    ...mapGetters(['userInfo']),
-    roleId() {
-      return this.userInfo.roleId;
-    },
-  },
   beforeMount() {
     this.declareStatus = DECLARE_STATUS;
     this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(DECLARE_STATUS));
@@ -159,7 +155,7 @@ export default {
       this.query.address.county = (val && val[1]) || '';
     },
     resetFormCallback() {
-      this.roleId === 1 && this.$refs.cascader.panel.clearCheckedNodes();
+      this.PROVINCE && this.$refs.cascader.panel.clearCheckedNodes();
     },
     handleClick(scope) {
       const { data } = scope;
@@ -183,10 +179,11 @@ export default {
     onAuditConfirm() {
       this.$refs.crud.getItems();
     },
+    // todo maybe fix role
     computedActionName(status) {
-      if (this.roleId === 3) {
+      if (this.COUNTRY) {
         return [0, 1].includes(status) ? '审核' : '查看';
-      } else if (this.roleId === 1) {
+      } else if (this.PROVINCE) {
         return [2, 3].includes(status) ? '审核' : '查看';
       }
       return '--';

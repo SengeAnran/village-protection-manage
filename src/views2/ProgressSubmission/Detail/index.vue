@@ -55,7 +55,6 @@ import VilliageListTable from "../Components/VilliageListTable";
 import VillageListHistoryTable from "../Components/VillageListHistoryTable";
 import rule from "@/mixins/rule";
 import { HISTORY_BUILDINGS } from "../constants";
-import { mapGetters } from "vuex";
 import {getDetail, getHistory} from "@/api2/progressSubmission";
 import { formatMoney } from '@/views2/utils/formatter';
 
@@ -89,18 +88,11 @@ export default {
       showTable: false,
     };
   },
-  computed: {
-    ...mapGetters(["userInfo", "declareType"]),
-    roleId() {
-      return this.userInfo.roleId;
-    },
-  },
   created() {
     this.historyBuildings = HISTORY_BUILDINGS;
   },
   mounted() {
     this.init();
-    //console.log(this.declareType);
   },
   methods: {
     formatMoney,

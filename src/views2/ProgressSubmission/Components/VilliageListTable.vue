@@ -86,7 +86,7 @@
     </el-table-column>
     <el-table-column v-if="type === 'edit'" label="总体进度（%）" width="170">
       <template slot-scope="scope">
-        <div v-if="userInfo.roleId === USER_TYPE.VILLAGE">
+        <div v-if="VILLAGE">
           <el-form-item :prop="`tmpKey-global-first-${scope.$index}`" label="" :show-message="false" :rules="rules[`tmpKey-global-first-${scope.$index}`]">
             <el-input-number v-model="form[`tmpKey-global-first-${scope.$index}`]" size="mini"
               maxlength="20" placeholder="请输入" :controls="false" :precision="1"
@@ -102,7 +102,7 @@
     <el-table-column prop="rate" label="年度投资完成率（%）">
       <template slot-scope="scope">
         <!-- 村级用户 -->
-        <div v-if="userInfo.roleId === USER_TYPE.VILLAGE && type === 'edit'">
+        <div v-if="VILLAGE && type === 'edit'">
           {{ calcRateCurrentYear(scope) }}
         </div>
         <!-- 省市级用户 -->
@@ -114,7 +114,7 @@
     <el-table-column prop="rate" label="计划投资完成率（%）">
       <template slot-scope="scope">
         <!-- 县级用户 -->
-        <div v-if="userInfo.roleId === USER_TYPE.VILLAGE && type === 'edit'">
+        <div v-if="VILLAGE && type === 'edit'">
           {{calcRateTotal(scope)}}
         </div>
         <!-- 省市级用户 -->
@@ -126,7 +126,7 @@
     <el-table-column prop="rate" label="是否开工" width="130">
       <template slot-scope="scope">
         <!-- 村级用户 -->
-        <div v-if="userInfo.roleId === USER_TYPE.VILLAGE && type === 'edit'">
+        <div v-if="VILLAGE && type === 'edit'">
           <el-form-item label="" :show-message="false">
             <el-radio-group v-model="form.detailLists[scope.$index].state"
               :disabled="form.detailLists[scope.$index].lastState">
@@ -149,8 +149,10 @@ import { USER_TYPE } from '@/views2/utils/constants';
 import { mapType } from '@/views2/utils/project';
 import _ from 'lodash';
 import { formatMoney, formatScore } from '@/views2/utils/formatter';
+import role from '@/views2/mixins/role';
 
 export default {
+  mixins: [role],
   props: {
     form: {
       type: Object,

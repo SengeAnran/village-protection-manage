@@ -1,6 +1,6 @@
 <template>
   <div class="list-search-module inline-flex pl-0">
-    <div class="search-item" v-if="!isCounty">
+    <div class="search-item" v-if="!(COUNTRY || COUNTRY_LEADER)">
       <span class="label">地区：</span>
       <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea" />
     </div>
@@ -13,19 +13,19 @@
         placeholder="请输入村庄名称"
       ></el-input>
     </div>
-    <div class="search-item" v-if="!isCounty">
+    <div class="search-item" v-if="!(COUNTRY || COUNTRY_LEADER)">
       <span class="label">创建批次：</span>
       <el-select v-model="query.declarationBatch" placeholder="请选择">
         <el-option v-for="item in batchOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
     </div>
-    <div class="search-item" v-if="!isCounty">
+    <div class="search-item" v-if="!(COUNTRY || COUNTRY_LEADER)">
       <span class="label">评价等次：</span>
       <el-select v-model="query.cityLevelRating" placeholder="请选择">
         <el-option v-for="item in cityLevelOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
     </div>
-    <div class="search-item" v-if="!isCounty">
+    <div class="search-item" v-if="!(COUNTRY || COUNTRY_LEADER)">
       <span class="label">审核比选时间：</span>
       <el-select v-model="query.cityAcceptTime" placeholder="请选择">
         <el-option v-for="item in acceptTimeOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
@@ -46,7 +46,10 @@ import { getSetList } from '@/api2/declarationBatch';
 // eslint-disable-next-line no-unused-vars
 import { getSetList as getSetListTime } from '@/api2/acceptanceTime';
 import { DECLARE_STATUS } from '@/views2/utils/constants';
+import role from '@/views2/mixins/role';
+
 export default {
+  mixins: [role],
   props: {
     query: {
       type: Object,
@@ -67,12 +70,6 @@ export default {
       finalStatusOpt: [],
     };
   },
-  computed: {
-    isCounty() {
-      return this.$store.getters.userInfo && this.$store.getters.userInfo.roleId === 3;
-    },
-  },
-
   mounted() {
     this.setBatchOpt();
     this.setCityLevelOpt();

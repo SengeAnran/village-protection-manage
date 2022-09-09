@@ -11,7 +11,7 @@
         selection
         id-key="id"
         actionWidth="180px"
-        :multiple-delete="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER"
+        :multiple-delete="COUNTRY || COUNTRY_LEADER"
         :hideAdd="true"
         :hideEdit="true"
         :hideView="true"
@@ -26,13 +26,13 @@
         </template>
 
         <template v-slot:crudAction>
-          <el-button v-if="roleId === USER_TYPE.COUNTRY" type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报 </el-button>
+          <el-button v-if="COUNTRY" type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报 </el-button>
         </template>
 
         <template v-slot:export>
-          <el-button v-if="roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER || roleId === USER_TYPE.PROVINCE" icon="el-icon-download" type="primary" plain @click="exportList" > 导出信息汇总表 </el-button>
-          <el-button v-if="roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER" icon="el-icon-download" type="primary" plain @click="printFile" > 材料打印 </el-button>
-          <el-button v-if="roleId === USER_TYPE.CITY_LEADER || roleId === USER_TYPE.COUNTRY_LEADER" type="primary" @click="UnifiedReport"> 统一上报</el-button>
+          <el-button v-if="CITY || CITY_LEADER || PROVINCE" icon="el-icon-download" type="primary" plain @click="exportList" > 导出信息汇总表 </el-button>
+          <el-button v-if="COUNTRY || COUNTRY_LEADER" icon="el-icon-download" type="primary" plain @click="printFile" > 材料打印 </el-button>
+          <el-button v-if="CITY_LEADER || COUNTRY_LEADER" type="primary" @click="UnifiedReport"> 统一上报</el-button>
           <!-- 
           <el-button icon="el-icon-download" v-if="!isCounty" type="primary" plain @click="exportEnclosure">
             导出附件
@@ -117,8 +117,9 @@
   </div>
 </template>
 <script>
-import { mapMutations, mapGetters } from 'vuex';
+import { mapMutations } from 'vuex';
 import rule from '@/mixins/rule';
+import role from '@/views2/mixins/role';
 import ListSearch from './components/ListSearch.vue';
 
 import { getAuditList, getReportList, deleteItem, exportList, exportAnnex, unifiedReporting, uploadScan, materialPrinting } from '@/api2/acceptanceEvaluation';
@@ -129,7 +130,7 @@ import { formatMoney } from '@/views2/utils/formatter';
 
 export default {
   components: { ListSearch },
-  mixins: [rule],
+  mixins: [rule, role],
   data() {
     return {
       USER_TYPE,
@@ -158,13 +159,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userInfo']),
-    roleId() {
-      return this.userInfo.roleId;
-    },
     isCounty() {
-      const roleId = this.roleId;
-      return roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER;
+      return this.COUNTRY || this.COUNTRY_LEADER;
     },
     getMethod() {
       return this.isCounty ? getReportList : getAuditList;
@@ -316,14 +312,14 @@ export default {
         this.$notify.error('请选择需要上报的申报信息');
         return;
       }
-      if (this.roleId === USER_TYPE.COUNTRY_LEADER || this.roleId === USER_TYPE.COUNTRY) {
+      if (this.COUNTRY_LEADER || this.COUNTRY) {
         //县级
         if (!this.selections.every((i) => i.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING)) {
           // 5县级待上报
           this.$notify.error('选中的申报信息状态有误');
           return;
         }
-      } else if (this.roleId === USER_TYPE.CITY_LEADER || this.roleId === USER_TYPE.CITY) {
+      } else if (this.CITY_LEADER || this.CITY) {
         // 市级
         if (!this.selections.every((i) => i.finalStatus === FINAL_STATUS.CITY_REPORT_PENDING)) {
           // 6市级待上报
@@ -382,33 +378,28 @@ export default {
       this.selections = val;
     },
     showDetail(data) {
-      const roleId = this.roleId;
       return (
-        roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER ||
-        ((roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) && data.finalStatus !== 0) ||
-        (roleId === USER_TYPE.PROVINCE && data.finalStatus !== 2)
+        this.COUNTRY || this.COUNTRY_LEADER ||
+        ((this.CITY || this.CITY_LEADER) && data.finalStatus !== 0) ||
+        (this.PROVINCE && data.finalStatus !== 2)
       );
     },
     showAudit(data) {
-      const roleId = this.roleId;
-      return ((roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) && data.finalStatus === 0) || (roleId === USER_TYPE.PROVINCE && data.finalStatus === 2);
+      return ((this.CITY || this.CITY_LEADER) && data.finalStatus === 0) || (this.PROVINCE && data.finalStatus === 2);
     },
     showModify(data) {
-      const roleId = this.roleId;
-      const countryShow = (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) && (data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING || data.finalStatus === FINAL_STATUS.CITY_VERIFY_REJECTED);
-      const cityShow = (roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) && data.finalStatus === FINAL_STATUS.CITY_REPORT_PENDING;
+      const countryShow = (this.COUNTRY || this.COUNTRY_LEADER) && (data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING || data.finalStatus === FINAL_STATUS.CITY_VERIFY_REJECTED);
+      const cityShow = (this.CITY || this.CITY_LEADER) && data.finalStatus === FINAL_STATUS.CITY_REPORT_PENDING;
       return countryShow || cityShow;
     },
     showDelete(data) {
-      const roleId = this.roleId;
-      return (roleId === USER_TYPE.COUNTRY) && data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING;
+      return (this.COUNTRY) && data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING;
     },
     showUploadScanFile(data) {
       if (data.fileId) {
         return false;
       }
-      const roleId = this.roleId;
-      return (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) && data.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED;
+      return (this.COUNTRY || this.COUNTRY_LEADER) && data.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED;
     },
   },
 };

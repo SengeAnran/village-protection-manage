@@ -20,7 +20,7 @@ function canModify(data, roleId) {
       declareStatus === FINAL_STATUS.CITY_REPORT_PENDING ||
       (rejectType === 2 && declareStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED)
     );
-  } else if (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) {
+  } else if (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER || roleId === USER_TYPE.VILLAGE) {
     return (
       declareStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING ||
       declareStatus === FINAL_STATUS.CITY_VERIFY_REJECTED ||
@@ -32,7 +32,7 @@ function canModify(data, roleId) {
 
 // 删除 *******
 function canDelete(data, roleId) {
-  if (roleId !== USER_TYPE.COUNTRY && roleId !== USER_TYPE.COUNTRY_LEADER) {
+  if (roleId !== USER_TYPE.COUNTRY && roleId !== USER_TYPE.COUNTRY_LEADER && roleId !== USER_TYPE.VILLAGE) {
     return false;
   }
   return canModify(data, roleId);
@@ -41,7 +41,7 @@ function canDelete(data, roleId) {
 // 审核详情
 function canViewDeclare(data, roleId) {
   const { finalStatus: declareStatus } = data;
-  if (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER) {
+  if (roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER || roleId === USER_TYPE.VILLAGE) {
     return true;
   } else if (roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER) {
     return declareStatus !== FINAL_STATUS.CITY_VERIFY_PENDING;
@@ -62,17 +62,23 @@ function canDeclare(data, roleId) {
   return false;
 }
 
+export const CUNJI_ACTION = {
+  修改: (declareStatus) => canModify(declareStatus, USER_TYPE.VILLAGE),
+  删除: (declareStatus) => canDelete(declareStatus, USER_TYPE.VILLAGE),
+  详情: (declareStatus) => canViewDeclare(declareStatus, USER_TYPE.VILLAGE),
+};
+
 export const XIANJI_ACTION = {
-  修改: (declareStatus) => canModify(declareStatus, 3),
-  删除: (declareStatus) => canDelete(declareStatus, 3),
-  详情: (declareStatus) => canViewDeclare(declareStatus, 3),
-  排序: (declareStatus) => canSort(declareStatus, 3),
+  修改: (declareStatus) => canModify(declareStatus, USER_TYPE.COUNTRY) || canModify(declareStatus, USER_TYPE.COUNTRY_LEADER),
+  删除: (declareStatus) => canDelete(declareStatus, USER_TYPE.COUNTRY) || canDelete(declareStatus, USER_TYPE.COUNTRY_LEADER),
+  详情: (declareStatus) => canViewDeclare(declareStatus, USER_TYPE.COUNTRY) || canViewDeclare(declareStatus, USER_TYPE.COUNTRY_LEADER),
+  排序: (declareStatus) => canSort(declareStatus, USER_TYPE.COUNTRY) || canSort(declareStatus, USER_TYPE.COUNTRY_LEADER),
 };
 export const SHIJI_ACTION = {
-  修改: (declareStatus) => canModify(declareStatus, 2),
-  审核: (declareStatus) => canDeclare(declareStatus, 2),
-  详情: (declareStatus) => canViewDeclare(declareStatus, 2),
-  排序: (declareStatus) => canSort(declareStatus, 2),
+  修改: (declareStatus) => canModify(declareStatus, USER_TYPE.CITY) || canModify(declareStatus, USER_TYPE.CITY_LEADER),
+  审核: (declareStatus) => canDeclare(declareStatus, USER_TYPE.CITY) || canDeclare(declareStatus, USER_TYPE.CITY_LEADER),
+  详情: (declareStatus) => canViewDeclare(declareStatus, USER_TYPE.CITY) || canViewDeclare(declareStatus, USER_TYPE.CITY_LEADER),
+  排序: (declareStatus) => canSort(declareStatus, USER_TYPE.CITY) || canSort(declareStatus, USER_TYPE.CITY_LEADER),
 };
 export const ADMIN_ACTION = {
   审核: (declareStatus) => canDeclare(declareStatus, 1),

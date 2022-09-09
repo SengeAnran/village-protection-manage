@@ -492,15 +492,15 @@ export const defaultRoutes2 = [
       title: '未来乡村创建申报',
       hideChild: false,
       icon: 'cunzhuangshenbao',
-      menuIds: [USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER, USER_TYPE.CITY, USER_TYPE.CITY_LEADER, USER_TYPE.PROVINCE],
+      menuIds: [USER_TYPE.VILLAGE, USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER, USER_TYPE.CITY, USER_TYPE.CITY_LEADER, USER_TYPE.PROVINCE],
     },
     children: [
       {
         path: '/villageApplication2/index',
         name: 'VillageApplyList2',
         meta: {
-          title: '县级申报',
-          menuIds: [USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER],
+          title: '创建申报',
+          menuIds: [USER_TYPE.VILLAGE, USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER],
         },
         component: () => import('@/views2/VillageApplication/index/index.vue'),
       },

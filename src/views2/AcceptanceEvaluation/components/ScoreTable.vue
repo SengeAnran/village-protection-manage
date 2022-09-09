@@ -18,7 +18,7 @@
       >
         <template slot-scope="{ row }">
           <!-- 县级用户 -->
-          <div v-if="(userInfo.roleId === USER_TYPE.COUNTRY || userInfo.roleId === USER_TYPE.COUNTRY_LEADER) && !disabled">
+          <div v-if="(COUNTRY || COUNTRY_LEADER) && !disabled">
             <el-form-item
               v-if="item.prop === 'countyScore'"
               :style="{ 'margin-bottom': row.title === '合计' ? 0 : undefined }"
@@ -47,7 +47,7 @@
             </span>
           </div>
           <!-- 市级用户 -->
-          <div v-else-if="(userInfo.roleId === USER_TYPE.CITY || userInfo.roleId === USER_TYPE.CITY_LEADER) && !disabled">
+          <div v-else-if="(CITY || CITY_LEADER) && !disabled">
             <el-form-item
               v-if="item.prop === 'cityScore'"
               label=""
@@ -89,12 +89,13 @@
 </template>
 <script>
 import rule from '@/mixins/rule';
+import role from '@/views2/mixins/role';
 import { TABLE_SCORE_DATA } from '../New/data';
 
 import { USER_TYPE } from '@/views2/utils/constants';
 
 export default {
-  mixins: [rule],
+  mixins: [rule, role],
   props: {
     disabled: {
       type: Boolean,
@@ -143,9 +144,8 @@ export default {
     if (this.disabled) {
       return;
     }
-    const roleId = this.userInfo.roleId;
-    const isCOUNTRY = roleId === USER_TYPE.COUNTRY || roleId === USER_TYPE.COUNTRY_LEADER;
-    const isCITY = roleId === USER_TYPE.CITY || roleId === USER_TYPE.CITY_LEADER;
+    const isCOUNTRY = this.COUNTRY || this.COUNTRY_LEADER;
+    const isCITY = this.CITY || this.CITY_LEADER;
     if (isCOUNTRY) {
       this.TABLE_TITLE[4].width = 160;
     } else if (isCITY) {

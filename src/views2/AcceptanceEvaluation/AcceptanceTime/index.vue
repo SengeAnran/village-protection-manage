@@ -13,7 +13,7 @@
         :form.sync="form"
         id-key="id"
         actionWidth="180px"
-        :multiple-delete="userInfo.roleId === 3"
+        :multiple-delete="COUNTRY"
         hideSearch
         :multipleDelete="false"
         :selection="false"
@@ -51,13 +51,14 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from 'vuex';
+import { mapMutations } from 'vuex';
 import { deleteVillageItem, getSetList, setAdd, setDelete, setUpdate } from '@/api2/acceptanceTime';
 import rule from '@/mixins/rule';
+import role from '@/views2/mixins/role';
 import { recVerify } from '../../../api/villageManage';
 const type = 1; //type 1：验收时间，2：申报批次
 export default {
-  mixins: [rule],
+  mixins: [rule, role],
   data() {
     return {
       query: {
@@ -73,12 +74,6 @@ export default {
       dialogVisible: false,
       submitSortMethod: recVerify,
     };
-  },
-  computed: {
-    ...mapGetters(['userInfo']),
-    roleId() {
-      return this.userInfo.roleId;
-    },
   },
   mounted() {},
   methods: {
