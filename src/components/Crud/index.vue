@@ -40,7 +40,7 @@
     <!--表格-->
     <el-table
       v-if="!hideTable"
-      class="table"
+      class="table1"
       :height="tableHeight || null"
       :header-row-style="{
         fontSize: '14px',
@@ -746,7 +746,7 @@ export default {
     margin-bottom: 5px;
   }
 }
-.table {
+.table1 {
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
   ::v-deep tr th {
     background-color: #f3f3f3;
