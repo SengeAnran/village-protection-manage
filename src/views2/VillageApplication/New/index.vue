@@ -1,8 +1,8 @@
 <template>
   <div class="block" v-loading="initLoading">
     <el-form ref="form" class="form" label-position="top" :model="form" label-width="80px">
-      <h3 class="text-gray-800 text-2xl mb-3"> {{ type === 'add' ? '新建申报' : '修改申报' }}</h3>
-      <div class="detail-top" >
+      <h3 class="text-gray-800 text-2xl mb-3">{{ type === 'add' ? '新建申报' : '修改申报' }}</h3>
+      <div class="detail-top">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="申报类型" prop="decType" :rules="rule.select">
@@ -98,12 +98,24 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="计划总投资（万元）" prop="investNum" :rules="rule.inputNumber">
-              <el-input-number v-model="form.investNum" :precision="2" :controls="false" placeholder="请输入" maxlength="8"></el-input-number>
+              <el-input-number
+                v-model="form.investNum"
+                :precision="2"
+                :controls="false"
+                placeholder="请输入"
+                maxlength="8"
+              ></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="村级集体经济年经营性收入（万元）" prop="incomeNum" :rules="rule.inputNumber">
-              <el-input-number v-model="form.incomeNum" :precision="2" :controls="false" placeholder="请输入" maxlength="8"></el-input-number>
+              <el-input-number
+                v-model="form.incomeNum"
+                :precision="2"
+                :controls="false"
+                placeholder="请输入"
+                maxlength="8"
+              ></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -124,7 +136,8 @@
           >
           </el-input>
           <p style="width: 42%; color: #ff6b00" class="py-4 leading-5">
-            <i class="el-icon-warning"></i> 要求：简述创建村基本情况、优劣势、必要性和创建目标定位等情况，要求300字以内。
+            <i class="el-icon-warning"></i>
+            要求：简述创建村基本情况、优劣势、必要性和创建目标定位等情况，要求300字以内。
           </p>
         </el-form-item>
         <el-form-item
@@ -193,7 +206,7 @@
           <el-row :gutter="20">
             <el-col :span="24">
               <el-form-item label="浙江省未来乡村创建方案" prop="createScenario" :rules="rule.upload">
-                <UploadFile22 
+                <UploadFile22
                   :defaultData="createScenarioDefault"
                   v-model="form.createScenario"
                   :limit="1"
@@ -247,9 +260,15 @@
     </el-form>
     <div>
       <el-button @click="$router.back()">取消</el-button>
-      <el-button type="primary" @click="validateForm">保存</el-button>
+      <el-button type="primary" @click="validateForm">提交</el-button>
     </div>
-    <CreateProjectDialog v-model="dialogVisible" :editData="editProjectForm" :dateRange="[form.startTime, form.endTime]" @change="handleAdd" @closed="handleAddClose" />
+    <CreateProjectDialog
+      v-model="dialogVisible"
+      :editData="editProjectForm"
+      :dateRange="[form.startTime, form.endTime]"
+      @change="handleAdd"
+      @closed="handleAddClose"
+    />
   </div>
 </template>
 <script>
@@ -263,7 +282,6 @@ import { mapGetters } from 'vuex';
 
 import { types } from '@/views2/utils/project';
 import CreateProjectDialog from './CreateProjectDialog.vue';
-
 
 const tableList = (rule, value, callback) => {
   if (value.length) {
@@ -279,7 +297,7 @@ export default {
     VilliageListTable,
     CreateProjectDialog,
     VillageProperty,
-},
+  },
   data() {
     return {
       types,
@@ -322,7 +340,7 @@ export default {
       },
       type: 'add',
       dialogVisible: false,
-      
+
       editIndex: '',
       editProjectForm: null, // 编辑表格
       listRules: { required: true, validator: tableList, trigger: 'blur' },
@@ -367,27 +385,32 @@ export default {
         this.initLoading = false;
         this.form.villageName = this.userInfo.areaName;
         return;
-      };
+      }
       this.type = 'edit';
-      getVillageItemDetail({ id }).then((res) => {
-        const data = {
-          ...res,
-        };
-        if (res.decType === 2) {
-          this.showdecType2 = true;
-        }
-        const createScenario = res.createScenarioFile ? [res.createScenarioFile] : [];
-        const meetingPic = res.meetingPic || '';
-        this.oldMeetingPic = meetingPic.split(',').filter((ele) => Boolean(ele)).map((ele) => ({ filePath: ele }));
-        this.createScenarioDefault = createScenario;
-        data.createScenario = [];
-        data.meetingPic = [];
-        this.form = data;
-        // this.form.annexFiles = [];
-        this.finalStatus = res.finalStatus;
-      }).finally(() => {
-        this.initLoading = false;
-      });
+      getVillageItemDetail({ id })
+        .then((res) => {
+          const data = {
+            ...res,
+          };
+          if (res.decType === 2) {
+            this.showdecType2 = true;
+          }
+          const createScenario = res.createScenarioFile ? [res.createScenarioFile] : [];
+          const meetingPic = res.meetingPic || '';
+          this.oldMeetingPic = meetingPic
+            .split(',')
+            .filter((ele) => Boolean(ele))
+            .map((ele) => ({ filePath: ele }));
+          this.createScenarioDefault = createScenario;
+          data.createScenario = [];
+          data.meetingPic = [];
+          this.form = data;
+          // this.form.annexFiles = [];
+          this.finalStatus = res.finalStatus;
+        })
+        .finally(() => {
+          this.initLoading = false;
+        });
     },
     // 获取批次列表
     getBatchList() {

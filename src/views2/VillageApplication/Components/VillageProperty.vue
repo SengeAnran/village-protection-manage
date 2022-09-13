@@ -10,7 +10,7 @@
       </el-radio-group>
     </div>
     <div class="checkbox-item">
-      <div class="checkbox-item-label" @click="villagePropertyF = undefined">法制村:</div>
+      <div class="checkbox-item-label" @click="villagePropertyF = undefined">法治村:</div>
       <el-radio-group class="radio-group" v-model="villagePropertyF">
         <el-radio v-for="(item, index) of fOptions" :key="index" :label="item"></el-radio>
       </el-radio-group>
@@ -55,7 +55,7 @@ export default {
         this.updateValue(v, this.villagePropertyA, this.villagePropertyF, this.villagePropertyW, this.villagePropertyS);
       },
       get: function () {
-        const dest = this.value.filter((ele) => this.options.some(el => el === ele));
+        const dest = this.value.filter((ele) => this.options.some((el) => el === ele));
         return dest;
       },
     },
@@ -64,7 +64,7 @@ export default {
         this.updateValue(this.villageProperty, this.villagePropertyA, this.villagePropertyF, this.villagePropertyW, v);
       },
       get: function () {
-        const dest = this.value.find((ele) => this.sOptions.some(el => el === ele));
+        const dest = this.value.find((ele) => this.sOptions.some((el) => el === ele));
         return dest;
       },
     },
@@ -73,7 +73,7 @@ export default {
         this.updateValue(this.villageProperty, this.villagePropertyA, v, this.villagePropertyW, this.villagePropertyS);
       },
       get: function () {
-        const dest = this.value.find((ele) => this.fOptions.some(el => el === ele));
+        const dest = this.value.find((ele) => this.fOptions.some((el) => el === ele));
         return dest;
       },
     },
@@ -82,7 +82,7 @@ export default {
         this.updateValue(this.villageProperty, this.villagePropertyA, this.villagePropertyF, v, this.villagePropertyS);
       },
       get: function () {
-        const dest = this.value.find((ele) => this.wOptions.some(el => el === ele));
+        const dest = this.value.find((ele) => this.wOptions.some((el) => el === ele));
         return dest;
       },
     },
@@ -91,7 +91,7 @@ export default {
         this.updateValue(this.villageProperty, v, this.villagePropertyF, this.villagePropertyW, this.villagePropertyS);
       },
       get: function () {
-        const dest = this.value.find((ele) => this.aOptions.some(el => el === ele));
+        const dest = this.value.find((ele) => this.aOptions.some((el) => el === ele));
         return dest;
       },
     },
