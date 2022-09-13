@@ -59,28 +59,24 @@
             </div>
           </el-col>
         </el-row>
-        <image-attach
-          label="请上传有“一老一小”服务场景照片，各场景3至5张（包含场景全景照、运维现场照）"
-          tip="照片大小范围为1MB-10MB之间"
-          verifyProp="oldSmallPics"
-          :data="form.oldSmallPics"
-          :required="true"
-          @addFile="onImageAdd"
-          @removeFile="onImageRemove"
-        ></image-attach>
-
-        <image-attach
-          isVideo
-          label="请上传有关“一老一小”服务场景的视频"
-          tip="照片大小不可超过600MB"
-          verifyProp="oldSmallVideo"
-          :size="600"
-          :data="form.oldSmallVideo"
-          :required="false"
-          :limit="1"
-          @addFile="onVideoAdd"
-          @removeFile="onVideoRemove"
-        ></image-attach>
+        <el-form-item label="请上传有“一老一小”服务场景照片，各场景3至5张（包含场景全景照、运维现场照）" :rules="rule.upload" prop="oldSmallPics">
+          <p style="color: #ff6b00" class="py-4 leading-5">
+            <span style="display: block">
+              <i class="el-icon-warning"></i>
+              照片大小范围为1MB-10MB之间
+            </span>
+          </p>
+          <UploadImg2 :defaultData="oldSmallPicsDefault" v-model="form.oldSmallPics" />
+        </el-form-item>
+        <el-form-item label="请上传有关“一老一小”服务场景的视频" :rules="rule.upload" prop="oldSmallVideo">
+          <p style="color: #ff6b00" class="py-4 leading-5">
+            <span style="display: block">
+              <i class="el-icon-warning"></i>
+              视频大小不可超过600MB
+            </span>
+          </p>
+          <UploadVideo2 :defaultData="oldSmallVideoDefault" v-model="form.oldSmallVideo" />
+        </el-form-item>
       </div>
       <sub-tit> 未来乡村创建成效评分表 </sub-tit>
       <score-table :form="form"></score-table>
@@ -102,9 +98,7 @@ import BasicInput from '../components/BasicInput.vue';
 import ScoreTable from '../components/ScoreTable.vue';
 import FileAttach from '../components/FileAttach.vue'; // 附件上传
 import ProvinceInfo from '../components/ProvinceInfo.vue';
-import ImageAttach from '../components/ImageAttach.vue';
 
-// import { saveInfo, getDetail, updateInfo, getCountyTempData } from '@/api2/acceptanceEvaluation';
 import { saveInfo, getDetail } from '@/api2/acceptanceEvaluation';
 import { COUNTY_DEFAULT_FORM as DEFAULT_FORM } from '../constants';
 
@@ -117,7 +111,6 @@ export default {
     ScoreTable,
     FileAttach,
     ProvinceInfo,
-    ImageAttach,
   },
   data() {
     return {
@@ -126,6 +119,8 @@ export default {
       },
       loading: true,
       hasTempData: false,
+      oldSmallPicsDefault: [],
+      oldSmallVideoDefault: [],
     };
   },
 
@@ -203,6 +198,7 @@ export default {
     },
 
     _saveInfo(form, message) {
+      // console.log('xxxxxx _saveInfo', form, message);
       this.saveMethod(form).then(() => {
         this.$notify.success({
           title: message || '保存成功！',
@@ -225,31 +221,6 @@ export default {
       }
     },
 
-    onImageAdd(file) {
-      console.log('oldSmallPics', file);
-      this.form['oldSmallPics'].push(file);
-    },
-    onImageRemove(file) {
-      const index = this.form['oldSmallPics'].findIndex((item) => {
-        return item.uid === file.uid || item.filePath === file.url;
-      });
-      if (index !== -1) {
-        this.form['oldSmallPics'].splice(index, 1);
-      }
-    },
-    onVideoAdd(file) {
-      console.log('oldSmallVideo', file);
-      this.form['oldSmallVideo'].push(file);
-    },
-    onVideoRemove(file) {
-      const index = this.form['oldSmallVideo'].findIndex((item) => {
-        return item.uid === file.uid || item.filePath === file.url;
-      });
-      if (index !== -1) {
-        this.form['oldSmallVideo'].splice(index, 1);
-      }
-    },
-
     villageChange(val) {
       this.form.areaId = val.areaId;
       this.form.declarationId = val.declarationId;
@@ -263,21 +234,14 @@ export default {
         this.form = res;
         this.form.selfAssessmentSummary = res.selfAssessmentSummary || '';
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
-        this.form.oldSmallPics = (res.oldSmallPics || '').split(',').map((ele) => ({ filePath: ele, url: ele }));
-        this.form.oldSmallVideo = oldSmallVideoFile ? [oldSmallVideoFile] : [];
+        this.oldSmallPicsDefault = (res.oldSmallPics || '').split(',').filter((ele) => Boolean(ele)).map((ele) => ({ filePath: ele }));
+        this.form.oldSmallPics = [];
+        this.oldSmallVideoDefault = oldSmallVideoFile ? [oldSmallVideoFile] : [];
+        this.form.oldSmallVideo = [];
         this.form.cityAcceptTime = createPerformanceAuditTimeDO?.id;
         this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd : '';
         // console.log('getDetail', this.form);
       });
-    },
-    // 获取保存待发数据
-    getCountyTempData() {
-      // getCountyTempData().then((res) => {
-      //   console.log(res, '获取保存待发数据');
-      //   this.hasTempData = Boolean(res);
-      //   this.form = res || { ...DEFAULT_FORM };
-      //   this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
-      // });
     },
 
     _modifyPageTitle(val) {
@@ -291,7 +255,6 @@ export default {
       this.getData();
       this._modifyPageTitle('修改');
     } else {
-      // this.getCountyTempData();
       this._modifyPageTitle('新增');
     }
     setTimeout(() => {

@@ -146,6 +146,9 @@
             <i class="el-icon-warning"></i> 请根据输入框内格式修改创建方案决议情况，并上传村民大会纪要。
           </p>
         </el-form-item>
+        <el-form-item label="" prop="meetingPic" :rules="rule.upload">
+          <UploadImg2 :defaultData="oldMeetingPic" v-model="form.meetingPic" :limit="1" />
+        </el-form-item>
         <el-form-item label="乡、镇（街道）人民政府（办事处）意见" prop="townText" :rules="rule.input">
           <el-input
             style="width: 42%"
@@ -158,6 +161,7 @@
           >
           </el-input>
         </el-form-item>
+
         <el-form-item label="县（市、区）部门审核意见" prop="departmentText" :rules="rule.input">
           <el-input
             style="width: 42%"
@@ -188,29 +192,22 @@
         <div class="detail-top">
           <el-row :gutter="20">
             <el-col :span="24">
-              <el-form-item label="浙江省未来乡村创建方案" prop="createScenario" :rules="rule.richText">
-                <el-input
-                  style="min-width: 42%; max-width: 90%;"
-                  type="textarea"
-                  :rows="5"
-                  :autosize="{ minRows: 10 }"
-                  :placeholder="`一、基本情况
-二、创建方案的实施情况
-三、数字化建设与应用情况
-四、场景特别是“一老一小”场景建设情况
-五、建设投入情况
-六、工作推进情况
-七、特色和创新情况
-八、相关附件
-报告中涉及到的支撑材料可作为附件单独提供，并需提供附件清单方便查阅。`"
-                  show-word-limit
+              <el-form-item label="浙江省未来乡村创建方案" prop="createScenario" :rules="rule.upload">
+                <UploadFile22 
+                  :defaultData="createScenarioDefault"
                   v-model="form.createScenario"
+                  :limit="1"
+                  tip="支持格式：.doc, .docx, .pdf"
+                  accept=".doc,.docx,.pdf"
                 />
+                <p style="width: 42%; color: #ff6b00" class="py-4 leading-5">
+                  <i class="el-icon-warning"></i> 请上传《浙江省未来乡村创建方案》
+                </p>
               </el-form-item>
             </el-col>
           </el-row>
         </div>
-        <h4 class="block-tit">未来乡村创建项目备案表</h4>
+        <h4 class="block-tit small">未来乡村创建项目备案表</h4>
         <div class="detail-top">
           <el-row :gutter="20">
             <el-col :span="12">
@@ -267,13 +264,7 @@ import { mapGetters } from 'vuex';
 import { types } from '@/views2/utils/project';
 import CreateProjectDialog from './CreateProjectDialog.vue';
 
-const imgs = (rule, value, callback) => {
-  if (value.length < 1) {
-    callback(new Error('需要上传1张以上图片'));
-  } else {
-    callback();
-  }
-};
+
 const tableList = (rule, value, callback) => {
   if (value.length) {
     callback();
@@ -281,13 +272,7 @@ const tableList = (rule, value, callback) => {
     callback(new Error('请添加项目'));
   }
 };
-const villageSelect = (rule, value, callback) => {
-  if (value.length) {
-    callback();
-  } else {
-    callback(new Error('请添加项目'));
-  }
-};
+
 export default {
   mixins: [rule],
   components: {
@@ -325,6 +310,7 @@ export default {
 
         basicText: '', //基本情况
         meetingText: '', //村民代表会议（村民会议）关于未来乡村建设方案决议情况
+        meetingPic: [],
         townText: '', //乡、镇（街道）人民政府（办事处）意见
         departmentText: '', //县（市、区）部门审核意见
         governmentText: '', //县（市、区）人民政府意见
@@ -332,7 +318,7 @@ export default {
         projectFilingPhone: '', //联系电话
         projectFilingAudit: '', //审核人
         projects: [], //项目列表
-        createScenario: '', // 未来乡村创建方案
+        createScenario: [], // 未来乡村创建方案
       },
       type: 'add',
       dialogVisible: false,
@@ -340,10 +326,9 @@ export default {
       editIndex: '',
       editProjectForm: null, // 编辑表格
       listRules: { required: true, validator: tableList, trigger: 'blur' },
-      villageSelects: { required: true, validator: villageSelect, trigger: 'blur' },
-
-      imgRule: { required: true, validator: imgs, trigger: 'change' },
       batchOptions: [],
+      oldMeetingPic: [],
+      createScenarioDefault: [],
 
       initLoading: true,
     };
@@ -391,6 +376,12 @@ export default {
         if (res.decType === 2) {
           this.showdecType2 = true;
         }
+        const createScenario = res.createScenarioFile ? [res.createScenarioFile] : [];
+        const meetingPic = res.meetingPic || '';
+        this.oldMeetingPic = meetingPic.split(',').filter((ele) => Boolean(ele)).map((ele) => ({ filePath: ele }));
+        this.createScenarioDefault = createScenario;
+        data.createScenario = [];
+        data.meetingPic = [];
         this.form = data;
         // this.form.annexFiles = [];
         this.finalStatus = res.finalStatus;
@@ -458,14 +449,20 @@ export default {
     },
 
     validateForm() {
+      console.log('xxxxxx _.', this.form);
       this.$refs['form'].validate((valid) => {
         if (valid) {
           const annexIds = this.form.annexFiles.map((i) => i.fileId).toString();
+          const createScenario = this.form.createScenario.map((ele) => ele.fileId).join(',');
+
+          const meetingPic = this.form.meetingPic.map((ele) => ele.filePath).join(',');
           const params = {
             ...this.form,
             annexIds,
+            meetingPic,
+            createScenario,
           };
-          console.log(params);
+          // console.log('validateForm', params);
           if (this.type === 'edit') {
             // this.form.id = this.$route.query.id;
             this.update(params);
@@ -498,30 +495,6 @@ export default {
         this.$router.back();
       });
     },
-
-    onImageAdd(res) {
-      if (!this.form.villagePicturesArr) {
-        this.form.villagePicturesArr = [];
-      }
-      if (!this.form.villagePicturesFiles) {
-        this.form.villagePicturesFiles = [];
-      }
-      this.form.villagePicturesArr.push(res.fileId);
-      this.form.villagePicturesFiles.push(res);
-
-      this.$refs.form.validateField('villagePicturesArr');
-    },
-    onImageRemove(res) {
-      const index = this.form.villagePicturesFiles.findIndex((list) => {
-        return list.uid === res.uid || list.filePath === res.url;
-      });
-
-      if (index !== -1) {
-        this.form.villagePicturesArr.splice(index, 1);
-        this.form.villagePicturesFiles.splice(index, 1);
-      }
-      this.$refs.form.validateField('villagePicturesArr');
-    },
   },
 };
 </script>
@@ -546,6 +519,10 @@ export default {
     margin-top: 32px;
     margin-bottom: 20px;
     font-size: 18px;
+
+    &.small {
+      margin-top: 4px;
+    }
   }
   .total-wrp {
     color: #333333;

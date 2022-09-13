@@ -70,6 +70,9 @@
         <div class="input-item-wrp">
           <el-form-item label="村民代表会议（村民会议）关于未来乡村建设方案决议情况" prop="introduction">
             <p class="content">{{ form.meetingText }}</p>
+            <p class="mt-2">
+              <ViewImg v-if="form.meetingPic && form.meetingPic.length" :data="form.meetingPic"></ViewImg>
+            </p>
           </el-form-item>
         </div>
         <div class="input-item-wrp">
@@ -88,7 +91,10 @@
           </el-form-item>
         </div>
         <h4 class="block-tit">浙江省未来乡村创建方案</h4>
-        <p class="content mt-4">{{ form.createScenario }}</p>
+        <p class="content mt-4">
+          <ViewFile2 v-if="form.createScenario && form.createScenario.length" :data="form.createScenario" />
+          <span v-else>--</span>
+        </p>
         <!-- <div class="input-item-wrp mt-4">
           <el-form-item label="附件：" prop="introduction">
             <div v-if="form.annexFiles && form.annexFiles.length > 0">
@@ -329,7 +335,6 @@ import { getVillageItemDetail, getvillageDetailExport, verify } from "@/api2/vil
 import { downloadFile } from "@/utils/data"
 import { formatMoney } from '@/views2/utils/formatter';
 import { FINAL_STATUS, USER_TYPE } from '@/views2/utils/constants';
-import ViewFile from "@/views2/AcceptanceEvaluation/components/ViewFile.vue";
 
 export default {
   mixins: [rule, role],
@@ -349,8 +354,7 @@ export default {
   },
   components: {
     VilliageListTable,
-    ViewFile
-},
+  },
   data() {
     return {
       FINAL_STATUS,
@@ -380,6 +384,7 @@ export default {
 
         basicText: "", //基本情况
         meetingText: "", //村民代表会议（村民会议）关于未来乡村建设方案决议情况
+        meetingPic: [],
         townText: "", //乡、镇（街道）人民政府（办事处）意见
         departmentText: "", //县（市、区）部门审核意见
         governmentText: "", //县（市、区）人民政府意见
@@ -447,6 +452,7 @@ export default {
       if (!id) return;
       getVillageItemDetail({ id }).then((res) => {
         this.form = res;
+        const meetingPic = (res.meetingPic || '').split(',').filter((ele) => Boolean(ele)).map((ele) => ({ filePath: ele }));
         this.finalStatus = res.finalStatus;
         if (this.CITY_LEADER || this.CITY) {
           if (this.cityVerify > 0) {
@@ -460,8 +466,10 @@ export default {
           }
         }
         this.form.stampedFile = res.stampedFile;
+        this.form.meetingPic = meetingPic;
+        this.form.createScenario = res.createScenarioFile ? [res.createScenarioFile] : [];
         this.reviewForm.stampedFiles = res.stampedFile ? [res.stampedFile] : [];
-        console.log('xxxxxxx', this.form.stampedFile, res.stampedFile);
+        // console.log('xxxxxxx', this.form.stampedFile, res.stampedFile);
         this.loading = false;
         //console.log(res);
       });

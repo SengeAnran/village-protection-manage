@@ -1,18 +1,8 @@
 <template>
   <div class="upload-img-wrp" :class="{ disabled: disabled }">
-    <el-upload
-      ref="upload"
-      action="string"
-      list-type="picture-card"
-      :limit="limit"
-      accept="video/mp4, video/quicktime"
-      :file-list="fileList"
-      :before-upload="beforeImgUpload"
-      :on-exceed="handleExceedImg"
-      :on-change="handleFileChange"
-      :http-request="uploadImg"
-      :multiple="multiple"
-    >
+    <el-upload ref="upload" action="string" list-type="picture-card" :limit="limit" accept="video/mp4, video/quicktime"
+      :file-list="fileList" :before-upload="beforeImgUpload" :on-exceed="handleExceedImg" :on-change="emitChange"
+      :on-remove="emitChange" :http-request="uploadImg" :multiple="multiple">
       <div class="default-upload" slot="default">
         <i class="el-icon-plus"></i>
         <p class="desc">
@@ -22,16 +12,10 @@
       <div slot="file" slot-scope="{ file }" style="height: 100%;">
         <video class="el-upload-list__item-thumbnail" :src="file.url"></video>
         <span class="el-upload-list__item-actions">
-          <span
-            class="el-upload-list__item-preview"
-            @click="handlePictureCardPreview(file)"
-          >
+          <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
             <i class="el-icon-zoom-in"></i>
           </span>
-          <span
-            class="el-upload-list__item-delete"
-            @click="handleRemove(file)"
-          >
+          <span class="el-upload-list__item-delete" @click="handleRemove(file)">
             <i class="el-icon-delete"></i>
           </span>
         </span>
@@ -44,20 +28,26 @@
 </template>
 <script>
 import { uploadFile2 } from "@/api/common.js";
+import emitter from 'element-ui/lib/mixins/emitter.js';
 
 export default {
+  mixins: [emitter],
   props: {
-    data: {
+    defaultData: {
+      type: Array,
+      default: () => [],
+    },
+    value: {
       type: Array,
       default: () => [],
     },
     limit: {
       type: Number,
-      default: 10,
+      default: 1,
     },
     size: {
       type: Number,
-      default: 10,
+      default: 600,
     },
     multiple: {
       type: Boolean,
@@ -69,34 +59,50 @@ export default {
       dialogImageUrl: "",
       dialogVisible: false,
       disabled: false,
+      fileList: [],
+      data: [],
     };
   },
-  computed: {
-    fileList() {
-      return this.data.map((list) => {
-        return {
-          name: list.fileName,
-          url: list.filePath,
-        };
-      });
+  watch: {
+    defaultData: {
+      handler: function (val) {
+        this.fileList = (val || []).map((list) => {
+          return {
+            name: list.fileName,
+            url: list.filePath,
+            status: "success",
+            response: list,
+            filePath: list.filePath,
+            fileName: list.fileName,
+          };
+        });
+        this.data = this.fileList;
+        if (this.fileList.length >= this.limit) {
+          this.disabled = true;
+        }
+        this.$emit('input', this.data);
+        this.$emit('change', this.data);
+        // this.dispatch('ElFormItem', 'el.form.change', [this.data]);
+      },
+      immediate: true,
     },
   },
   methods: {
     async uploadImg(info) {
-      const formData = new FormData();
-      formData.append("file", info.file);
-      formData.append("business", 'history');
-
-      const res = await uploadFile2(formData);
-      this.$message.success("视频上传成功");
-      this.$emit("add", { ...res, uid: info.file.uid });
-      // info.onSuccess(info);
-      return res;
+      try {
+        const formData = new FormData();
+        formData.append("file", info.file);
+        formData.append("business", 'history');
+        const res = await uploadFile2(formData);
+        this.$message.success("视频上传成功");
+        return res;
+      } catch (error) {
+        this.$refs.upload.handleRemove(info.file);
+        throw new Error('上传失败');
+      }
     },
     handleRemove(file) {
       this.$refs.upload.handleRemove(file);
-      this.$emit("remove", file);
-      this.disabled = false;
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
@@ -110,24 +116,48 @@ export default {
 
       if (!isFormat) {
         this.$message.error("上传视频只能是 MP4、MOV 格式!");
+        this.$refs.upload.handleRemove(file);
+        return false;
       }
       if (!isLt2M) {
-        this.$message.error(`上传视频大小不能超过 ${this.size}MB!`);
+        this.$message.error(`上传图片大小不能超过 ${this.size}MB!`);
+        this.$refs.upload.handleRemove(file);
+        return false;
       }
-      return isFormat && isLt2M;
+      return true;
     },
     handleExceedImg() {
       this.$message.warning(`当前限制上传 ${this.limit} 个视频`);
     },
-    handleFileChange() {
-      if (this.$refs.upload.uploadFiles.length >= this.limit) {
+    emitChange(file, fileList) {
+      if (fileList.length >= this.limit) {
         this.disabled = true;
+      } else {
+        this.disabled = false;
       }
+      const dest = fileList.map((ele) => {
+        const { name, url, uid, status, response } = ele;
+        const { fileId, fileName, filePath } = response || {};
+        return {
+          name,
+          url,
+          uid,
+          status,
+          fileId,
+          fileName,
+          filePath,
+          response,
+        };
+      });
+      this.data = dest;
+      this.$emit('input', dest);
+      this.$emit('change', dest);
+      this.dispatch('ElFormItem', 'el.form.change', [dest]);
     }
   },
 };
 </script>
-
+  
 <style lang="scss" scoped>
 .upload-img-wrp {
   .el-icon-plus {
@@ -135,6 +165,7 @@ export default {
     font-weight: 500;
     margin-bottom: 14px;
   }
+
   &.disabled {
     ::v-deep .el-upload--picture-card {
       display: none;
@@ -147,6 +178,7 @@ export default {
     border-radius: 4px;
     outline: 0;
   }
+
   ::v-deep .el-upload-list__item {
     width: 124px;
     height: 122px;
@@ -160,6 +192,7 @@ export default {
       object-fit: contain;
     }
   }
+
   .default-upload {
     width: 124px;
     height: 122px;
@@ -167,9 +200,11 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     .desc {
       display: flex;
       flex-direction: column;
+
       & span {
         display: inline-block;
         font-size: 14px;
@@ -185,9 +220,11 @@ export default {
     cursor: pointer;
     width: 100%;
     height: 100%;
+
     img {
       object-fit: cover;
     }
+
     .delete-active {
       position: absolute;
       top: -12px;
@@ -197,3 +234,4 @@ export default {
   }
 }
 </style>
+  

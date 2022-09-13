@@ -1,36 +1,30 @@
 <template>
   <div class="upload-img-wrp" :class="{ disabled: disabled }">
-    <el-upload ref="upload" action="string" list-type="picture-card" :limit="limit"
-      accept="image/jpg, image/png, image/jpeg" :file-list="fileList" :before-upload="beforeImgUpload"
-      :on-exceed="handleExceedImg" :on-change="emitChange" :on-remove="emitChange" :http-request="uploadImg"
-      :multiple="multiple">
-      <div class="default-upload" slot="default">
-        <i class="el-icon-plus"></i>
-        <p class="desc">
-          <span>上传照片</span>
-        </p>
-      </div>
-      <div slot="file" slot-scope="{ file }">
-        <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-        <span class="el-upload-list__item-actions">
-          <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
-            <i class="el-icon-zoom-in"></i>
-          </span>
-          <span class="el-upload-list__item-delete" @click="handleRemove(file)">
-            <i class="el-icon-delete"></i>
-          </span>
-        </span>
-      </div>
+    <el-upload
+      ref="upload"
+      action="/"
+      drag
+      :limit="limit"
+      :accept="accept"
+      :file-list="fileList"
+      :before-upload="beforeImgUpload"
+      :on-exceed="handleExceedImg"
+      :http-request="uploadImg"
+      :multiple="multiple"
+      :on-change="emitChange"
+      :on-remove="emitChange"
+    >
+      <i class="el-icon-upload"></i>
+      <div class="el-upload__text">点击或将文件拖到这里上传</div>
+      <div v-if="tip" class="el-upload__text">{{ tip }}</div>
     </el-upload>
-    <el-dialog :visible.sync="dialogVisible">
-      <img width="100%" :src="dialogImageUrl" alt="" />
-    </el-dialog>
   </div>
 </template>
 <script>
 import { uploadFile2 } from "@/api/common.js";
 import emitter from 'element-ui/lib/mixins/emitter.js';
 
+// 区别于 uploadFile2,这里不需要特别的监听add\remove事件，通过v-model绑定value值获取到最新值。默认值通过defaultData传入
 export default {
   mixins: [emitter],
   props: {
@@ -44,21 +38,28 @@ export default {
     },
     limit: {
       type: Number,
-      default: 6,
-    },
-    size: {
-      type: Number,
       default: 10,
+    },
+    // 限制文件大小（MB）
+    limitSize: {
+      type: Number,
+      default: 30,
     },
     multiple: {
       type: Boolean,
       default: true,
     },
+    tip: {
+      type: String,
+      default: "",
+    },
+    accept: {
+      type: String,
+      default: "*",
+    },
   },
   data() {
     return {
-      dialogImageUrl: "",
-      dialogVisible: false,
       disabled: false,
       fileList: [],
       data: [],
@@ -75,6 +76,7 @@ export default {
             response: list,
             filePath: list.filePath,
             fileName: list.fileName,
+            fileId: list.fileId,
           };
         });
         this.data = this.fileList;
@@ -95,41 +97,34 @@ export default {
         formData.append("file", info.file);
         formData.append("business", 'history');
         const res = await uploadFile2(formData);
-        this.$message.success("图片上传成功");
+        this.$message.success("文件上传成功");
         return res;
       } catch (error) {
         this.$refs.upload.handleRemove(info.file);
         throw new Error('上传失败');
       }
     },
-    handleRemove(file) {
-      this.$refs.upload.handleRemove(file);
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
     beforeImgUpload(file) {
-      const isFormat =
-        file.type === "image/png" ||
-        file.type === "image/jpg" ||
-        file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < this.size;
+      //console.log(file);
+      const suffix = file.name.split(".").slice(-1)[0];
+      const isFormat = this.accept === "*" ? true : this.accept.indexOf(suffix) >= 0;
+      const isLimit = file.size / 1024 / 1024 < this.limitSize;
 
       if (!isFormat) {
-        this.$message.error("上传图片只能是 JPG、PNG 格式!");
-        this.$refs.upload.handleRemove(file);
-        return false;
+        this.$message.error("上传文件格式不正确!");
       }
-      if (!isLt2M) {
-        this.$message.error(`上传图片大小不能超过 ${this.size}MB!`);
-        this.$refs.upload.handleRemove(file);
-        return false;
+      if (!isLimit) {
+        this.$message.error(`上传文件大小不能超过 ${this.limitSize}MB!`);
       }
-      return true;
+      const r = isFormat && isLimit;
+
+      if (!r) {
+        this.$refs.upload.handleRemove(file);
+      }
+      return r;
     },
     handleExceedImg() {
-      this.$message.warning(`当前限制上传 ${this.limit} 张图片`);
+      this.$message.warning(`当前限制上传 ${this.limit} 个文件`);
     },
     emitChange(file, fileList) {
       if (fileList.length >= this.limit) {
@@ -155,46 +150,33 @@ export default {
       this.$emit('input', dest);
       this.$emit('change', dest);
       this.dispatch('ElFormItem', 'el.form.change', [dest]);
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .upload-img-wrp {
-  .el-icon-plus {
-    font-size: 30px;
-    font-weight: 500;
-    margin-bottom: 14px;
-  }
-
   &.disabled {
     ::v-deep .el-upload--picture-card {
       display: none;
     }
   }
-
   ::v-deep .el-upload--picture-card {
     width: 124px;
     height: 122px;
+    background: #f4f4f4;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.06);
     border-radius: 4px;
+    border: 0;
     outline: 0;
   }
-
   ::v-deep .el-upload-list__item {
-    width: 124px;
-    height: 122px;
+    width: 360px;
     overflow: visible;
     border: 0;
     outline: 0;
-
-    img {
-      width: 124px;
-      height: 124px;
-      object-fit: contain;
-    }
   }
-
   .default-upload {
     width: 124px;
     height: 122px;
@@ -202,14 +184,13 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     .desc {
+      height: 60px;
       display: flex;
       flex-direction: column;
-
       & span {
         display: inline-block;
-        font-size: 14px;
+        font-size: 10px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: rgba(0, 0, 0, 0.5);
@@ -222,11 +203,9 @@ export default {
     cursor: pointer;
     width: 100%;
     height: 100%;
-
     img {
       object-fit: cover;
     }
-
     .delete-active {
       position: absolute;
       top: -12px;

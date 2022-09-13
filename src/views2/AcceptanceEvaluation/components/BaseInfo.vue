@@ -62,7 +62,7 @@
       <div v-else>--</div>
     </el-form-item>
     <el-form-item label="“一老一小”服务场景的视频">
-      <ViewVideo v-if="form.oldSmallVideo && form.oldSmallVideo.length" :data="form.oldSmallVideo"></ViewVideo>
+      <ViewVideo2 v-if="form.oldSmallVideo && form.oldSmallVideo.length" :data="form.oldSmallVideo"></ViewVideo2>
       <div v-else>--</div>
     </el-form-item>
   </div>
