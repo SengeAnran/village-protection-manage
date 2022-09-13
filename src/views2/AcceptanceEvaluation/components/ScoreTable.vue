@@ -92,8 +92,6 @@ import rule from '@/mixins/rule';
 import role from '@/views2/mixins/role';
 import { TABLE_SCORE_DATA } from '../New/data';
 
-import { USER_TYPE } from '@/views2/utils/constants';
-
 export default {
   mixins: [rule, role],
   props: {
@@ -108,7 +106,6 @@ export default {
   },
   data() {
     return {
-      USER_TYPE,
       TABLE_TITLE: [
         { prop: 'content', label: '评价内容' },
         { prop: 'standard', label: '评价标准', width: 400, align: 'left' },

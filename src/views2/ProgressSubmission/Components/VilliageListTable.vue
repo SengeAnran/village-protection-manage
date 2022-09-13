@@ -145,7 +145,6 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import { USER_TYPE } from '@/views2/utils/constants';
 import { mapType } from '@/views2/utils/project';
 import _ from 'lodash';
 import { formatMoney, formatScore } from '@/views2/utils/formatter';
@@ -169,7 +168,6 @@ export default {
   },
   data() {
     return {
-      USER_TYPE,
       refill: false,
       isFirstTimeReport: false,
       lastUpdateTime: '',

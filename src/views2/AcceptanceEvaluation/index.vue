@@ -125,7 +125,7 @@ import ListSearch from './components/ListSearch.vue';
 import { getAuditList, getReportList, deleteItem, exportList, exportAnnex, unifiedReporting, uploadScan, materialPrinting } from '@/api2/acceptanceEvaluation';
 import { downloadFile } from '@/utils/data';
 import { CITY_LEVEL_RATING } from './constants';
-import { USER_TYPE, FINAL_STATUE_COLOR, DECLARE_STATUS, FINAL_STATUS } from '@/views2/utils/constants';
+import { FINAL_STATUE_COLOR, DECLARE_STATUS, FINAL_STATUS } from '@/views2/utils/constants';
 import { formatMoney } from '@/views2/utils/formatter';
 
 export default {
@@ -133,7 +133,6 @@ export default {
   mixins: [rule, role],
   data() {
     return {
-      USER_TYPE,
       DECLARE_STATUS,
       CITY_LEVEL_RATING,
       textColor: FINAL_STATUE_COLOR,

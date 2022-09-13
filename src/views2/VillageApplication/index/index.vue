@@ -183,7 +183,6 @@ import {
   materialPrinting,
   sortList,
   unifiedReporting,
-  uploadScan,
 } from '@/api2/villageManage';
 import { recVerify } from '@/api/villageManage';
 import { getvillagesExport } from '@/api2/villageManage';
@@ -191,7 +190,7 @@ import { downloadFile } from '@/utils/data';
 import rule from '@/mixins/rule';
 import role from '@/views2/mixins/role';
 
-import { FINAL_STATUS, USER_TYPE, FINAL_STATUE_COLOR, DECLARE_STATUS } from '@/views2/utils/constants';
+import { FINAL_STATUS, FINAL_STATUE_COLOR, DECLARE_STATUS } from '@/views2/utils/constants';
 import { XIANJI_ACTION, SHIJI_ACTION, ADMIN_ACTION, CUNJI_ACTION, checkCountryUnifiedReport, checkCityUnifiedReport } from './utils';
 
 import { formatMoney } from '@/views2/utils/formatter';
@@ -211,7 +210,6 @@ export default {
   data() {
     return {
       FINAL_STATUS,
-      USER_TYPE,
       exportFileName: '创建申报信息汇总表',
       selections: [],
       query: {
@@ -358,21 +356,6 @@ export default {
         this.sortDialogVisible = false;
         this.$refs.crud.getItems();
         this.$notify.success('提交排序成功！');
-      });
-    },
-    // 提交排序
-    // todo delete
-    onSubmitUploadScan() {
-      const data = {
-        id: this.form2.id,
-        fileId: this.form2.annexFiles[0].fileId,
-      };
-      uploadScan(data).then(() => {
-        this.form2.id = null;
-        this.form2.annexFiles = [];
-        this.ScanDocDialogVisible = false;
-        this.$refs.crud.getItems();
-        this.$notify.success('扫描件上传成功！');
       });
     },
     // 审核详情

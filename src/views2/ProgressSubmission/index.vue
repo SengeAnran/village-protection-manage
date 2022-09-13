@@ -140,7 +140,6 @@ import { downloadFile } from '@/utils/data';
 import role from '@/views2/mixins/role';
 
 import { exportDetail, getInforExport, getList } from '@/api2/progressSubmission';
-import { USER_TYPE } from '@/views2/utils/constants';
 import { formatMoney } from '@/views2/utils/formatter';
 // import qs from "qs";
 export default {
@@ -151,7 +150,6 @@ export default {
     //console.log(year);
 
     return {
-      USER_TYPE,
       REPORT_STATUS_COLOR,
       query: {
         declarationBatch: '',

@@ -10,7 +10,6 @@
 import CountyNew from './CountyNew.vue';
 import CityNew from './CityNew.vue';
 import ProvinceNew from './ProvinceNew.vue';
-import { USER_TYPE } from '@/views2/utils/constants';
 import role from '@/views2/mixins/role';
 
 export default {
@@ -23,7 +22,6 @@ export default {
   },
   data() {
     return {
-      USER_TYPE,
       form: {},
     };
   },

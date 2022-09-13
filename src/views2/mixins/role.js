@@ -1,6 +1,7 @@
 import { USER_TYPE } from '../utils/constants';
 import { mapGetters } from 'vuex';
 
+// 当前 县级和县级领导权限相同。当前市级和市级领导权限相同。
 export default {
   computed: {
     ...mapGetters({

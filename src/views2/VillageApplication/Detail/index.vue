@@ -165,10 +165,9 @@
               <p class="content">{{ form.cityOpinion }}</p>
             </el-form-item>
           </div>
-          <div class="input-item-wrp">
+          <div class="input-item-wrp" v-if="form.stampedFile">
             <el-form-item label="附件上传" prop="introduction">
-              <ViewFile v-if="form.stampedFile" :data="form.stampedFile" />
-              <span v-else>--</span>
+              <ViewFile :data="form.stampedFile" />
             </el-form-item>
           </div>
           <div class="input-item-wrp">
@@ -277,48 +276,17 @@
           </el-input>
         </el-form-item>
         <el-form-item v-if="(CITY || CITY_LEADER) && reviewForm.status === 1" label="附件上传" :rules="rule.upload" prop="stampedFiles">
-          <UploadFile2
+          <UploadFile22
             tip="支持格式：.doc, .docx, .pdf"
             accept=".doc,.docx,.pdf"
-            :data="reviewForm.stampedFiles"
+            v-model="reviewForm.stampedFiles"
+            :defaultData="stampedFilesDefault"
             :limit="1"
-            @add="onFileAdd($event, 'stampedFiles')"
-            @remove="onFileRemove($event, 'stampedFiles')"
           />
           <p style="width: 100%; color: #ff6b00" class="py-4 leading-5">
             <i class="el-icon-warning"></i>请上传盖章完成的《未来乡村创建申报表》扫描件
           </p>
         </el-form-item>
-        <!-- <el-form-item
-          v-if="userInfo.roleId === 2"
-          label="审核意见附件"
-          prop="processFilesArr"
-          :rules="rule.upload"
-        >
-          <p style="width: 42%; color: #FF6B00" class="py-4 leading-5">
-            <i class="el-icon-warning"></i>上传《未来乡村创建申报表》市级盖章扫描件
-          </p>
-          <UploadFile2
-            tip="支持格式：.doc, .docx, .pdf"
-            accept=".doc,.docx,.pdf"
-            :data="reviewForm.processFilesArr"
-            @add="onFileAdd($event, 'processFilesArr')"
-            @remove="onFileRemove($event, 'processFilesArr')"
-          />
-        </el-form-item> -->
-<!--          <el-form-item-->
-<!--            v-else-->
-<!--            label="审核意见附件"-->
-<!--            prop="processFilesArr"-->
-<!--          >-->
-<!--            <UploadFile2-->
-<!--              tip="支持格式：.doc, .docx, .pdf"-->
-<!--              accept=".doc,.docx,.pdf"-->
-<!--              :data="reviewForm.processFilesArr"-->
-<!--              @add="onFileAdd($event, 'processFilesArr')"-->
-<!--              @remove="onFileRemove($event, 'processFilesArr')"-->
-<!--            />-->
-<!--          </el-form-item>-->
         <el-form-item style="text-align: center">
           <el-button @click="$router.back()">取消</el-button>
           <el-button type="primary" @click="validateForm">确定</el-button>
@@ -334,7 +302,7 @@ import role from '@/views2/mixins/role';
 import { getVillageItemDetail, getvillageDetailExport, verify } from "@/api2/villageManage";
 import { downloadFile } from "@/utils/data"
 import { formatMoney } from '@/views2/utils/formatter';
-import { FINAL_STATUS, USER_TYPE } from '@/views2/utils/constants';
+import { FINAL_STATUS } from '@/views2/utils/constants';
 
 export default {
   mixins: [rule, role],
@@ -358,7 +326,6 @@ export default {
   data() {
     return {
       FINAL_STATUS,
-      USER_TYPE,
       form: {
         annexFiles: [], // 附件
         cityAuditFile: [], // 附件
@@ -401,6 +368,7 @@ export default {
         stampedFiles: [],
         // processFilesArr: [],
       },
+      stampedFilesDefault: [],
       finalStatus: null,
       // cityVerify: false,
       total: 0,
@@ -421,22 +389,11 @@ export default {
     },
   },
   mounted() {
-    console.log('xxxxxx --->', this.type);
+    // console.log('xxxxxx --->', this.type);
     this.init();
   },
   methods: {
     formatMoney,
-    onFileAdd(file, key) {
-      this.reviewForm[key].push(file);
-    },
-    onFileRemove(file, key) {
-      const index = this.reviewForm[key].findIndex((item) => {
-        return item.uid === file.uid || item.filePath === file.url;
-      });
-      if (index !== -1) {
-        this.reviewForm[key].splice(index, 1);
-      }
-    },
     validateForm() {
       this.$refs["reviewForm"].validate((valid) => {
         if (valid) {
@@ -465,11 +422,12 @@ export default {
             this.reviewForm.opinion = res.provinceOpinion;
           }
         }
-        this.form.stampedFile = res.stampedFile;
+        const stampedFile = res.stampedFile;
+        this.form.stampedFile = stampedFile ? [stampedFile] : [];
         this.form.meetingPic = meetingPic;
         this.form.createScenario = res.createScenarioFile ? [res.createScenarioFile] : [];
-        this.reviewForm.stampedFiles = res.stampedFile ? [res.stampedFile] : [];
-        // console.log('xxxxxxx', this.form.stampedFile, res.stampedFile);
+        this.stampedFilesDefault = stampedFile ? [stampedFile] : [];
+        this.reviewForm.stampedFiles = [];
         this.loading = false;
         //console.log(res);
       });
