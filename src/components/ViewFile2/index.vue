@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-col justify-start items-start">
+  <div class="container">
     <div class="item flex items-center content-between" v-for="(item, i) in data" :key="i">
-      <div>
+      <span class="content">
         <i class="el-icon-link"></i>
         <span>{{ item.fileName }}</span>
-      </div>
-      <div class="ml-3">
+      </span>
+      <div class="ml-3 flex-shrink-0">
         <el-link class="action" @click.stop="isDownload(item.filePath, item.fileName)">下载</el-link>
         <el-link class="action" @click.stop="preview(item.filePath, item.fileName)">在线预览</el-link>
       </div>
@@ -85,5 +85,10 @@ export default {
   display: inline-block;
   margin-left: 8px;
   color: #7bb9f6;
+}
+.content {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>

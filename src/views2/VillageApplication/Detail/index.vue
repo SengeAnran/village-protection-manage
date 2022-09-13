@@ -167,7 +167,7 @@
           </div>
           <div class="input-item-wrp" v-if="form.stampedFile">
             <el-form-item label="附件上传" prop="introduction">
-              <ViewFile :data="form.stampedFile" />
+              <ViewFile2 :data="form.stampedFile" />
             </el-form-item>
           </div>
           <div class="input-item-wrp">
