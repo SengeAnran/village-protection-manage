@@ -9,6 +9,7 @@
         :update-method="updateMethod"
         :delete-method="deleteMethod"
         :before-edit-method="beforeEditMethod"
+        :before-save-method="beforeSaveMethod"
         :query.sync="query"
         :form.sync="form"
         id-key="id"
@@ -23,31 +24,43 @@
         :permission-delete="4100"
       >
         <template v-slot:form>
-          <el-form-item label="创建批次：" prop="batch" :rules="rule.input">
+          <el-form-item label="申报批次：" prop="batch" :rules="rule.input">
             <el-input v-model="form.batch" maxlength="20"></el-input>
           </el-form-item>
-          <el-form-item label="创建时间：">
-            <el-col :span="11">
-              <!-- <el-date-picker type="date" placeholder="选择日期" v-model="form.startTime"> </el-date-picker> -->
-              <el-date-picker
-                type="date"
-                placeholder="选择日期"
-                v-model="form.startTime"
-                style="width: 100%"
-                value-format="yyyy-MM-dd"
-              ></el-date-picker>
-            </el-col>
-            <el-col class="line" :span="2">至</el-col>
-            <el-col :span="11">
-              <el-date-picker
-                type="date"
-                placeholder="选择日期"
-                v-model="form.endTime"
-                style="width: 100%"
-                value-format="yyyy-MM-dd"
-              ></el-date-picker>
-            </el-col>
+
+          <el-form-item label="申报时间：" prop="declareTime">
+            <el-date-picker
+              v-model="form.declareTime"
+              value-format="yyyy-MM-dd"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            >
+            </el-date-picker>
           </el-form-item>
+          <!--          <el-form-item label="申报时间：">-->
+          <!--            <el-col :span="11">-->
+          <!--              &lt;!&ndash; <el-date-picker type="date" placeholder="选择日期" v-model="form.startTime"> </el-date-picker> &ndash;&gt;-->
+          <!--              <el-date-picker-->
+          <!--                type="date"-->
+          <!--                placeholder="选择日期"-->
+          <!--                v-model="form.startTime"-->
+          <!--                style="width: 100%"-->
+          <!--                value-format="yyyy-MM-dd"-->
+          <!--              ></el-date-picker>-->
+          <!--            </el-col>-->
+          <!--            <el-col class="line" :span="2">至</el-col>-->
+          <!--            <el-col :span="11">-->
+          <!--              <el-date-picker-->
+          <!--                type="date"-->
+          <!--                placeholder="选择日期"-->
+          <!--                v-model="form.endTime"-->
+          <!--                style="width: 100%"-->
+          <!--                value-format="yyyy-MM-dd"-->
+          <!--              ></el-date-picker>-->
+          <!--            </el-col>-->
+          <!--          </el-form-item>-->
         </template>
         <!--        <template v-slot:tableAction="scope">-->
         <!--          <div style="text-align: left">-->
@@ -93,8 +106,9 @@ export default {
       form: {
         // type: type, //type 1：验收时间，2：申报批次
         batch: '',
-        endTime: '',
-        startTime: '',
+        declareTime: [],
+        // endTime: '',
+        // startTime: '',
       },
       addMethod: setAdd,
       deleteMethod: setDelete,
@@ -125,13 +139,21 @@ export default {
         });
       });
     },
+    beforeSaveMethod() {
+      const [startTime, endTime] = this.form.declareTime;
+      return {
+        ...this.form,
+        startTime,
+        endTime,
+      };
+    },
     beforeEditMethod(item) {
       console.log(item, 11111);
       this.form.batch = item.batch;
       // this.form.type = type; //type 1：验收时间，2：申报批次
       this.form.id = item.id;
-      this.form.endTime = item.endTime;
-      this.form.startTime = item.startTime;
+      this.form.declareTime = [item.startTime, item.endTime];
+      // this.form.startTime = ;
     },
 
     changeTime(item) {
