@@ -28,7 +28,7 @@
             <el-input v-model="form.batch" maxlength="20"></el-input>
           </el-form-item>
 
-          <el-form-item label="申报时间：" prop="declareTime">
+          <el-form-item label="申报时间：" prop="declareTime" :rules="rule.multiSelect">
             <el-date-picker
               v-model="form.declareTime"
               value-format="yyyy-MM-dd"
