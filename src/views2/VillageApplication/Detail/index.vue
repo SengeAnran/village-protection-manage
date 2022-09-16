@@ -2,22 +2,15 @@
   <div class="block">
     <div class="nav-root mb-4">
       <RouterBack>详情</RouterBack>
-      <el-button class="export-button" @click="clickExport">导出</el-button>
+      <!--      <el-button class="export-button" @click="clickExport">导出</el-button>-->
     </div>
     <div class="box-title">申报详情</div>
     <div class="examine-result">
-      <img v-if="finalStatus === 4" src="../imgs/pass.png" alt="">
-      <img v-if="finalStatus === 3" src="../imgs/pro_reject.png" alt="">
-      <img v-if="finalStatus === 1" src="../imgs/reject.png" alt="">
+      <img v-if="finalStatus === 4" src="../imgs/pass.png" alt="" />
+      <img v-if="finalStatus === 3" src="../imgs/pro_reject.png" alt="" />
+      <img v-if="finalStatus === 1" src="../imgs/reject.png" alt="" />
     </div>
-    <el-form
-      style="padding-left: 14px"
-      ref="form"
-      class="form"
-      label-position="top"
-      :model="form"
-      label-width="80px"
-    >
+    <el-form style="padding-left: 14px" ref="form" class="form" label-position="top" :model="form" label-width="80px">
       <div class="input-item-wrp">
         <el-form-item label="创建村（片区）名称" prop="villageId">
           <p class="content">
@@ -25,13 +18,13 @@
           </p>
         </el-form-item>
         <el-form-item label="推荐次序" prop="countrySortNum">
-          <p class="content">{{ form.countrySortNum || '--'}}</p>
+          <p class="content">{{ form.countrySortNum || '--' }}</p>
         </el-form-item>
         <el-form-item label="创建批次" prop="declarationBatch">
           <p class="content">{{ form.declarationBatch }}</p>
         </el-form-item>
         <el-form-item label="创建周期" prop="resPopulation">
-          <p class="content">{{ (form.startTime || '').slice(0,7) }} 至 {{( form.endTime || '').slice(0,7) }}</p>
+          <p class="content">{{ (form.startTime || '').slice(0, 7) }} 至 {{ (form.endTime || '').slice(0, 7) }}</p>
         </el-form-item>
         <el-form-item label="领办领导">
           <p class="content">{{ form.leader }}</p>
@@ -90,6 +83,7 @@
             <p class="content">{{ form.governmentText }}</p>
           </el-form-item>
         </div>
+        <hr />
         <h4 class="block-tit">浙江省未来乡村创建方案</h4>
         <p class="content mt-4">
           <ViewFile2 v-if="form.createScenario && form.createScenario.length" :data="form.createScenario" />
@@ -111,6 +105,7 @@
           </el-form-item>
         </div> -->
       </div>
+      <hr style="margin-top: 18px" />
       <h4 class="block-tit">未来乡村创建项目备案表</h4>
       <div class="input-item-wrp">
         <el-form-item label="负责人" prop="resPopulation">
@@ -124,12 +119,7 @@
         </el-form-item>
       </div>
       <el-form-item v-if="!loading">
-        <VilliageListTable
-          :data="form.projects"
-          :hiddenEdit="false"
-          :hiddenDetail="true"
-          hiddenOperation
-        />
+        <VilliageListTable :data="form.projects" :hiddenEdit="false" :hiddenDetail="true" hiddenOperation />
       </el-form-item>
       <div id="verify"></div>
     </el-form>
@@ -137,21 +127,14 @@
     <!-- 市级审核详情。如果是市级角色，并且处于编辑模式则不展示此结果 -->
     <div
       v-if="
-        ((cityVerify && !CITY && !CITY_LEADER) || (!cityVerify)) && 
+        ((cityVerify && !CITY && !CITY_LEADER) || !cityVerify) &&
         finalStatus > FINAL_STATUS.CITY_VERIFY_PENDING &&
         finalStatus <= FINAL_STATUS.CITY_REPORT_PENDING &&
         finalStatus !== FINAL_STATUS.COUNTRY_REPORT_PENDING
       "
     >
       <div class="box-title">审核详情</div>
-      <el-form
-        style="padding-left: 14px"
-        ref="form"
-        class="form"
-        label-position="top"
-        :model="form"
-        label-width="80px"
-      >
+      <el-form style="padding-left: 14px" ref="form" class="form" label-position="top" :model="form" label-width="80px">
         <!-- 市级审核结果-->
         <div class="examine-item">
           <div class="examine-title">设区市比选意见</div>
@@ -176,13 +159,15 @@
             </el-form-item>
           </div>
         </div>
-<!--          省级审核结果-->
+        <!--          省级审核结果-->
         <div
           v-if="
-            ((cityVerify && !PROVINCE) || (!cityVerify)) && 
-            (finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED)
+            ((cityVerify && !PROVINCE) || !cityVerify) &&
+            (finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED ||
+              finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED)
           "
-          class="examine-item">
+          class="examine-item"
+        >
           <div class="examine-title">省级审核详情</div>
           <div class="input-item-wrp">
             <el-form-item label="审核结果" prop="introduction">
@@ -195,26 +180,26 @@
               <p class="content">{{ form.provinceOpinion }}</p>
             </el-form-item>
           </div>
-<!--            <div class="input-item-wrp">-->
-<!--              <el-form-item label="审核意见附件" prop="introduction">-->
-<!--&lt;!&ndash;                <p class="content fu-file" v-for="(item, index) in form.provinceAuditFile" :key="index">&ndash;&gt;-->
-<!--&lt;!&ndash;                  <a :href="item.filePath">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <i class="el-icon-link"></i>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <span>&ndash;&gt;-->
-<!--&lt;!&ndash;                    {{ item.fileName }}&ndash;&gt;-->
-<!--&lt;!&ndash;                  </span>&ndash;&gt;-->
-<!--&lt;!&ndash;                  </a>&ndash;&gt;-->
-<!--&lt;!&ndash;                </p>&ndash;&gt;-->
-<!--                <p class="content fu-file" v-if="form.provinceAuditFile">-->
-<!--                  <a :href="form.provinceAuditFile.filePath">-->
-<!--                    <i class="el-icon-link"></i>-->
-<!--                    <span>-->
-<!--                    {{ form.provinceAuditFile.fileName }}-->
-<!--                  </span>-->
-<!--                  </a>-->
-<!--                </p>-->
-<!--              </el-form-item>-->
-<!--            </div>-->
+          <!--            <div class="input-item-wrp">-->
+          <!--              <el-form-item label="审核意见附件" prop="introduction">-->
+          <!--&lt;!&ndash;                <p class="content fu-file" v-for="(item, index) in form.provinceAuditFile" :key="index">&ndash;&gt;-->
+          <!--&lt;!&ndash;                  <a :href="item.filePath">&ndash;&gt;-->
+          <!--&lt;!&ndash;                    <i class="el-icon-link"></i>&ndash;&gt;-->
+          <!--&lt;!&ndash;                    <span>&ndash;&gt;-->
+          <!--&lt;!&ndash;                    {{ item.fileName }}&ndash;&gt;-->
+          <!--&lt;!&ndash;                  </span>&ndash;&gt;-->
+          <!--&lt;!&ndash;                  </a>&ndash;&gt;-->
+          <!--&lt;!&ndash;                </p>&ndash;&gt;-->
+          <!--                <p class="content fu-file" v-if="form.provinceAuditFile">-->
+          <!--                  <a :href="form.provinceAuditFile.filePath">-->
+          <!--                    <i class="el-icon-link"></i>-->
+          <!--                    <span>-->
+          <!--                    {{ form.provinceAuditFile.fileName }}-->
+          <!--                  </span>-->
+          <!--                  </a>-->
+          <!--                </p>-->
+          <!--              </el-form-item>-->
+          <!--            </div>-->
           <div class="input-item-wrp">
             <el-form-item label="审核时间" prop="introduction">
               <p class="content">{{ form.provinceAuditTime }}</p>
@@ -233,11 +218,14 @@
     <div
       v-if="
         cityVerify &&
-        (((CITY || CITY_LEADER) && (finalStatus === FINAL_STATUS.CITY_VERIFY_PENDING || finalStatus === FINAL_STATUS.CITY_REPORT_PENDING || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED)) ||
-        (PROVINCE && finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PENDING))
+        (((CITY || CITY_LEADER) &&
+          (finalStatus === FINAL_STATUS.CITY_VERIFY_PENDING ||
+            finalStatus === FINAL_STATUS.CITY_REPORT_PENDING ||
+            finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED)) ||
+          (PROVINCE && finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PENDING))
       "
     >
-      <div class="box-title" v-text="PROVINCE ? '审核':'设区市比选意见'"></div>
+      <div class="box-title" v-text="PROVINCE ? '审核' : '设区市比选意见'"></div>
       <el-form
         style="padding-left: 14px"
         ref="reviewForm"
@@ -252,15 +240,20 @@
             <el-radio :label="0">不通过</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-if="PROVINCE && reviewForm.status === 0" label="不通过类型" prop="rejectType" :rules="rule.select">
+        <el-form-item
+          v-if="PROVINCE && reviewForm.status === 0"
+          label="不通过类型"
+          prop="rejectType"
+          :rules="rule.select"
+        >
           <el-radio-group v-model="reviewForm.rejectType">
             <el-radio :label="2">驳回市级重填</el-radio>
             <el-radio :label="1">驳回县级重填</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item
-          v-if="(CITY || CITY_LEADER) || reviewForm.status === 0"
-          :label="(CITY || CITY_LEADER) ? '请填写比选意见' : '请填写审核意见'"
+          v-if="CITY || CITY_LEADER || reviewForm.status === 0"
+          :label="CITY || CITY_LEADER ? '请填写比选意见' : '请填写审核意见'"
           prop="opinion"
           :rules="rule.input"
         >
@@ -268,14 +261,19 @@
             style="width: 42%"
             type="textarea"
             :rows="5"
-            :placeholder="(CITY || CITY_LEADER) ? '请输入比选意见' : '请输入审核意见'"
+            :placeholder="CITY || CITY_LEADER ? '请输入比选意见' : '请输入审核意见'"
             maxlength="300"
             show-word-limit
             v-model="reviewForm.opinion"
           >
           </el-input>
         </el-form-item>
-        <el-form-item v-if="(CITY || CITY_LEADER) && reviewForm.status === 1" label="附件上传" :rules="rule.upload" prop="stampedFiles">
+        <el-form-item
+          v-if="(CITY || CITY_LEADER) && reviewForm.status === 1"
+          label="附件上传"
+          :rules="rule.upload"
+          prop="stampedFiles"
+        >
           <UploadFile22
             tip="支持格式：.doc, .docx, .pdf"
             accept=".doc,.docx,.pdf"
@@ -296,11 +294,11 @@
   </div>
 </template>
 <script>
-import VilliageListTable from "../Components/VilliageListTable";
-import rule from "@/mixins/rule";
+import VilliageListTable from '../Components/VilliageListTable';
+import rule from '@/mixins/rule';
 import role from '@/views2/mixins/role';
-import { getVillageItemDetail, getvillageDetailExport, verify } from "@/api2/villageManage";
-import { downloadFile } from "@/utils/data"
+import { getVillageItemDetail, getvillageDetailExport, verify } from '@/api2/villageManage';
+import { downloadFile } from '@/utils/data';
 import { formatMoney } from '@/views2/utils/formatter';
 import { FINAL_STATUS } from '@/views2/utils/constants';
 
@@ -309,13 +307,14 @@ export default {
   props: {
     type: {
       type: String,
-      default: "add",
+      default: 'add',
     },
     data: {
       type: Object,
       default: () => {},
     },
-    cityVerify: { // true，编辑模式。FALSE查看模式
+    cityVerify: {
+      // true，编辑模式。FALSE查看模式
       type: [String, Boolean],
       default: false,
     },
@@ -331,33 +330,33 @@ export default {
         cityAuditFile: [], // 附件
         stampedFiles: [], // 附件
         provinceAuditFile: [], // 附件
-        villageName: "", //村庄地址
-        town: "", //村庄地址
-        villageId: "", //村庄地址
-        countrySortNum: "", //推荐次序
-        declarationBatch: "", //申报批次
-        startTime: "", //创建周期 开始
-        endTime: "", //创建周期 结束
-        leader: "", //领办领导
-        construct: "", //建设单位
-        contactPerson: "", // 联系人
-        phone: "", //联系方式
-        huNum: "", //户籍人口数（万人）
-        personNum: "", //常住人口数（万人）
-        investNum: "", //计划总投资（万元）
-        incomeNum: "", //村级集体经济年经营性收入（万元）
+        villageName: '', //村庄地址
+        town: '', //村庄地址
+        villageId: '', //村庄地址
+        countrySortNum: '', //推荐次序
+        declarationBatch: '', //申报批次
+        startTime: '', //创建周期 开始
+        endTime: '', //创建周期 结束
+        leader: '', //领办领导
+        construct: '', //建设单位
+        contactPerson: '', // 联系人
+        phone: '', //联系方式
+        huNum: '', //户籍人口数（万人）
+        personNum: '', //常住人口数（万人）
+        investNum: '', //计划总投资（万元）
+        incomeNum: '', //村级集体经济年经营性收入（万元）
 
         villageProperty: [], //村庄属性（可多选）
 
-        basicText: "", //基本情况
-        meetingText: "", //村民代表会议（村民会议）关于未来乡村建设方案决议情况
+        basicText: '', //基本情况
+        meetingText: '', //村民代表会议（村民会议）关于未来乡村建设方案决议情况
         meetingPic: [],
-        townText: "", //乡、镇（街道）人民政府（办事处）意见
-        departmentText: "", //县（市、区）部门审核意见
-        governmentText: "", //县（市、区）人民政府意见
-        projectFilingPerson: "", //填表人
-        projectFilingPhone: "", //联系电话
-        projectFilingAudit: "", //审核人
+        townText: '', //乡、镇（街道）人民政府（办事处）意见
+        departmentText: '', //县（市、区）部门审核意见
+        governmentText: '', //县（市、区）人民政府意见
+        projectFilingPerson: '', //填表人
+        projectFilingPhone: '', //联系电话
+        projectFilingAudit: '', //审核人
         projects: [], //项目列表
         richText: '23333', //
       },
@@ -373,17 +372,17 @@ export default {
       // cityVerify: false,
       total: 0,
 
-      tips: "",
+      tips: '',
       dialogVisible: false,
-      dialogId: "",
-      textarea: "",
+      dialogId: '',
+      textarea: '',
       status: null,
       loading: true,
     };
   },
   watch: {
     type(val) {
-      if (val === "edit") {
+      if (val === 'edit') {
         this.form = this.data;
       }
     },
@@ -395,7 +394,7 @@ export default {
   methods: {
     formatMoney,
     validateForm() {
-      this.$refs["reviewForm"].validate((valid) => {
+      this.$refs['reviewForm'].validate((valid) => {
         if (valid) {
           this.submit();
         } else {
@@ -409,7 +408,10 @@ export default {
       if (!id) return;
       getVillageItemDetail({ id }).then((res) => {
         this.form = res;
-        const meetingPic = (res.meetingPic || '').split(',').filter((ele) => Boolean(ele)).map((ele) => ({ filePath: ele }));
+        const meetingPic = (res.meetingPic || '')
+          .split(',')
+          .filter((ele) => Boolean(ele))
+          .map((ele) => ({ filePath: ele }));
         this.finalStatus = res.finalStatus;
         if (this.CITY_LEADER || this.CITY) {
           if (this.cityVerify > 0) {
@@ -434,8 +436,8 @@ export default {
     },
     async clickExport() {
       const { id } = this.$route.query;
-      const res = await getvillageDetailExport({id})
-      downloadFile(res, "浙江省未来乡村创建申报表", "application/msword")
+      const res = await getvillageDetailExport({ id });
+      downloadFile(res, '浙江省未来乡村创建申报表', 'application/msword');
     },
     countTotal() {
       return HISTORY_BUILDINGS.reduce((pre, next) => {
@@ -444,37 +446,40 @@ export default {
     },
     verifyRes(index) {
       switch (index) {
-        case 0 : return '不通过';
-        case 1 : return '通过';
-        case -1 : return '不通过';
-        default: return ''
+        case 0:
+          return '不通过';
+        case 1:
+          return '通过';
+        case -1:
+          return '不通过';
+        default:
+          return '';
       }
     },
     verify() {
       // this.tips = "请填写审核意见";
-        // this.userInfo.roleId === 1
-        //   ? "是否通过该项目审核？"
-        //   : "是否通过该项目审核，若审核通过则项目提交至省级。";
+      // this.userInfo.roleId === 1
+      //   ? "是否通过该项目审核？"
+      //   : "是否通过该项目审核，若审核通过则项目提交至省级。";
       // this.textarea = "";
       this.dialogId = this.$route.query.id;
       this.dialogVisible = true;
-
     },
     onConfirm() {
-      if (this.status === "0" || this.status === "1") {
+      if (this.status === '0' || this.status === '1') {
         this.dialogId = this.$route.query.id;
         this.submit();
         // this.dialogVisible = false;
       } else {
-        this.$notify.error("请选择通过或不通过");
+        this.$notify.error('请选择通过或不通过');
       }
     },
     async submit() {
       //console.log(this.reviewForm.processFilesArr);
       const { id } = this.$route.query;
       const { stampedFiles, status } = this.reviewForm;
-      const stampedFile = status && (stampedFiles && stampedFiles[0]) || {};
-      const verifyType = (this.CITY || this.CITY_LEADER) ? 1 : 2;//1:市级审核，2：省级审核
+      const stampedFile = (status && stampedFiles && stampedFiles[0]) || {};
+      const verifyType = this.CITY || this.CITY_LEADER ? 1 : 2; //1:市级审核，2：省级审核
       await verify({
         id: id, // 村庄id
         status: status, // 审核状态 通过:1 不通过:0
@@ -483,7 +488,7 @@ export default {
         verifyType, //1:市级审核，2：省级审核
         stampedFile: stampedFile.fileId || undefined,
       });
-      this.$notify.success("操作成功");
+      this.$notify.success('操作成功');
       this.$router.back();
     },
   },
@@ -499,13 +504,13 @@ export default {
     flex-shrink: 0;
   }
 
-  ::v-deep .router-back{
+  ::v-deep .router-back {
     margin-bottom: 0 !important;
   }
 }
 .box-title {
   height: 40px;
-  background: #F5FAFF;
+  background: #f5faff;
   line-height: 40px;
   font-size: 18px;
   font-family: PingFangSC-Medium, PingFang SC;
@@ -527,7 +532,6 @@ export default {
       color: #999;
       font-size: 16px;
     }
-
   }
   .block-tit {
     margin-top: 18px;
@@ -536,7 +540,7 @@ export default {
     font-family: PingFangSC-Medium, PingFang SC;
     font-weight: 500;
     color: #333333;
-    line-height: 25px
+    line-height: 25px;
   }
 
   .input {
@@ -591,7 +595,7 @@ export default {
     }
   }
   .fu-file:hover {
-    color: #1492FF;
+    color: #1492ff;
   }
   .status {
     margin-bottom: 20px;
@@ -616,5 +620,4 @@ export default {
     text-align: right;
   }
 }
-
 </style>

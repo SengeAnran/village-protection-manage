@@ -41,20 +41,10 @@
           <el-col :span="12">
             <el-form-item label="创建周期" prop="startTime" :rules="rule.date">
               计划从
-              <el-date-picker
-                v-model="form.startTime"
-                type="month"
-                placeholder="选择月"
-                value-format="yyyy-MM-DD HH:mm:ss"
-              >
+              <el-date-picker v-model="form.startTime" type="month" placeholder="选择月" value-format="yyyy-MM">
               </el-date-picker>
               至
-              <el-date-picker
-                v-model="form.endTime"
-                type="month"
-                placeholder="选择月"
-                value-format="yyyy-MM-DD HH:mm:ss"
-              >
+              <el-date-picker v-model="form.endTime" type="month" placeholder="选择月" value-format="yyyy-MM">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -475,6 +465,13 @@ export default {
       // console.log('xxxxxx _.', this.form);
       this.$refs['form'].validate((valid) => {
         if (valid) {
+          // 校验总额是否相等
+          if (!this.verificationTotal(this.form.projects, this.form.investNum)) {
+            return this.$message({
+              message: '项目填报金额与总投资额不一致！',
+              type: 'warning',
+            });
+          }
           const annexIds = this.form.annexFiles.map((i) => i.fileId).toString();
           const createScenario = this.form.createScenario.map((ele) => ele.fileId).join(',');
 
@@ -497,7 +494,16 @@ export default {
         }
       });
     },
-
+    // 校验总额是否相等
+    verificationTotal(arr, allNum) {
+      console.log(arr, allNum);
+      let projectAllNum = 0;
+      arr.forEach((i) => {
+        projectAllNum += i.planFirstDrive + i.planFirstGov + i.planSecondDrive + i.planSecondGov;
+      });
+      console.log(projectAllNum);
+      return projectAllNum === allNum;
+    },
     // 新增申报item
     submit(params) {
       villageDeclaration(params).then(() => {
