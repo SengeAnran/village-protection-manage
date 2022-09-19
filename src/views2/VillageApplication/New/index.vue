@@ -41,10 +41,20 @@
           <el-col :span="12">
             <el-form-item label="创建周期" prop="startTime" :rules="rule.date">
               计划从
-              <el-date-picker v-model="form.startTime" type="month" placeholder="选择月" value-format="yyyy-MM">
+              <el-date-picker
+                v-model="form.startTime"
+                type="month"
+                placeholder="选择月"
+                value-format="yyyy-MM-DD HH:mm:ss"
+              >
               </el-date-picker>
               至
-              <el-date-picker v-model="form.endTime" type="month" placeholder="选择月" value-format="yyyy-MM">
+              <el-date-picker
+                v-model="form.endTime"
+                type="month"
+                placeholder="选择月"
+                value-format="yyyy-MM-DD HH:mm:ss"
+              >
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -499,7 +509,8 @@ export default {
       console.log(arr, allNum);
       let projectAllNum = 0;
       arr.forEach((i) => {
-        projectAllNum += i.planFirstDrive + i.planFirstGov + i.planSecondDrive + i.planSecondGov;
+        projectAllNum +=
+          (i.planFirstDrive || 0) + (i.planFirstGov || 0) + (i.planSecondDrive || 0) + (i.planSecondGov || 0);
       });
       console.log(projectAllNum);
       return projectAllNum === allNum;

@@ -1,5 +1,6 @@
 <template>
   <div class="block">
+    <el-button v-if="showEdit()" class="edit-btn" type="primary" @click="handleEdit(form)">修改</el-button>
     <div class="nav-root mb-4">
       <RouterBack>详情</RouterBack>
       <!--      <el-button class="export-button" @click="clickExport">导出</el-button>-->
@@ -17,9 +18,9 @@
             {{ form.name }}
           </p>
         </el-form-item>
-        <el-form-item label="推荐次序" prop="countrySortNum">
-          <p class="content">{{ form.countrySortNum || '--' }}</p>
-        </el-form-item>
+        <!--        <el-form-item label="推荐次序" prop="countrySortNum">-->
+        <!--          <p class="content">{{ form.countrySortNum || '&#45;&#45;' }}</p>-->
+        <!--        </el-form-item>-->
         <el-form-item label="创建批次" prop="declarationBatch">
           <p class="content">{{ form.declarationBatch }}</p>
         </el-form-item>
@@ -225,7 +226,7 @@
           (PROVINCE && finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PENDING))
       "
     >
-      <div class="box-title" v-text="PROVINCE ? '审核' : '设区市比选意见'"></div>
+      <div class="box-title" v-text="PROVINCE ? '审核' : '设区市比选意见'" ref="review"></div>
       <el-form
         style="padding-left: 14px"
         ref="reviewForm"
@@ -386,6 +387,13 @@ export default {
         this.form = this.data;
       }
     },
+    cityVerify(val) {
+      if (val === true) {
+        this.$nextTick(() => {
+          this.$refs.review.scrollIntoView();
+        });
+      }
+    },
   },
   mounted() {
     // console.log('xxxxxx --->', this.type);
@@ -403,6 +411,7 @@ export default {
       });
     },
     init() {
+      console.log('init');
       this.loading = true;
       const { id } = this.$route.query;
       if (!id) return;
@@ -491,11 +500,50 @@ export default {
       this.$notify.success('操作成功');
       this.$router.back();
     },
+    // 市级审核修改
+    goAuditVerify(data) {
+      const { id } = data;
+      this.$router.push({ name: 'villageDetails', query: { id: id, cityVerify: true } });
+    },
+    // 修改
+    edit(data) {
+      console.log(data);
+      const { id } = data;
+      this.$router.push({
+        name: 'newApplication',
+        query: { id },
+      });
+    },
+    handleEdit(data) {
+      if (this.CITY || this.CITY_LEADER) {
+        this.goAuditVerify(data);
+      } else {
+        this.edit(data);
+      }
+    },
+    showEdit() {
+      if (
+        (this.VILLAGE && this.form.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING) ||
+        ((this.CITY || this.CITY_LEADER) &&
+          this.form.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED &&
+          this.form.rejectType === 2 &&
+          !this.cityVerify)
+      ) {
+        return true;
+      }
+      return false;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.edit-btn {
+  z-index: 10;
+  position: fixed;
+  bottom: 100px;
+  right: 70px;
+}
 .nav-root {
   display: flex;
   align-items: center;

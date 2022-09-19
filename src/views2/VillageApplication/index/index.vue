@@ -59,19 +59,19 @@
           </div>
         </template>
         <template v-slot:crudAction>
-          <el-button v-if="VILLAGE" type="primary" icon="el-icon-plus" @click="newApplications">
-            新建申报</el-button>
+          <el-button v-if="VILLAGE" type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报</el-button>
         </template>
         <template v-slot:export>
-          <el-button v-if="COUNTRY || COUNTRY_LEADER" icon="el-icon-download" type="primary" plain @click="exportDatas">材料打印
+          <el-button v-if="COUNTRY || COUNTRY_LEADER" icon="el-icon-download" type="primary" plain @click="exportDatas"
+            >材料打印
           </el-button>
           <el-button v-if="COUNTRY_LEADER || CITY_LEADER" type="primary" @click="UnifiedReport"> 统一上报</el-button>
         </template>
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
-            <el-link v-if="actionControl('排序', scope.data)" type="primary" @click="sort(scope)"> 排序 </el-link>
+            <!--            <el-link v-if="actionControl('排序', scope.data)" type="primary" @click="sort(scope)"> 排序 </el-link>-->
             <span v-if="actionControl('详情', scope.data)">
-              <el-divider v-if="actionControl('排序', scope.data)" direction="vertical"></el-divider>
+              <!--              <el-divider v-if="actionControl('排序', scope.data)" direction="vertical"></el-divider>-->
               <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
             </span>
             <span v-if="actionControl('审核', scope.data)">
@@ -82,8 +82,22 @@
               <el-link @click="goAudit(scope)" type="primary"> 审核 </el-link>
             </span>
 
+            <!--            &lt;!&ndash;            市级审核修改&ndash;&gt;-->
+            <!--            <span v-if="actionControl('修改', scope.data)">-->
+            <!--              <el-divider-->
+            <!--                v-if="-->
+            <!--                  actionControl('排序', scope.data) ||-->
+            <!--                  actionControl('详情', scope.data) ||-->
+            <!--                  actionControl('审核', scope.data)-->
+            <!--                "-->
+            <!--                direction="vertical"-->
+            <!--              ></el-divider>-->
+            <!--              <el-link @click="handleEdit(scope)" type="primary">-->
+            <!--                {{ COUNTRY || COUNTRY_LEADER ? '审阅' : '修改' }}-->
+            <!--              </el-link>-->
+            <!--            </span>-->
             <!--            市级审核修改-->
-            <span v-if="actionControl('修改', scope.data)">
+            <span v-if="actionControl('审阅', scope.data)">
               <el-divider
                 v-if="
                   actionControl('排序', scope.data) ||
@@ -92,7 +106,7 @@
                 "
                 direction="vertical"
               ></el-divider>
-              <el-link @click="handleEdit(scope)" type="primary"> {{ (COUNTRY || COUNTRY_LEADER) ? '审阅' : '修改' }} </el-link>
+              <el-link @click="handleEdit(scope)" type="primary"> 审阅 </el-link>
             </span>
 
             <span v-if="actionControl('删除', scope.data)">
@@ -102,7 +116,7 @@
                   actionControl('排序', scope.data) ||
                   actionControl('详情', scope.data) ||
                   actionControl('审核', scope.data) ||
-                  actionControl('修改', scope.data)
+                  actionControl('审阅', scope.data)
                 "
               ></el-divider>
               <el-link @click="deleteItem(scope.data.id)" type="danger"> 删除 </el-link>
@@ -111,18 +125,29 @@
         </template>
 
         <template v-slot:table>
-          <el-table-column v-if="COUNTRY || COUNTRY_LEADER || CITY || CITY_LEADER"
-            :label="(COUNTRY || COUNTRY_LEADER) ? '推荐次序' : '县推荐次序'" align="center" width="100" prop="countrySortNum">
-            <template slot-scope="scope">
-              <p>{{ scope.row.countrySortNum || '-' }}</p>
-            </template>
-          </el-table-column>
-          <el-table-column v-if="CITY || CITY_LEADER || PROVINCE"
-            :label="(CITY || CITY_LEADER) ? '市推荐次序' : '推荐次序'" align="center" width="100" prop="citySortNum">
-            <template slot-scope="scope">
-              <p>{{ (scope.row.citySortNum && scope.row.citySortNum < 0) ? '-'  : (scope.row.citySortNum || '-') }}</p>
-            </template>
-          </el-table-column>
+          <!--          排序功能去掉-->
+          <!--          <el-table-column-->
+          <!--            v-if="COUNTRY || COUNTRY_LEADER || CITY || CITY_LEADER"-->
+          <!--            :label="COUNTRY || COUNTRY_LEADER ? '推荐次序' : '县推荐次序'"-->
+          <!--            align="center"-->
+          <!--            width="100"-->
+          <!--            prop="countrySortNum"-->
+          <!--          >-->
+          <!--            <template slot-scope="scope">-->
+          <!--              <p>{{ scope.row.countrySortNum || '-' }}</p>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            v-if="CITY || CITY_LEADER || PROVINCE"-->
+          <!--            :label="CITY || CITY_LEADER ? '市推荐次序' : '推荐次序'"-->
+          <!--            align="center"-->
+          <!--            width="100"-->
+          <!--            prop="citySortNum"-->
+          <!--          >-->
+          <!--            <template slot-scope="scope">-->
+          <!--              <p>{{ scope.row.citySortNum && scope.row.citySortNum < 0 ? '-' : scope.row.citySortNum || '-' }}</p>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
           <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
           <el-table-column label="村（片区）名称" prop="villageName">
             <template slot-scope="scope">
@@ -191,7 +216,14 @@ import rule from '@/mixins/rule';
 import role from '@/views2/mixins/role';
 
 import { FINAL_STATUS, FINAL_STATUE_COLOR, DECLARE_STATUS } from '@/views2/utils/constants';
-import { XIANJI_ACTION, SHIJI_ACTION, ADMIN_ACTION, CUNJI_ACTION, checkCountryUnifiedReport, checkCityUnifiedReport } from './utils';
+import {
+  XIANJI_ACTION,
+  SHIJI_ACTION,
+  ADMIN_ACTION,
+  CUNJI_ACTION,
+  checkCountryUnifiedReport,
+  checkCityUnifiedReport,
+} from './utils';
 
 import { formatMoney } from '@/views2/utils/formatter';
 
@@ -410,7 +442,7 @@ export default {
     actionControl(actionName, data) {
       if (this.VILLAGE) {
         // 村级
-        return CUNJI_ACTION[actionName] && CUNJI_ACTION[actionName](data);;
+        return CUNJI_ACTION[actionName] && CUNJI_ACTION[actionName](data);
       } else if (this.COUNTRY || this.COUNTRY_LEADER) {
         // 县级
         return XIANJI_ACTION[actionName] && XIANJI_ACTION[actionName](data);
@@ -436,7 +468,7 @@ export default {
     color: #333333;
   }
 
-  >div{
+  > div {
     display: inline-block;
   }
 }

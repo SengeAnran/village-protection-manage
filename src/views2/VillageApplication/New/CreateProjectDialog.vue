@@ -4,6 +4,7 @@
     :visible.sync="dialogVisible"
     width="800px"
     :lock-scroll="true"
+    :close-on-click-modal="false"
     @close="resetForm"
     @closed="$emit('closed')"
   >
@@ -17,7 +18,7 @@
       <el-form-item label="建设地点：" prop="constructAddress" :rules="rules.inputMaxRequire">
         <el-input v-model="projectForm.constructAddress"></el-input>
       </el-form-item>
-      <el-form-item label="建设内容和规模：" prop="constructDetail" :rules="rules.inputMaxRequire">
+      <el-form-item label="建设内容和规模：" prop="constructDetail" :rules="rules.inputMaxRequire50">
         <el-input v-model="projectForm.constructDetail"></el-input>
       </el-form-item>
       <el-form-item label="进度安排：" prop="scheduleRange" :rules="rule.multiSelect">
@@ -36,12 +37,12 @@
       </el-form-item>
       <el-form-item :label="`${projectForm.firstYear}年计划投资（万元）：`">
         <plain-text
-          :value="projectForm.planFirstGov + projectForm.planFirstDrive"
+          :value="(projectForm.planFirstGov || 0) + (projectForm.planFirstDrive || 0)"
           :formatter="formatMoney"
           maxlength="8"
         />
       </el-form-item>
-      <el-form-item label="其中政府投资：" prop="planFirstGov">
+      <el-form-item label="其中政府投资：" prop="planFirstGov" :rules="rule.inputNumberContainZero">
         <el-input-number
           v-model="projectForm.planFirstGov"
           :precision="2"
@@ -50,7 +51,7 @@
           class="number"
         ></el-input-number>
       </el-form-item>
-      <el-form-item label="其中带动投资：" prop="planFirstDrive">
+      <el-form-item label="其中带动投资：" prop="planFirstDrive" :rules="rule.inputNumberContainZero">
         <el-input-number
           v-model="projectForm.planFirstDrive"
           :precision="2"
@@ -60,13 +61,14 @@
         ></el-input-number>
       </el-form-item>
       <el-form-item :label="`${projectForm.firstYear + 1}年计划投资（万元）：`">
+        <!--  (projectForm.planSecondGov || 0) 兼容undefined      -->
         <plain-text
-          :value="projectForm.planSecondGov + projectForm.planSecondDrive"
+          :value="(projectForm.planSecondGov || 0) + (projectForm.planSecondDrive || 0)"
           :formatter="formatMoney"
           maxlength="8"
         />
       </el-form-item>
-      <el-form-item label="其中政府投资：" prop="planSecondGov">
+      <el-form-item label="其中政府投资：" prop="planSecondGov" :rules="rule.inputNumberContainZero">
         <el-input-number
           v-model="projectForm.planSecondGov"
           :precision="2"
@@ -75,7 +77,7 @@
           class="number"
         ></el-input-number>
       </el-form-item>
-      <el-form-item label="其中带动投资：" prop="planSecondDrive">
+      <el-form-item label="其中带动投资：" prop="planSecondDrive" :rules="rule.inputNumberContainZero">
         <el-input-number
           v-model="projectForm.planSecondDrive"
           :precision="2"
@@ -84,7 +86,7 @@
           class="number"
         ></el-input-number>
       </el-form-item>
-      <el-form-item label="类型：" prop="type" :rules="rule.select">
+      <el-form-item label="类型：" prop="type">
         <el-select v-model="projectForm.type" placeholder="请选择">
           <el-option v-for="(item, index) of types" :key="index" :label="item.name" :value="item.value"></el-option>
         </el-select>
@@ -161,6 +163,15 @@ export default {
             trigger: 'blur',
           },
         ],
+        inputMaxRequire50: [
+          { message: '长度不得超过50个字符', trigger: 'change', max: 50 },
+          { message: '长度不得超过50个字符', trigger: 'blur', max: 50 },
+          {
+            required: true,
+            message: '请输入',
+            trigger: 'blur',
+          },
+        ],
       },
     };
   },
@@ -175,10 +186,12 @@ export default {
     },
     pickerOptions() {
       const dataRange = this.dateRange;
-      const dataRangeStart = dataRange[0].trim() + '-01 00:00:00';
+      // console.log(dataRange);
+      const dataRangeStart = dataRange[0].trim().slice(0, 7) + '-01 00:00:00';
+      // console.log('dataRangeStart', dataRangeStart);
       // 月份Date.parse后默认是8：00 会影响起始值的选取
       const range = [Date.parse(dataRangeStart), Date.parse(dataRange[1])];
-      console.log('range[0]', Date.parse(dataRangeStart));
+      // console.log('range[0]', Date.parse(dataRangeStart));
       // console.log(dataRange, range, 'range', Date.parse(dataRange[0]));
       return {
         disabledDate(time) {
@@ -192,13 +205,15 @@ export default {
     value(next) {
       if (next && this.editData) {
         this.projectForm = { ...this.editData };
+        this.projectForm.scheduleRange = [this.editData.schedule, this.editData.scheduleEnd];
       }
     },
   },
   mounted() {
     if (this.editData) {
       this.projectForm = { ...this.editData };
-      this.projectForm.scheduleRange = [this.projectForm.schedule, this.projectForm.scheduleEnd];
+      this.projectForm.scheduleRange = [this.editData.schedule, this.editData.scheduleEnd];
+      // console.log(this.projectForm.scheduleRange);
     }
   },
   methods: {
@@ -237,7 +252,7 @@ export default {
         type: null,
         firstYear: new Date().getFullYear(),
       };
-      // this.$refs.projectForm.resetFields();
+      this.$refs.projectForm.resetFields();
       this.dialogVisible = false;
       this.$emit('close');
     },
