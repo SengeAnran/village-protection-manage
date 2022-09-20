@@ -260,7 +260,8 @@
     </el-form>
     <div>
       <el-button @click="$router.back()">取消</el-button>
-      <el-button type="primary" @click="validateForm">提交</el-button>
+      <el-button type="primary" @click="validateForm(0)">提交</el-button>
+      <el-button type="primary" v-if="showSaveBtn" @click="validateForm(1)">保存待发</el-button>
     </div>
     <CreateProjectDialog
       v-model="dialogVisible"
@@ -277,7 +278,7 @@ import VilliageListTable from '../Components/VilliageListTable.vue';
 import VillageProperty from '../Components/VillageProperty.vue';
 import rule from '@/mixins/rule';
 import { getActiveSetList } from '@/api2/declarationBatch';
-import { villageDeclaration, getVillageItemDetail, updateVillageItem } from '@/api2/villageManage';
+import { villageDeclaration, getVillageItemDetail, updateVillageItem, getGeneration } from '@/api2/villageManage';
 import { mapGetters } from 'vuex';
 
 import { types } from '@/views2/utils/project';
@@ -353,6 +354,9 @@ export default {
   },
   computed: {
     ...mapGetters(['userInfo']),
+    showSaveBtn() {
+      return this.type === 'add';
+    },
   },
   watch: {},
   mounted() {
@@ -372,50 +376,48 @@ export default {
       this.dialogVisible = true;
     },
     changeDecType() {
-      console.log('changeDecType', this.form.decType);
+      // console.log('changeDecType', this.form.decType);
       if (this.form.decType === 1) {
         this.showdecType2 = false;
       } else {
         this.showdecType2 = true;
       }
     },
-    getDetail() {
+    async getDetail() {
       const { id } = this.$route.query;
+      let res;
       if (!id) {
-        this.initLoading = false;
         this.form.villageName = this.userInfo.areaName;
-        return;
+        res = await getGeneration(); // 获取保存待发数据
+      } else {
+        this.type = 'edit';
+        res = await getVillageItemDetail({ id });
       }
-      this.type = 'edit';
-      getVillageItemDetail({ id })
-        .then((res) => {
-          const data = {
-            ...res,
-          };
-          if (res.decType === 2) {
-            this.showdecType2 = true;
-          }
-          const createScenario = res.createScenarioFile ? [res.createScenarioFile] : [];
-          const meetingPic = res.meetingPic || '';
-          this.oldMeetingPic = meetingPic
-            .split(',')
-            .filter((ele) => Boolean(ele))
-            .map((ele) => ({ filePath: ele }));
-          this.createScenarioDefault = createScenario;
-          data.createScenario = [];
-          data.meetingPic = [];
-          this.form = data;
-          // this.form.annexFiles = [];
-          this.finalStatus = res.finalStatus;
-        })
-        .finally(() => {
-          this.initLoading = false;
-        });
+      if (res) {
+        const data = {
+          ...res,
+        };
+        if (res.decType === 2) {
+          this.showdecType2 = true;
+        }
+        const createScenario = res.createScenarioFile ? [res.createScenarioFile] : [];
+        const meetingPic = res.meetingPic || '';
+        this.oldMeetingPic = meetingPic
+          .split(',')
+          .filter((ele) => Boolean(ele))
+          .map((ele) => ({ filePath: ele }));
+        this.createScenarioDefault = createScenario;
+        data.createScenario = [];
+        data.meetingPic = [];
+        this.form = data;
+        // this.form.annexFiles = [];
+        this.finalStatus = res.finalStatus;
+      }
+      this.initLoading = false;
     },
     // 获取批次列表
     getBatchList() {
       getActiveSetList().then((res) => {
-        console.log(res);
         this.batchOptions = res.map((c) => {
           return {
             label: c.batch,
@@ -471,7 +473,7 @@ export default {
         .catch(() => {});
     },
 
-    validateForm() {
+    validateForm(save) {
       // console.log('xxxxxx _.', this.form);
       this.$refs['form'].validate((valid) => {
         if (valid) {
@@ -491,9 +493,10 @@ export default {
             annexIds,
             meetingPic,
             createScenario,
+            saveToGo: save,
           };
           // console.log('validateForm', params);
-          if (this.type === 'edit') {
+          if (this.type === 'edit' || params.id) {
             // this.form.id = this.$route.query.id;
             this.update(params);
           } else {
@@ -506,16 +509,25 @@ export default {
     },
     // 校验总额是否相等
     verificationTotal(arr, allNum) {
-      console.log(arr, allNum);
       let projectAllNum = 0;
       arr.forEach((i) => {
         projectAllNum +=
           (i.planFirstDrive || 0) + (i.planFirstGov || 0) + (i.planSecondDrive || 0) + (i.planSecondGov || 0);
       });
-      console.log(projectAllNum);
       return projectAllNum === allNum;
     },
-    // 新增申报item
+    // // 保存待发item
+    // saveToSend(params) {
+    //   // ？？？
+    //   villageDeclaration(params).then(() => {
+    //     this.$message({
+    //       message: '保存成功！',
+    //       type: 'success',
+    //     });
+    //     this.$router.back();
+    //   });
+    // },
+    // 新增申报或保存待发item
     submit(params) {
       villageDeclaration(params).then(() => {
         this.$message({
@@ -529,7 +541,7 @@ export default {
     update(params) {
       updateVillageItem(params).then(() => {
         this.$message({
-          message: '修改成功！',
+          message: params.saveToGo ? '保存成功！' : this.type === 'edit' ? '修改成功！' : '添加成功！',
           type: 'success',
         });
         this.$router.back();

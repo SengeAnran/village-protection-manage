@@ -5,34 +5,26 @@
     </el-checkbox-group>
     <div class="checkboxs">
       <div class="checkbox-item">
-        <div class="checkbox-item-label">
-          <el-checkbox v-model="showA" label="3A级景区村庄:"></el-checkbox>
-        </div>
-        <el-radio-group v-if="showA || villagePropertyA" class="radio-group" v-model="villagePropertyA">
+        <div class="checkbox-item-label" @click="villagePropertyA = undefined">3A级景区村庄:</div>
+        <el-radio-group class="radio-group" v-model="villagePropertyA">
           <el-radio v-for="(item, index) of aOptions" :key="index" :label="item"></el-radio>
         </el-radio-group>
       </div>
       <div class="checkbox-item">
-        <div class="checkbox-item-label">
-          <el-checkbox v-model="showF" label="法治村:"></el-checkbox>
-        </div>
-        <el-radio-group v-if="showF || villagePropertyF" class="radio-group" v-model="villagePropertyF">
+        <div class="checkbox-item-label" @click="villagePropertyF = undefined">法治村:</div>
+        <el-radio-group class="radio-group" v-model="villagePropertyF">
           <el-radio v-for="(item, index) of fOptions" :key="index" :label="item"></el-radio>
         </el-radio-group>
       </div>
       <div class="checkbox-item">
-        <div class="checkbox-item-label">
-          <el-checkbox v-model="showW" label="文明村:"></el-checkbox>
-        </div>
-        <el-radio-group v-if="showW || villagePropertyW" class="radio-group" v-model="villagePropertyW">
+        <div class="checkbox-item-label" @click="villagePropertyW = undefined">文明村:</div>
+        <el-radio-group class="radio-group" v-model="villagePropertyW">
           <el-radio v-for="(item, index) of wOptions" :key="index" :label="item"></el-radio>
         </el-radio-group>
       </div>
       <div class="checkbox-item">
-        <div class="checkbox-item-label">
-          <el-checkbox v-model="showS" label="善治村:"></el-checkbox>
-        </div>
-        <el-radio-group v-if="showS" class="radio-group" v-model="villagePropertyS">
+        <div class="checkbox-item-label" @click="villagePropertyS = undefined">善治村:</div>
+        <el-radio-group class="radio-group" v-model="villagePropertyS">
           <el-radio v-for="(item, index) of sOptions" :key="index" :label="item"></el-radio>
         </el-radio-group>
       </div>
@@ -52,10 +44,6 @@ export default {
   },
   data() {
     return {
-      showS2: false,
-      showW2: false,
-      showF2: false,
-      showA2: false,
       sOptions: ['善治村', '善治示范村'],
       wOptions: ['全国文明村', '省级文明村', '市级文明村'],
       fOptions: ['全国法治村', '省级法治村', '市级法治村'],
@@ -109,75 +97,11 @@ export default {
         return dest;
       },
     },
-    showS: {
-      set: function (v) {
-        this.showS2 = v;
-        if (!v) {
-          this.villagePropertyS = undefined;
-        }
-      },
-      get: function () {
-        return !!this.villagePropertyS || this.showS2;
-      },
-    },
-    showW: {
-      set: function (v) {
-        this.showW2 = v;
-        if (!v) {
-          this.villagePropertyW = undefined;
-        }
-      },
-      get: function () {
-        return !!this.villagePropertyW || this.showW2;
-      },
-    },
-    showF: {
-      set: function (v) {
-        this.showF2 = v;
-        if (!v) {
-          this.villagePropertyF = undefined;
-        }
-      },
-      get: function () {
-        return !!this.villagePropertyF || this.showF2;
-      },
-    },
-    showA: {
-      set: function (v) {
-        this.showA2 = v;
-        if (!v) {
-          this.villagePropertyA = undefined;
-        }
-      },
-      get: function () {
-        return !!this.villagePropertyA || this.showA2;
-      },
-    },
   },
   watch: {
     value(val) {
       this.dispatch('ElFormItem', 'el.form.change', [val]);
     },
-    // showS(val) {
-    //   if (!val) {
-    //     this.villagePropertyS = undefined;
-    //   }
-    // },
-    // showW(val) {
-    //   if (!val) {
-    //     this.villagePropertyW = undefined;
-    //   }
-    // },
-    // showF(val) {
-    //   if (!val) {
-    //     this.villagePropertyF = undefined;
-    //   }
-    // },
-    // showA(val) {
-    //   if (!val) {
-    //     this.villagePropertyA = undefined;
-    //   }
-    // },
   },
   methods: {
     updateValue(multi, a, f, w, s) {
@@ -206,11 +130,9 @@ export default {
   display: flex;
 }
 .checkbox-item {
-  min-width: 130px;
-  //flex: 1;
-  //display: flex;
+  display: flex;
   align-items: center;
-  //padding-left: 20px;
+  padding-left: 20px;
 
   .checkbox-item-label {
     width: 100px;
@@ -220,12 +142,7 @@ export default {
     cursor: pointer;
   }
 
-  ::v-deep .el-radio-group {
-    display: block;
-  }
   ::v-deep .el-radio {
-    display: block;
-    padding: 3px 0;
     min-width: 100px;
   }
 }

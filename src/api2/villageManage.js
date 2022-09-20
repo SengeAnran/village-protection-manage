@@ -244,3 +244,29 @@ export const uploadScan = (params) => {
     params,
   });
 };
+
+// 获取新增时待发数据
+export const getGeneration = (params) => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + '/api/workbench/villageDeclaration/generation',
+    params,
+  });
+};
+// 列表-市级下拉
+export const getCityList = (params) => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + '/api/workbench/villageDeclaration/cityList',
+    params,
+    headers: { 'APPLICATION-ID': `${4}` },
+  });
+};
+// 列表-省级下拉
+export const getProList = () => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + '/api/workbench/villageDeclaration/proList',
+    headers: { 'APPLICATION-ID': `${4}` },
+  });
+};

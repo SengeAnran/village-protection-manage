@@ -38,6 +38,17 @@
               </el-input>
             </div>
             <div class="search-item mb-6">
+              <span class="label">地区：</span>
+              <el-select v-if="CITY" v-model="query.county" placeholder="请选择">
+                <el-option v-for="item in queryCityListOpt" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+              <el-select v-if="PROVINCE" v-model="query.city" placeholder="请选择">
+                <el-option v-for="item in queryProListOpt" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </div>
+            <div class="search-item mb-6">
               <span class="label">创建批次：</span>
               <el-select v-model="query.declarationBatch" placeholder="请选择">
                 <el-option
@@ -208,6 +219,8 @@ import {
   materialPrinting,
   sortList,
   unifiedReporting,
+  getCityList,
+  getProList,
 } from '@/api2/villageManage';
 import { recVerify } from '@/api/villageManage';
 import { getvillagesExport } from '@/api2/villageManage';
@@ -248,8 +261,22 @@ export default {
         declarationBatch: '',
         finalStatus: '',
         villageName: '',
+        city: '', // 市中文名称
+        county: '', //县中文名称
       },
       queryDeclareTypeOpt: [
+        {
+          label: '全部',
+          value: '',
+        },
+      ],
+      queryCityListOpt: [
+        {
+          label: '全部',
+          value: '',
+        },
+      ],
+      queryProListOpt: [
         {
           label: '全部',
           value: '',
@@ -282,6 +309,12 @@ export default {
     this.declareStatus = DECLARE_STATUS;
     this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(DECLARE_STATUS));
     this.getBatchInfo();
+    if (this.CITY) {
+      this.getCityList();
+    }
+    if (this.PROVINCE) {
+      this.getProList();
+    }
   },
   mounted() {},
   methods: {
@@ -309,6 +342,28 @@ export default {
         };
       });
       this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(opt);
+    },
+    // 市的县下拉列表
+    async getCityList() {
+      const res = await getCityList();
+      const opt = (res || []).map((ele) => {
+        return {
+          label: ele.name,
+          value: ele.name,
+        };
+      });
+      this.queryCityListOpt = this.queryCityListOpt.concat(opt);
+    },
+    // 市的县下拉列表
+    async getProList() {
+      const res = await getProList();
+      const opt = (res || []).map((ele) => {
+        return {
+          label: ele.name,
+          value: ele.name,
+        };
+      });
+      this.queryProListOpt = this.queryProListOpt.concat(opt);
     },
     selectionChange(val) {
       this.selections = val;
