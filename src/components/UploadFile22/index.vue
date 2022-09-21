@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import { uploadFile2 } from "@/api/common.js";
+import { uploadFile2 } from '@/api/common.js';
 import emitter from 'element-ui/lib/mixins/emitter.js';
 
 // 区别于 uploadFile2,这里不需要特别的监听add\remove事件，通过v-model绑定value值获取到最新值。默认值通过defaultData传入
@@ -51,11 +51,11 @@ export default {
     },
     tip: {
       type: String,
-      default: "",
+      default: '',
     },
     accept: {
       type: String,
-      default: "*",
+      default: '*',
     },
   },
   data() {
@@ -72,7 +72,7 @@ export default {
           return {
             name: list.fileName,
             url: list.filePath,
-            status: "success",
+            status: 'success',
             response: list,
             filePath: list.filePath,
             fileName: list.fileName,
@@ -94,10 +94,10 @@ export default {
     async uploadImg(info) {
       try {
         const formData = new FormData();
-        formData.append("file", info.file);
-        formData.append("business", 'history');
+        formData.append('file', info.file);
+        formData.append('business', 'history');
         const res = await uploadFile2(formData);
-        this.$message.success("文件上传成功");
+        this.$message.success('文件上传成功');
         return res;
       } catch (error) {
         this.$refs.upload.handleRemove(info.file);
@@ -106,12 +106,12 @@ export default {
     },
     beforeImgUpload(file) {
       //console.log(file);
-      const suffix = file.name.split(".").slice(-1)[0];
-      const isFormat = this.accept === "*" ? true : this.accept.indexOf(suffix) >= 0;
+      const suffix = file.name.split('.').slice(-1)[0];
+      const isFormat = this.accept === '*' ? true : this.accept.indexOf(suffix) >= 0;
       const isLimit = file.size / 1024 / 1024 < this.limitSize;
 
       if (!isFormat) {
-        this.$message.error("上传文件格式不正确!");
+        this.$message.error('上传文件格式不正确!');
       }
       if (!isLimit) {
         this.$message.error(`上传文件大小不能超过 ${this.limitSize}MB!`);

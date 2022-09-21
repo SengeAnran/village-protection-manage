@@ -149,7 +149,7 @@
               <p class="content">{{ form.cityOpinion }}</p>
             </el-form-item>
           </div>
-          <div class="input-item-wrp" v-if="form.stampedFile">
+          <div class="input-item-wrp" v-if="form.stampedFile && form.stampedFile.length > 0">
             <el-form-item label="附件上传" prop="introduction">
               <ViewFile2 :data="form.stampedFile" />
             </el-form-item>
@@ -275,13 +275,7 @@
           :rules="rule.upload"
           prop="stampedFiles"
         >
-          <UploadFile22
-            tip="支持格式：.doc, .docx, .pdf"
-            accept=".doc,.docx,.pdf"
-            v-model="reviewForm.stampedFiles"
-            :defaultData="stampedFilesDefault"
-            :limit="1"
-          />
+          <UploadFile23 tip="支持格式：.doc, .docx, .pdf" accept=".doc,.docx,.pdf" v-model="reviewForm.stampedFiles" />
           <p style="width: 100%; color: #ff6b00" class="py-4 leading-5">
             <i class="el-icon-warning"></i>请上传盖章完成的《未来乡村创建申报表》扫描件
           </p>
@@ -329,7 +323,7 @@ export default {
       form: {
         annexFiles: [], // 附件
         cityAuditFile: [], // 附件
-        stampedFiles: [], // 附件
+        stampedFile: [], // 附件
         provinceAuditFile: [], // 附件
         villageName: '', //村庄地址
         town: '', //村庄地址
@@ -365,10 +359,11 @@ export default {
         status: null,
         rejectType: null,
         opinion: '',
-        stampedFiles: [],
+        stampedFiles: {},
+        stampedFile: '',
         // processFilesArr: [],
       },
-      stampedFilesDefault: [],
+      // stampedFilesDefault: [],
       finalStatus: null,
       // cityVerify: false,
       total: 0,
@@ -390,6 +385,7 @@ export default {
     cityVerify(val) {
       if (val === true) {
         this.$nextTick(() => {
+          this.init();
           this.$refs.review.scrollIntoView();
         });
       }
@@ -437,9 +433,9 @@ export default {
         this.form.stampedFile = stampedFile ? [stampedFile] : [];
         this.form.meetingPic = meetingPic;
         this.form.createScenario = res.createScenarioFile ? [res.createScenarioFile] : [];
-        this.stampedFilesDefault = stampedFile ? [stampedFile] : [];
-        this.reviewForm.stampedFiles = [];
+        this.reviewForm.stampedFiles = stampedFile ? stampedFile : {};
         this.loading = false;
+        // console.log(this.form.stampedFile);
         //console.log(res);
       });
     },
@@ -487,7 +483,7 @@ export default {
       //console.log(this.reviewForm.processFilesArr);
       const { id } = this.$route.query;
       const { stampedFiles, status } = this.reviewForm;
-      const stampedFile = (status && stampedFiles && stampedFiles[0]) || {};
+      const stampedFile = (status && stampedFiles) || {};
       const verifyType = this.CITY || this.CITY_LEADER ? 1 : 2; //1:市级审核，2：省级审核
       await verify({
         id: id, // 村庄id
@@ -523,7 +519,9 @@ export default {
     },
     showEdit() {
       if (
-        (this.VILLAGE && this.form.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING) ||
+        (this.VILLAGE &&
+          (this.form.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING ||
+            this.form.finalStatus === FINAL_STATUS.CITY_VERIFY_REJECTED)) ||
         ((this.CITY || this.CITY_LEADER) &&
           this.form.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED &&
           this.form.rejectType === 2 &&

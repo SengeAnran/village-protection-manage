@@ -50,7 +50,7 @@
     </el-table-column>
     <el-table-column prop="type" label="类型">
       <template slot-scope="scope">
-        <span>{{ mapType(scope.row.type) }}</span>
+        <span>{{ scope.row.type === null ? '-' : mapType(scope.row.type) }}</span>
       </template>
     </el-table-column>
     <el-table-column prop="remark" label="备注">

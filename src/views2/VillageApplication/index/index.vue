@@ -38,15 +38,19 @@
               </el-input>
             </div>
             <div class="search-item mb-6">
-              <span class="label">地区：</span>
-              <el-select v-if="CITY" v-model="query.county" placeholder="请选择">
+              <span v-if="CITY || CITY_LEADER || PROVINCE" class="label">地区：</span>
+              <el-select v-if="CITY || CITY_LEADER" v-model="query.county" placeholder="请选择">
                 <el-option v-for="item in queryCityListOpt" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
-              <el-select v-if="PROVINCE" v-model="query.city" placeholder="请选择">
-                <el-option v-for="item in queryProListOpt" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
+              <el-cascader
+                v-if="PROVINCE"
+                v-model="proRegion"
+                :options="queryProListOpt"
+                placeholder="请选择"
+                :props="{ checkStrictly: true, value: 'name', label: 'name', children: 'child' }"
+                clearable
+              ></el-cascader>
             </div>
             <div class="search-item mb-6">
               <span class="label">创建批次：</span>
@@ -234,8 +238,8 @@ import {
   SHIJI_ACTION,
   ADMIN_ACTION,
   CUNJI_ACTION,
-  checkCountryUnifiedReport,
-  checkCityUnifiedReport,
+  // checkCountryUnifiedReport,
+  // checkCityUnifiedReport,
 } from './utils';
 
 import { formatMoney } from '@/views2/utils/formatter';
@@ -264,6 +268,7 @@ export default {
         city: '', // 市中文名称
         county: '', //县中文名称
       },
+      proRegion: '', // 省级选地区
       queryDeclareTypeOpt: [
         {
           label: '全部',
@@ -316,6 +321,11 @@ export default {
       this.getProList();
     }
   },
+  watch: {
+    proRegion(val) {
+      [this.query.city, this.query.county] = val;
+    },
+  },
   mounted() {},
   methods: {
     formatMoney,
@@ -357,13 +367,19 @@ export default {
     // 市的县下拉列表
     async getProList() {
       const res = await getProList();
-      const opt = (res || []).map((ele) => {
-        return {
-          label: ele.name,
-          value: ele.name,
-        };
-      });
-      this.queryProListOpt = this.queryProListOpt.concat(opt);
+      // let opt;
+      // if (res && res.length > 0) {
+      //   res.forEach((i, index) => {
+      //     res.name = i.name;
+      //     res[index].label = i.name;
+      //     // if (i.child)
+      //   });
+      // }
+      this.queryProListOpt = res;
+    },
+    handleProRegionChange(val) {
+      console.log(this.proRegion);
+      console.log(val);
     },
     selectionChange(val) {
       this.selections = val;
@@ -400,20 +416,22 @@ export default {
           // 5县级待上报
           this.$notify.error('选中的申报信息状态有误');
           return;
-        } else if (!checkCountryUnifiedReport(this.selections)) {
-          this.$notify.error('请先对选中的申报信息进行推荐次序排序');
-          return;
         }
+        // else if (!checkCountryUnifiedReport(this.selections)) {
+        //   this.$notify.error('请先对选中的申报信息进行推荐次序排序');
+        //   return;
+        // }
       } else if (this.CITY_LEADER) {
         // 市级
         if (!this.selections.every((i) => i.finalStatus === FINAL_STATUS.CITY_REPORT_PENDING)) {
           // 6市级待上报
           this.$notify.error('选中的申报信息状态有误');
           return;
-        } else if (!this.selections.every((i) => !isNaN(i.citySortNum)) || !checkCityUnifiedReport(this.selections)) {
-          this.$notify.error('请先对选中的申报信息进行推荐次序排序');
-          return;
         }
+        // else if (!this.selections.every((i) => !isNaN(i.citySortNum)) || !checkCityUnifiedReport(this.selections)) {
+        //   this.$notify.error('请先对选中的申报信息进行推荐次序排序');
+        //   return;
+        // }
       }
       this.$confirm('是否确认上报选中的申报信息？', '提示', {
         type: 'warning',

@@ -22,6 +22,8 @@
         :permission-add="4100"
         :permission-edit="4100"
         :permission-delete="4100"
+        labelWidth="130px"
+        dialogWidth="530px"
       >
         <template v-slot:form>
           <el-form-item label="申报批次：" prop="batch" :rules="rule.input">
@@ -33,6 +35,17 @@
               v-model="form.declareTime"
               value-format="yyyy-MM-dd"
               type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="项目调度时间：" prop="schedule" :rules="rules.multiSelect">
+            <el-date-picker
+              v-model="form.schedule"
+              value-format="yyyy-MM"
+              type="monthrange"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
@@ -80,7 +93,7 @@
 
         <template v-slot:table>
           <el-table-column label="创建批次" prop="batch"></el-table-column>
-          <el-table-column label="创建时间">
+          <el-table-column label="申报时间">
             <template slot-scope="scope">
               <p>{{ scope.row.startTime.slice(0, 10) }}——{{ scope.row.endTime.slice(0, 10) }}</p>
             </template>
@@ -92,6 +105,21 @@
 </template>
 
 <script>
+const rangeTime = (rule, value, callback) => {
+  console.log(rule, value);
+  if (!value || value.length !== 2) {
+    callback(new Error('请选择'));
+  } else if (getRangeMonth(value) <= 12 || getRangeMonth(value) > 24) {
+    callback(new Error('请选择一到两年内的时间范围'));
+  }
+  callback();
+};
+function getRangeMonth(value) {
+  const year = [Number.parseInt(value[0].slice(0, 4)), Number.parseInt(value[1].slice(0, 4))];
+  const month = [Number.parseInt(value[0].slice(5, 7)), Number.parseInt(value[1].slice(5, 7))];
+  const rangeMonth = (year[1] - year[0]) * 12 + month[1] - month[0];
+  return rangeMonth;
+}
 import { mapMutations, mapGetters } from 'vuex';
 import { deleteVillageItem, getSetList, setAdd, setDelete, setUpdate } from '@/api2/declarationBatch';
 import rule from '@/mixins/rule';
@@ -107,6 +135,7 @@ export default {
         // type: type, //type 1：验收时间，2：申报批次
         batch: '',
         declareTime: [],
+        schedule: [],
         // endTime: '',
         // startTime: '',
       },
@@ -116,6 +145,16 @@ export default {
       getMethod: getSetList,
       value1: '',
       dialogVisible: false,
+      rules: {
+        multiSelect: [
+          {
+            type: 'array',
+            required: true,
+            validator: rangeTime,
+            trigger: 'change',
+          },
+        ],
+      },
     };
   },
   computed: {
@@ -141,10 +180,13 @@ export default {
     },
     beforeSaveMethod() {
       const [startTime, endTime] = this.form.declareTime;
+      const [scheduleStartTime, scheduleEndTime] = this.form.schedule;
       return {
         ...this.form,
         startTime,
         endTime,
+        scheduleStartTime,
+        scheduleEndTime,
       };
     },
     beforeEditMethod(item) {
@@ -153,6 +195,7 @@ export default {
       // this.form.type = type; //type 1：验收时间，2：申报批次
       this.form.id = item.id;
       this.form.declareTime = [item.startTime, item.endTime];
+      this.form.schedule = [item.scheduleStartTime, item.scheduleEndTime];
       // this.form.startTime = ;
     },
 

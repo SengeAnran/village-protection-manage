@@ -205,12 +205,10 @@
         <div class="detail-top">
           <el-row :gutter="20">
             <el-col :span="24">
-              <el-form-item label="浙江省未来乡村创建方案" prop="createScenario" :rules="rule.upload">
-                <UploadFile22
-                  :defaultData="createScenarioDefault"
-                  v-model="form.createScenario"
-                  :limit="1"
-                  tip="支持格式：.doc, .docx, .pdf"
+              <el-form-item label="浙江省未来乡村创建方案" prop="createScenarioFile" :rules="rule.upload">
+                <UploadFile23
+                  v-model="form.createScenarioFile"
+                  tip="支持拓展名：.doc, .docx, .pdf"
                   accept=".doc,.docx,.pdf"
                 />
                 <p style="width: 42%; color: #ff6b00" class="py-4 leading-5">
@@ -337,7 +335,8 @@ export default {
         projectFilingPhone: '', //联系电话
         projectFilingAudit: '', //审核人
         projects: [], //项目列表
-        createScenario: [], // 未来乡村创建方案
+        createScenario: '', // 未来乡村创建方案
+        createScenarioFile: {},
       },
       type: 'add',
       dialogVisible: false,
@@ -347,7 +346,6 @@ export default {
       listRules: { required: true, validator: tableList, trigger: 'blur' },
       batchOptions: [],
       oldMeetingPic: [],
-      createScenarioDefault: [],
 
       initLoading: true,
     };
@@ -400,15 +398,16 @@ export default {
         if (res.decType === 2) {
           this.showdecType2 = true;
         }
-        const createScenario = res.createScenarioFile ? [res.createScenarioFile] : [];
         const meetingPic = res.meetingPic || '';
         this.oldMeetingPic = meetingPic
           .split(',')
           .filter((ele) => Boolean(ele))
           .map((ele) => ({ filePath: ele }));
-        this.createScenarioDefault = createScenario;
-        data.createScenario = [];
+
         data.meetingPic = [];
+        if (!res.createScenarioFile) {
+          data.createScenarioFile = {};
+        }
         this.form = data;
         // this.form.annexFiles = [];
         this.finalStatus = res.finalStatus;
@@ -475,17 +474,39 @@ export default {
 
     validateForm(save) {
       // console.log('xxxxxx _.', this.form);
+      if (save) {
+        // 保存待发
+        const annexIds = this.form.annexFiles.map((i) => i.fileId).toString();
+        const createScenario = this.form.createScenarioFile.fileId;
+
+        const meetingPic = this.form.meetingPic.map((ele) => ele.filePath).join(',');
+        const params = {
+          ...this.form,
+          annexIds,
+          meetingPic,
+          createScenario,
+          saveToGo: save,
+        };
+        // console.log('validateForm', params);
+        if (this.type === 'edit' || params.id) {
+          // this.form.id = this.$route.query.id;
+          this.update(params);
+        } else {
+          this.submit(params);
+        }
+        return;
+      }
       this.$refs['form'].validate((valid) => {
         if (valid) {
           // 校验总额是否相等
           if (!this.verificationTotal(this.form.projects, this.form.investNum)) {
             return this.$message({
-              message: '项目填报金额与总投资额不一致！',
+              message: '项目计划投资金额合计必须等于计划总投资！',
               type: 'warning',
             });
           }
           const annexIds = this.form.annexFiles.map((i) => i.fileId).toString();
-          const createScenario = this.form.createScenario.map((ele) => ele.fileId).join(',');
+          const createScenario = this.form.createScenarioFile.fileId;
 
           const meetingPic = this.form.meetingPic.map((ele) => ele.filePath).join(',');
           const params = {
@@ -516,17 +537,6 @@ export default {
       });
       return projectAllNum === allNum;
     },
-    // // 保存待发item
-    // saveToSend(params) {
-    //   // ？？？
-    //   villageDeclaration(params).then(() => {
-    //     this.$message({
-    //       message: '保存成功！',
-    //       type: 'success',
-    //     });
-    //     this.$router.back();
-    //   });
-    // },
     // 新增申报或保存待发item
     submit(params) {
       villageDeclaration(params).then(() => {
