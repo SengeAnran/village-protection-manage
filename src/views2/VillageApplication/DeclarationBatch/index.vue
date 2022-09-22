@@ -106,7 +106,6 @@
 
 <script>
 const rangeTime = (rule, value, callback) => {
-  console.log(rule, value);
   if (!value || value.length !== 2) {
     callback(new Error('请选择'));
   } else if (getRangeMonth(value) <= 12 || getRangeMonth(value) > 24) {
@@ -197,10 +196,6 @@ export default {
       this.form.declareTime = [item.startTime, item.endTime];
       this.form.schedule = [item.scheduleStartTime, item.scheduleEndTime];
       // this.form.startTime = ;
-    },
-
-    changeTime(item) {
-      console.log(item);
     },
   },
 };
