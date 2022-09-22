@@ -130,7 +130,7 @@
             type="textarea"
             :rows="5"
             placeholder="请输入创建村基本情况"
-            maxlength="300"
+            maxlength="350"
             show-word-limit
             v-model="form.basicText"
           >

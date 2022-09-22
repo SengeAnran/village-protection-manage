@@ -18,7 +18,7 @@
       <el-form-item label="建设地点：" prop="constructAddress" :rules="rules.inputMaxRequire">
         <el-input v-model="projectForm.constructAddress"></el-input>
       </el-form-item>
-      <el-form-item label="建设内容和规模：" prop="constructDetail" :rules="rules.inputMaxRequire50">
+      <el-form-item label="建设内容和规模：" prop="constructDetail" :rules="rules.inputMaxRequire255">
         <el-input v-model="projectForm.constructDetail"></el-input>
       </el-form-item>
       <el-form-item label="进度安排：" prop="scheduleRange" :rules="rule.multiSelect">
@@ -163,9 +163,9 @@ export default {
             trigger: 'blur',
           },
         ],
-        inputMaxRequire50: [
-          { message: '长度不得超过50个字符', trigger: 'change', max: 50 },
-          { message: '长度不得超过50个字符', trigger: 'blur', max: 50 },
+        inputMaxRequire255: [
+          { message: '长度不得超过255个字符', trigger: 'change', max: 255 },
+          { message: '长度不得超过255个字符', trigger: 'blur', max: 255 },
           {
             required: true,
             message: '请输入',
