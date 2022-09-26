@@ -23,7 +23,7 @@
         @selectionChange="selectionChange"
       >
         <template v-slot:search>
-          <div class="inline-flex mb-2 pl-0" style="flex-wrap: wrap;">
+          <div class="inline-flex mb-2 pl-0" style="flex-wrap: wrap">
             <div v-if="!COUNTRY" class="search-item mb-4">
               <span class="label">地区：</span>
               <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea" />
@@ -61,12 +61,7 @@
             <div class="search-item mb-4">
               <span class="label">状态：</span>
               <el-select v-model="query.reportStatus" placeholder="请选择">
-                <el-option
-                  v-for="(item, index) of reportStateOPt"
-                  :key="index"
-                  :label="item.label"
-                  :value="item.value"
-                >
+                <el-option v-for="(item, index) of reportStateOPt" :key="index" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </div>
@@ -116,7 +111,9 @@
           <el-table-column label="计划投资完成率" sortable prop="rate"></el-table-column>
           <el-table-column label="状态" prop="status">
             <template slot-scope="scope">
-              <p :style="{ color: REPORT_STATUS_COLOR[scope.row.reportStatus]}">{{ getStatusName(scope.row.reportStatus) }}</p>
+              <p :style="{ color: REPORT_STATUS_COLOR[scope.row.reportStatus] }">
+                {{ getStatusName(scope.row.reportStatus) }}
+              </p>
             </template>
           </el-table-column>
         </template>
@@ -132,7 +129,7 @@ import {
   DECLEAR_STATUS,
   getStatusName,
   REPORT_STATUS_COLOR,
-  REPORT_STATUS
+  REPORT_STATUS,
   // PRO_DECLEAR_STATUS,
 } from './constants';
 import { recVerify } from '../../api/villageManage';
@@ -184,9 +181,7 @@ export default {
           value: '',
         },
       ],
-      reportStateOPt: [
-       
-      ],
+      reportStateOPt: [],
       getMethod: getList,
       deleteMethod: deleteVillageItem,
       dialogVisible: false,
@@ -231,17 +226,17 @@ export default {
     getStatusName,
     canReport(data) {
       const hasPerm = this.VILLAGE;
-      if (data.reportStatus !== REPORT_STATUS.UNREPORTED) {
+      if (data.reportStatus !== REPORT_STATUS.UNREPORTED && data.reportStatus !== REPORT_STATUS.TIMEOUT) {
         // 已报送则不可在报送
         return false;
       }
       if (!hasPerm) {
         return false;
       }
-      const day = new Date().getDate();
-      if (day > 18) {
-        return false;
-      }
+      // const day = new Date().getDate();
+      // if (day > 18) {
+      //   return false;
+      // }
       return true;
     },
     // 地区
@@ -441,7 +436,7 @@ export default {
 .search-item {
   margin-right: 20px;
   white-space: nowrap;
-  
+
   .label {
     font-weight: 400;
     color: #333333;
@@ -525,6 +520,5 @@ export default {
       background-color: rgb(244, 121, 121);
     }
   }
-  
 }
 </style>

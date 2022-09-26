@@ -19,7 +19,13 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="总投资（万元）" prop="investNum">
-              <el-input-number v-model="form.investNum" :precision="2" :controls="false" placeholder="请输入总投资（万元）" disabled />
+              <el-input-number
+                v-model="form.investNum"
+                :precision="2"
+                :controls="false"
+                placeholder="请输入总投资（万元）"
+                disabled
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -52,7 +58,7 @@
     </el-form>
     <div>
       <el-button @click="$router.back()">返回</el-button>
-      <el-button type="primary" @click="onSubmit">保存</el-button>
+      <el-button type="primary" @click="onSubmit">提交</el-button>
     </div>
     <el-dialog title="详情" :visible.sync="dialogVisible" width="90%">
       <VillageListHistoryTable :data="historyList" />
@@ -61,11 +67,11 @@
 </template>
 
 <script>
-import VilliageListTable from "../Components/VilliageListTable";
-import VillageListHistoryTable from "../Components/VillageListHistoryTable";
+import VilliageListTable from '../Components/VilliageListTable';
+import VillageListHistoryTable from '../Components/VillageListHistoryTable';
 
-import rule from "@/mixins/rule";
-import { addData, getDetail, getHistory } from "@/api2/progressSubmission";
+import rule from '@/mixins/rule';
+import { addData, getDetail, getHistory } from '@/api2/progressSubmission';
 import { formatMoney } from '@/views2/utils/formatter';
 
 const tableList = (rule, value, callback) => {
@@ -74,7 +80,7 @@ const tableList = (rule, value, callback) => {
       return isNaN(i.completeDriveNow) || isNaN(i.completeGovNow);
     });
     if (notNum) {
-      callback(new Error("请填写的数据都为数字"));
+      callback(new Error('请填写的数据都为数字'));
       return;
     }
     // const notNum = value.some((i) => {
@@ -82,7 +88,7 @@ const tableList = (rule, value, callback) => {
     // });
     callback();
   } else {
-    callback(new Error("无上报数据"));
+    callback(new Error('无上报数据'));
   }
 };
 export default {
@@ -105,13 +111,13 @@ export default {
         detailLists: [],
       },
       historyList: [],
-      type: "add",
+      type: 'add',
       firstTime: false, // 是否是第一次填报进度
       dialogVisible: false,
       importDialogVisible: false,
-      editIndex: "",
+      editIndex: '',
       editProjectForm: false, // 编辑表格
-      listRules: { required: true, validator: tableList, trigger: "blur" },
+      listRules: { required: true, validator: tableList, trigger: 'blur' },
     };
   },
   beforeMount() {
@@ -132,7 +138,7 @@ export default {
             overallProgressNow: 0,
           };
         });
-        this.firstTime = this.form.detailLists.every(i => {
+        this.firstTime = this.form.detailLists.every((i) => {
           return i.planGovInvestment === null;
         });
         this.showTable = true;
@@ -165,12 +171,12 @@ export default {
       });
     },
     async lookHistory() {
-      const res = await getHistory({ id: this.$route.query.id })
+      const res = await getHistory({ id: this.$route.query.id });
       this.historyList = res;
       this.dialogVisible = true;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -192,7 +198,6 @@ export default {
       font-size: 16px;
     }
   }
-
 
   .block-tit {
     margin-top: 32px;
