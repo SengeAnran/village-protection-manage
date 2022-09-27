@@ -9,7 +9,7 @@
       <Notify style="margin-right: 20px" />
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img class="user-avatar" :src="require('@/assets/imgs/avatar.jpeg')" />
+          <img class="user-avatar" :src="require('@/assets/imgs/avatar.svg')" />
           <span class="user-name">{{ userInfo.userNickname }}</span>
         </div>
 

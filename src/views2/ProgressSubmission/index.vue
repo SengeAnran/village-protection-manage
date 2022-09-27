@@ -226,17 +226,17 @@ export default {
     getStatusName,
     canReport(data) {
       const hasPerm = this.VILLAGE;
-      if (data.reportStatus !== REPORT_STATUS.UNREPORTED && data.reportStatus !== REPORT_STATUS.TIMEOUT) {
+      if (data.reportStatus !== REPORT_STATUS.UNREPORTED) {
         // 已报送则不可在报送
         return false;
       }
       if (!hasPerm) {
         return false;
       }
-      // const day = new Date().getDate();
-      // if (day > 18) {
-      //   return false;
-      // }
+      const day = new Date().getDate();
+      if (day > 18) {
+        return false;
+      }
       return true;
     },
     // 地区

@@ -277,7 +277,7 @@
         >
           <UploadFile23 tip="支持格式：.doc, .docx, .pdf" accept=".doc,.docx,.pdf" v-model="reviewForm.stampedFiles" />
           <p style="width: 100%; color: #ff6b00" class="py-4 leading-5">
-            <i class="el-icon-warning"></i>请上传盖章完成的《未来乡村创建申报表》扫描件
+            <i class="el-icon-warning"></i>请上传《未来乡村创建申报表》盖章扫描件
           </p>
         </el-form-item>
         <el-form-item style="text-align: center">
