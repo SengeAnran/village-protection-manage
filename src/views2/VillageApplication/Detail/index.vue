@@ -419,14 +419,14 @@ export default {
           .map((ele) => ({ filePath: ele }));
         this.finalStatus = res.finalStatus;
         if (this.CITY_LEADER || this.CITY) {
-          if (this.cityVerify > 0) {
-            this.reviewForm.status = 1;
+          if (this.cityVerify > 0 && res.cityOpinion !== '') {
+            this.reviewForm.status = res.cityVerify;
             this.reviewForm.opinion = res.cityOpinion;
           }
         } else if (this.PROVINCE) {
           if (this.cityVerify > 0) {
-            this.reviewForm.status = 1;
-            this.reviewForm.opinion = res.provinceOpinion;
+            // this.reviewForm.status = res.provinceVerify;
+            // this.reviewForm.opinion = res.provinceOpinion;
           }
         }
         const stampedFile = res.stampedFile;
