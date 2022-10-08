@@ -1,7 +1,7 @@
 <template>
   <div class="show-box">
     <div class="select-batch">
-      <SelectBatch @changeSelect="changeSelect"/>
+      <SelectBatch @changeSelect="changeSelect" />
     </div>
     <div class="left-content">
       <PieChart
@@ -16,7 +16,7 @@
       />
     </div>
     <div class="right-content">
-      <BarChart v-if="showBar" key="1" :chart-data="chartData"/>
+      <BarChart v-if="showBar" key="1" :chart-data="chartData" />
     </div>
   </div>
 </template>
@@ -31,9 +31,9 @@ export default {
   data() {
     return {
       pieDataList: [
-        { name: '审核通过', value: 300 },
-        { name: '待审核', value: 50 },
-        { name: '审核未通过', value: 28 },
+        { name: '审核通过', value: 0 },
+        { name: '待审核', value: 0 },
+        { name: '审核未通过', value: 0 },
       ],
       total: 0,
       showBar: true,
@@ -55,7 +55,7 @@ export default {
         setTimeout(() => {
           this.flag = true;
           this.showBar = true;
-        },200);
+        }, 200);
       }
     });
   },
@@ -65,19 +65,28 @@ export default {
     },
     getData(val) {
       getCountVillage({ declarationBatch: val }).then((res) => {
-        this.chartData.xAxisData = res.cityCountVOList.map((i) => {return i.cityName});
-        this.chartData.dataList1 = res.cityCountVOList.map((i) => {return i.passTotalCount});
-        this.chartData.dataList2 = res.cityCountVOList.map((i) => {return i.readyPassTotalCount});
-        this.chartData.dataList3 = res.cityCountVOList.map((i) => {return i.noPassTotalCount});
+        this.chartData.xAxisData = res.cityCountVOList.map((i) => {
+          return i.cityName;
+        });
+        this.chartData.dataList1 = res.cityCountVOList.map((i) => {
+          return i.passTotalCount;
+        });
+        this.chartData.dataList2 = res.cityCountVOList.map((i) => {
+          return i.readyPassTotalCount;
+        });
+        this.chartData.dataList3 = res.cityCountVOList.map((i) => {
+          return i.noPassTotalCount;
+        });
+        console.log(res);
         this.pieDataList[0].value = res.passTotalCount;
         this.pieDataList[1].value = res.readyPassTotalCount;
-        this.pieDataList[2].value = res.passTotalCount;
+        this.pieDataList[2].value = res.noPassTotalCount;
         console.log(this.chartData);
-        this.total = res.passTotalCount + res.readyPassTotalCount + res.passTotalCount;
+        this.total = res.passTotalCount + res.readyPassTotalCount + res.noPassTotalCount;
       });
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
