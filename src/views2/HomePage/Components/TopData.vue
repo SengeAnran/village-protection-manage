@@ -1,9 +1,9 @@
 <template>
-  <div class="items" >
+  <div class="items">
     <el-row :gutter="20">
       <el-col :span="8" v-for="(item, index) in dataList" :key="index" style="text-align: center">
-        <div class="item" :style="{background: `url(${item.backgroundImg}) 100% 100% no-repeat`}">
-          <img :src="item.iconImg" alt="">
+        <div class="item" :style="{ background: `url(${item.backgroundImg}) 100% 100% no-repeat` }">
+          <img :src="item.iconImg" alt="" />
           <label-info
             :direction="labelInfoSet.direction"
             :color="item.color"
@@ -14,12 +14,11 @@
         </div>
       </el-col>
     </el-row>
-
   </div>
 </template>
 
 <script>
-import { getPreviewsNum } from "@/api2/homePage";
+import { getPreviewsNum } from '@/api2/homePage';
 
 export default {
   name: 'TopData',
@@ -37,7 +36,7 @@ export default {
         {
           label: '在建数',
           num: 0,
-          unit: '人',
+          unit: '个',
           color: '#FEC447',
           backgroundImg: require('../img/bg_01.png'),
           iconImg: require('../img/icon_02.png'),
@@ -95,7 +94,7 @@ export default {
       height: 48px;
     }
     &::v-deep .label {
-      margin-top: 3px
+      margin-top: 3px;
     }
   }
   .el-col:first-child .item {
