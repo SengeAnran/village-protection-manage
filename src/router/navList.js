@@ -492,7 +492,14 @@ export const defaultRoutes2 = [
       title: '未来乡村创建申报',
       hideChild: false,
       icon: 'cunzhuangshenbao',
-      menuIds: [USER_TYPE.VILLAGE, USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER, USER_TYPE.CITY, USER_TYPE.CITY_LEADER, USER_TYPE.PROVINCE],
+      menuIds: [
+        USER_TYPE.VILLAGE,
+        USER_TYPE.COUNTRY,
+        USER_TYPE.COUNTRY_LEADER,
+        USER_TYPE.CITY,
+        USER_TYPE.CITY_LEADER,
+        USER_TYPE.PROVINCE,
+      ],
     },
     children: [
       {
@@ -575,7 +582,13 @@ export const defaultRoutes2 = [
         name: 'ProgressSubmissionList',
         meta: {
           // icon: "cunzhuangshenbao",
-          menuIds: [USER_TYPE.PROVINCE, USER_TYPE.CITY, USER_TYPE.CITY_LEADER, USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER],
+          menuIds: [
+            USER_TYPE.PROVINCE,
+            USER_TYPE.CITY,
+            USER_TYPE.CITY_LEADER,
+            USER_TYPE.COUNTRY,
+            USER_TYPE.COUNTRY_LEADER,
+          ],
           title: '项目进度审阅',
         },
         component: () => import('@/views2/ProgressSubmission/index.vue'),
@@ -716,7 +729,7 @@ export const defaultRoutes2 = [
         },
         component: () => import('@/views2/AcceptanceEvaluation/AcceptanceTime/index'),
       },
-    ]
+    ],
   },
   // 驾驶舱进度
   {
@@ -727,7 +740,7 @@ export const defaultRoutes2 = [
       name: 'CockpitProgressList',
     },
     meta: {
-      menuIds: [USER_TYPE.PROVINCE, USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER],
+      menuIds: [USER_TYPE.PROVINCE, USER_TYPE.CITY, USER_TYPE.CITY_LEADER, USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER],
       title: '驾驶舱进度',
       hideChild: false,
       icon: 'xiangmuyanshou',
@@ -740,6 +753,16 @@ export const defaultRoutes2 = [
           // icon: "cunzhuangshenbao",
           menuIds: [USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER],
           title: '县级初审',
+        },
+        component: () => import('@/views2/CockpitProgress/index.vue'),
+      },
+      {
+        path: '/cockpitProgress/index',
+        name: 'CockpitProgressList',
+        meta: {
+          // icon: "cunzhuangshenbao",
+          menuIds: [USER_TYPE.CITY, USER_TYPE.CITY_LEADER],
+          title: '市级中审',
         },
         component: () => import('@/views2/CockpitProgress/index.vue'),
       },

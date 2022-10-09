@@ -110,6 +110,7 @@ function _setWLXCZXInfo(c_token) {
 function _setWLXCZXZCYJInfo(areaName) {
   return areaNameExchangeToken({ areaName }).then((res) => {
     setToken(res.token);
+    localStorage.setItem('viewType', res.viewType);
     // setLoginType("ext2");
   });
 }
