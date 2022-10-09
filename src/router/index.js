@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { constantRoutes } from './navList';
-import { getToken, verifyAuth } from '@/utils/auth';
+import { getQueryToken, getToken, verifyAuth } from '@/utils/auth';
 import store from '@/store';
 import config from '@/utils/config';
 import addAsyncRoutes from './route';
@@ -47,6 +47,13 @@ router.beforeEach(async (to, from, next) => {
         } else {
           const asyncRoutes = addAsyncRoutes(systemType, router, store.getters.permissionList);
           store.commit('user/SET_ROUTE_LIST', asyncRoutes); // 存储routeList
+        }
+        // 未来乡村在线跳转过来
+        const viewType = localStorage.getItem('viewType');
+        if (viewType === '1') {
+          localStorage.setItem('viewType', 0);
+          next('/cockpitProgress/index');
+          return;
         }
         // todo 添加其他内容
         if (to.fullPath === '/login') {
