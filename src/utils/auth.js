@@ -46,7 +46,7 @@ export function verifyAuth() {
   const token = getQueryToken('token');
   const c_token = getQueryToken('c_token');
   const systemType = getQueryToken('applicationId');
-  // const systemType = getQueryToken('applicationId');
+  // const areaName = getQueryToken('areaName'); // 如果从驾驶舱过来获取路径上的区域名
   if (systemType) {
     localStorage.setItem('systemType', systemType);
     localStorage.setItem('systemTitle', systemTitleType[systemType]);
