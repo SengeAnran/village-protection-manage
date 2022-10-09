@@ -21,6 +21,8 @@ export default {
           xAxisData: [],
           dataList1: [],
           dataList2: [],
+          dataList3: [],
+          dataList4: [],
         };
       },
     },
@@ -32,6 +34,8 @@ export default {
       xAxisData: [],
       dataList1: [],
       dataList2: [],
+      dataList3: [],
+      dataList4: [],
       data: [],
       timmerOneAnim: null,
       unit: '万',
@@ -44,7 +48,7 @@ export default {
           if (val.xAxisData && val.xAxisData.length > 0) {
             this.loadData();
           }
-        });
+        })
       },
       deep: true,
       immediate: true,
@@ -85,7 +89,7 @@ export default {
         },
         legend: {
           show: true,
-          data: ['计划投资', '完成投资'],
+          data: ['计划社会投资', '计划政府投资', '完成社会投资', '完成政府投资'],
           left: 60,
           top: 0,
           textStyle: {
@@ -98,8 +102,7 @@ export default {
         },
         tooltip: {
           trigger: 'axis',
-          axisPointer: {
-            // 坐标轴指示器配置项。
+          axisPointer: { // 坐标轴指示器配置项。
             type: 'shadow',
           },
           textStyle: {
@@ -109,32 +112,40 @@ export default {
           borderColor: 'rgba(255, 255, 255, 0.4)',
           backgroundColor: 'rgba(0, 0, 0, 0.3)',
           formatter: (params) => {
-            //             let str = `
-            // <div style="">
-            //   <div style="">${params[0].name}</div>
-            //   <div style="display: flex;"></div>
-            // </div>`
+//             let str = `
+// <div style="">
+//   <div style="">${params[0].name}</div>
+//   <div style="display: flex;"></div>
+// </div>`
             let str = params[0].name + '<br />';
+            str += `&nbsp; &nbsp;  完成总投: ${(params[0].value + params[1].value).toFixed(2)}${this.unit}<br/>`;
             params.forEach((item) => {
-              if (item.seriesName.indexOf('计划投资') != -1) {
-                str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
+              // console.log(item.seriesName);
+              // if (item.value) {
+                if (item.seriesName.indexOf('计划政府投资') != -1) {
+                  str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
                                     "></span>
                                          ${item.seriesName}
                                          :
-                                       ${item.value}${this.unit}  <br/>`;
-              }
-              if (item.seriesName.indexOf('完成投资') != -1) {
-                str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
+                                       ${item.value}${this.unit}  <br/><br/>`;
+                }else if (item.seriesName.indexOf('完成社会投资') != -1) {
+                  str += `&nbsp; &nbsp;  计划总投: ${(params[2].value + params[3].value).toFixed(2)}${this.unit}<br/><span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
                                     "></span>
                                          ${item.seriesName}
                                          :
                                        ${item.value}${this.unit}
                                         <br/>`;
-              }
+                }else{
+                  str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
+                                    "></span>
+                                        ${item.seriesName}
+                                        :
+                                      ${item.value}${this.unit}
+                                        <br/>`;
+                }
+              // }
             });
-            str += `&nbsp; &nbsp;  投资完成率: ${
-              params[0].value + params[1].value === 0 ? 0 : ((params[1].value / params[0].value) * 100).toFixed(2)
-            }%<br/>`;
+            str += `&nbsp; &nbsp;  投资完成率: ${params[0].value + params[1].value === 0 ? 0 : ((params[2].value + params[3].value)/(params[0].value + params[1].value) * 100 ).toFixed(2)}%<br/>`
             return str;
           },
         },
@@ -205,7 +216,7 @@ export default {
           {
             stack: 'AA',
             z: 1,
-            name: '计划投资',
+            name: '计划社会投资',
             data: this.dataList1,
             type: 'bar',
             barMaxWidth: 'auto',
@@ -254,10 +265,30 @@ export default {
             // },
           },
           {
+            stack: 'AA',
+            type: 'bar',
+            name: '计划政府投资',
+            barWidth: 10,
+            itemStyle: {
+              color: '#FED887',
+              borderRadius: [2, 2, 0, 0],
+            },
+            label: {
+              show: false,
+              position: 'top',
+              distance: 10,
+              color: '#FFFFFF',
+              textStyle: {
+                fontSize: 22,
+              },
+            },
+            data: this.dataList2,
+          },
+          {
             stack: 'BB',
             z: 1,
-            name: '完成投资',
-            data: this.dataList2,
+            name: '完成社会投资',
+            data: this.dataList3,
             type: 'bar',
             barMaxWidth: 'auto',
             barWidth: 10,
@@ -280,7 +311,7 @@ export default {
               //     },
               //   ],
               // },
-              color: '#FED887',
+              color: '#1492FF',
               borderRadius: [2, 2, 0, 0],
             },
             label: {
@@ -290,15 +321,37 @@ export default {
               color: '#fff',
             },
           },
+          {
+            stack: 'BB',
+            type: 'bar',
+            name: '完成政府投资',
+            barWidth: 10,
+            itemStyle: {
+              color: '#FED887',
+              borderRadius: [2, 2, 0, 0],
+            },
+            label: {
+              show: false,
+              position: 'top',
+              distance: 10,
+              color: '#FFFFFF',
+              textStyle: {
+                fontSize: 22,
+              },
+            },
+            data: this.dataList4,
+          },
         ],
       };
       return option;
     },
     loadData() {
-      const { xAxisData, dataList1, dataList2 } = this.chartData;
+      const { xAxisData, dataList1, dataList2, dataList3, dataList4 } = this.chartData;
       this.xAxisData = xAxisData;
       this.dataList1 = dataList1;
       this.dataList2 = dataList2;
+      this.dataList3 = dataList3;
+      this.dataList4 = dataList4;
       this.setData();
     },
   },

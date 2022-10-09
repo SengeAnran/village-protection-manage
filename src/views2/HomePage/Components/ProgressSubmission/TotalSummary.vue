@@ -25,15 +25,15 @@ export default {
   },
   computed: {
     rate() {
-      return (this.data.rate && Number(this.data.rate.replace('%', ''))) || 0;
-    },
-    totalComplete() {
-      const { totalCompleteGovInvestment, totalCompleteSocialInvestment } = this.data;
-      return (totalCompleteGovInvestment + totalCompleteSocialInvestment || 0).toFixed(2);
+      return parseFloat((this.data.totalwctzbl * 100).toFixed(1), 10);
     },
     totalPlan() {
-      const { totalPlanGovInvestment, totalPlanSocialInvestment } = this.data;
-      return totalPlanGovInvestment + totalPlanSocialInvestment || 0;
+      const { totalsbztt } = this.data;
+      return (totalsbztt || 0).toFixed(2);
+    },
+    totalComplete() {
+      const { totalywcztz } = this.data;
+      return totalywcztz || 0;
     },
   },
   methods: {

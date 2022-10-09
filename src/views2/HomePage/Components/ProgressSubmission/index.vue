@@ -16,7 +16,7 @@
 import FinanceIncome from '@/views2/HomePage/Components/ProgressSubmission/FinanceIncome';
 import SelectBatch from '@/views2/HomePage/Components/SelectBatch';
 import TotalSummary from './TotalSummary.vue';
-import { getProjectProgressReport } from '@/api2/homePage';
+import { getProjectProgressReportNew } from '@/api2/homePage';
 export default {
   components: { FinanceIncome, SelectBatch, TotalSummary },
   data() {
@@ -28,8 +28,6 @@ export default {
         xAxisData: [],
         dataList1: [],
         dataList2: [],
-        dataList3: [],
-        dataList4: [],
       },
     };
   },
@@ -42,7 +40,7 @@ export default {
         setTimeout(() => {
           this.flag = true;
           this.showBar = true;
-        },200);
+        }, 200);
       }
     });
   },
@@ -51,22 +49,16 @@ export default {
       this.getData(val);
     },
     async getData(batch) {
-      const res = await getProjectProgressReport({ batch });
+      const res = await getProjectProgressReportNew({ batch });
       this.data = res;
-      this.chartData.xAxisData = res.projectProgressReportVO.map((i) => {
-        return i.areaName;
+      this.chartData.xAxisData = res.staticProgressDOS.map((i) => {
+        return i.city;
       });
-      this.chartData.dataList1 = res.projectProgressReportVO.map((i) => {
-        return i.planGovInvestment;
+      this.chartData.dataList1 = res.staticProgressDOS.map((i) => {
+        return i.sbztt;
       });
-      this.chartData.dataList2 = res.projectProgressReportVO.map((i) => {
-        return i.planSocialInvestment;
-      });
-      this.chartData.dataList3 = res.projectProgressReportVO.map((i) => {
-        return i.completeSocialInvestment;
-      });
-      this.chartData.dataList4 = res.projectProgressReportVO.map((i) => {
-        return i.completeGovInvestment;
+      this.chartData.dataList2 = res.staticProgressDOS.map((i) => {
+        return i.ywcztz;
       });
     },
   },

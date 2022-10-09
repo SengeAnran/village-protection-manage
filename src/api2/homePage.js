@@ -29,6 +29,15 @@ export const getProjectProgressReport = (params) => {
     headers: { 'APPLICATION-ID': 4 },
   });
 };
+// 【首页】项目进度报送
+export const getProjectProgressReportNew = (params) => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/index/staticProgressReport`,
+    params,
+    headers: { 'APPLICATION-ID': 4 },
+  });
+};
 // 验收评价统计
 export const getAcceptanceStatistics = (data) => {
   return axios.request({
