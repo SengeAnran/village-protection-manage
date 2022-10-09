@@ -182,7 +182,8 @@ export default {
         },
       ],
       reportStateOPt: [],
-      getMethod: getList,
+      getMethod: '',
+      getMethod2: getList, // **关闭列表获取接口
       deleteMethod: deleteVillageItem,
       dialogVisible: false,
       submitSortMethod: recVerify,

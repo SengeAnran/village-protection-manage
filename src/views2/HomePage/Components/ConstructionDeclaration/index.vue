@@ -77,11 +77,9 @@ export default {
         this.chartData.dataList3 = res.cityCountVOList.map((i) => {
           return i.noPassTotalCount;
         });
-        console.log(res);
         this.pieDataList[0].value = res.passTotalCount;
         this.pieDataList[1].value = res.readyPassTotalCount;
         this.pieDataList[2].value = res.noPassTotalCount;
-        console.log(this.chartData);
         this.total = res.passTotalCount + res.readyPassTotalCount + res.noPassTotalCount;
       });
     },
