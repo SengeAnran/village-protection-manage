@@ -3,10 +3,11 @@
     <TotalTitle name="投资完成率" unit="%" :count="rate" />
     <div class="gap"></div>
     <TotalTitle name="计划投资" unit="万元" countSize="24" :icon="false" :count="Number(formatMoney(totalPlan))" />
-    <TotalItem :social="data.totalPlanSocialInvestment" :government="data.totalPlanGovInvestment" />
+    <!--    <TotalItem :social="data.totalPlanSocialInvestment" :government="data.totalPlanGovInvestment" : />-->
+    <TotalItem background-color="#70abf8" />
     <div class="gap"></div>
     <TotalTitle name="完成投资" unit="万元" countSize="24" :icon="false" :count="Number(formatMoney(totalComplete))" />
-    <TotalItem :social="data.totalCompleteSocialInvestment" :government="data.totalCompleteGovInvestment" />
+    <TotalItem background-color="#fed887" />
   </div>
 </template>
 <script>
@@ -37,7 +38,7 @@ export default {
   },
   methods: {
     formatMoney,
-  }
+  },
 };
 </script>
 

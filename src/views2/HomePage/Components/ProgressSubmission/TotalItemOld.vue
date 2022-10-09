@@ -1,24 +1,23 @@
 <template>
   <div>
     <div class="g-wrp">
-      <div class="g-rect" :style="{ width: '100%', backgroundColor: backgroundColor }">
-        <!--      <div class="g-rect" :style="{ width: socialWidth }">-->
+      <div class="g-rect" :style="{ width: socialWidth }">
         <div class="g-rect-fill"></div>
       </div>
-      <!--      <div class="g-rect" :style="{ width: governmentWidth }">-->
-      <!--        <div class="g-rect-fill"></div>-->
-      <!--      </div>-->
+      <div class="g-rect" :style="{ width: governmentWidth }">
+        <div class="g-rect-fill"></div>
+      </div>
     </div>
-    <!--    <div class="g-legend">-->
-    <!--      <div class="g-legend-item">-->
-    <!--        <span class="g-legend-icon"></span>-->
-    <!--        社会投资-->
-    <!--      </div>-->
-    <!--      <div class="g-legend-item">-->
-    <!--        <span class="g-legend-icon"></span>-->
-    <!--        政府投资-->
-    <!--      </div>-->
-    <!--    </div>-->
+    <div class="g-legend">
+      <div class="g-legend-item">
+        <span class="g-legend-icon"></span>
+        社会投资
+      </div>
+      <div class="g-legend-item">
+        <span class="g-legend-icon"></span>
+        政府投资
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -27,7 +26,6 @@ export default {
   props: {
     social: [Number, String],
     government: [Number, String],
-    backgroundColor: [Number, String],
   },
   computed: {
     total() {
@@ -61,7 +59,7 @@ export default {
     .g-rect-fill {
       width: 100%;
       height: 100%;
-      //background: #70abf8;
+      background: #70abf8;
       animation: widthAnimate 1s forwards;
     }
     &:nth-child(2) {
