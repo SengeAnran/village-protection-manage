@@ -277,7 +277,7 @@
           <UploadFile23
             tip="支持格式：.doc, .docx, .pdf"
             accept=".doc,.docx,.pdf"
-            :limitSize="100"
+            :limitSize="200"
             v-model="reviewForm.stampedFiles"
           />
           <p style="width: 100%; color: #ff6b00" class="py-4 leading-5">

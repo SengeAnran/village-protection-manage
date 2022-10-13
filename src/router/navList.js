@@ -582,14 +582,8 @@ export const defaultRoutes2 = [
         name: 'ProgressSubmissionList',
         meta: {
           // icon: "cunzhuangshenbao",
-          menuIds: [
-            USER_TYPE.PROVINCE,
-            USER_TYPE.CITY,
-            USER_TYPE.CITY_LEADER,
-            USER_TYPE.COUNTRY,
-            USER_TYPE.COUNTRY_LEADER,
-          ],
-          title: '项目进度审阅',
+          menuIds: [USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER],
+          title: '县级审核',
         },
         component: () => import('@/views2/ProgressSubmission/index.vue'),
       },

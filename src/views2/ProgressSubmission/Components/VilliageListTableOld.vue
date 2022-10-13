@@ -41,14 +41,12 @@
     </el-table-column>
     <el-table-column align="center" label="年度投资完成率（%）">
       <template slot-scope="scope">
-        <!--        {{ scope.row.yearRate || scope.row.yearRate === 0 ? scope.row.yearRate.toFixed(1) + '%' : '-' }}-->
-        {{ formatScore(scope.row.yearRate || 0) }}
+        {{ scope.row.yearRate || scope.row.yearRate === 0 ? scope.row.yearRate.toFixed(1) + '%' : '-' }}
       </template>
     </el-table-column>
     <el-table-column align="center" label="计划投资完成率（%）">
       <template slot-scope="scope">
-        <!--        {{ scope.row.planRate || scope.row.planRate === 0 ? scope.row.planRate.toFixed(1) + '%' : '-' }}-->
-        {{ formatScore(scope.row.planRate || 0) }}
+        {{ scope.row.planRate || scope.row.planRate === 0 ? scope.row.planRate.toFixed(1) + '%' : '-' }}
       </template>
     </el-table-column>
     <el-table-column
@@ -122,42 +120,74 @@
         </template>
       </el-table-column>
     </el-table-column>
-    <el-table-column v-if="type === 'edit'" align="center" label="本月总体进度（%）" width="170">
+    <el-table-column v-if="type === 'edit'" label="本月总体进度（%）" width="170">
       <template slot-scope="scope">
-        {{
-          scope.row.overallProgress || scope.row.overallProgress === 0
-            ? scope.row.overallProgress.toFixed(1) + '%'
-            : '-'
-        }}
+        <div v-if="VILLAGE">
+          <el-form-item
+            :prop="`tmpKey-global-first-${scope.$index}`"
+            label=""
+            :show-message="false"
+            :rules="rules[`tmpKey-global-first-${scope.$index}`]"
+          >
+            <el-input-number
+              v-model="form[`tmpKey-global-first-${scope.$index}`]"
+              size="mini"
+              maxlength="20"
+              placeholder="请输入"
+              :controls="false"
+              :precision="1"
+            >
+            </el-input-number>
+            %
+          </el-form-item>
+        </div>
+        <div v-else>
+          <span class="cell">{{ formatScore(scope.row.globalRate || 0, 1) }}%</span>
+        </div>
       </template>
     </el-table-column>
-    <!--    <el-table-column prop="rate" label="年度投资完成率（%）">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        &lt;!&ndash; 村级用户 &ndash;&gt;-->
-    <!--        <div v-if="VILLAGE && type === 'edit'">-->
-    <!--          {{ calcRateCurrentYear(scope) }}-->
-    <!--        </div>-->
-    <!--        &lt;!&ndash; 省市级用户 &ndash;&gt;-->
-    <!--        <div v-else>-->
-    <!--          <span class="cell">{{ formatScore(scope.row.yearRate || 0, 1) }}%</span>-->
-    <!--        </div>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
-    <!--    <el-table-column prop="rate" label="计划投资完成率（%）">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        &lt;!&ndash; 县级用户 &ndash;&gt;-->
-    <!--        <div v-if="VILLAGE && type === 'edit'">-->
-    <!--          {{ calcRateTotal(scope) }}-->
-    <!--        </div>-->
-    <!--        &lt;!&ndash; 省市级用户 &ndash;&gt;-->
-    <!--        <div v-else>-->
-    <!--          <span class="cell">{{ formatScore(scope.row.planRate || 0, 1) }}%</span>-->
-    <!--        </div>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
-    <el-table-column fixed="right" v-if="useAction" label="操作">
+    <el-table-column prop="rate" label="年度投资完成率（%）">
       <template slot-scope="scope">
-        <slot name="action" :data="scope.row"></slot>
+        <!-- 村级用户 -->
+        <div v-if="VILLAGE && type === 'edit'">
+          {{ calcRateCurrentYear(scope) }}
+        </div>
+        <!-- 省市级用户 -->
+        <div v-else>
+          <span class="cell">{{ formatScore(scope.row.yearRate || 0, 1) }}%</span>
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column prop="rate" label="计划投资完成率（%）">
+      <template slot-scope="scope">
+        <!-- 县级用户 -->
+        <div v-if="VILLAGE && type === 'edit'">
+          {{ calcRateTotal(scope) }}
+        </div>
+        <!-- 省市级用户 -->
+        <div v-else>
+          <span class="cell">{{ formatScore(scope.row.planRate || 0, 1) }}%</span>
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column prop="rate" label="是否开工" width="130">
+      <template slot-scope="scope">
+        <!-- 村级用户 -->
+        <div v-if="VILLAGE && type === 'edit'">
+          <el-form-item label="" :show-message="false">
+            <el-radio-group
+              v-model="form.detailLists[scope.$index].state"
+              :disabled="form.detailLists[scope.$index].lastState"
+            >
+              <el-radio :label="true">是</el-radio>
+              <el-radio :label="false">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </div>
+        <!-- 省市县级级用户 -->
+        <div v-else>
+          <span class="cell">{{ scope.row.isStart ? '是' : '否' }}</span>
+        </div>
       </template>
     </el-table-column>
   </el-table>
@@ -183,10 +213,6 @@ export default {
     type: {
       type: String,
       default: 'edit',
-    },
-    useAction: {
-      type: Boolean,
-      default: false,
     },
   },
   data() {

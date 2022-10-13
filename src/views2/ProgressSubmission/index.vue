@@ -23,21 +23,13 @@
         @selectionChange="selectionChange"
       >
         <template v-slot:search>
-          <div class="inline-flex mb-2 pl-0" style="flex-wrap: wrap">
-            <div v-if="!COUNTRY" class="search-item mb-4">
-              <span class="label">地区：</span>
-              <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea" />
-              <!--              <el-select v-model="query.declarationBatch" placeholder="请选择">-->
-              <!--                <el-option-->
-              <!--                  v-for="item in queryDeclareTypeOpt"-->
-              <!--                  :key="item.value"-->
-              <!--                  :label="item.label"-->
-              <!--                  :value="item.value"-->
-              <!--                >-->
-              <!--                </el-option>-->
-              <!--              </el-select>-->
-            </div>
+          <div v-if="VILLAGE || COUNTRY || COUNTRY_LEADER" class="inline-flex mb-2 pl-0" style="flex-wrap: wrap">
             <div class="search-item mb-4">
+              <span class="label">报送时间：</span>
+              <el-date-picker v-model="query.reportingTime" type="month" placeholder="请选择" value-format="yyyy-MM">
+              </el-date-picker>
+            </div>
+            <div v-if="!VILLAGE" class="search-item mb-4">
               <span class="label">村（片区）名称：</span>
               <el-input
                 style="width: 200px"
@@ -58,9 +50,23 @@
                 </el-option>
               </el-select>
             </div>
-            <div class="search-item mb-4">
+            <!--            <div v-if="!COUNTRY" class="search-item mb-4">-->
+            <!--              <span class="label">地区：</span>-->
+            <!--              <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea" />-->
+            <!--              &lt;!&ndash;              <el-select v-model="query.declarationBatch" placeholder="请选择">&ndash;&gt;-->
+            <!--              &lt;!&ndash;                <el-option&ndash;&gt;-->
+            <!--              &lt;!&ndash;                  v-for="item in queryDeclareTypeOpt"&ndash;&gt;-->
+            <!--              &lt;!&ndash;                  :key="item.value"&ndash;&gt;-->
+            <!--              &lt;!&ndash;                  :label="item.label"&ndash;&gt;-->
+            <!--              &lt;!&ndash;                  :value="item.value"&ndash;&gt;-->
+            <!--              &lt;!&ndash;                >&ndash;&gt;-->
+            <!--              &lt;!&ndash;                </el-option>&ndash;&gt;-->
+            <!--              &lt;!&ndash;              </el-select>&ndash;&gt;-->
+            <!--            </div>-->
+
+            <div v-if="VILLAGE" class="search-item mb-4">
               <span class="label">状态：</span>
-              <el-select v-model="query.reportStatus" placeholder="请选择">
+              <el-select v-model="query.projectStatus" placeholder="请选择">
                 <el-option v-for="(item, index) of reportStateOPt" :key="index" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
@@ -69,14 +75,15 @@
         </template>
         <template v-slot:export>
           <el-button icon="el-icon-download" type="primary" plain @click="exportMethod"> 导出信息汇总表 </el-button>
-          <el-button icon="el-icon-download" type="primary" plain @click="exportMethod2"> 导出项目进度表 </el-button>
+          <!--          <el-button icon="el-icon-download" type="primary" plain @click="exportMethod2"> 导出项目进度表 </el-button>-->
         </template>
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
-            <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
-            <el-divider v-if="canReport(scope.data)" direction="vertical"></el-divider>
+            <el-link v-if="canVerify(scope.data)" @click="goDetail(scope)" type="primary"> 审核 </el-link>
+            <el-link v-if="canDetail(scope.data)" @click="goDetail(scope)" type="primary"> 详情 </el-link>
+            <!--            <el-divider v-if="canReport(scope.data)" direction="vertical"></el-divider>-->
             <div style="display: inline-block">
-              <el-link v-if="canReport(scope.data)" @click="edit(scope.data)" type="primary"> 进度报送</el-link>
+              <el-link v-if="canReport(scope.data)" @click="edit(scope.data)" type="primary"> 报送</el-link>
             </div>
           </div>
         </template>
@@ -93,6 +100,7 @@
         <!--        </template>-->
 
         <template v-slot:table>
+          <el-table-column label="报送时间" prop="reportingTime" fixed></el-table-column>
           <el-table-column label="村（片区）名称" prop="name"></el-table-column>
           <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
           <el-table-column label="项目数" prop="projectNum"></el-table-column>
@@ -108,11 +116,12 @@
               {{ formatMoney(scope.row.completeTotalInvestment || 0) }}
             </template>
           </el-table-column>
-          <el-table-column label="计划投资完成率" sortable prop="rate"></el-table-column>
+          <el-table-column label="投资完成率" sortable prop="rate"></el-table-column>
+          <el-table-column label="总体进度" sortable prop="rate"></el-table-column>
           <el-table-column label="状态" prop="status">
             <template slot-scope="scope">
-              <p :style="{ color: REPORT_STATUS_COLOR[scope.row.reportStatus] }">
-                {{ getStatusName(scope.row.reportStatus) }}
+              <p :style="{ color: REPORT_STATUS_COLOR[scope.row.projectStatus] }">
+                {{ getStatusName(scope.row.projectStatus) }}
               </p>
             </template>
           </el-table-column>
@@ -130,6 +139,7 @@ import {
   getStatusName,
   REPORT_STATUS_COLOR,
   REPORT_STATUS,
+  PROJECT_STATUS,
   // PRO_DECLEAR_STATUS,
 } from './constants';
 import { recVerify } from '../../api/villageManage';
@@ -152,9 +162,10 @@ export default {
         declarationBatch: '',
         finalStatus: '',
         name: '',
+        reportingTime: '', // 报送时间
         date: '',
         areaId: '',
-        reportStatus: '',
+        projectStatus: null,
       },
       declareYearOpt: [
         {
@@ -182,8 +193,7 @@ export default {
         },
       ],
       reportStateOPt: [],
-      getMethod: '',
-      getMethod2: getList, // **关闭列表获取接口
+      getMethod: getList,
       deleteMethod: deleteVillageItem,
       dialogVisible: false,
       submitSortMethod: recVerify,
@@ -210,34 +220,49 @@ export default {
     console.log([12, 13].toString());
   },
   mounted() {
-    const opts = Object.values(REPORT_STATUS).map((ele) => {
+    const opts = Object.keys(REPORT_STATUS).map((ele) => {
+      console.log(ele);
       return {
-        label: ele,
-        value: ele,
+        label: REPORT_STATUS[ele],
+        value: parseInt(ele),
       };
     });
     opts.unshift({
       label: '全部',
-      value: '',
+      value: null,
     });
     this.reportStateOPt = opts;
   },
   methods: {
     formatMoney,
     getStatusName,
+    canVerify(data) {
+      const hasPerm = this.CITY || this.COUNTRY_LEADER;
+      if (data.projectStatus !== PROJECT_STATUS.CITY_VERIFY_PENDING) {
+        return false;
+      }
+      return hasPerm;
+    },
+    canDetail(data) {
+      const hasPerm = this.VILLAGE;
+      if (data.projectStatus === PROJECT_STATUS.TO_BE_REPORT) {
+        return false;
+      }
+      return hasPerm;
+    },
     canReport(data) {
       const hasPerm = this.VILLAGE;
-      if (data.reportStatus !== REPORT_STATUS.UNREPORTED) {
+      if (data.projectStatus !== PROJECT_STATUS.TO_BE_REPORT) {
         // 已报送则不可在报送
         return false;
       }
       if (!hasPerm) {
         return false;
       }
-      const day = new Date().getDate();
-      if (day > 18) {
-        return false;
-      }
+      // const day = new Date().getDate();
+      // if (day > 18) {
+      //   return false;
+      // }
       return true;
     },
     // 地区

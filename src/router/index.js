@@ -44,6 +44,8 @@ router.beforeEach(async (to, from, next) => {
         if (String(systemType) === '4') {
           const asyncRoutes = addAsyncRoutes2(systemType, router, store.getters.userInfo?.roleId);
           store.commit('user/SET_ROUTE_LIST', asyncRoutes); // 存储routeList
+          // const t = window.devicePixelRatio   // 获取下载的缩放 125% -> 1.25    150% -> 1.5
+          document.body.style.zoom = 1.1; // 修改页面的缩放比例为1.1
         } else {
           const asyncRoutes = addAsyncRoutes(systemType, router, store.getters.permissionList);
           store.commit('user/SET_ROUTE_LIST', asyncRoutes); // 存储routeList

@@ -49,10 +49,43 @@
       </div>
       <div class="mb-8">
         <el-form-item class="list-table" label="" prop="detailLists" :rules="listRules">
-          <div class="import">
-            <el-button type="primary" @click="lookHistory">历史数据</el-button>
-          </div>
-          <VilliageListTable v-if="showTable" type="edit" :form="form" :data="form.detailLists" />
+          <!--          <div class="import">-->
+          <!--            <el-button type="primary" @click="lookHistory">历史数据</el-button>-->
+          <!--          </div>-->
+          <el-tabs v-model="activeName">
+            <el-tab-pane label="报送中" name="first">
+              <VilliageListTable
+                key="报送中"
+                v-if="showTable"
+                type="edit"
+                :form="form"
+                useAction
+                :data="form.detailLists"
+              >
+                <template v-slot:action="scope">
+                  <el-link
+                    v-if="
+                      scope.data.completeDrive === null &&
+                      scope.data.completeGov === null &&
+                      scope.data.completeTotal === null
+                    "
+                    @click="goDetail(scope)"
+                    type="primary"
+                  >
+                    填报
+                  </el-link>
+                  <span v-else>
+                    <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
+                    <el-divider direction="vertical"></el-divider>
+                    <el-link @click="goDetail(scope)" type="primary"> 修改 </el-link>
+                  </span>
+                </template>
+              </VilliageListTable>
+            </el-tab-pane>
+            <el-tab-pane label="已竣工" name="second">
+              <VilliageListTable key="已竣工" v-if="showTable" type="edit" :form="form" :data="form.endLists" />
+            </el-tab-pane>
+          </el-tabs>
         </el-form-item>
       </div>
     </el-form>
@@ -99,6 +132,7 @@ export default {
   },
   data() {
     return {
+      activeName: 'first',
       showTable: false,
       form: {
         area: '',
@@ -109,6 +143,7 @@ export default {
         contactPerson: '',
         phone: '',
         detailLists: [],
+        endLists: [],
       },
       historyList: [],
       type: 'add',
@@ -129,6 +164,16 @@ export default {
       getDetail({ id: this.$route.query.id }).then((res) => {
         this.form = res;
         this.form.detailLists = this.form.detailLists.map((i) => {
+          return {
+            ...i,
+            state: Boolean(i.isStart),
+            lastState: Boolean(i.isStart),
+            completeDriveNow: 0,
+            completeGovNow: 0,
+            overallProgressNow: 0,
+          };
+        });
+        this.form.endLists = this.form.endLists.map((i) => {
           return {
             ...i,
             state: Boolean(i.isStart),

@@ -160,7 +160,7 @@
           </p>
         </el-form-item>
         <el-form-item label="" prop="meetingPic" :rules="rule.upload">
-          <UploadImg2 :defaultData="oldMeetingPic" v-model="form.meetingPic" :limit="1" />
+          <UploadImg2 :defaultData="oldMeetingPic" v-model="form.meetingPic" :limit="3" />
         </el-form-item>
         <el-form-item label="乡、镇（街道）人民政府（办事处）意见" prop="townText" :rules="rule.input">
           <el-input
@@ -210,7 +210,7 @@
                   v-model="form.createScenarioFile"
                   tip="支持拓展名：.doc, .docx, .pdf"
                   accept=".doc,.docx,.pdf"
-                  :limitSize="100"
+                  :limitSize="200"
                 />
                 <p style="width: 42%; color: #ff6b00" class="py-4 leading-5">
                   <i class="el-icon-warning"></i> 请上传《浙江省未来乡村创建方案》
@@ -506,6 +506,13 @@ export default {
               type: 'warning',
             });
           }
+          // 校验时间填写是否合规
+          if (!this.verificationTime(this.form.projects, [this.form.startTime, this.form.endTime])) {
+            return this.$message({
+              message: '项目进度安排周期不可超出创建周期范围！',
+              type: 'warning',
+            });
+          }
           const annexIds = this.form.annexFiles.map((i) => i.fileId).toString();
           const createScenario = this.form.createScenarioFile.fileId;
 
@@ -537,6 +544,23 @@ export default {
           (i.planFirstDrive || 0) + (i.planFirstGov || 0) + (i.planSecondDrive || 0) + (i.planSecondGov || 0);
       });
       return projectAllNum === allNum;
+    },
+    // 校验时间填写是否规范
+    verificationTime(arr, time = []) {
+      const res = arr.every((i) => {
+        // console.log(i.schedule, time[0], i.scheduleEnd, time[1]);
+        // console.log(
+        //   Date.parse(new Date(i.schedule)),
+        //   Date.parse(new Date(time[0])),
+        //   Date.parse(new Date(i.scheduleEnd)),
+        //   Date.parse(new Date(time[1])),
+        // );
+        return (
+          Date.parse(new Date(i.schedule)) > Date.parse(new Date(time[0])) &&
+          Date.parse(new Date(i.scheduleEnd)) < Date.parse(new Date(time[1]))
+        );
+      });
+      return res;
     },
     // 新增申报或保存待发item
     submit(params) {
