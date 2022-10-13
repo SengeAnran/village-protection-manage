@@ -162,9 +162,9 @@ export const exchangeToken = (params) => {
   return axios.get(apiHost2 + `/api/user/login/dxLogin`, { params });
 };
 
-// 未来乡村在线系统跳转过来，通过 areaName 换取token
-export const areaNameExchangeToken = (params) => {
-  return axios.get(apiHost2 + `/api/user/login/jscLogin`, { params });
+// 未来乡村在线系统跳转过来，通过 param 换取token
+export const paramExchangeToken = (data) => {
+  return axios.post(apiHost2 + `/api/user/login/jscLogin`, data);
 };
 
 // 获取门户地址及登录地址

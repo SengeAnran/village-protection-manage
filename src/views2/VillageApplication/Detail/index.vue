@@ -1,6 +1,5 @@
 <template>
   <div class="block">
-    <el-button v-if="showEdit()" class="edit-btn" type="primary" @click="handleEdit(form)">修改</el-button>
     <div class="nav-root mb-4">
       <RouterBack>详情</RouterBack>
       <!--      <el-button class="export-button" @click="clickExport">导出</el-button>-->
@@ -275,7 +274,12 @@
           :rules="rule.upload"
           prop="stampedFiles"
         >
-          <UploadFile23 tip="支持格式：.doc, .docx, .pdf" accept=".doc,.docx,.pdf" v-model="reviewForm.stampedFiles" />
+          <UploadFile23
+            tip="支持格式：.doc, .docx, .pdf"
+            accept=".doc,.docx,.pdf"
+            :limitSize="100"
+            v-model="reviewForm.stampedFiles"
+          />
           <p style="width: 100%; color: #ff6b00" class="py-4 leading-5">
             <i class="el-icon-warning"></i>请上传《未来乡村创建申报表》盖章扫描件
           </p>
@@ -286,6 +290,7 @@
         </el-form-item>
       </el-form>
     </div>
+    <el-button v-if="showEdit()" class="edit-btn" type="primary" @click="handleEdit(form)">修改</el-button>
   </div>
 </template>
 <script>
@@ -537,10 +542,10 @@ export default {
 
 <style lang="scss" scoped>
 .edit-btn {
-  z-index: 10;
-  position: fixed;
-  bottom: 100px;
-  right: 70px;
+  //z-index: 10;
+  //position: fixed;
+  //bottom: 100px;
+  //right: 70px;
 }
 .nav-root {
   display: flex;

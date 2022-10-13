@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import config from '@/utils/config';
-import { exchangeToken, areaNameExchangeToken } from '@/api/user';
+import { exchangeToken, paramExchangeToken } from '@/api/user';
 import store from '@/store';
 
 const TokenKey = 'access_token';
@@ -47,6 +47,7 @@ export function verifyAuth() {
   const c_token = getQueryToken('c_token');
   const systemType = getQueryToken('applicationId');
   const areaName = getQueryToken('areaName'); // 如果从驾驶舱过来获取路径上的区域名
+  const id = getQueryToken('id'); // 如果从驾驶舱过来获取路径上的区域名
   if (systemType) {
     localStorage.setItem('systemType', systemType);
     localStorage.setItem('systemTitle', systemTitleType[systemType]);
@@ -56,13 +57,35 @@ export function verifyAuth() {
   if (areaName) {
     localStorage.setItem('areaName', areaName); // 存储areaName 列表跳转时使用
   }
+  if (id) {
+    localStorage.setItem('id', id); // id 列表跳转时使用
+  }
   updateDocumentTitle();
 
   return new Promise((resolve) => {
     // 移除链接中token
     removeLocationSearch();
-
-    if (c_token) {
+    if (areaName && c_token) {
+      setLoginType('ext2'); // c_token可能超时，跳转回登录页
+      const data = {
+        c_token: c_token,
+        param: areaName,
+        viewType: 1, // 0：正常进入工作台，1：省级驾驶舱进入，2：美丽乡村二级页面进入）
+      };
+      _setWLXCZXZCYJInfo(data).then(() => {
+        resolve();
+      });
+    } else if (id && c_token) {
+      setLoginType('ext2'); // c_token可能超时，跳转回登录页
+      const data = {
+        c_token: c_token,
+        param: id,
+        viewType: 2, // 0：正常进入工作台，1：省级驾驶舱进入，2：美丽乡村二级页面进入）
+      };
+      _setWLXCZXZCYJInfo(data).then(() => {
+        resolve();
+      });
+    } else if (c_token) {
       setLoginType('ext2'); // c_token可能超时，跳转回登录页
       _setWLXCZXInfo(c_token).then(() => {
         resolve();
@@ -70,11 +93,6 @@ export function verifyAuth() {
     } else if (token) {
       _setPortalInfo(token);
       resolve();
-    } else if (areaName) {
-      setLoginType('ext2'); // c_token可能超时，跳转回登录页
-      _setWLXCZXZCYJInfo(areaName).then(() => {
-        resolve();
-      });
     } else {
       resolve();
     }
@@ -107,8 +125,8 @@ function _setWLXCZXInfo(c_token) {
   });
 }
 // 从「未来乡村在线.监测预警」跳转过来
-function _setWLXCZXZCYJInfo(areaName) {
-  return areaNameExchangeToken({ areaName }).then((res) => {
+function _setWLXCZXZCYJInfo(data) {
+  return paramExchangeToken(data).then((res) => {
     setToken(res.token);
     localStorage.setItem('viewType', res.viewType);
     // setLoginType("ext2");

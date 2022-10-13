@@ -55,6 +55,12 @@ router.beforeEach(async (to, from, next) => {
           next('/cockpitProgress/index');
           return;
         }
+        if (viewType === '2') {
+          // console.log('去详情页');
+          localStorage.setItem('viewType', 0);
+          next(`/villageApplication2/villageDetails?id=${localStorage.getItem('id')}`);
+          return;
+        }
         // todo 添加其他内容
         if (to.fullPath === '/login') {
           next('/home');
