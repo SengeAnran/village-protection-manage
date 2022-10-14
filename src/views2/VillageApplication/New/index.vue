@@ -200,7 +200,7 @@
                   v-model="form.createScenarioFile"
                   tip="支持拓展名：.doc, .docx, .pdf"
                   accept=".doc,.docx,.pdf"
-                  :limitSize="200"
+                  :limitSize="100"
                 />
                 <p style="width: 42%; color: #ff6b00" class="py-4 leading-5">
                   <i class="el-icon-warning"></i> 请上传《浙江省未来乡村创建方案》
