@@ -42,13 +42,13 @@
     <el-table-column align="center" label="年度投资完成率（%）">
       <template slot-scope="scope">
         <!--        {{ scope.row.yearRate || scope.row.yearRate === 0 ? scope.row.yearRate.toFixed(1) + '%' : '-' }}-->
-        {{ formatScore(scope.row.yearRate || 0) }}
+        {{ formatScore(scope.row.yearRate || 0) }}%
       </template>
     </el-table-column>
     <el-table-column align="center" label="计划投资完成率（%）">
       <template slot-scope="scope">
         <!--        {{ scope.row.planRate || scope.row.planRate === 0 ? scope.row.planRate.toFixed(1) + '%' : '-' }}-->
-        {{ formatScore(scope.row.planRate || 0) }}
+        {{ formatScore(scope.row.planRate || 0) }}%
       </template>
     </el-table-column>
     <el-table-column

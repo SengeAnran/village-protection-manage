@@ -193,6 +193,7 @@ export default {
         },
       ],
       reportStateOPt: [],
+      // getMethod: '',
       getMethod: getList,
       deleteMethod: deleteVillageItem,
       dialogVisible: false,

@@ -69,7 +69,7 @@
                       scope.data.completeGov === null &&
                       scope.data.completeTotal === null
                     "
-                    @click="goDetail(scope)"
+                    @click="fillIn(scope)"
                     type="primary"
                   >
                     填报
@@ -96,17 +96,21 @@
     <el-dialog title="详情" :visible.sync="dialogVisible" width="90%">
       <VillageListHistoryTable :data="historyList" />
     </el-dialog>
+
+    <el-dialog class="new-dialog" title="填报" center :visible.sync="fillInDialogVisible" width="90%">
+      <AddFillIn :id="projectId" @saveItem="saveItem" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import VilliageListTable from '../Components/VilliageListTable';
 import VillageListHistoryTable from '../Components/VillageListHistoryTable';
+import AddFillIn from '../Components/AddFillIn';
 
 import rule from '@/mixins/rule';
 import { addData, getDetail, getHistory } from '@/api2/progressSubmission';
 import { formatMoney } from '@/views2/utils/formatter';
-
 const tableList = (rule, value, callback) => {
   if (value.length) {
     const notNum = value.some((i) => {
@@ -129,9 +133,11 @@ export default {
   components: {
     VilliageListTable,
     VillageListHistoryTable,
+    AddFillIn,
   },
   data() {
     return {
+      projectId: null,
       activeName: 'first',
       showTable: false,
       form: {
@@ -146,9 +152,11 @@ export default {
         endLists: [],
       },
       historyList: [],
+      fillInDataList: [],
       type: 'add',
       firstTime: false, // 是否是第一次填报进度
       dialogVisible: false,
+      fillInDialogVisible: false, // 填报弹窗
       importDialogVisible: false,
       editIndex: '',
       editProjectForm: false, // 编辑表格
@@ -189,6 +197,20 @@ export default {
         this.showTable = true;
       });
     },
+    // 填报
+    fillIn(scope) {
+      console.log(scope.data);
+      this.projectId = scope.data.id;
+      this.fillInDialogVisible = true;
+    },
+    saveItem(data) {
+      const index = this.fillInDataList.findIndex((i) => i.id === data.id);
+      if (index === -1) {
+        this.fillInDataList.push(data); // 新增
+      } else {
+        this.fillInDataList.splice(index, 1, data); // 修改
+      }
+    },
     // 添加 项目
     onSubmit() {
       this.$refs.form.validate(async (valid) => {
@@ -225,6 +247,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.new-dialog {
+  &::v-deep .el-dialog__header::after {
+    //border-bottom: #e6e9f0 1px solid;
+    margin-top: 16px;
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #e6e9f0;
+  }
+}
 .form {
   max-width: 1600px;
   padding-left: 8px;

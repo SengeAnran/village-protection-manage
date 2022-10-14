@@ -41,20 +41,10 @@
           <el-col :span="12">
             <el-form-item label="创建周期" prop="startTime" :rules="rule.date">
               计划从
-              <el-date-picker
-                v-model="form.startTime"
-                type="month"
-                placeholder="选择月"
-                value-format="yyyy-MM-DD HH:mm:ss"
-              >
+              <el-date-picker v-model="form.startTime" type="month" placeholder="选择月" value-format="yyyy-MM">
               </el-date-picker>
               至
-              <el-date-picker
-                v-model="form.endTime"
-                type="month"
-                placeholder="选择月"
-                value-format="yyyy-MM-DD HH:mm:ss"
-              >
+              <el-date-picker v-model="form.endTime" type="month" placeholder="选择月" value-format="yyyy-MM">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -548,16 +538,16 @@ export default {
     // 校验时间填写是否规范
     verificationTime(arr, time = []) {
       const res = arr.every((i) => {
-        // console.log(i.schedule, time[0], i.scheduleEnd, time[1]);
-        // console.log(
-        //   Date.parse(new Date(i.schedule)),
-        //   Date.parse(new Date(time[0])),
-        //   Date.parse(new Date(i.scheduleEnd)),
-        //   Date.parse(new Date(time[1])),
-        // );
+        console.log(i.schedule, time[0], i.scheduleEnd, time[1]);
+        console.log(
+          Date.parse(new Date(i.schedule)),
+          Date.parse(new Date(time[0])),
+          Date.parse(new Date(i.scheduleEnd)),
+          Date.parse(new Date(time[1])),
+        );
         return (
-          Date.parse(new Date(i.schedule)) > Date.parse(new Date(time[0])) &&
-          Date.parse(new Date(i.scheduleEnd)) < Date.parse(new Date(time[1]))
+          Date.parse(new Date(i.schedule)) >= Date.parse(new Date(time[0])) &&
+          Date.parse(new Date(i.scheduleEnd)) <= Date.parse(new Date(time[1]))
         );
       });
       return res;
@@ -566,7 +556,7 @@ export default {
     submit(params) {
       villageDeclaration(params).then(() => {
         this.$message({
-          message: '添加成功！',
+          message: '提交成功！',
           type: 'success',
         });
         this.$router.back();
@@ -576,7 +566,7 @@ export default {
     update(params) {
       updateVillageItem(params).then(() => {
         this.$message({
-          message: params.saveToGo ? '保存成功！' : this.type === 'edit' ? '修改成功！' : '添加成功！',
+          message: params.saveToGo ? '保存成功！' : this.type === 'edit' ? '修改成功！' : '提交成功！',
           type: 'success',
         });
         this.$router.back();
