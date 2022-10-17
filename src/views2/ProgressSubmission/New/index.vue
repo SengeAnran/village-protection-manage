@@ -101,6 +101,7 @@
         v-if="detailDialogVisible"
         v-model="detailDialogVisible"
         :id="detailId"
+        type="add"
         :detailData="detailData"
       />
     </el-dialog>
@@ -267,20 +268,24 @@ export default {
     onSubmit() {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
-          console.log(this.form);
+          if (this.fillInDataList.length !== this.form.detailLists.length) {
+            return this.$notify.error('请填报所以项目的上报数据');
+          }
           const data = this.form.detailLists.map((item) => {
             return {
-              completeDrive: Number(item.completeDriveNow),
-              completeGov: Number(item.completeGovNow),
-              completeTotal: Number(item.completeDriveNow) + Number(item.completeGovNow),
-              overallProgress: Number(item.overallProgressNow),
+              completeDrive: Number(item.completeDrive),
+              completeGov: Number(item.completeGov),
+              completeTotal: Number(item.completeDrive) + Number(item.completeDrive),
+              overallProgress: Number(item.overallProgress),
               planRate: Number(item.planRate),
               yearRate: Number(item.yearRate),
-              projectId: item.projectId,
-              isStart: item.state ? 1 : 0,
+              id: item.id,
+              isStart: item.isStart,
+              isEnd: item.isEnd,
+              monthPic: item.monthPic,
             };
           });
-
+          console.log(data);
           await addData(data);
           this.$notify.success({
             title: '进度上报成功！',

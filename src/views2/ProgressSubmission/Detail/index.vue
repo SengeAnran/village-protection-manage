@@ -2,14 +2,7 @@
   <div class="block">
     <RouterBack>详情</RouterBack>
     <div class="box-title">未来乡村项目进度报送</div>
-    <el-form
-      style="padding-left: 14px"
-      ref="form"
-      class="form"
-      label-position="top"
-      :model="form"
-      label-width="80px"
-    >
+    <el-form style="padding-left: 14px" ref="form" class="form" label-position="top" :model="form" label-width="80px">
       <div class="input-item-wrp">
         <el-form-item label="创建村/片区名称" prop="villageId">
           <p class="content">{{ form.name }}</p>
@@ -33,29 +26,25 @@
         </el-form-item>
       </div>
       <el-form-item>
-        <div class="import">
-          <el-button type="primary" @click="lookHistory" >历史数据</el-button>
-        </div>
+        <!--        <div class="import">-->
+        <!--          <el-button type="primary" @click="lookHistory">历史数据</el-button>-->
+        <!--        </div>-->
         <VilliageListTable v-if="showTable" type="look" :data="form.detailLists" />
       </el-form-item>
       <div id="verify"></div>
       <el-button @click="$router.back()">返回</el-button>
     </el-form>
-    <el-dialog
-      title="详情"
-      :visible.sync="dialogVisible"
-      width="90%"
-    >
+    <el-dialog title="详情" :visible.sync="dialogVisible" width="90%">
       <VillageListHistoryTable :data="historyList" />
     </el-dialog>
   </div>
 </template>
 <script>
-import VilliageListTable from "../Components/VilliageListTable";
-import VillageListHistoryTable from "../Components/VillageListHistoryTable";
-import rule from "@/mixins/rule";
-import { HISTORY_BUILDINGS } from "../constants";
-import {getDetail, getHistory} from "@/api2/progressSubmission";
+import VilliageListTable from '../Components/VilliageListTable';
+import VillageListHistoryTable from '../Components/VillageListHistoryTable';
+import rule from '@/mixins/rule';
+import { HISTORY_BUILDINGS } from '../constants';
+import { getDetail, getHistory } from '@/api2/progressSubmission';
 import { formatMoney } from '@/views2/utils/formatter';
 
 export default {
@@ -80,10 +69,10 @@ export default {
       finalStatus: null,
       total: 0,
 
-      tips: "",
+      tips: '',
       dialogVisible: false,
-      dialogId: "",
-      textarea: "",
+      dialogId: '',
+      textarea: '',
       status: null,
       showTable: false,
     };
@@ -105,10 +94,10 @@ export default {
       });
     },
     async lookHistory() {
-      const res = await getHistory({ id: this.$route.query.id })
+      const res = await getHistory({ id: this.$route.query.id });
       this.historyList = res;
       this.dialogVisible = true;
-    }
+    },
     // async clickExport() {
     //   const { id } = this.$route.query;
     //   const res = await getvillageDetailExport({id})
@@ -121,13 +110,13 @@ export default {
 <style lang="scss" scoped>
 .export {
   margin-bottom: 25px;
-  .export-button{
+  .export-button {
     float: right;
   }
 }
 .box-title {
   height: 40px;
-  background: #F5FAFF;
+  background: #f5faff;
   line-height: 40px;
   font-size: 18px;
   font-family: PingFangSC-Medium, PingFang SC;
@@ -149,7 +138,6 @@ export default {
       color: #999;
       font-size: 16px;
     }
-
   }
   .block-tit {
     margin-top: 18px;
@@ -158,7 +146,7 @@ export default {
     font-family: PingFangSC-Medium, PingFang SC;
     font-weight: 500;
     color: #333333;
-    line-height: 25px
+    line-height: 25px;
   }
 
   .input {
@@ -190,7 +178,7 @@ export default {
     //margin-bottom: 18px;
 
     ::v-deep .el-form-item {
-      width: 40%;
+      width: 30%;
       flex-shrink: 0;
       margin-right: 20px;
       .el-form-item__label {
@@ -213,7 +201,7 @@ export default {
     }
   }
   .fu-file:hover {
-    color: #1492FF;
+    color: #1492ff;
   }
   .status {
     margin-bottom: 20px;
