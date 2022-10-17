@@ -77,7 +77,7 @@
                   <span v-else>
                     <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
                     <el-divider direction="vertical"></el-divider>
-                    <el-link @click="goDetail(scope)" type="primary"> 修改 </el-link>
+                    <el-link @click="goModify(scope)" type="primary"> 修改 </el-link>
                   </span>
                 </template>
               </VilliageListTable>
@@ -96,9 +96,24 @@
     <el-dialog title="详情" :visible.sync="dialogVisible" width="90%">
       <VillageListHistoryTable :data="historyList" />
     </el-dialog>
+    <el-dialog class="new-dialog" title="详情" :visible.sync="detailDialogVisible" width="90%">
+      <AddFillInDetail
+        v-if="detailDialogVisible"
+        v-model="detailDialogVisible"
+        :id="detailId"
+        :detailData="detailData"
+      />
+    </el-dialog>
 
     <el-dialog class="new-dialog" title="填报" center :visible.sync="fillInDialogVisible" width="90%">
-      <AddFillIn :id="projectId" @saveItem="saveItem" />
+      <AddFillIn
+        v-if="fillInDialogVisible"
+        v-model="fillInDialogVisible"
+        :id="projectId"
+        :modifyData="modifyData"
+        :type="dialogType"
+        @saveItem="saveItem"
+      />
     </el-dialog>
   </div>
 </template>
@@ -106,6 +121,7 @@
 <script>
 import VilliageListTable from '../Components/VilliageListTable';
 import VillageListHistoryTable from '../Components/VillageListHistoryTable';
+import AddFillInDetail from '../Components/AddFillInDetail';
 import AddFillIn from '../Components/AddFillIn';
 
 import rule from '@/mixins/rule';
@@ -134,10 +150,12 @@ export default {
     VilliageListTable,
     VillageListHistoryTable,
     AddFillIn,
+    AddFillInDetail,
   },
   data() {
     return {
       projectId: null,
+      modifyData: {},
       activeName: 'first',
       showTable: false,
       form: {
@@ -157,10 +175,15 @@ export default {
       firstTime: false, // 是否是第一次填报进度
       dialogVisible: false,
       fillInDialogVisible: false, // 填报弹窗
+      detailDialogVisible: false, // 填报详情弹窗
       importDialogVisible: false,
       editIndex: '',
       editProjectForm: false, // 编辑表格
       listRules: { required: true, validator: tableList, trigger: 'blur' },
+      firstYear: 2022,
+      dialogType: 'add',
+      detailData: {}, // 详情数据
+      detailId: '', // 详情弹窗id
     };
   },
   beforeMount() {
@@ -201,7 +224,23 @@ export default {
     fillIn(scope) {
       console.log(scope.data);
       this.projectId = scope.data.id;
+      this.dialogType = 'add';
       this.fillInDialogVisible = true;
+    },
+    // 修改
+    goModify(scope) {
+      console.log(scope);
+      this.modifyData = _.cloneDeep(scope.data);
+      this.projectId = scope.data.id;
+      this.dialogType = 'modify';
+      this.fillInDialogVisible = true;
+    },
+    // 详情
+    goDetail(scope) {
+      console.log(scope);
+      this.detailData = _.cloneDeep(scope.data);
+      this.detailId = scope.data.id;
+      this.detailDialogVisible = true;
     },
     saveItem(data) {
       const index = this.fillInDataList.findIndex((i) => i.id === data.id);
@@ -210,6 +249,19 @@ export default {
       } else {
         this.fillInDataList.splice(index, 1, data); // 修改
       }
+      const addIndex = index === -1 ? this.fillInDataList.length - 1 : index;
+      const dataListIndex = this.form.detailLists.findIndex((i) => i.id === data.id);
+      const row = this.form.detailLists[dataListIndex];
+      row.completeDrive = data.completeDrive;
+      row.completeGov = data.completeGov;
+      row.completeTotal = data.completeTotal;
+      row.overallProgress = data.overallProgress;
+      row.isEnd = data.isEnd;
+      row.isStart = data.isStart;
+      row.isEnd = data.isEnd;
+      row.monthPic = data.monthPic;
+      this.calcRateTotal(row, this.fillInDataList[addIndex]);
+      this.calcRateCurrentYear(row, this.fillInDataList[addIndex]);
     },
     // 添加 项目
     onSubmit() {
@@ -241,6 +293,38 @@ export default {
       const res = await getHistory({ id: this.$route.query.id });
       this.historyList = res;
       this.dialogVisible = true;
+    },
+    //  计划投资完成率（%）
+    calcRateTotal(scope, formData) {
+      const data = scope;
+      const form = formData;
+      const { planFirstDrive, planFirstGov, planSecondDrive, planSecondGov } = data;
+      const plantTotal =
+        Number(planFirstDrive) + Number(planFirstGov) + Number(planSecondDrive) + Number(planSecondGov) || 1;
+      const currentTotal = Number(form.completeGov || 0) + Number(form.completeDrive || 0);
+      const result = ((currentTotal / plantTotal) * 100 || 0).toFixed(1);
+      data.planRate = result;
+      form.yearRate = result;
+      console.log('xxxx total', currentTotal, plantTotal, result);
+
+      return result ? result + '%' : '0%';
+    },
+    // 年度投资完成率（%）
+    calcRateCurrentYear(scope, formData) {
+      console.log(scope);
+      const data = scope;
+      const form = formData;
+      const { planFirstDrive, planFirstGov, planSecondDrive, planSecondGov } = data;
+      const isFirstYear = this.firstYear === new Date().getFullYear();
+      const plantTotal = isFirstYear
+        ? Number(planFirstDrive) + Number(planFirstGov) || 1
+        : Number(planSecondDrive) + Number(planSecondGov) || 1;
+      const currentTotal = Number(form.completeGov || 0) + Number(form.completeDrive || 0);
+      const result = ((currentTotal / plantTotal) * 100 || 0).toFixed(1);
+      data.yearRate = result;
+      form.yearRate = result;
+      console.log('xxxx total', currentTotal, plantTotal, result);
+      return result ? result + '%' : '0%';
     },
   },
 };

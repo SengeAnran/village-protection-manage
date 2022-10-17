@@ -1,9 +1,19 @@
 <template>
   <div class="upload-img-wrp" :class="{ disabled: disabled }">
-    <el-upload ref="upload" action="string" list-type="picture-card" :limit="limit"
-      accept="image/jpg, image/png, image/jpeg" :file-list="fileList" :before-upload="beforeImgUpload"
-      :on-exceed="handleExceedImg" :on-change="emitChange" :on-remove="emitChange" :http-request="uploadImg"
-      :multiple="multiple">
+    <el-upload
+      ref="upload"
+      action="string"
+      list-type="picture-card"
+      :limit="limit"
+      accept="image/jpg, image/png, image/jpeg"
+      :file-list="fileList"
+      :before-upload="beforeImgUpload"
+      :on-exceed="handleExceedImg"
+      :on-change="emitChange"
+      :on-remove="emitChange"
+      :http-request="uploadImg"
+      :multiple="multiple"
+    >
       <div class="default-upload" slot="default">
         <i class="el-icon-plus"></i>
         <p class="desc">
@@ -22,13 +32,13 @@
         </span>
       </div>
     </el-upload>
-    <el-dialog :visible.sync="dialogVisible">
+    <el-dialog :visible.sync="dialogVisible" :modal="modal">
       <img width="100%" :src="dialogImageUrl" alt="" />
     </el-dialog>
   </div>
 </template>
 <script>
-import { uploadFile2 } from "@/api/common.js";
+import { uploadFile2 } from '@/api/common.js';
 import emitter from 'element-ui/lib/mixins/emitter.js';
 
 export default {
@@ -41,6 +51,10 @@ export default {
     value: {
       type: Array,
       default: () => [],
+    },
+    modal: {
+      type: Boolean,
+      default: true,
     },
     limit: {
       type: Number,
@@ -57,7 +71,7 @@ export default {
   },
   data() {
     return {
-      dialogImageUrl: "",
+      dialogImageUrl: '',
       dialogVisible: false,
       disabled: false,
       fileList: [],
@@ -71,7 +85,7 @@ export default {
           return {
             name: list.fileName,
             url: list.filePath,
-            status: "success",
+            status: 'success',
             response: list,
             filePath: list.filePath,
             fileName: list.fileName,
@@ -92,10 +106,10 @@ export default {
     async uploadImg(info) {
       try {
         const formData = new FormData();
-        formData.append("file", info.file);
-        formData.append("business", 'history');
+        formData.append('file', info.file);
+        formData.append('business', 'history');
         const res = await uploadFile2(formData);
-        this.$message.success("图片上传成功");
+        this.$message.success('图片上传成功');
         return res;
       } catch (error) {
         this.$refs.upload.handleRemove(info.file);
@@ -110,14 +124,11 @@ export default {
       this.dialogVisible = true;
     },
     beforeImgUpload(file) {
-      const isFormat =
-        file.type === "image/png" ||
-        file.type === "image/jpg" ||
-        file.type === "image/jpeg";
+      const isFormat = file.type === 'image/png' || file.type === 'image/jpg' || file.type === 'image/jpeg';
       const isLt2M = file.size / 1024 / 1024 < this.size;
 
       if (!isFormat) {
-        this.$message.error("上传图片只能是 JPG、PNG 格式!");
+        this.$message.error('上传图片只能是 JPG、PNG 格式!');
         this.$refs.upload.handleRemove(file);
         return false;
       }
@@ -155,7 +166,7 @@ export default {
       this.$emit('input', dest);
       this.$emit('change', dest);
       this.dispatch('ElFormItem', 'el.form.change', [dest]);
-    }
+    },
   },
 };
 </script>

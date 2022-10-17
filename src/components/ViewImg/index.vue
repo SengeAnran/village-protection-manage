@@ -8,7 +8,7 @@
       fit="cover"
       @click="preview(item.filePath)"
     ></el-image>
-    <el-dialog :visible.sync="dialogVisible">
+    <el-dialog :visible.sync="dialogVisible" :modal="modal">
       <img width="100%" :src="dialogImageUrl" alt="" />
     </el-dialog>
   </div>
@@ -21,11 +21,15 @@ export default {
       type: Array,
       default: () => [],
     },
+    modal: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
       dialogVisible: false,
-      dialogImageUrl: "",
+      dialogImageUrl: '',
     };
   },
   methods: {

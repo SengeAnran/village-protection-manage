@@ -265,7 +265,7 @@ export default {
       return result;
     },
     init() {
-      console.log(this.data);
+      // console.log(this.data);
       if (this.data && this.data.length > 0) {
         this.isFirstTimeReport = this.data.some((i) => {
           return i.completeDrive === null && i.completeGov === null && i.completeTotal === null;

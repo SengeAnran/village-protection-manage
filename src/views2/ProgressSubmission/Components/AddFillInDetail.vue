@@ -4,107 +4,146 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="项目名称" prop="projectName" :rules="rule.input">
-            <el-input v-model="form.projectName" placeholder="请输入项目名称" disabled></el-input>
+            {{ form.projectName }}
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="类型" prop="type">
-            <el-select v-model="form.type" placeholder="" disabled>
-              <el-option v-for="item in typeOption" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
+            {{ form.type }}
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="计划总投资（万元）" prop="planTotal" :rules="rule.input">
-            <el-input-number
-              v-model="form.planTotal"
-              :precision="2"
-              :controls="false"
-              placeholder="请输入计划总投资（万元）"
-              disabled
-            />
+          <el-form-item label="建设单位" prop="constructUnit" :rules="rule.input">
+            {{ form.constructUnit }}
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="本月完成总投资（万元）" prop="completeTotal" :rules="completeTotalInput">
-            <el-input v-model="form.completeTotal" placeholder="请输入"></el-input>
+          <el-form-item label="建设地点" prop="constructAddress" :rules="rule.input">
+            {{ form.constructAddress }}
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="其中政府投资（万元）" prop="completeGov" :rules="completeGovInput">
-            <el-input v-model="form.completeGov" placeholder="请输入"></el-input>
+          <el-form-item label="建设内容和规模" prop="constructDetail">
+            {{ form.constructDetail }}
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="其中带动投资（万元）" prop="completeDrive" :rules="completeDriveInput">
-            <el-input v-model="form.completeDrive" placeholder="请输入" maxlength="8"></el-input>
+          <el-form-item label="进度安排" prop="schedule" :rules="rule.input">
+            {{ form.schedule + '-' + form.scheduleEnd }}
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="上月报送完成总投资（万元）" prop="lastTotal">
-            <span>{{ formatMoney(form.lastTotal || 0) }}</span>
+          <el-form-item label="用地情况（m²）" prop="landUse" :rules="rule.input">
+            {{ form.landUse }}
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="上月报送政府投资（万元）" prop="lastGov">
-            <span>{{ formatMoney(form.lastGov || 0) }}</span>
-            <!--            <el-input v-model="form.lastGov" placeholder="请输入联系人" disabled></el-input>-->
+          <el-form-item label="是否开工" prop="isStart">
+            {{ form.isStart ? '是' : '否' }}
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="上月报送带动投资（万元）" prop="lastDrive">
-            <span>{{ formatMoney(form.lastDrive || 0) }}</span>
+          <el-form-item label="是否竣工" prop="isEnd" :rules="rule.input">
+            {{ form.isEnd ? '是' : '否' }}
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <hr class="hr" />
+      <div class="box-title">计划总投资（万元）</div>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-form-item label="2022年计划投资" prop="planFirst" :rules="rule.input">
+            {{ form.planFirst }}
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="其中政府投资" prop="planFirstGov">
+            {{ form.planFirstGov }}
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="其中带动投资" prop="planFirstDrive" :rules="rule.input">
+            {{ form.planFirstDrive }}
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="本月总体进度（%）" prop="overallProgress" :rules="overallProgressInput">
-            <el-input v-model="form.overallProgress" placeholder="请输入"></el-input>
+          <el-form-item label="2023年计划投资" prop="planSecond" :rules="rule.input">
+            {{ form.planSecond }}
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="上月报送总体进度（%）" prop="lastOverallProgress">
-            <span>{{ formatScore(form.lastOverallProgress || 0) }}%</span>
+          <el-form-item label="其中政府投资" prop="planSecondGov">
+            {{ form.planSecondGov }}
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="其中带动投资" prop="planSecondDrive" :rules="rule.input">
+            {{ form.planSecondDrive }}
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <hr class="hr" />
+      <div class="box-title">完成总投资（万元）</div>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-form-item label="2022年完成投资" prop="planSecond" :rules="rule.input">
+            {{ form.comFirst }}
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="其中政府投资" prop="comFirstGov">
+            {{ form.comFirstGov }}
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="其中带动投资" prop="comFirstDrive" :rules="rule.input">
+            {{ form.comFirstDrive }}
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="是否开工" prop="isStart" :rules="rule.select">
-            <el-radio v-model="form.isStart" :disabled="startDisabled" :label="0">否</el-radio>
-            <el-radio v-model="form.isStart" :disabled="startDisabled" :label="1">是</el-radio>
+          <el-form-item label="2023年完成投资" prop="comSecond" :rules="rule.input">
+            {{ form.comSecond }}
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="其中政府投资" prop="comSecondGov">
+            {{ form.comSecondGov }}
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="其中带动投资" prop="comSecondDrive" :rules="rule.input">
+            {{ form.comSecondDrive }}
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row v-if="form.isStart" :gutter="20">
-        <el-col :span="20">
-          <el-form-item label="本月项目进度情况照片" prop="monthPic" :rules="rule.upload">
-            <UploadImg2 :modal="false" :defaultData="oldPics" v-model="form.monthPic" :limit="5" />
-            <i style="color: #d40000">请上传1至5张照片，每张大小不可超过10MB</i>
+
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-form-item label="计划投资完成率（%）" prop="planRate" :rules="rule.input">
+            {{ form.planRate }}
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="年度投资完成率（%）" prop="yearRate">
+            {{ form.yearRate }}
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="总体进度（%）" prop="overallProgress" :rules="rule.input">
+            {{ form.overallProgress }}
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row v-if="form.isStart" :gutter="20">
-        <el-col :span="18">
-          <el-form-item label="是否竣工" prop="isEnd" :rules="rule.select">
-            <el-radio v-model="form.isEnd" :disabled="startDisabled" :label="0">否</el-radio>
-            <el-radio v-model="form.isEnd" :disabled="startDisabled" :label="1">是</el-radio>
-          </el-form-item>
-          <i style="color: #ff6b00">（选择“是”则该项目状态变更为“已竣工”，之后月份无法再进行填报）</i>
-        </el-col>
-      </el-row>
-    </div>
-    <div class="btns">
-      <div class="btn-content">
-        <el-button @click="$emit('input', false)">关闭</el-button>
-        <el-button type="primary" @click="onSubmit">确定</el-button>
-      </div>
+      <hr class="hr" />
+      <ViewImg v-if="form.monthPic && form.monthPic.length" :data="form.monthPic" :modal="false"></ViewImg>
     </div>
   </el-form>
 </template>
@@ -348,5 +387,19 @@ export default {
   justify-content: space-around;
   .btn-content {
   }
+}
+.hr {
+  border-top: 1px dashed #eeeeee;
+  margin-top: 14px;
+  margin-bottom: 32px;
+}
+.box-title {
+  height: 40px;
+  line-height: 40px;
+  font-size: 18px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 13px;
 }
 </style>
