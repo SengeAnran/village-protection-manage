@@ -116,3 +116,27 @@ export const progressReportDetail = (data) => {
     url: apiHost2 + `/api/workbench/progressReport/project/detail/${data.id}`,
   });
 };
+
+// 单个报送新增
+export const postSaveOne = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/progressReport/save/one`,
+    data,
+  });
+};
+// 县级-项目进度审核
+export const countryAudit = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/progressReport/audit`,
+    data,
+  });
+};
+// 获取项目调度地区数
+export const getObtainArea = () => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/progressReport/obtain/area`,
+  });
+};

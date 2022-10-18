@@ -83,7 +83,20 @@
               </VilliageListTable>
             </el-tab-pane>
             <el-tab-pane label="已竣工" name="second">
-              <VilliageListTable key="已竣工" v-if="showTable" type="edit" :form="form" :data="form.endLists" />
+              <VilliageListTable
+                key="已竣工"
+                v-if="showTable"
+                use-action
+                type="edit"
+                :form="form"
+                :data="form.endLists"
+              >
+                <template v-slot:action="scope">
+                  <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
+                  <el-divider direction="vertical"></el-divider>
+                  <el-link @click="goModify(scope)" type="primary"> 修改 </el-link>
+                </template>
+              </VilliageListTable>
             </el-tab-pane>
           </el-tabs>
         </el-form-item>
@@ -91,7 +104,8 @@
     </el-form>
     <div>
       <el-button @click="$router.back()">返回</el-button>
-      <el-button type="primary" @click="onSubmit">提交</el-button>
+      <!--      改为单个提交隐藏总体提交-->
+      <!--      <el-button type="primary" @click="onSubmit">提交</el-button>-->
     </div>
     <el-dialog title="详情" :visible.sync="dialogVisible" width="90%">
       <VillageListHistoryTable :data="historyList" />
@@ -101,7 +115,7 @@
         v-if="detailDialogVisible"
         v-model="detailDialogVisible"
         :id="detailId"
-        type="add"
+        type="detail"
         :detailData="detailData"
       />
     </el-dialog>
@@ -224,6 +238,7 @@ export default {
     // 填报
     fillIn(scope) {
       console.log(scope.data);
+      this.modifyData = _.cloneDeep(scope.data);
       this.projectId = scope.data.id;
       this.dialogType = 'add';
       this.fillInDialogVisible = true;
@@ -243,7 +258,29 @@ export default {
       this.detailId = scope.data.id;
       this.detailDialogVisible = true;
     },
-    saveItem(data) {
+    saveItem() {
+      this.getDetail();
+      // const index = this.fillInDataList.findIndex((i) => i.id === data.id);
+      // if (index === -1) {
+      //   this.fillInDataList.push(data); // 新增
+      // } else {
+      //   this.fillInDataList.splice(index, 1, data); // 修改
+      // }
+      // const addIndex = index === -1 ? this.fillInDataList.length - 1 : index;
+      // const dataListIndex = this.form.detailLists.findIndex((i) => i.id === data.id);
+      // const row = this.form.detailLists[dataListIndex];
+      // row.completeDrive = data.completeDrive;
+      // row.completeGov = data.completeGov;
+      // row.completeTotal = data.completeTotal;
+      // row.overallProgress = data.overallProgress;
+      // row.isEnd = data.isEnd;
+      // row.isStart = data.isStart;
+      // row.isEnd = data.isEnd;
+      // row.monthPic = data.monthPic;
+      // this.calcRateTotal(row, this.fillInDataList[addIndex]);
+      // this.calcRateCurrentYear(row, this.fillInDataList[addIndex]);
+    },
+    saveItemOld(data) {
       const index = this.fillInDataList.findIndex((i) => i.id === data.id);
       if (index === -1) {
         this.fillInDataList.push(data); // 新增
@@ -271,26 +308,30 @@ export default {
           if (this.fillInDataList.length !== this.form.detailLists.length) {
             return this.$notify.error('请填报所以项目的上报数据');
           }
-          const data = this.form.detailLists.map((item) => {
-            return {
-              completeDrive: Number(item.completeDrive),
-              completeGov: Number(item.completeGov),
-              completeTotal: Number(item.completeDrive) + Number(item.completeDrive),
-              overallProgress: Number(item.overallProgress),
-              planRate: Number(item.planRate),
-              yearRate: Number(item.yearRate),
-              id: item.id,
-              isStart: item.isStart,
-              isEnd: item.isEnd,
-              monthPic: item.monthPic,
-            };
-          });
-          console.log(data);
-          await addData(data);
-          this.$notify.success({
-            title: '进度上报成功！',
-          });
-          this.$router.back();
+          this.$confirm('确认提交？')
+            .then(async () => {
+              const data = this.form.detailLists.map((item) => {
+                return {
+                  completeDrive: Number(item.completeDrive),
+                  completeGov: Number(item.completeGov),
+                  completeTotal: Number(item.completeDrive) + Number(item.completeDrive),
+                  overallProgress: Number(item.overallProgress),
+                  planRate: Number(item.planRate),
+                  yearRate: Number(item.yearRate),
+                  id: item.id,
+                  isStart: item.isStart,
+                  isEnd: item.isEnd,
+                  monthPic: item.monthPic,
+                };
+              });
+              console.log(data);
+              await addData(data);
+              this.$notify.success({
+                title: '进度上报成功！',
+              });
+              this.$router.back();
+            })
+            .catch(() => {});
         }
       });
     },

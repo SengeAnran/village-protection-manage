@@ -151,7 +151,7 @@
 <script>
 import { PROJECT_TYPE } from './constants';
 import rule from '@/mixins/rule';
-import { getFillInDEcho, progressReportDetail } from '@/api2/progressSubmission';
+import { progressReportDetail } from '@/api2/progressSubmission';
 import { formatMoney, formatScore } from '@/views2/utils/formatter';
 export default {
   mixins: [rule],
@@ -230,6 +230,12 @@ export default {
       if (this.type === 'detail') {
         const res = await progressReportDetail({ id: this.id });
         this.form = res;
+        if (this.form.monthPic) {
+          this.oldPics = this.form.monthPic
+            .split(',')
+            .filter((ele) => Boolean(ele))
+            .map((ele) => ({ filePath: ele }));
+        }
         // const { projectName, type, planTotal, lastTotal, lastGov, lastDrive, lastOverallProgress, isStart } = res;
         // this.form.projectName = projectName;
         // this.form.type = type;

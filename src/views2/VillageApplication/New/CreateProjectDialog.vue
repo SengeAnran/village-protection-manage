@@ -205,16 +205,21 @@ export default {
     value(next) {
       if (next && this.editData) {
         this.projectForm = { ...this.editData };
-        this.projectForm.scheduleRange = [this.editData.schedule, this.editData.scheduleEnd];
+        this.$set(this.projectForm, 'scheduleRange', [
+          '' + this.editData.schedule + '',
+          '' + this.editData.scheduleEnd + '',
+        ]);
+        // this.projectForm.scheduleRange = [new Date(this.editData.schedule), new Date(this.editData.scheduleEnd)];
+        console.log(this.projectForm.scheduleRange);
       }
     },
   },
   mounted() {
-    if (this.editData) {
-      this.projectForm = { ...this.editData };
-      this.projectForm.scheduleRange = [this.editData.schedule, this.editData.scheduleEnd];
-      // console.log(this.projectForm.scheduleRange);
-    }
+    // if (this.editData) {
+    //   this.projectForm = { ...this.editData };
+    //   this.projectForm.scheduleRange = [new Date(this.editData.schedule), new Date(this.editData.scheduleEnd)];
+    //   console.log(this.projectForm.scheduleRange);
+    // }
   },
   methods: {
     formatMoney,

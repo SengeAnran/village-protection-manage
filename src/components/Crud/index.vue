@@ -33,104 +33,210 @@
       >
     </div>
     <!--    表格与搜索之间的插槽 -->
-    <div>
-      <slot name="insert"></slot>
+    <div v-if="useTableLeft" class="table-box">
+      <div v-if="useTableLeft" class="table-left">
+        <slot name="tableLeft"></slot>
+      </div>
+      <!--表格-->
+      <div class="table-right">
+        <div>
+          <slot name="insert"></slot>
+        </div>
+        <el-table
+          v-if="!hideTable"
+          class="table1"
+          :height="tableHeight || null"
+          :header-row-style="{
+            fontSize: '14px',
+            fontFamily: 'PingFangSC-Medium, PingFang SC',
+            fontWeight: 500,
+            color: ' #333333',
+            lineHeight: '22px',
+          }"
+          v-loading="loading"
+          :data="items"
+          :row-class-name="tableRowClassName"
+          @selection-change="selectionChange"
+        >
+          <el-table-column v-if="selection" type="selection" width="50" align="center" fixed="left"></el-table-column>
+          <el-table-column v-if="showOrder" :label="order ? '推荐次序' : '序号'" width="80" align="center" fixed="left">
+            <template slot-scope="scope">
+              {{ scope.$index + 1 + (page - 1) * size }}
+            </template>
+          </el-table-column>
+
+          <!--表格列插槽-->
+          <slot name="table" :data="items"></slot>
+
+          <el-table-column v-if="!hideTableAction" label="操作" :width="actionWidth" fixed="right" align="center">
+            <template slot-scope="scope">
+              <!--表格操作插槽-->
+              <div class="table-action">
+                <slot name="tableAction" :data="scope.row"></slot>
+                <el-link v-if="!hideEdit" v-permission="permissionEdit" type="primary" @click="editItem(scope.row)"
+                  >编辑</el-link
+                >
+                <el-link
+                  v-if="!hideView"
+                  type="primary"
+                  @click="
+                    $router.push({
+                      path: viewPath,
+                      query: { id: scope.row[idKey] },
+                    })
+                  "
+                  >查看</el-link
+                >
+                <el-link
+                  v-if="!hideDelete"
+                  v-permission="permissionDelete"
+                  type="danger"
+                  @click.native="deleteItem(scope.row)"
+                  >删除</el-link
+                >
+                <el-link v-if="moveUp" type="primary" @click.native="moveUpItem(scope.row, scope.$index)">上移</el-link>
+                <el-divider v-if="moveUp" direction="vertical"></el-divider>
+                <el-link v-if="moveDown" type="primary" @click.native="moveDownItem(scope.row, scope.$index)"
+                  >下移</el-link
+                >
+                <el-divider v-if="moveDown" direction="vertical"></el-divider>
+                <el-link v-if="moveTop" type="primary" @click.native="moveTopItem(scope.row, scope.$index)"
+                  >置顶</el-link
+                >
+                <el-divider v-if="moveTop" direction="vertical"></el-divider>
+                <el-link v-if="virtualDelete" type="danger" @click.native="virtualDeleteItem(scope.row, scope.$index)"
+                  >移除</el-link
+                >
+                <slot name="tableEdit" :data="scope.row"></slot>
+                <!--          <el-button-->
+                <!--            v-if="!hideDelete"-->
+                <!--            type="text"-->
+                <!--            :loading="loading"-->
+                <!--            @click="deleteItem(scope.row)"-->
+                <!--            >删除</el-button-->
+                <!--          >-->
+                <slot name="tableDelete" :data="scope.row"></slot>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!--自定义数据插槽-->
+        <slot name="data" :data="items"></slot>
+
+        <!--分页-->
+        <div style="text-align: right">
+          <el-pagination
+            v-if="!hidePagination"
+            style="margin-top: 15px"
+            background
+            :current-page.sync="page"
+            :page-sizes="sizes"
+            :page-size="size"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            @size-change="handleSizeChange"
+          />
+        </div>
+      </div>
     </div>
+    <div v-else>
+      <div>
+        <slot name="insert"></slot>
+      </div>
+      <el-table
+        v-if="!hideTable"
+        class="table1"
+        :height="tableHeight || null"
+        :header-row-style="{
+          fontSize: '14px',
+          fontFamily: 'PingFangSC-Medium, PingFang SC',
+          fontWeight: 500,
+          color: ' #333333',
+          lineHeight: '22px',
+        }"
+        v-loading="loading"
+        :data="items"
+        :row-class-name="tableRowClassName"
+        @selection-change="selectionChange"
+      >
+        <el-table-column v-if="selection" type="selection" width="50" align="center" fixed="left"></el-table-column>
+        <el-table-column v-if="showOrder" :label="order ? '推荐次序' : '序号'" width="80" align="center" fixed="left">
+          <template slot-scope="scope">
+            {{ scope.$index + 1 + (page - 1) * size }}
+          </template>
+        </el-table-column>
 
-    <!--表格-->
-    <el-table
-      v-if="!hideTable"
-      class="table1"
-      :height="tableHeight || null"
-      :header-row-style="{
-        fontSize: '14px',
-        fontFamily: 'PingFangSC-Medium, PingFang SC',
-        fontWeight: 500,
-        color: ' #333333',
-        lineHeight: '22px',
-      }"
-      v-loading="loading"
-      :data="items"
-      :row-class-name="tableRowClassName"
-      @selection-change="selectionChange"
-    >
-      <el-table-column v-if="selection" type="selection" width="50" align="center" fixed="left"></el-table-column>
-      <el-table-column v-if="showOrder" :label="order ? '推荐次序' : '序号'" width="80" align="center" fixed="left">
-        <template slot-scope="scope">
-          {{ scope.$index + 1 + (page - 1) * size }}
-        </template>
-      </el-table-column>
+        <!--表格列插槽-->
+        <slot name="table" :data="items"></slot>
 
-      <!--表格列插槽-->
-      <slot name="table" :data="items"></slot>
+        <el-table-column v-if="!hideTableAction" label="操作" :width="actionWidth" fixed="right" align="center">
+          <template slot-scope="scope">
+            <!--表格操作插槽-->
+            <div class="table-action">
+              <slot name="tableAction" :data="scope.row"></slot>
+              <el-link v-if="!hideEdit" v-permission="permissionEdit" type="primary" @click="editItem(scope.row)"
+                >编辑</el-link
+              >
+              <el-link
+                v-if="!hideView"
+                type="primary"
+                @click="
+                  $router.push({
+                    path: viewPath,
+                    query: { id: scope.row[idKey] },
+                  })
+                "
+                >查看</el-link
+              >
+              <el-link
+                v-if="!hideDelete"
+                v-permission="permissionDelete"
+                type="danger"
+                @click.native="deleteItem(scope.row)"
+                >删除</el-link
+              >
+              <el-link v-if="moveUp" type="primary" @click.native="moveUpItem(scope.row, scope.$index)">上移</el-link>
+              <el-divider v-if="moveUp" direction="vertical"></el-divider>
+              <el-link v-if="moveDown" type="primary" @click.native="moveDownItem(scope.row, scope.$index)"
+                >下移</el-link
+              >
+              <el-divider v-if="moveDown" direction="vertical"></el-divider>
+              <el-link v-if="moveTop" type="primary" @click.native="moveTopItem(scope.row, scope.$index)">置顶</el-link>
+              <el-divider v-if="moveTop" direction="vertical"></el-divider>
+              <el-link v-if="virtualDelete" type="danger" @click.native="virtualDeleteItem(scope.row, scope.$index)"
+                >移除</el-link
+              >
+              <slot name="tableEdit" :data="scope.row"></slot>
+              <!--          <el-button-->
+              <!--            v-if="!hideDelete"-->
+              <!--            type="text"-->
+              <!--            :loading="loading"-->
+              <!--            @click="deleteItem(scope.row)"-->
+              <!--            >删除</el-button-->
+              <!--          >-->
+              <slot name="tableDelete" :data="scope.row"></slot>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!--自定义数据插槽-->
+      <slot name="data" :data="items"></slot>
 
-      <el-table-column v-if="!hideTableAction" label="操作" :width="actionWidth" fixed="right" align="center">
-        <template slot-scope="scope">
-          <!--表格操作插槽-->
-          <div class="table-action">
-            <slot name="tableAction" :data="scope.row"></slot>
-            <el-link v-if="!hideEdit" v-permission="permissionEdit" type="primary" @click="editItem(scope.row)"
-              >编辑</el-link
-            >
-            <el-link
-              v-if="!hideView"
-              type="primary"
-              @click="
-                $router.push({
-                  path: viewPath,
-                  query: { id: scope.row[idKey] },
-                })
-              "
-              >查看</el-link
-            >
-            <el-link
-              v-if="!hideDelete"
-              v-permission="permissionDelete"
-              type="danger"
-              @click.native="deleteItem(scope.row)"
-              >删除</el-link
-            >
-            <el-link v-if="moveUp" type="primary" @click.native="moveUpItem(scope.row, scope.$index)">上移</el-link>
-            <el-divider v-if="moveUp" direction="vertical"></el-divider>
-            <el-link v-if="moveDown" type="primary" @click.native="moveDownItem(scope.row, scope.$index)">下移</el-link>
-            <el-divider v-if="moveDown" direction="vertical"></el-divider>
-            <el-link v-if="moveTop" type="primary" @click.native="moveTopItem(scope.row, scope.$index)">置顶</el-link>
-            <el-divider v-if="moveTop" direction="vertical"></el-divider>
-            <el-link v-if="virtualDelete" type="danger" @click.native="virtualDeleteItem(scope.row, scope.$index)"
-              >移除</el-link
-            >
-            <slot name="tableEdit" :data="scope.row"></slot>
-            <!--          <el-button-->
-            <!--            v-if="!hideDelete"-->
-            <!--            type="text"-->
-            <!--            :loading="loading"-->
-            <!--            @click="deleteItem(scope.row)"-->
-            <!--            >删除</el-button-->
-            <!--          >-->
-            <slot name="tableDelete" :data="scope.row"></slot>
-          </div>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <!--自定义数据插槽-->
-    <slot name="data" :data="items"></slot>
-
-    <!--分页-->
-    <div style="text-align: right">
-      <el-pagination
-        v-if="!hidePagination"
-        style="margin-top: 15px"
-        background
-        :current-page.sync="page"
-        :page-sizes="sizes"
-        :page-size="size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-      />
+      <!--分页-->
+      <div style="text-align: right">
+        <el-pagination
+          v-if="!hidePagination"
+          style="margin-top: 15px"
+          background
+          :current-page.sync="page"
+          :page-sizes="sizes"
+          :page-size="size"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          @size-change="handleSizeChange"
+        />
+      </div>
     </div>
-
     <!--弹窗-->
     <div v-if="dialogDestroyOnClose ? dialog : true">
       <el-dialog
@@ -320,6 +426,11 @@ export default {
     },
     // 隐藏表格
     hideTable: {
+      type: Boolean,
+      default: false,
+    },
+    // 表格左边插槽
+    useTableLeft: {
       type: Boolean,
       default: false,
     },
@@ -744,6 +855,13 @@ export default {
   > * {
     margin-right: 15px;
     margin-bottom: 5px;
+  }
+}
+.table-box {
+  width: 100%;
+  display: flex;
+  .table-right {
+    flex: 1;
   }
 }
 .table1 {

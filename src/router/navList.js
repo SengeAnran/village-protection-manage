@@ -588,6 +588,23 @@ export const defaultRoutes2 = [
         component: () => import('@/views2/ProgressSubmission/index.vue'),
       },
       {
+        path: '/progressSubmission/projectScheduling/index',
+        name: 'ProjectSchedulingList',
+        meta: {
+          // icon: "cunzhuangshenbao",
+          menuIds: [
+            USER_TYPE.VILLAGE,
+            USER_TYPE.COUNTRY,
+            USER_TYPE.COUNTRY_LEADER,
+            USER_TYPE.CITY,
+            USER_TYPE.CITY_LEADER,
+            USER_TYPE.PROVINCE,
+          ],
+          title: '项目调度',
+        },
+        component: () => import('@/views2/ProgressSubmission/ProjectScheduling/index.vue'),
+      },
+      {
         path: '/progressSubmission/new',
         name: 'NewProgressSubmission',
         hidden: true,

@@ -112,7 +112,7 @@
 <script>
 import { PROJECT_TYPE } from './constants';
 import rule from '@/mixins/rule';
-import { getFillInDEcho } from '@/api2/progressSubmission';
+import { getFillInDEcho, postSaveOne } from '@/api2/progressSubmission';
 import { formatMoney, formatScore } from '@/views2/utils/formatter';
 // const completeGovInputValue = (rule, value, callback) => {
 //   console.log(rule, value);
@@ -136,6 +136,7 @@ export default {
     modifyData: {
       type: Object,
       default: () => {},
+      require: true,
     },
   },
   name: 'AddFillIn',
@@ -157,9 +158,10 @@ export default {
         monthPic: [], // 本月项目进度情况照片
         isEnd: '', // 是否竣工
 
-        // planRate: '', // 计划投资完成率（%）
-        // yearRate: '', // 计划投资完成率（%）
+        planRate: '', // 计划投资完成率（%）
+        yearRate: '', // 计划投资完成率（%）
       },
+      firstYear: 2022,
       typeOption: [],
       startDisabled: false, // 开工能否修改
       oldPics: [], //
@@ -230,7 +232,8 @@ export default {
     async getData() {
       if (this.id) {
         const res = await getFillInDEcho({ id: this.id });
-        const { projectName, type, planTotal, lastTotal, lastGov, lastDrive, lastOverallProgress, isStart } = res;
+        const { projectName, type, planTotal, lastTotal, lastGov, lastDrive, lastOverallProgress, isStart, isEnd } =
+          res;
         this.form.projectName = projectName;
         this.form.type = type;
         this.form.planTotal = planTotal;
@@ -239,6 +242,10 @@ export default {
         this.form.lastDrive = lastDrive;
         this.form.lastOverallProgress = lastOverallProgress;
         this.form.isStart = isStart;
+        if (isEnd) {
+          this.form.isEnd = isEnd;
+        }
+
         if (this.type === 'add' && res.isStart) {
           this.startDisabled = true;
         }
@@ -252,7 +259,7 @@ export default {
         this.form.completeDrive = completeDrive;
         this.form.isStart = isStart;
         this.form.overallProgress = overallProgress;
-        this.form.isEnd = isEnd;
+        // this.form.isEnd = isEnd;
         if (monthPic) {
           this.oldPics = monthPic
             .split(',')
@@ -273,8 +280,6 @@ export default {
             completeGov: Number(this.form.completeGov),
             completeTotal: Number(this.form.completeTotal),
             overallProgress: Number(this.form.overallProgress),
-            // planRate: Number(this.form.planRate),
-            // yearRate: Number(this.form.yearRate),
             id: this.id,
             isStart: this.form.isStart,
             monthPic: (this.form.monthPic || [])
@@ -284,14 +289,55 @@ export default {
               .join(','),
             // monthPic: this.form.monthPic,
             isEnd: this.form.isEnd,
+            planRate: this.calcRateTotal(this.modifyData, this.form),
+            yearRate: this.calcRateCurrentYear(this.modifyData, this.form),
           };
           console.log(data);
-          this.$emit('saveItem', data);
-          this.$refs.form.resetFields();
-          this.$emit('input', false);
+          postSaveOne(data).then(() => {
+            this.$message({
+              type: 'success',
+              message: '提交成功!',
+            });
+            this.$emit('saveItem', data);
+            this.$refs.form.resetFields();
+            this.$emit('input', false);
+          });
         }
       });
     },
+    //  计划投资完成率（%）
+    calcRateTotal(scope, formData) {
+      const data = scope;
+      const form = formData;
+      const { planFirstDrive, planFirstGov, planSecondDrive, planSecondGov } = data;
+      const plantTotal =
+        Number(planFirstDrive) + Number(planFirstGov) + Number(planSecondDrive) + Number(planSecondGov) || 1;
+      const currentTotal = Number(form.completeGov || 0) + Number(form.completeDrive || 0);
+      const result = ((currentTotal / plantTotal) * 100 || 0).toFixed(1);
+      data.planRate = result;
+      form.yearRate = result;
+      console.log('xxxx total', currentTotal, plantTotal, result);
+
+      return result ? result : 0;
+    },
+    // 年度投资完成率（%）
+    calcRateCurrentYear(scope, formData) {
+      console.log(scope);
+      const data = scope;
+      const form = formData;
+      const { planFirstDrive, planFirstGov, planSecondDrive, planSecondGov } = data;
+      const isFirstYear = this.firstYear === new Date().getFullYear();
+      const plantTotal = isFirstYear
+        ? Number(planFirstDrive) + Number(planFirstGov) || 1
+        : Number(planSecondDrive) + Number(planSecondGov) || 1;
+      const currentTotal = Number(form.completeGov || 0) + Number(form.completeDrive || 0);
+      const result = ((currentTotal / plantTotal) * 100 || 0).toFixed(1);
+      data.yearRate = result;
+      form.yearRate = result;
+      console.log('xxxx total', currentTotal, plantTotal, result);
+      return result ? result : 0;
+    },
+
     // 校验completeGov
     completeGovInputValue(rule, value, callback) {
       if (!value) {

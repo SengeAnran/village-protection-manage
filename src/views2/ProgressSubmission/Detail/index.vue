@@ -1,7 +1,7 @@
 <template>
   <div class="block">
-    <RouterBack>详情</RouterBack>
-    <div class="box-title">未来乡村项目进度报送</div>
+    <RouterBack>{{ VILLAGE ? '详情' : '审核' }}</RouterBack>
+    <div class="box-title">未来乡村项目进度报送 {{ form.reportingTime }}</div>
     <el-form style="padding-left: 14px" ref="form" class="form" label-position="top" :model="form" label-width="80px">
       <div class="input-item-wrp">
         <el-form-item label="创建村/片区名称" prop="villageId">
@@ -29,29 +29,60 @@
         <!--        <div class="import">-->
         <!--          <el-button type="primary" @click="lookHistory">历史数据</el-button>-->
         <!--        </div>-->
-        <VilliageListTable v-if="showTable" type="look" :data="form.detailLists" />
+        <el-tabs v-model="activeName">
+          <el-tab-pane label="报送中" name="first">
+            <VilliageListTable key="报送中" use-action v-if="showTable" type="look" :data="form.detailLists">
+              <template v-slot:action="scope">
+                <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
+              </template>
+            </VilliageListTable>
+          </el-tab-pane>
+          <el-tab-pane label="已竣工" name="second">
+            <VilliageListTable key="已竣工" v-if="showTable" type="edit" :form="form" :data="form.endLists" />
+          </el-tab-pane>
+        </el-tabs>
       </el-form-item>
       <div id="verify"></div>
       <el-button @click="$router.back()">返回</el-button>
+      <el-button
+        v-if="this.form && this.form.projectStatus === PROJECT_STATUS.CITY_VERIFY_PENDING"
+        type="primary"
+        @click="edit()"
+        >修改</el-button
+      >
+      <el-button
+        v-if="
+          this.form && this.form.projectStatus === PROJECT_STATUS.CITY_VERIFY_PENDING && (COUNTRY || COUNTRY_LEADER)
+        "
+        type="primary"
+        @click="pass()"
+        >通过</el-button
+      >
     </el-form>
-    <el-dialog title="详情" :visible.sync="dialogVisible" width="90%">
-      <VillageListHistoryTable :data="historyList" />
+    <!--    <el-dialog title="详情" :visible.sync="dialogVisible" width="90%">-->
+    <!--      <VillageListHistoryTable :data="historyList" />-->
+    <!--    </el-dialog>-->
+    <el-dialog class="new-dialog" title="详情" :visible.sync="detailDialogVisible" width="90%">
+      <AddFillInDetail v-if="detailDialogVisible" v-model="detailDialogVisible" :id="detailId" type="detail" />
     </el-dialog>
   </div>
 </template>
 <script>
 import VilliageListTable from '../Components/VilliageListTable';
-import VillageListHistoryTable from '../Components/VillageListHistoryTable';
+import AddFillInDetail from '../Components/AddFillInDetail';
+// import VillageListHistoryTable from '../Components/VillageListHistoryTable';
 import rule from '@/mixins/rule';
-import { HISTORY_BUILDINGS } from '../constants';
-import { getDetail, getHistory } from '@/api2/progressSubmission';
+import { HISTORY_BUILDINGS, PROJECT_STATUS } from '../constants';
+import { countryAudit, getDetail, getHistory } from '@/api2/progressSubmission';
 import { formatMoney } from '@/views2/utils/formatter';
+import role from '@/views2/mixins/role';
 
 export default {
-  mixins: [rule],
+  mixins: [role, rule],
   components: {
     VilliageListTable,
-    VillageListHistoryTable,
+    // VillageListHistoryTable,
+    AddFillInDetail,
   },
   data() {
     return {
@@ -64,17 +95,24 @@ export default {
         contactPerson: '',
         phone: '',
         detailLists: [],
+        endLists: [],
+        reportingTime: '',
       },
+      activeName: 'first',
+      dateTime: new Date().getFullYear() + '-' + (new Date().getMonth() + 1),
       historyList: [],
       finalStatus: null,
       total: 0,
 
       tips: '',
       dialogVisible: false,
+      detailDialogVisible: false, // 详情弹窗
+      detailId: '',
       dialogId: '',
       textarea: '',
       status: null,
       showTable: false,
+      PROJECT_STATUS,
     };
   },
   created() {
@@ -97,6 +135,49 @@ export default {
       const res = await getHistory({ id: this.$route.query.id });
       this.historyList = res;
       this.dialogVisible = true;
+    },
+    // 详情
+    goDetail(scope) {
+      this.detailId = scope.data.id;
+      this.detailDialogVisible = true;
+    },
+    // 修改
+    edit() {
+      const { id } = this.$route.query;
+      this.$router.push({
+        name: 'NewProgressSubmission',
+        query: { id },
+      });
+    },
+    // 县级审核通过
+    pass() {
+      this.$confirm('是否确认通过填报的信息，通过后该条报送信息流转至省（市）调度', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        const data = {
+          ids: this.getProjectIds(),
+        };
+        countryAudit(data).then(() => {
+          this.$message({
+            type: 'success',
+            message: '通过成功!',
+          });
+          this.$router.back();
+        });
+      });
+    },
+    getProjectIds() {
+      let ids = this.form.detailLists.map((i) => {
+        return i.id;
+      });
+      ids = ids.concat(
+        this.form.endLists.map((i) => {
+          return i.id;
+        }),
+      );
+      return ids;
     },
     // async clickExport() {
     //   const { id } = this.$route.query;

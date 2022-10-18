@@ -51,37 +51,37 @@
         {{ formatScore(scope.row.planRate || 0) }}%
       </template>
     </el-table-column>
-    <el-table-column
-      v-if="!isFirstTimeReport && lastUpdateTime"
-      :label="'完成投资（万元） ' + lastUpdateTime"
-      header-align="center"
-    >
-      <el-table-column prop="completeTotal" label="总投资">
-        <template slot-scope="scope">
-          {{ formatMoney(scope.row.completeTotal || 0) }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="completeGov" label="政府投资">
-        <template slot-scope="scope">
-          <span>{{ formatMoney(scope.row.completeGov || 0) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="completeDrive" label="带动投资">
-        <template slot-scope="scope">
-          <span>{{ formatMoney(scope.row.completeDrive || 0) }}</span>
-        </template>
-      </el-table-column>
-    </el-table-column>
-    <el-table-column
-      v-if="!isFirstTimeReport && lastUpdateTime"
-      prop="overallProgress"
-      :label="'总体进度（%） ' + lastUpdateTime"
-      header-align="center"
-      width="120"
-    >
-      <template slot-scope="scope"> {{ formatScore(scope.row.overallProgress || 0) }}% </template>
-    </el-table-column>
-    <el-table-column v-if="type === 'edit'" label="本月完成投资（万元）" header-align="center">
+    <!--    <el-table-column-->
+    <!--      v-if="!isFirstTimeReport && lastUpdateTime"-->
+    <!--      :label="'完成投资（万元） ' + lastUpdateTime"-->
+    <!--      header-align="center"-->
+    <!--    >-->
+    <!--      <el-table-column prop="completeTotal" label="总投资">-->
+    <!--        <template slot-scope="scope">-->
+    <!--          {{ formatMoney(scope.row.completeTotal || 0) }}-->
+    <!--        </template>-->
+    <!--      </el-table-column>-->
+    <!--      <el-table-column prop="completeGov" label="政府投资">-->
+    <!--        <template slot-scope="scope">-->
+    <!--          <span>{{ formatMoney(scope.row.completeGov || 0) }}</span>-->
+    <!--        </template>-->
+    <!--      </el-table-column>-->
+    <!--      <el-table-column prop="completeDrive" label="带动投资">-->
+    <!--        <template slot-scope="scope">-->
+    <!--          <span>{{ formatMoney(scope.row.completeDrive || 0) }}</span>-->
+    <!--        </template>-->
+    <!--      </el-table-column>-->
+    <!--    </el-table-column>-->
+    <!--    <el-table-column-->
+    <!--      v-if="!isFirstTimeReport && lastUpdateTime"-->
+    <!--      prop="overallProgress"-->
+    <!--      :label="'总体进度（%） ' + lastUpdateTime"-->
+    <!--      header-align="center"-->
+    <!--      width="120"-->
+    <!--    >-->
+    <!--      <template slot-scope="scope"> {{ formatScore(scope.row.overallProgress || 0) }}% </template>-->
+    <!--    </el-table-column>-->
+    <el-table-column label="本月完成投资（万元）" header-align="center">
       <!-- 村级用户 -->
       <el-table-column align="center" label="总投资" width="100">
         <template slot-scope="scope">
@@ -122,7 +122,7 @@
         </template>
       </el-table-column>
     </el-table-column>
-    <el-table-column v-if="type === 'edit'" align="center" label="本月总体进度（%）" width="170">
+    <el-table-column align="center" label="本月总体进度（%）" width="170">
       <template slot-scope="scope">
         {{
           scope.row.overallProgress || scope.row.overallProgress === 0

@@ -1,7 +1,6 @@
 <template>
   <div class="block">
     <div>
-      <div class="text-lg mb-4">报送列表</div>
       <Crud
         ref="crud"
         :get-method="getMethod"
@@ -10,10 +9,12 @@
         :showOrder="false"
         id-key="id"
         actionWidth="180px"
+        use-table-left
         :multiple-delete="COUNTRY"
         :hideAdd="true"
         :hideEdit="true"
         :hideView="true"
+        :hideTableAction="hideTableAction"
         :hideDelete="true"
         :permission-add="0"
         :permission-edit="0"
@@ -22,17 +23,13 @@
         @selectionChange="selectionChange"
       >
         <template v-slot:search>
-          <div v-if="VILLAGE || COUNTRY || COUNTRY_LEADER" class="inline-flex mb-2 pl-0" style="flex-wrap: wrap">
-            <div class="search-item mb-4">
-              <span class="label">报送时间：</span>
-              <el-date-picker v-model="query.reportingTime" type="month" placeholder="请选择" value-format="yyyy-MM">
-              </el-date-picker>
-            </div>
+          <div class="text-lg mb-4">调度列表</div>
+          <div class="inline-flex mb-2 pl-0" style="flex-wrap: wrap">
             <div v-if="!VILLAGE" class="search-item mb-4">
               <span class="label">村（片区）名称：</span>
               <el-input
                 style="width: 200px"
-                v-model="query.name"
+                v-model="query.village"
                 :maxlength="50"
                 placeholder="请输入村（片区）名称"
               ></el-input>
@@ -49,43 +46,20 @@
                 </el-option>
               </el-select>
             </div>
-            <!--            <div v-if="!COUNTRY" class="search-item mb-4">-->
-            <!--              <span class="label">地区：</span>-->
-            <!--              <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea" />-->
-            <!--              &lt;!&ndash;              <el-select v-model="query.declarationBatch" placeholder="请选择">&ndash;&gt;-->
-            <!--              &lt;!&ndash;                <el-option&ndash;&gt;-->
-            <!--              &lt;!&ndash;                  v-for="item in queryDeclareTypeOpt"&ndash;&gt;-->
-            <!--              &lt;!&ndash;                  :key="item.value"&ndash;&gt;-->
-            <!--              &lt;!&ndash;                  :label="item.label"&ndash;&gt;-->
-            <!--              &lt;!&ndash;                  :value="item.value"&ndash;&gt;-->
-            <!--              &lt;!&ndash;                >&ndash;&gt;-->
-            <!--              &lt;!&ndash;                </el-option>&ndash;&gt;-->
-            <!--              &lt;!&ndash;              </el-select>&ndash;&gt;-->
-            <!--            </div>-->
-
-            <div v-if="VILLAGE" class="search-item mb-4">
-              <span class="label">状态：</span>
-              <el-select v-model="query.projectStatus" placeholder="请选择">
-                <el-option v-for="(item, index) of reportStateOPt" :key="index" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
-            </div>
           </div>
         </template>
-        <template v-slot:export>
-          <el-button v-if="VILLAGE" icon="el-icon-download" type="primary" plain @click="exportMethod">
+        <template v-slot:insert>
+          <el-button icon="el-icon-download" style="margin-bottom: 20px" type="primary" plain @click="exportMethod">
             导出信息汇总表
           </el-button>
           <!--          <el-button icon="el-icon-download" type="primary" plain @click="exportMethod2"> 导出项目进度表 </el-button>-->
         </template>
+        <template v-slot:tableLeft>
+          <AreaTree @changeArea="changeArea" />
+        </template>
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
-            <el-link v-if="canVerify(scope.data)" @click="goDetail(scope)" type="primary"> 审核 </el-link>
             <el-link v-if="canDetail(scope.data)" @click="goDetail(scope)" type="primary"> 详情 </el-link>
-            <!--            <el-divider v-if="canReport(scope.data)" direction="vertical"></el-divider>-->
-            <div style="display: inline-block">
-              <el-link v-if="canReport(scope.data)" @click="edit(scope.data)" type="primary"> 报送</el-link>
-            </div>
           </div>
         </template>
 
@@ -101,9 +75,19 @@
         <!--        </template>-->
 
         <template v-slot:table>
-          <el-table-column label="报送时间" prop="reportingTime" fixed></el-table-column>
-          <el-table-column label="村（片区）名称" prop="name"></el-table-column>
-          <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
+          <el-table-column v-if="VILLAGE" label="报送时间" prop="reportingTime" fixed></el-table-column>
+          <el-table-column
+            v-if="VILLAGE || COUNTRY || COUNTRY_LEADER"
+            label="村（片区）名称"
+            prop="name"
+          ></el-table-column>
+          <el-table-column
+            v-if="VILLAGE || COUNTRY || COUNTRY_LEADER"
+            label="创建批次"
+            prop="declarationBatch"
+          ></el-table-column>
+          <el-table-column label="地区" prop="reportingTime" fixed></el-table-column>
+          <el-table-column label="创建村数" prop="name"></el-table-column>
           <el-table-column label="项目数" prop="projectNum"></el-table-column>
           <el-table-column label="已开工项目数" prop="startNum"></el-table-column>
           <el-table-column label="项目开工比例" prop="startRate"></el-table-column>
@@ -119,7 +103,7 @@
           </el-table-column>
           <el-table-column label="投资完成率" sortable prop="rate"></el-table-column>
           <el-table-column label="总体进度" sortable prop="rate"></el-table-column>
-          <el-table-column label="状态" prop="status">
+          <el-table-column v-if="VILLAGE" label="状态" prop="status">
             <template slot-scope="scope">
               <p :style="{ color: REPORT_STATUS_COLOR[scope.row.projectStatus] }">
                 {{ getStatusName(scope.row.projectStatus) }}
@@ -142,16 +126,17 @@ import {
   REPORT_STATUS,
   PROJECT_STATUS,
   // PRO_DECLEAR_STATUS,
-} from './constants';
-import { recVerify } from '../../api/villageManage';
+} from '../constants';
+import { recVerify } from '@/api/villageManage';
 import { downloadFile } from '@/utils/data';
 import role from '@/views2/mixins/role';
-
+import AreaTree from '@/views2/ProgressSubmission/Components/AreaTree';
 import { exportDetail, getInforExport, getList } from '@/api2/progressSubmission';
 import { formatMoney } from '@/views2/utils/formatter';
 // import qs from "qs";
 export default {
   mixins: [role],
+  components: { AreaTree },
   data() {
     // const date = new Date();
     // const year = date.getFullYear().toString();
@@ -159,13 +144,17 @@ export default {
 
     return {
       REPORT_STATUS_COLOR,
+      hideTableAction: true,
       query: {
         declarationBatch: '',
         finalStatus: '',
-        name: '',
         reportingTime: '', // 报送时间
         date: '',
         areaId: '',
+        city: '',
+        county: '',
+        province: '',
+        village: '',
         projectStatus: null,
       },
       declareYearOpt: [
@@ -219,6 +208,9 @@ export default {
     //   this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(PRO_DECLEAR_STATUS));
     // }
     this.getBatchInfo();
+    if (this.VILLAGE) {
+      this.hideTableAction = false;
+    }
     console.log([12, 13].toString());
   },
   mounted() {
@@ -267,10 +259,32 @@ export default {
       // }
       return true;
     },
-    // 地区
+    // 改变地区
     changeArea(val) {
       console.log(val);
-      this.query.areaId = val.areaId;
+      if (val.level === 4) {
+        this.query.village = val.area;
+        this.query.city = '';
+        this.query.county = '';
+        this.query.province = '';
+      } else if (val.level === 3) {
+        this.query.village = '';
+        this.query.city = '';
+        this.query.county = val.area;
+        this.query.province = '';
+      } else if (val.level === 2) {
+        this.query.village = '';
+        this.query.city = val.area;
+        this.query.county = '';
+        this.query.province = '';
+      } else if (val.level === 1) {
+        this.query.village = '';
+        this.query.city = '';
+        this.query.county = '';
+        this.query.province = val.area;
+      }
+      this.$refs.crud.search();
+      // this.query.areaId = val.areaId;
     },
     tableRowClassName({ row }) {
       return row.completeTotalInvestment > row.investNum ? 'row-danger' : '';
@@ -461,6 +475,30 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.block {
+  background-color: unset;
+  &::v-deep .search {
+    background-color: white;
+    padding: 20px 16px;
+    border-radius: 4px;
+  }
+  &::v-deep .table-box {
+    padding: 20px 0 0;
+    background-color: rgb(246 246 246);
+    .table-right {
+      border-radius: 4px;
+      padding: 12px 25px;
+      background-color: white;
+    }
+    .table-left {
+      width: fit-content;
+      padding: 15px 2px;
+      margin-right: 20px;
+      background-color: white;
+      border-radius: 4px;
+    }
+  }
+}
 .search-item {
   margin-right: 20px;
   white-space: nowrap;
