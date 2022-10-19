@@ -51,9 +51,7 @@
         >修改</el-button
       >
       <el-button
-        v-if="
-          this.form && this.form.projectStatus === PROJECT_STATUS.CITY_VERIFY_PENDING && (COUNTRY || COUNTRY_LEADER)
-        "
+        v-if="form && form.projectStatus === PROJECT_STATUS.CITY_VERIFY_PENDING && (COUNTRY || COUNTRY_LEADER)"
         type="primary"
         @click="pass()"
         >通过</el-button
@@ -63,7 +61,7 @@
     <!--      <VillageListHistoryTable :data="historyList" />-->
     <!--    </el-dialog>-->
     <el-dialog class="new-dialog" title="详情" :visible.sync="detailDialogVisible" width="90%">
-      <AddFillInDetail v-if="detailDialogVisible" v-model="detailDialogVisible" :id="detailId" type="detail" />
+      <AddFillInDetail v-if="detailDialogVisible" v-model="detailDialogVisible" :id="detailId" :type="type" />
     </el-dialog>
   </div>
 </template>
@@ -86,6 +84,7 @@ export default {
   },
   data() {
     return {
+      type: 'detail',
       form: {
         area: '',
         villageName: '',
@@ -129,6 +128,13 @@ export default {
       getDetail({ id }).then((res) => {
         this.form = res;
         this.showTable = true;
+        if (
+          this.form &&
+          this.form.projectStatus === this.PROJECT_STATUS.CITY_VERIFY_PENDING &&
+          (this.COUNTRY || this.COUNTRY_LEADER)
+        ) {
+          this.type = 'verity';
+        }
       });
     },
     async lookHistory() {

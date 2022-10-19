@@ -531,9 +531,14 @@ export default {
       let projectAllNum = 0;
       arr.forEach((i) => {
         projectAllNum +=
-          (i.planFirstDrive || 0) + (i.planFirstGov || 0) + (i.planSecondDrive || 0) + (i.planSecondGov || 0);
+          (i.planFirstDrive || 0) * 100 +
+          (i.planFirstGov || 0) * 100 +
+          (i.planSecondDrive || 0) * 100 +
+          (i.planSecondGov || 0) * 100;
       });
+      projectAllNum = projectAllNum / 100; // 避免浮点数相加出现的误差
       return projectAllNum === allNum;
+      // return false;
     },
     // 校验时间填写是否规范
     verificationTime(arr, time = []) {

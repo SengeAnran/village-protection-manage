@@ -719,6 +719,17 @@ export const defaultRoutes2 = [
         component: () => import('@/views2/VillageApplication/DeclarationBatch/index'),
       },
       {
+        path: '/villageApplication2/ProjectSchedulConfig',
+        name: 'DeclarationBatch',
+        hidden: false,
+        meta: {
+          // activeMenu: "/acceptanceEvaluation/index",
+          title: '项目调度配置',
+          menuIds: [USER_TYPE.PROVINCE],
+        },
+        component: () => import('@/views2/ProgressSubmission/ProjectSchedulConfig/index'),
+      },
+      {
         path: '/villageApplication2/applicationQuota',
         name: 'ApplicationQuota',
         hidden: false,

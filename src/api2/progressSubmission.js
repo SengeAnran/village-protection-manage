@@ -110,10 +110,12 @@ export const progressReportSave = (data) => {
 };
 
 // 获取填报详情
-export const progressReportDetail = (data) => {
+export const progressReportDetail = (params) => {
   return axios.request({
-    method: 'POST',
-    url: apiHost2 + `/api/workbench/progressReport/project/detail/${data.id}`,
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/progressReport/project/detail`,
+    params,
+    // data,
   });
 };
 

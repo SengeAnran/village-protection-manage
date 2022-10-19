@@ -242,7 +242,7 @@ export default {
         this.form.lastDrive = lastDrive;
         this.form.lastOverallProgress = lastOverallProgress;
         this.form.isStart = isStart;
-        if (isEnd) {
+        if (isEnd || isEnd !== null) {
           this.form.isEnd = isEnd;
         }
 

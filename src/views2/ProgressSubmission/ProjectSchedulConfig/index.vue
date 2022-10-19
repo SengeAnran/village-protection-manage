@@ -1,13 +1,11 @@
 <template>
   <div class="block">
     <div>
-      <div class="text-lg mb-4">创建批次配置</div>
+      <div class="text-lg mb-4">项目调度配置</div>
       <Crud
         ref="crud"
-        :add-method="addMethod"
         :get-method="getMethod"
         :update-method="updateMethod"
-        :delete-method="deleteMethod"
         :before-edit-method="beforeEditMethod"
         :before-save-method="beforeSaveMethod"
         :query.sync="query"
@@ -16,32 +14,45 @@
         actionWidth="180px"
         :multiple-delete="userInfo.roleId === 3"
         hideSearch
+        hideAdd
+        hideDelete
         :multipleDelete="false"
         :selection="false"
         :hideView="true"
         :permission-add="4100"
         :permission-edit="4100"
         :permission-delete="4100"
-        labelWidth="130px"
+        labelWidth="150px"
         dialogWidth="530px"
       >
         <template v-slot:form>
-          <el-form-item label="创建批次：" prop="batch" :rules="rule.input">
-            <el-input v-model="form.batch" maxlength="20"></el-input>
-          </el-form-item>
+          <!--          <el-form-item label="创建批次：" prop="batch" :rules="rule.input">-->
+          <!--            <el-input v-model="form.batch" maxlength="20"></el-input>-->
+          <!--          </el-form-item>-->
 
-          <el-form-item label="创建时间：" prop="declareTime" :rules="rule.multiSelect">
+          <!--          <el-form-item label="创建时间：" prop="declareTime" :rules="rule.multiSelect">-->
+          <!--            <el-date-picker-->
+          <!--              v-model="form.declareTime"-->
+          <!--              value-format="yyyy-MM-dd"-->
+          <!--              type="daterange"-->
+          <!--              range-separator="至"-->
+          <!--              start-placeholder="开始日期"-->
+          <!--              end-placeholder="结束日期"-->
+          <!--            >-->
+          <!--            </el-date-picker>-->
+          <!--          </el-form-item>-->
+          <el-form-item label="项目调度时间：" prop="schedule" :rules="rules.multiSelect">
             <el-date-picker
-              v-model="form.declareTime"
-              value-format="yyyy-MM-dd"
-              type="daterange"
+              v-model="form.schedule"
+              value-format="yyyy-MM"
+              type="monthrange"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
             >
             </el-date-picker>
           </el-form-item>
-          <!--          <el-form-item label="项目调度时间：" prop="schedule" :rules="rules.multiSelect">-->
+          <!--          <el-form-item label="每月超时报送时间：" prop="schedule" :rules="rules.multiSelect">-->
           <!--            <el-date-picker-->
           <!--              v-model="form.schedule"-->
           <!--              value-format="yyyy-MM"-->
@@ -52,7 +63,7 @@
           <!--            >-->
           <!--            </el-date-picker>-->
           <!--          </el-form-item>-->
-          <!--          <el-form-item label="申报时间：">-->
+          <!--          <el-form-item label="每月允许报送时间：">-->
           <!--            <el-col :span="11">-->
           <!--              &lt;!&ndash; <el-date-picker type="date" placeholder="选择日期" v-model="form.startTime"> </el-date-picker> &ndash;&gt;-->
           <!--              <el-date-picker-->
@@ -93,9 +104,13 @@
 
         <template v-slot:table>
           <el-table-column label="创建批次" prop="batch"></el-table-column>
-          <el-table-column label="创建时间">
+          <el-table-column label="项目调度时间">
             <template slot-scope="scope">
-              <p>{{ scope.row.startTime.slice(0, 10) }}——{{ scope.row.endTime.slice(0, 10) }}</p>
+              <p>
+                {{ scope.row.scheduleStartTime ? scope.row.scheduleStartTime.slice(0, 10) : '' }}——{{
+                  scope.row.scheduleEndTime ? scope.row.scheduleEndTime.slice(0, 10) : ''
+                }}
+              </p>
             </template>
           </el-table-column>
         </template>
@@ -120,7 +135,7 @@ function getRangeMonth(value) {
   return rangeMonth;
 }
 import { mapMutations, mapGetters } from 'vuex';
-import { deleteVillageItem, getSetList, setAdd, setDelete, setUpdate } from '@/api2/declarationBatch';
+import { deleteVillageItem, getSetList, ProjectSchedulUpdate } from '@/api2/declarationBatch';
 import rule from '@/mixins/rule';
 const type = 2; //type 1：验收时间，2：申报批次
 export default {
@@ -133,14 +148,12 @@ export default {
       form: {
         // type: type, //type 1：验收时间，2：申报批次
         batch: '',
-        declareTime: [],
-        // schedule: [],
+        // declareTime: [],
+        schedule: [],
         // endTime: '',
         // startTime: '',
       },
-      addMethod: setAdd,
-      deleteMethod: setDelete,
-      updateMethod: setUpdate,
+      updateMethod: ProjectSchedulUpdate,
       getMethod: getSetList,
       value1: '',
       dialogVisible: false,
@@ -178,23 +191,25 @@ export default {
       });
     },
     beforeSaveMethod() {
-      const [startTime, endTime] = this.form.declareTime;
-      // const [scheduleStartTime, scheduleEndTime] = this.form.schedule;
+      // const [startTime, endTime] = this.form.declareTime;
+      const [scheduleStartTime, scheduleEndTime] = this.form.schedule;
       return {
         ...this.form,
-        startTime,
-        endTime,
-        // scheduleStartTime,
-        // scheduleEndTime,
+        // startTime,
+        // endTime,
+        scheduleStartTime,
+        scheduleEndTime,
       };
     },
     beforeEditMethod(item) {
-      console.log(item, 11111);
+      // console.log(item, 11111);
       this.form.batch = item.batch;
-      // this.form.type = type; //type 1：验收时间，2：申报批次
-      this.form.id = item.id;
-      this.form.declareTime = [item.startTime, item.endTime];
-      this.form.schedule = [item.scheduleStartTime, item.scheduleEndTime];
+      if (item.scheduleStartTime && item.scheduleStartTime) {
+        this.form.schedule = [item.scheduleStartTime, item.scheduleEndTime];
+      } else {
+        this.form.schedule = [];
+      }
+
       // this.form.startTime = ;
     },
   },

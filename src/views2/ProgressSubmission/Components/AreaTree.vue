@@ -26,7 +26,9 @@ export default {
   methods: {
     getData() {
       getObtainArea().then((res) => {
-        this.data = [res];
+        if (res) {
+          this.data = [res];
+        }
       });
     },
     handleNodeClick(data) {

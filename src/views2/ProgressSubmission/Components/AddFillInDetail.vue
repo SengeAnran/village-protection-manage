@@ -1,5 +1,12 @@
 <template>
   <el-form ref="form" class="form" label-position="top" :model="form" label-width="80px">
+    <el-select
+      v-if="(COUNTRY_LEADER || COUNTRY) && this.type === 'verity'"
+      v-model="reportingTime"
+      placeholder="请选择"
+    >
+      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+    </el-select>
     <div class="detail-top">
       <el-row :gutter="20">
         <el-col :span="8">
@@ -43,12 +50,12 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="是否开工" prop="isStart">
-            {{ form.isStart === '' ? '--' : form.isStart ? '是' : '否' }}
+            {{ form.isStart === null ? '--' : form.isStart ? '是' : '否' }}
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="是否竣工" prop="isEnd">
-            {{ form.isEnd === '' ? '--' : form.isEnd ? '是' : '否' }}
+            {{ form.isEnd === null ? '--' : form.isEnd ? '是' : '否' }}
           </el-form-item>
         </el-col>
       </el-row>
@@ -142,7 +149,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <hr class="hr" />
+      <hr v-if="oldPics && oldPics.length" class="hr" />
       <ViewImg v-if="oldPics && oldPics.length" :data="oldPics" :modal="false"></ViewImg>
     </div>
   </el-form>
@@ -153,8 +160,9 @@ import { PROJECT_TYPE } from './constants';
 import rule from '@/mixins/rule';
 import { progressReportDetail } from '@/api2/progressSubmission';
 import { formatMoney, formatScore } from '@/views2/utils/formatter';
+import role from '@/views2/mixins/role';
 export default {
-  mixins: [rule],
+  mixins: [rule, role],
   props: {
     id: {
       type: Number,
@@ -176,6 +184,8 @@ export default {
   name: 'AddFillIn',
   data() {
     return {
+      reportingTime: '', // 月份
+      options: [], // 时间选项
       form: {
         projectName: '', // 项目名称
         type: '', // 类型
@@ -204,10 +214,18 @@ export default {
         overallProgress: '', // 总体进度
         monthPic: [], // 照片
       },
+
       typeOption: [],
       oldPics: [], //
       PROJECT_TYPE,
     };
+  },
+  watch: {
+    reportingTime(val) {
+      if (val && val !== this.form.times[0]) {
+        this.getData();
+      }
+    },
   },
   beforeMount() {
     this.getData();
@@ -227,14 +245,27 @@ export default {
             .map((ele) => ({ filePath: ele }));
         }
       }
-      if (this.type === 'detail') {
-        const res = await progressReportDetail({ id: this.id });
+      if (this.type === 'detail' || this.type === 'verity') {
+        const data = {
+          reportingTime: this.reportingTime,
+          projectId: this.id,
+        };
+        const res = await progressReportDetail(data);
         this.form = res;
         if (this.form.monthPic) {
           this.oldPics = this.form.monthPic
             .split(',')
             .filter((ele) => Boolean(ele))
             .map((ele) => ({ filePath: ele }));
+        }
+        if (this.type === 'verity' && res.times && res.times.length > 0) {
+          this.reportingTime = res.times[0];
+          this.options = res.times.map((i) => {
+            return {
+              label: i,
+              value: i,
+            };
+          });
         }
         // const { projectName, type, planTotal, lastTotal, lastGov, lastDrive, lastOverallProgress, isStart } = res;
         // this.form.projectName = projectName;
@@ -254,6 +285,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-select {
+  margin-bottom: 32px;
+}
 .el-form-item {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;

@@ -29,7 +29,7 @@
               <span class="label">村（片区）名称：</span>
               <el-input
                 style="width: 200px"
-                v-model="query.village"
+                v-model="query.name"
                 :maxlength="50"
                 placeholder="请输入村（片区）名称"
               ></el-input>
@@ -86,8 +86,8 @@
             label="创建批次"
             prop="declarationBatch"
           ></el-table-column>
-          <el-table-column label="地区" prop="reportingTime" fixed></el-table-column>
-          <el-table-column label="创建村数" prop="name"></el-table-column>
+          <el-table-column v-if="CITY_LEADER || CITY || PROVINCE" label="地区" prop="name" fixed></el-table-column>
+          <el-table-column v-if="CITY_LEADER || CITY || PROVINCE" label="创建村数" prop="nums"></el-table-column>
           <el-table-column label="项目数" prop="projectNum"></el-table-column>
           <el-table-column label="已开工项目数" prop="startNum"></el-table-column>
           <el-table-column label="项目开工比例" prop="startRate"></el-table-column>
@@ -149,6 +149,7 @@ export default {
         declarationBatch: '',
         finalStatus: '',
         reportingTime: '', // 报送时间
+        name: '',
         date: '',
         areaId: '',
         city: '',
@@ -230,13 +231,6 @@ export default {
   methods: {
     formatMoney,
     getStatusName,
-    canVerify(data) {
-      const hasPerm = this.CITY || this.COUNTRY_LEADER;
-      if (data.projectStatus !== PROJECT_STATUS.CITY_VERIFY_PENDING) {
-        return false;
-      }
-      return hasPerm;
-    },
     canDetail(data) {
       const hasPerm = this.VILLAGE;
       if (data.projectStatus === PROJECT_STATUS.TO_BE_REPORT) {
@@ -244,24 +238,8 @@ export default {
       }
       return hasPerm;
     },
-    canReport(data) {
-      const hasPerm = this.VILLAGE;
-      if (data.projectStatus !== PROJECT_STATUS.TO_BE_REPORT) {
-        // 已报送则不可在报送
-        return false;
-      }
-      if (!hasPerm) {
-        return false;
-      }
-      // const day = new Date().getDate();
-      // if (day > 18) {
-      //   return false;
-      // }
-      return true;
-    },
     // 改变地区
     changeArea(val) {
-      console.log(val);
       if (val.level === 4) {
         this.query.village = val.area;
         this.query.city = '';
@@ -428,48 +406,6 @@ export default {
     goDetail(scope) {
       const { id } = scope.data;
       this.$router.push({ name: 'ProgressSubmissionDetails', query: { id: id } });
-    },
-    // 修改
-    edit(data) {
-      const { id } = data;
-      this.$router.push({
-        name: 'NewProgressSubmission',
-        query: { id },
-      });
-    },
-    // 删除
-    deleteItem(id) {
-      this.$confirm('是否删除该条数据？', '提示', {
-        type: 'warning',
-      }).then(async () => {
-        deleteVillageItem([id]).then(() => {
-          this.$notify.success('删除成功');
-          this.$refs.crud.getItems();
-        });
-      });
-    },
-
-    /**
-     * @desc 判断action按钮是否显示
-     * @param {String} actionName 按钮名称
-     * @param {Number} declareStatus 审核状态码
-     */
-    actionControl(actionName, declareStatus) {
-      if (this.COUNTRY) {
-        // 县级
-        return this.XIANJI_ACTION[actionName] && this.XIANJI_ACTION[actionName](declareStatus);
-      } else if (this.CITY) {
-        return (
-          // 市级
-          this.SHIJI_ACTION[actionName] && this.SHIJI_ACTION[actionName](declareStatus)
-        );
-      } else if (this.PROVINCE) {
-        return (
-          // 省
-          this.ADMIN_ACTION[actionName] && this.ADMIN_ACTION[actionName](declareStatus)
-        );
-      }
-      return false;
     },
   },
 };

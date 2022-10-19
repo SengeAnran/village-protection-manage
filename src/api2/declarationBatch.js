@@ -9,7 +9,7 @@ export const getSetList = (data) => {
     url: apiHost2 + `/api/workbench/declarationConfig/batch/list`,
     data,
   });
-}
+};
 
 // 【申报批次】可选批次查询
 export const getActiveSetList = () => {
@@ -17,7 +17,7 @@ export const getActiveSetList = () => {
     method: 'GET',
     url: apiHost2 + `/api/workbench/declarationConfig/optional/batch`,
   });
-}
+};
 
 export const setUpdate = (data) => {
   return axios.request({
@@ -25,18 +25,26 @@ export const setUpdate = (data) => {
     url: apiHost2 + `/api/workbench/declarationConfig/batch/add`,
     data,
   });
-}
+};
+// 【项目调度配置】修改
+export const ProjectSchedulUpdate = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/declarationConfig/schedule/up`,
+    data,
+  });
+};
 export const setAdd = (data) => {
   return axios.request({
     method: 'POST',
     url: apiHost2 + `/api/workbench/declarationConfig/batch/add`,
     data,
   });
-}
+};
 
 export const setDelete = (id) => {
   return axios.request({
     method: 'get',
     url: apiHost2 + `/api/workbench/declarationConfig/batch/delete/${id}`,
   });
-}
+};
