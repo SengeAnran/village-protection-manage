@@ -343,7 +343,7 @@ export default {
       if (!value) {
         callback(new Error('填写不能为空'));
       } else if (Number(value) < (Number(this.form.lastGov) || 0)) {
-        callback(new Error('可少于上月报送政府投资'));
+        callback(new Error('不可少于上月报送政府投资'));
       } else {
         callback();
       }
@@ -363,7 +363,7 @@ export default {
       if (!value) {
         callback(new Error('填写不能为空'));
       } else if (Number(value) < (Number(this.form.lastDrive) || 0)) {
-        callback(new Error('可少于上月报送带动投资'));
+        callback(new Error('不可少于上月报送带动投资'));
       } else {
         callback();
       }
@@ -373,7 +373,7 @@ export default {
       if (!value) {
         callback(new Error('填写不能为空'));
       } else if (Number(value) < (Number(this.form.lastOverallProgress) || 0)) {
-        callback(new Error('可少于上月报送总体进度'));
+        callback(new Error('不可少于上月报送总体进度'));
       } else {
         callback();
       }

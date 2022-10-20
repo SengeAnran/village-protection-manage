@@ -75,19 +75,11 @@
         <!--        </template>-->
 
         <template v-slot:table>
-          <el-table-column v-if="VILLAGE" label="报送时间" prop="reportingTime" fixed></el-table-column>
-          <el-table-column
-            v-if="VILLAGE || COUNTRY || COUNTRY_LEADER"
-            label="村（片区）名称"
-            prop="name"
-          ></el-table-column>
-          <el-table-column
-            v-if="VILLAGE || COUNTRY || COUNTRY_LEADER"
-            label="创建批次"
-            prop="declarationBatch"
-          ></el-table-column>
-          <el-table-column v-if="CITY_LEADER || CITY || PROVINCE" label="地区" prop="name" fixed></el-table-column>
-          <el-table-column v-if="CITY_LEADER || CITY || PROVINCE" label="创建村数" prop="nums"></el-table-column>
+          <el-table-column v-if="level === 4" label="报送时间" prop="reportingTime" fixed></el-table-column>
+          <el-table-column v-if="level === 4 || level === 3" label="村（片区）名称" prop="name"></el-table-column>
+          <el-table-column v-if="level === 4 || level === 3" label="创建批次" prop="declarationBatch"></el-table-column>
+          <el-table-column v-if="level === 2 || level === 1" label="地区" prop="name" fixed></el-table-column>
+          <el-table-column v-if="level === 2 || level === 1" label="创建村数" prop="nums"></el-table-column>
           <el-table-column label="项目数" prop="projectNum"></el-table-column>
           <el-table-column label="已开工项目数" prop="startNum"></el-table-column>
           <el-table-column label="项目开工比例" prop="startRate"></el-table-column>
@@ -103,7 +95,7 @@
           </el-table-column>
           <el-table-column label="投资完成率" sortable prop="rate"></el-table-column>
           <el-table-column label="总体进度" sortable prop="rate"></el-table-column>
-          <el-table-column v-if="VILLAGE" label="状态" prop="status">
+          <el-table-column v-if="level === 4" label="状态" prop="status">
             <template slot-scope="scope">
               <p :style="{ color: REPORT_STATUS_COLOR[scope.row.projectStatus] }">
                 {{ getStatusName(scope.row.projectStatus) }}
@@ -143,6 +135,7 @@ export default {
     //console.log(year);
 
     return {
+      level: '',
       REPORT_STATUS_COLOR,
       hideTableAction: true,
       query: {
@@ -212,6 +205,15 @@ export default {
     if (this.VILLAGE) {
       this.hideTableAction = false;
     }
+    if (this.VILLAGE) {
+      this.level = 4;
+    } else if (this.COUNTRY || this.COUNTRY_LEADER) {
+      this.level = 3;
+    } else if (this.CITY || this.COUNTRY_LEADER) {
+      this.level = 2;
+    } else {
+      this.level = 1;
+    }
     console.log([12, 13].toString());
   },
   mounted() {
@@ -240,6 +242,7 @@ export default {
     },
     // 改变地区
     changeArea(val) {
+      this.level = val.level;
       if (val.level === 4) {
         this.query.village = val.area;
         this.query.city = '';
