@@ -4,13 +4,13 @@
       <sub-tit> {{ (isEdit && '修改') || '创建' }}成效评价申请 </sub-tit>
       <basic-input :form="form" @change="villageChange"></basic-input>
       <sub-tit> 浙江省未来乡村创建成效自评总结 </sub-tit>
-      <div style="padding: 20px; padding-top: 4px;">
+      <div style="padding: 20px; padding-top: 4px">
         <el-row :gutter="20">
           <el-col :span="24">
             <div class="mb-8 mt-2">
-              <el-form-item prop="selfAssessmentSummary" label="浙江省未来乡村创建成效自评总结" :rules="rule.input" >
+              <el-form-item prop="selfAssessmentSummary" label="浙江省未来乡村创建成效自评总结" :rules="rule.input">
                 <el-input
-                  style="min-width: 42%; max-width: 90%;"
+                  style="min-width: 42%; max-width: 90%"
                   type="textarea"
                   :rows="5"
                   :autosize="{ minRows: 10 }"
@@ -40,18 +40,25 @@
         ></file-attach>
       </div>
       <sub-tit> 浙江省未来乡村“一老一小”服务场景验收自评报告 </sub-tit>
-      <div style="padding: 20px; padding-top: 4px;">
+      <div style="padding: 20px; padding-top: 4px">
         <el-row :gutter="20">
           <el-col :span="24">
             <div class="mb-8 mt-2">
-              <el-form-item prop="oldSmallSelfReport" label="浙江省未来乡村“一老一小”服务场景验收自评报告" :rules="rule.input">
+              <el-form-item
+                prop="oldSmallSelfReport"
+                label="浙江省未来乡村“一老一小”服务场景验收自评报告"
+                :rules="rule.input"
+              >
                 <el-input
-                  style="min-width: 42%; max-width: 90%;"
+                  style="min-width: 42%; max-width: 90%"
                   type="textarea"
                   maxlength="500"
                   :rows="5"
                   :autosize="{ minRows: 5 }"
-                  placeholder="请输入"
+                  :placeholder="`一、基本情况
+二、建设成效及制度建设情况
+三、数字化建设与应用情况
+四、特色和创新情况。`"
                   show-word-limit
                   v-model="form.oldSmallSelfReport"
                 />
@@ -59,14 +66,18 @@
             </div>
           </el-col>
         </el-row>
-        <el-form-item label="请上传有“一老一小”服务场景照片，各场景3至5张（包含场景全景照、运维现场照）" :rules="rule.upload" prop="oldSmallPics">
+        <el-form-item
+          label="请上传有“一老一小”服务场景照片，各场景3至5张（包含场景全景照、运维现场照）"
+          :rules="rule.upload"
+          prop="oldSmallPics"
+        >
           <p style="color: #ff6b00" class="py-4 leading-5">
             <span style="display: block">
               <i class="el-icon-warning"></i>
               照片大小范围为1MB-10MB之间
             </span>
           </p>
-          <UploadImg2 :defaultData="oldSmallPicsDefault" v-model="form.oldSmallPics" />
+          <UploadImg2 :defaultData="oldSmallPicsDefault" v-model="form.oldSmallPics" :limit="10" />
         </el-form-item>
         <el-form-item label="请上传有关“一老一小”服务场景的视频" :rules="rule.upload" prop="oldSmallVideo">
           <p style="color: #ff6b00" class="py-4 leading-5">
@@ -234,12 +245,17 @@ export default {
         this.form = res;
         this.form.selfAssessmentSummary = res.selfAssessmentSummary || '';
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
-        this.oldSmallPicsDefault = (res.oldSmallPics || '').split(',').filter((ele) => Boolean(ele)).map((ele) => ({ filePath: ele }));
+        this.oldSmallPicsDefault = (res.oldSmallPics || '')
+          .split(',')
+          .filter((ele) => Boolean(ele))
+          .map((ele) => ({ filePath: ele }));
         this.form.oldSmallPics = [];
         this.oldSmallVideoDefault = oldSmallVideoFile ? [oldSmallVideoFile] : [];
         this.form.oldSmallVideo = [];
         this.form.cityAcceptTime = createPerformanceAuditTimeDO?.id;
-        this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd : '';
+        this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO
+          ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd
+          : '';
         // console.log('getDetail', this.form);
       });
     },

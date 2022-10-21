@@ -188,6 +188,9 @@ export default {
       type: Boolean,
       default: false,
     },
+    defaultFirstYear: {
+      type: Number,
+    },
   },
   data() {
     return {
@@ -202,6 +205,9 @@ export default {
     ...mapGetters(['userInfo']),
   },
   beforeMount() {
+    if (this.defaultFirstYear) {
+      this.firstYear = this.defaultFirstYear;
+    }
     this.init();
   },
   methods: {

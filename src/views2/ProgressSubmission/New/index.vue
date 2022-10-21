@@ -105,7 +105,7 @@
     <div>
       <el-button @click="$router.back()">返回</el-button>
       <!--      改为单个提交隐藏总体提交-->
-      <!--      <el-button type="primary" @click="onSubmit">提交</el-button>-->
+      <el-button v-if="!$route.query.modify" type="primary" @click="onSubmit">提交</el-button>
     </div>
     <el-dialog title="详情" :visible.sync="dialogVisible" width="90%">
       <VillageListHistoryTable :data="historyList" />
@@ -207,7 +207,11 @@ export default {
   methods: {
     formatMoney,
     getDetail() {
-      getDetail({ id: this.$route.query.id }).then((res) => {
+      const params = {
+        id: this.$route.query.id,
+        reportingTime: this.$route.query.reportingTime,
+      };
+      getDetail(params).then((res) => {
         this.form = res;
         this.form.detailLists = this.form.detailLists.map((i) => {
           return {
@@ -258,27 +262,27 @@ export default {
       this.detailId = scope.data.id;
       this.detailDialogVisible = true;
     },
-    saveItem() {
-      this.getDetail();
-      // const index = this.fillInDataList.findIndex((i) => i.id === data.id);
-      // if (index === -1) {
-      //   this.fillInDataList.push(data); // 新增
-      // } else {
-      //   this.fillInDataList.splice(index, 1, data); // 修改
-      // }
-      // const addIndex = index === -1 ? this.fillInDataList.length - 1 : index;
-      // const dataListIndex = this.form.detailLists.findIndex((i) => i.id === data.id);
-      // const row = this.form.detailLists[dataListIndex];
-      // row.completeDrive = data.completeDrive;
-      // row.completeGov = data.completeGov;
-      // row.completeTotal = data.completeTotal;
-      // row.overallProgress = data.overallProgress;
-      // row.isEnd = data.isEnd;
-      // row.isStart = data.isStart;
-      // row.isEnd = data.isEnd;
-      // row.monthPic = data.monthPic;
-      // this.calcRateTotal(row, this.fillInDataList[addIndex]);
-      // this.calcRateCurrentYear(row, this.fillInDataList[addIndex]);
+    saveItem(data) {
+      // this.getDetail();
+      const index = this.fillInDataList.findIndex((i) => i.id === data.id);
+      if (index === -1) {
+        this.fillInDataList.push(data); // 新增
+      } else {
+        this.fillInDataList.splice(index, 1, data); // 修改
+      }
+      const addIndex = index === -1 ? this.fillInDataList.length - 1 : index;
+      const dataListIndex = this.form.detailLists.findIndex((i) => i.id === data.id);
+      const row = this.form.detailLists[dataListIndex];
+      row.completeDrive = data.completeDrive;
+      row.completeGov = data.completeGov;
+      row.completeTotal = data.completeTotal;
+      row.overallProgress = data.overallProgress;
+      row.isEnd = data.isEnd;
+      row.isStart = data.isStart;
+      row.isEnd = data.isEnd;
+      row.monthPic = data.monthPic;
+      this.calcRateTotal(row, this.fillInDataList[addIndex]);
+      this.calcRateCurrentYear(row, this.fillInDataList[addIndex]);
     },
     saveItemOld(data) {
       const index = this.fillInDataList.findIndex((i) => i.id === data.id);
@@ -305,7 +309,7 @@ export default {
     onSubmit() {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
-          if (this.fillInDataList.length !== this.form.detailLists.length) {
+          if (!this.$route.query.modify && this.fillInDataList.length !== this.form.detailLists.length) {
             return this.$notify.error('请填报所以项目的上报数据');
           }
           this.$confirm('确认提交？')

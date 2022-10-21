@@ -1,4 +1,3 @@
-
 // 省级审核状态码
 export const PRO_DECLEAR_STATUS = {
   2004: '省级未审核',
@@ -10,6 +9,9 @@ export const CITY_LEVEL_RATING = ['合格', '良好', '优秀'];
 // 县级默认表单
 export const COUNTY_DEFAULT_FORM = {
   isSave: undefined,
+  isProperty: undefined, // 是否配备物业
+  propertyType: '', // 物业类型
+  propertyServe: [], // 配备服务
   id: '',
   areaId: '',
   buildPutInCounty: '',

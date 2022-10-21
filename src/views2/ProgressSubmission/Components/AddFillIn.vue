@@ -250,10 +250,8 @@ export default {
           this.startDisabled = true;
         }
       }
-      console.log(this.modifyData);
       if (this.type === 'modify' && this.modifyData.id) {
-        const { completeTotal, completeGov, completeDrive, isStart, overallProgress, monthPic, isEnd } =
-          this.modifyData;
+        const { completeTotal, completeGov, completeDrive, isStart, overallProgress, monthPic } = this.modifyData;
         this.form.completeTotal = completeTotal;
         this.form.completeGov = completeGov;
         this.form.completeDrive = completeDrive;
@@ -275,7 +273,7 @@ export default {
     onSubmit() {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
-          const data = {
+          const dataFrom = {
             completeDrive: Number(this.form.completeDrive),
             completeGov: Number(this.form.completeGov),
             completeTotal: Number(this.form.completeTotal),
@@ -292,16 +290,31 @@ export default {
             planRate: this.calcRateTotal(this.modifyData, this.form),
             yearRate: this.calcRateCurrentYear(this.modifyData, this.form),
           };
-          console.log(data);
-          postSaveOne(data).then(() => {
-            this.$message({
-              type: 'success',
-              message: '提交成功!',
+          console.log(dataFrom);
+          if (this.$route.query.modify) {
+            postSaveOne(dataFrom).then(() => {
+              this.$message({
+                type: 'success',
+                message: '提交成功!',
+              });
+              this.$emit('saveItem', dataFrom);
+              this.$refs.form.resetFields();
+              this.$emit('input', false);
             });
-            this.$emit('saveItem', data);
+          } else {
+            this.$emit('saveItem', dataFrom);
             this.$refs.form.resetFields();
             this.$emit('input', false);
-          });
+          }
+          // postSaveOne(data).then(() => {
+          //   this.$message({
+          //     type: 'success',
+          //     message: '提交成功!',
+          //   });
+          //   this.$emit('saveItem', data);
+          //   this.$refs.form.resetFields();
+          //   this.$emit('input', false);
+          // });
         }
       });
     },

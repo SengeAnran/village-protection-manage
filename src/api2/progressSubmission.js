@@ -45,11 +45,11 @@ export const getList = (data) => {
   });
 };
 // 报送详情
-export const getDetail = (data) => {
+export const getDetail = (params) => {
   return axios.request({
-    method: 'POST',
-    url: apiHost2 + `/api/workbench/progressReport/detail/${data.id}`,
-    data,
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/progressReport/detail`,
+    params,
   });
 };
 // 报送历史
@@ -140,5 +140,13 @@ export const getObtainArea = () => {
   return axios.request({
     method: 'GET',
     url: apiHost2 + `/api/workbench/progressReport/obtain/area`,
+  });
+};
+// 检查上月报送状态
+export const getProgressReportCheck = (params) => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/progressReport/check`,
+    params,
   });
 };

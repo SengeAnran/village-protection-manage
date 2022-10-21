@@ -7,7 +7,10 @@
       <score-table :form="form" disabled></score-table>
       <city-info v-if="showCity" :form="form"></city-info>
       <province-info v-if="showProvince" :form="form"></province-info>
-      <div class="extra-content" v-if="form.multipartFileVO && form.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED">
+      <div
+        class="extra-content"
+        v-if="form.multipartFileVO && form.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED"
+      >
         <sub-tit class="mb-4"> 扫描件下载 </sub-tit>
         <div class="extra-content">
           <view-file :data="[form.multipartFileVO]"></view-file>
@@ -17,6 +20,7 @@
 
     <div style="text-align: center; padding: 40px">
       <el-button @click="$router.back()">返回</el-button>
+      <el-button v-if="showModify(form)" @click="edit(form)" type="primary">修改</el-button>
     </div>
   </div>
 </template>
@@ -31,10 +35,12 @@ import SubTit from '../components/SubTit.vue';
 import { getDetail } from '@/api2/acceptanceEvaluation';
 
 import { FINAL_STATUS } from '@/views2/utils/constants';
+import role from '@/views2/mixins/role';
 
 export default {
   name: 'index',
   components: { BaseInfo, ScoreTable, CityInfo, ProvinceInfo, SubTit },
+  mixins: [role],
   data() {
     return {
       form: {},
@@ -47,10 +53,32 @@ export default {
     },
     showProvince() {
       const finalStatus = this.form.finalStatus;
-      return finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED;
+      return (
+        finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED
+      );
     },
   },
   methods: {
+    // 是否显示修改
+    showModify(data) {
+      const countryShow =
+        (this.COUNTRY || this.COUNTRY_LEADER) &&
+        (data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING ||
+          data.finalStatus === FINAL_STATUS.CITY_VERIFY_REJECTED);
+      const cityShow =
+        (this.CITY || this.CITY_LEADER) &&
+        (data.finalStatus === FINAL_STATUS.CITY_REPORT_PENDING ||
+          data.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED);
+      return countryShow || cityShow;
+    },
+    // 修改
+    edit(data) {
+      const { id } = data;
+      this.$router.push({
+        name: 'NewAcceptanceEvaluation',
+        query: { id, edit: true },
+      });
+    },
     getData() {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
@@ -59,7 +87,9 @@ export default {
         this.form.oldSmallPics = (res.oldSmallPics || '').split(',').map((ele) => ({ filePath: ele, url: ele }));
         this.form.oldSmallVideo = oldSmallVideoFile ? [oldSmallVideoFile] : [];
         this.form.cityAcceptTime = createPerformanceAuditTimeDO?.id;
-        this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd : '';
+        this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO
+          ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd
+          : '';
         console.log('xxxxx', this.form.oldSmallPics, this.form.oldSmallVideo);
       });
     },

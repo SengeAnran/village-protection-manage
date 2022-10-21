@@ -30,8 +30,18 @@
         </template>
 
         <template v-slot:export>
-          <el-button v-if="CITY || CITY_LEADER || PROVINCE" icon="el-icon-download" type="primary" plain @click="exportList" > 导出信息汇总表 </el-button>
-          <el-button v-if="COUNTRY || COUNTRY_LEADER" icon="el-icon-download" type="primary" plain @click="printFile" > 材料打印 </el-button>
+          <el-button
+            v-if="CITY || CITY_LEADER || PROVINCE"
+            icon="el-icon-download"
+            type="primary"
+            plain
+            @click="exportList"
+          >
+            导出信息汇总表
+          </el-button>
+          <el-button v-if="COUNTRY || COUNTRY_LEADER" icon="el-icon-download" type="primary" plain @click="printFile">
+            材料打印
+          </el-button>
           <el-button v-if="CITY_LEADER || COUNTRY_LEADER" type="primary" @click="UnifiedReport"> 统一上报</el-button>
           <!-- 
           <el-button icon="el-icon-download" v-if="!isCounty" type="primary" plain @click="exportEnclosure">
@@ -46,9 +56,14 @@
           <el-link class="link" @click="deleteItem(scope.data.id)" type="danger" v-if="showDelete(scope.data)">
             删除
           </el-link>
-          <el-link class="link" @click="(form2.id = scope.data.id) && (ScanDocDialogVisible = true)" type="primary" v-if="showUploadScanFile(scope.data)">
-            扫描件上传
-          </el-link>
+          <!--          <el-link-->
+          <!--            class="link"-->
+          <!--            @click="(form2.id = scope.data.id) && (ScanDocDialogVisible = true)"-->
+          <!--            type="primary"-->
+          <!--            v-if="showUploadScanFile(scope.data)"-->
+          <!--          >-->
+          <!--            扫描件上传-->
+          <!--          </el-link>-->
         </template>
 
         <template v-slot:table>
@@ -78,9 +93,13 @@
               <span v-else>-</span>
             </template>
           </el-table-column>
-          <el-table-column label="县申请时间" prop="gmtModified" v-if="!isCounty"> </el-table-column>
-          <el-table-column label="申请时间" prop="gmtModified" v-else></el-table-column>
-          <el-table-column label="市审核时间" prop="cityReviewTime" v-if="!isCounty"> </el-table-column>
+          <el-table-column label="验收时间段">
+            <!--            完善-->
+            <template v-slot="scope">{{ scope.row.cityAcceptTime + '至' }}</template>
+          </el-table-column>
+          <!--          <el-table-column label="县申请时间" prop="gmtModified" v-if="!isCounty"> </el-table-column>-->
+          <!--          <el-table-column label="申请时间" prop="gmtModified" v-else></el-table-column>-->
+          <!--          <el-table-column label="市审核时间" prop="cityReviewTime" v-if="!isCounty"> </el-table-column>-->
           <el-table-column label="状态" prop="finalStatus">
             <!--  0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过-->
             <template slot-scope="scope">
@@ -122,7 +141,16 @@ import rule from '@/mixins/rule';
 import role from '@/views2/mixins/role';
 import ListSearch from './components/ListSearch.vue';
 
-import { getAuditList, getReportList, deleteItem, exportList, exportAnnex, unifiedReporting, uploadScan, materialPrinting } from '@/api2/acceptanceEvaluation';
+import {
+  getAuditList,
+  getReportList,
+  deleteItem,
+  exportList,
+  exportAnnex,
+  unifiedReporting,
+  uploadScan,
+  materialPrinting,
+} from '@/api2/acceptanceEvaluation';
 import { downloadFile } from '@/utils/data';
 import { CITY_LEVEL_RATING } from './constants';
 import { FINAL_STATUE_COLOR, DECLARE_STATUS, FINAL_STATUS } from '@/views2/utils/constants';
@@ -207,8 +235,9 @@ export default {
         this.$notify.error('请选择需要打印的数据');
         return;
       }
-      if (!this.selections.every((i) => i.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING)) {
-        this.$notify.error('该条示范带信息市级还未通过审核，无法导出打印');
+      // 则判断勾选的信息内是否为县级待上报以后的状态（仅县级待上报状态不可导出）
+      if (this.selections.some((i) => i.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING)) {
+        this.$notify.error('需先上报后才可进行导出');
         return;
       } else {
         this.$confirm('是否批量导出所选数据？', '提示', {
@@ -219,7 +248,7 @@ export default {
               id: item.id,
             };
             const res = await materialPrinting(data);
-            downloadFile(res, "浙江省未来乡村创建成效评价申请表", "application/msword")
+            downloadFile(res, '浙江省未来乡村创建成效评价申请表', 'application/msword');
             this.$notify.success('导出成功');
           });
         });
@@ -331,13 +360,19 @@ export default {
       }).then(() => {
         const data = this.selections.map((item) => item.id);
         unifiedReporting(data).then(() => {
-          this.$notify.success('统一上报成功！');
+          this.$notify.success('上报成功！');
           this.$refs.crud.getItems();
         });
       });
     },
 
     newApplications() {
+      // 完善
+      // 判断是否在配置的验收时间段内，是则进入新建申报页面，否责toast提示“不在验收时间内，无法新建申报”
+      this.$notify({
+        type: 'warning',
+        message: '不在验收时间内，无法新建申报',
+      });
       this.$router.push({ name: 'NewAcceptanceEvaluation' });
     },
     // 详情
@@ -360,7 +395,7 @@ export default {
     },
     // 删除
     deleteItem(id) {
-      this.$confirm('是否删除该条数据？', '提示', {
+      this.$confirm('是否确认删除申报信息？', '提示', {
         type: 'warning',
       }).then(async () => {
         deleteItem({ id }).then(() => {
@@ -378,7 +413,8 @@ export default {
     },
     showDetail(data) {
       return (
-        this.COUNTRY || this.COUNTRY_LEADER ||
+        this.COUNTRY ||
+        this.COUNTRY_LEADER ||
         ((this.CITY || this.CITY_LEADER) && data.finalStatus !== 0) ||
         (this.PROVINCE && data.finalStatus !== 2)
       );
@@ -387,12 +423,18 @@ export default {
       return ((this.CITY || this.CITY_LEADER) && data.finalStatus === 0) || (this.PROVINCE && data.finalStatus === 2);
     },
     showModify(data) {
-      const countryShow = (this.COUNTRY || this.COUNTRY_LEADER) && (data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING || data.finalStatus === FINAL_STATUS.CITY_VERIFY_REJECTED);
-      const cityShow = (this.CITY || this.CITY_LEADER) && data.finalStatus === FINAL_STATUS.CITY_REPORT_PENDING;
+      const countryShow =
+        (this.COUNTRY || this.COUNTRY_LEADER) &&
+        (data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING ||
+          data.finalStatus === FINAL_STATUS.CITY_VERIFY_REJECTED);
+      const cityShow =
+        (this.CITY || this.CITY_LEADER) &&
+        (data.finalStatus === FINAL_STATUS.CITY_REPORT_PENDING ||
+          data.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED);
       return countryShow || cityShow;
     },
     showDelete(data) {
-      return (this.COUNTRY) && data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING;
+      return this.COUNTRY && data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING;
     },
     showUploadScanFile(data) {
       if (data.fileId) {

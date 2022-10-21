@@ -1,10 +1,23 @@
 <template>
   <div class="basic-info-module">
     <el-row :gutter="20">
+      <el-radio v-model="villageType" :label="1">创建村申报</el-radio>
+      <el-radio v-model="villageType" :label="2">片区申报</el-radio>
+    </el-row>
+    <el-row :gutter="20">
       <el-col :span="8">
-        <el-form-item prop="areaId" label="创建村名称" :rules="rule.select" v-if="villageType === 1">
-          <VillageSelect ref="villageSelect" v-model="saveVO.villageName" @change="changeAddress('areaId', $event)" />
-        </el-form-item>
+        <div class="mb-8">
+          <el-form-item prop="areaId" label="创建村名称" :rules="rule.select" v-if="villageType === 1">
+            <VillageSelect ref="villageSelect" v-model="saveVO.villageName" @change="changeAddress('areaId', $event)" />
+          </el-form-item>
+          <el-form-item prop="declarationId" label="片区名称" :rules="rule.select" v-if="villageType === 2">
+            <DistrictSelect
+              v-model="form.declarationId"
+              :area.sync="saveVO.area"
+              @change="changeAddress('district', $event)"
+            />
+          </el-form-item>
+        </div>
       </el-col>
       <el-col :span="8">
         <el-form-item label="创建批次">
@@ -72,37 +85,18 @@
       >
       </el-input>
     </el-form-item>
-    <el-form-item label="是否配备物业" prop="isProperty" :rules="rule.select">
-      <el-select v-model="form.isProperty" placeholder="请选择" class="village-select">
-        <el-option v-for="item in propertyOptions" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select>
-      <el-select v-if="form.isProperty" v-model="form.propertyType" placeholder="请选择类型" class="village-select">
-        <el-option v-for="item in propertyTypeOptions" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select>
-      <el-select
-        v-if="form.isProperty"
-        multiple
-        v-model="form.propertyServe"
-        placeholder="请勾选配备服务"
-        class="village-select"
-      >
-        <el-option v-for="item in propertyServeOptions" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select>
-    </el-form-item>
   </div>
 </template>
 <script>
 import rule from '@/mixins/rule';
 
 import VillageSelect from './VillageSelect.vue';
+import DistrictSelect from './DistrictSelect.vue';
 
 import { getAreaBaseInfo } from '@/api2/acceptanceEvaluation';
 
 export default {
-  components: { VillageSelect },
+  components: { VillageSelect, DistrictSelect },
   mixins: [rule],
   props: {
     form: {
@@ -114,56 +108,7 @@ export default {
     return {
       // 片区名称
       villageType: 1,
-      propertyOptions: [
-        {
-          label: '是',
-          value: 1,
-        },
-        {
-          label: '否',
-          value: 0,
-        },
-      ],
-      propertyTypeOptions: [
-        {
-          label: '专业服务',
-          value: 0,
-        },
-        {
-          label: '自治服务',
-          value: 1,
-        },
-        {
-          label: '托管服务',
-          value: 2,
-        },
-      ],
-      propertyServeOptions: [
-        {
-          label: '公共区域保洁',
-          value: 0,
-        },
-        {
-          label: '安全秩序维护',
-          value: 1,
-        },
-        {
-          label: '停车秩序维护',
-          value: 2,
-        },
-        {
-          label: '共用设施维修',
-          value: 3,
-        },
-        {
-          label: '绿化养护',
-          value: 4,
-        },
-        {
-          label: '小区道路保养',
-          value: 5,
-        },
-      ],
+
       baseInfo: {
         // villageName: '',
         declarationBatch: '', //申报批次

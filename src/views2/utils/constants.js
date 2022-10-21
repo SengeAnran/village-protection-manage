@@ -16,7 +16,7 @@ export const VERIFY_STATE = Object.freeze({
 
 // 最终审核状态
 export const FINAL_STATUS = Object.freeze({
-  //5县级待上报、0:市级未审核、1:市级已驳回、6市级待上报、2:省级未审核、3:省级已驳回、4:审核通过
+  //5县级待上报、0:市级待审核、1:市级已驳回、6市级待上报、2:省级未审核、3:省级已驳回、4:审核通过
   COUNTRY_REPORT_PENDING: 5,
   CITY_VERIFY_PENDING: 0,
   CITY_REPORT_PENDING: 6,
@@ -30,14 +30,21 @@ export const FINAL_STATUS = Object.freeze({
 export const DECLARE_STATUS = Object.freeze({
   //0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过 5县级待上报 6市级待上报
   5: '县级待上报',
-  0: '市级未审核',
+  0: '市级待审核',
   6: '市级待上报',
   1: '市级已驳回',
-  2: '省级未审核',
-  3: '省级已驳回',
+  2: '省级待审核',
+  3: '省级审核不通过',
   4: '省级审核通过',
 });
 
 // 最终审核状态个状态对应的颜色值
-export const FINAL_STATUE_COLOR = Object.freeze(['#E6A23C', '#F56C6C', '#E6A23C', '#F56C6C', '#67C23A', '#E6A23C', '#E6A23C'])
-
+export const FINAL_STATUE_COLOR = Object.freeze([
+  '#E6A23C',
+  '#F56C6C',
+  '#E6A23C',
+  '#F56C6C',
+  '#67C23A',
+  '#E6A23C',
+  '#E6A23C',
+]);

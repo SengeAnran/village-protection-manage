@@ -45,6 +45,27 @@
     <el-form-item label="县（市、区）人民政府自评结论" prop="basicText">
       {{ form.conclusion }}
     </el-form-item>
+    <!--    完善-->
+    <el-row :gutter="20">
+      <el-col :span="8">
+        <el-form-item label="是否配备物业" prop="basicText">
+          {{ form.isProperty }}
+        </el-form-item>
+      </el-col>
+
+      <el-col v-if="form.isProperty" :span="8">
+        <el-form-item label="物业类型" prop="basicText">
+          {{ form.propertyType }}
+        </el-form-item>
+      </el-col>
+
+      <el-col v-if="form.isProperty" :span="8">
+        <el-form-item label="配备服务" prop="basicText">
+          {{ form.propertyServe }}
+        </el-form-item>
+      </el-col>
+    </el-row>
+
     <el-form-item label="浙江省未来乡村创建成效自评总结">
       {{ form.selfAssessmentSummary }}
     </el-form-item>

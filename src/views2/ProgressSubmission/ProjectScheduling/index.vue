@@ -94,7 +94,9 @@
             </template>
           </el-table-column>
           <el-table-column label="投资完成率" sortable prop="rate"></el-table-column>
-          <el-table-column label="总体进度" sortable prop="rate"></el-table-column>
+          <el-table-column label="总体进度" sortable prop="overallProgress">
+            <template v-slot="scope"> {{ formatScore(scope.row.overallProgress || 0) }}% </template>
+          </el-table-column>
           <el-table-column v-if="level === 4" label="状态" prop="status">
             <template slot-scope="scope">
               <p :style="{ color: REPORT_STATUS_COLOR[scope.row.projectStatus] }">
@@ -109,6 +111,7 @@
 </template>
 <script>
 import { mapMutations } from 'vuex';
+
 import { queryBatchInfo, queryTypeDeclaration, getRecVillages, deleteVillageItem } from '@/api2/villageManage';
 import {
   DECLEAR_TYPE,
@@ -124,7 +127,7 @@ import { downloadFile } from '@/utils/data';
 import role from '@/views2/mixins/role';
 import AreaTree from '@/views2/ProgressSubmission/Components/AreaTree';
 import { exportDetail, getInforExport, getList } from '@/api2/progressSubmission';
-import { formatMoney } from '@/views2/utils/formatter';
+import { formatMoney, formatScore } from '@/views2/utils/formatter';
 // import qs from "qs";
 export default {
   mixins: [role],
@@ -201,6 +204,9 @@ export default {
     // } else {
     //   this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(PRO_DECLEAR_STATUS));
     // }
+    if (this.COUNTRY || this.COUNTRY_LEADER) {
+      this.query.isAudit = 0;
+    }
     this.getBatchInfo();
     if (this.VILLAGE) {
       this.hideTableAction = false;
@@ -231,10 +237,11 @@ export default {
     this.reportStateOPt = opts;
   },
   methods: {
+    formatScore,
     formatMoney,
     getStatusName,
     canDetail(data) {
-      const hasPerm = this.VILLAGE;
+      const hasPerm = this.level === 4;
       if (data.projectStatus === PROJECT_STATUS.TO_BE_REPORT) {
         return false;
       }
@@ -244,6 +251,7 @@ export default {
     changeArea(val) {
       this.level = val.level;
       if (val.level === 4) {
+        this.hideTableAction = false;
         this.query.village = val.area;
         this.query.city = '';
         this.query.county = '';
@@ -285,11 +293,11 @@ export default {
     },
     // 导出信息汇总表
     async exportMethod() {
-      if (this.selections.length === 0) {
-        this.$notify.error('请选择需要导出的数据');
-        return;
-      }
-      this.$confirm('是否批量导出所选数据？', '提示', {
+      // if (this.selections.length === 0) {
+      //   this.$notify.error('请选择需要导出的数据');
+      //   return;
+      // }
+      this.$confirm('是否导出数据？', '提示', {
         type: 'warning',
       }).then(async () => {
         const data = {
@@ -407,8 +415,8 @@ export default {
     },
     // 详情
     goDetail(scope) {
-      const { id } = scope.data;
-      this.$router.push({ name: 'ProgressSubmissionDetails', query: { id: id } });
+      const { id, reportingTime } = scope.data;
+      this.$router.push({ name: 'ProgressSubmissionDetails', query: { id: id, reportingTime } });
     },
   },
 };

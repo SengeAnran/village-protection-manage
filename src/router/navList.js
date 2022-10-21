@@ -593,7 +593,6 @@ export const defaultRoutes2 = [
         meta: {
           // icon: "cunzhuangshenbao",
           menuIds: [
-            USER_TYPE.VILLAGE,
             USER_TYPE.COUNTRY,
             USER_TYPE.COUNTRY_LEADER,
             USER_TYPE.CITY,

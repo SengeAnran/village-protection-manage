@@ -32,6 +32,13 @@
       </el-select>
     </div>
     <div class="search-item">
+      <span class="label">验收时间段：</span>
+      <el-select v-model="query.finalStatus" placeholder="请选择">
+        <el-option v-for="item in finalStatusOpt" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+    </div>
+    <div class="search-item">
       <span class="label">状态：</span>
       <el-select v-model="query.finalStatus" placeholder="请选择">
         <el-option v-for="item in finalStatusOpt" :key="item.value" :label="item.label" :value="item.value">

@@ -38,7 +38,14 @@
             </VilliageListTable>
           </el-tab-pane>
           <el-tab-pane label="已竣工" name="second">
-            <VilliageListTable key="已竣工" v-if="showTable" type="edit" :form="form" :data="form.endLists" />
+            <VilliageListTable
+              key="已竣工"
+              v-if="showTable"
+              type="edit"
+              :defaultFirstYear="defaultFirstYear"
+              :form="form"
+              :data="form.endLists"
+            />
           </el-tab-pane>
         </el-tabs>
       </el-form-item>
@@ -85,6 +92,7 @@ export default {
   data() {
     return {
       type: 'detail',
+      defaultFirstYear: undefined,
       form: {
         area: '',
         villageName: '',
@@ -123,10 +131,13 @@ export default {
   methods: {
     formatMoney,
     init() {
-      const { id } = this.$route.query;
+      const { id, reportingTime } = this.$route.query;
       if (!id) return;
-      getDetail({ id }).then((res) => {
+      getDetail({ id, reportingTime }).then((res) => {
         this.form = res;
+        if (res.detailLists && res.detailLists[0] && res.detailLists[0].firstYear) {
+          this.defaultFirstYear = res.detailLists[0].firstYear;
+        }
         this.showTable = true;
         if (
           this.form &&
@@ -149,10 +160,10 @@ export default {
     },
     // 修改
     edit() {
-      const { id } = this.$route.query;
+      const { id, reportingTime } = this.$route.query;
       this.$router.push({
         name: 'NewProgressSubmission',
-        query: { id },
+        query: { id, reportingTime, modify: true },
       });
     },
     // 县级审核通过

@@ -1,12 +1,12 @@
 <template>
   <el-form ref="form" class="form" label-position="top" :model="form" label-width="80px">
-    <el-select
-      v-if="(COUNTRY_LEADER || COUNTRY) && this.type === 'verity'"
-      v-model="reportingTime"
-      placeholder="请选择"
-    >
-      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-    </el-select>
+    <!--    <el-select-->
+    <!--      v-if="(COUNTRY_LEADER || COUNTRY) && this.type === 'verity'"-->
+    <!--      v-model="reportingTime"-->
+    <!--      placeholder="请选择"-->
+    <!--    >-->
+    <!--      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>-->
+    <!--    </el-select>-->
     <div class="detail-top">
       <el-row :gutter="20">
         <el-col :span="8">
@@ -63,7 +63,7 @@
       <div class="box-title">计划总投资（万元）</div>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="2022年计划投资" prop="planFirst">
+          <el-form-item :label="firstYear + '年计划投资'" prop="planFirst">
             {{ formatMoney(form.planFirst || form.planFirstGov + form.planFirstDrive) }}
           </el-form-item>
         </el-col>
@@ -80,7 +80,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="2023年计划投资" prop="planSecond">
+          <el-form-item :label="firstYear + 1 + '年计划投资'" prop="planSecond">
             {{ formatMoney(form.planSecond || Number(form.planSecondGov) + Number(form.planSecondDrive)) }}
           </el-form-item>
         </el-col>
@@ -99,7 +99,7 @@
       <div class="box-title">完成总投资（万元）</div>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="2022年完成投资" prop="planSecond">
+          <el-form-item :label="firstYear + '年完成投资'" prop="planSecond">
             {{ formatMoney(form.comFirst || Number(form.comFirstGov) + Number(form.comFirstDrive) || 0) }}
           </el-form-item>
         </el-col>
@@ -116,7 +116,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="2023年完成投资" prop="comSecond">
+          <el-form-item :label="firstYear + 1 + '年完成投资'" prop="comSecond">
             {{ formatMoney(form.comSecond || Number(form.comSecondGov) + Number(form.comSecondDrive)) }}
           </el-form-item>
         </el-col>
@@ -184,6 +184,7 @@ export default {
   name: 'AddFillIn',
   data() {
     return {
+      firstYear: 2022,
       reportingTime: '', // 月份
       options: [], // 时间选项
       form: {
@@ -247,11 +248,12 @@ export default {
       }
       if (this.type === 'detail' || this.type === 'verity') {
         const data = {
-          reportingTime: this.reportingTime,
+          // reportingTime: this.reportingTime,
           projectId: this.id,
         };
         const res = await progressReportDetail(data);
         this.form = res;
+        this.firstYear = this.form.firstYear || 2022;
         if (this.form.monthPic) {
           this.oldPics = this.form.monthPic
             .split(',')
