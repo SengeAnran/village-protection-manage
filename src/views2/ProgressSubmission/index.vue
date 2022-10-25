@@ -123,7 +123,7 @@
             <template slot-scope="scope"> {{ formatScore(scope.row.rate * 100 || 0) }}% </template>
           </el-table-column>
           <el-table-column label="总体进度" sortable prop="overallProgress">
-            <template v-slot="scope"> {{ formatScore(scope.row.overallProgress * 100 || 0) }}% </template>
+            <template v-slot="scope"> {{ formatScore(scope.row.overallProgress || 0) }}% </template>
           </el-table-column>
           <el-table-column label="状态" prop="status">
             <template slot-scope="scope">

@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <div>
-      <div class="text-lg mb-4">审批比选时间配置</div>
+      <div class="text-lg mb-4">验收评价配置</div>
       <Crud
         ref="crud"
         :add-method="addMethod"
@@ -26,8 +26,8 @@
           <el-form-item label="比选时间：" prop="acceptanceTime" :rules="rule.multiSelect">
             <el-date-picker
               v-model="form.acceptanceTime"
-              value-format="yyyy-MM"
-              type="monthrange"
+              value-format="yyyy-MM-dd"
+              type="daterange"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
@@ -39,7 +39,7 @@
         <template v-slot:crudAction> </template>
 
         <template v-slot:table>
-          <el-table-column label="比选时间">
+          <el-table-column label="验收评价时间段">
             <template slot-scope="scope">
               <p>{{ scope.row.acceptanceTimeStart }} 至 {{ scope.row.acceptanceTimeEnd }}</p>
             </template>

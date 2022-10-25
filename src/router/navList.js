@@ -745,7 +745,7 @@ export const defaultRoutes2 = [
         hidden: false,
         meta: {
           // activeMenu: "/acceptanceEvaluation/index",
-          title: '审批比选时间配置',
+          title: '验收评价配置',
           menuIds: [USER_TYPE.PROVINCE],
         },
         component: () => import('@/views2/AcceptanceEvaluation/AcceptanceTime/index'),

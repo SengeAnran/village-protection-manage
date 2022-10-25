@@ -9,9 +9,9 @@ export const CITY_LEVEL_RATING = ['合格', '良好', '优秀'];
 // 县级默认表单
 export const COUNTY_DEFAULT_FORM = {
   isSave: undefined,
-  isProperty: undefined, // 是否配备物业
+  isAllocated: undefined, // 是否配备物业
   propertyType: '', // 物业类型
-  propertyServe: [], // 配备服务
+  provisionService: [], // 配备服务
   id: '',
   areaId: '',
   buildPutInCounty: '',
@@ -48,7 +48,7 @@ export const CITY_DEFAULT_FORM = {
   cityAcceptTime: '',
   cityLevelRating: '',
   // cityRanking: '',
-  citySaveAnnex: [],
+  citySaveAnnex: {},
   cityVerify: '',
   id: 0,
   saveToGoCity: 0, //0/1 默认是提交

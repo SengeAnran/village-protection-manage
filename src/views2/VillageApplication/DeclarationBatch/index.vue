@@ -30,7 +30,7 @@
             <el-input v-model="form.batch" maxlength="20"></el-input>
           </el-form-item>
 
-          <el-form-item label="创建时间：" prop="declareTime" :rules="rule.multiSelect">
+          <el-form-item label="申报时间：" prop="declareTime" :rules="rule.multiSelect">
             <el-date-picker
               v-model="form.declareTime"
               value-format="yyyy-MM-dd"
@@ -93,7 +93,7 @@
 
         <template v-slot:table>
           <el-table-column label="创建批次" prop="batch"></el-table-column>
-          <el-table-column label="创建时间">
+          <el-table-column label="申报时间">
             <template slot-scope="scope">
               <p>{{ scope.row.startTime.slice(0, 10) }}——{{ scope.row.endTime.slice(0, 10) }}</p>
             </template>

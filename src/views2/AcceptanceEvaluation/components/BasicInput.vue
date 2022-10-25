@@ -72,23 +72,23 @@
       >
       </el-input>
     </el-form-item>
-    <el-form-item label="是否配备物业" prop="isProperty" :rules="rule.select">
-      <el-select v-model="form.isProperty" placeholder="请选择" class="village-select">
+    <el-form-item label="是否配备物业" prop="isAllocated" :rules="isAllocatedRule">
+      <el-select v-model="form.isAllocated" placeholder="请选择" class="village-select">
         <el-option v-for="item in propertyOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-select v-if="form.isProperty" v-model="form.propertyType" placeholder="请选择类型" class="village-select">
-        <el-option v-for="item in propertyTypeOptions" :key="item.value" :label="item.label" :value="item.value">
+      <el-select v-if="form.isAllocated" v-model="form.propertyType" placeholder="请选择类型" class="village-select">
+        <el-option v-for="item in propertyTypeOptions" :key="item.value" :label="item.label" :value="item.label">
         </el-option>
       </el-select>
       <el-select
-        v-if="form.isProperty"
+        v-if="form.isAllocated"
         multiple
-        v-model="form.propertyServe"
+        v-model="form.provisionService"
         placeholder="请勾选配备服务"
         class="village-select"
       >
-        <el-option v-for="item in propertyServeOptions" :key="item.value" :label="item.label" :value="item.value">
+        <el-option v-for="item in propertyServeOptions" :key="item.value" :label="item.label" :value="item.label">
         </el-option>
       </el-select>
     </el-form-item>
@@ -172,6 +172,11 @@ export default {
         contactPerson: '', //联系人
         phone: '', //联系方式
       },
+      isAllocatedRule: {
+        required: true,
+        validator: this.isAllocatedRuleFun,
+        trigger: ['blur', 'change'],
+      },
     };
   },
   computed: {
@@ -229,6 +234,19 @@ export default {
         this.baseInfo[key] = '';
         this.$emit('change', { areaId: undefined, declarationId: undefined });
       });
+    },
+    // 校验是否匹配物业
+    isAllocatedRuleFun(rule, value, callback) {
+      if (value === undefined) {
+        callback(new Error('填选择不能为空'));
+      }
+      if (value && (!this.form.propertyType || this.form.propertyType === 0)) {
+        callback(new Error('请选择物业类型'));
+      } else if (this.form.provisionService.length === 0) {
+        callback(new Error('请勾选配备服务'));
+      } else {
+        callback();
+      }
     },
   },
 };

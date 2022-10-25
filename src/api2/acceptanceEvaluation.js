@@ -188,3 +188,10 @@ export const materialPrinting = (params) => {
     responseType: 'blob',
   });
 };
+// 判断是否可以新增验收评价
+export const createReportsCanSave = () => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/createReports/can/save`,
+  });
+};

@@ -420,7 +420,7 @@ export default {
     // 详情
     goDetail(scope) {
       const { id, reportingTime } = scope.data;
-      this.$router.push({ name: 'ProgressSubmissionDetails', query: { id: id, reportingTime } });
+      this.$router.push({ name: 'ProgressSubmissionDetails', query: { id: id, reportingTime, detail: true } });
     },
   },
 };

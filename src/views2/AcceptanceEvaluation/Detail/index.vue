@@ -2,8 +2,9 @@
   <div class="page">
     <el-form ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
       <RouterBack>详情</RouterBack>
-      <sub-tit> 申报详情 </sub-tit>
+      <sub-tit> 浙江省未来乡村创建成效申请表 </sub-tit>
       <BaseInfo :form="form" />
+      <sub-tit> 未来乡村创建成效评分表 </sub-tit>
       <score-table :form="form" disabled></score-table>
       <city-info v-if="showCity" :form="form"></city-info>
       <province-info v-if="showProvince" :form="form"></province-info>
@@ -49,7 +50,13 @@ export default {
   computed: {
     showCity() {
       const finalStatus = this.form.finalStatus;
-      return finalStatus !== FINAL_STATUS.COUNTRY_REPORT_PENDING && finalStatus != FINAL_STATUS.CITY_VERIFY_PENDING;
+      const canViewStatus =
+        finalStatus !== FINAL_STATUS.COUNTRY_REPORT_PENDING && finalStatus != FINAL_STATUS.CITY_VERIFY_PENDING;
+      let canViewIdentity = canViewStatus;
+      if ((this.COUNTRY || this.COUNTRY_LEADER) && finalStatus !== FINAL_STATUS.CITY_VERIFY_REJECTED) {
+        canViewIdentity = false;
+      }
+      return canViewIdentity;
     },
     showProvince() {
       const finalStatus = this.form.finalStatus;
@@ -86,7 +93,7 @@ export default {
         this.form = res;
         this.form.oldSmallPics = (res.oldSmallPics || '').split(',').map((ele) => ({ filePath: ele, url: ele }));
         this.form.oldSmallVideo = oldSmallVideoFile ? [oldSmallVideoFile] : [];
-        this.form.cityAcceptTime = createPerformanceAuditTimeDO?.id;
+        // this.form.cityAcceptTime = createPerformanceAuditTimeDO?.id;
         this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO
           ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd
           : '';

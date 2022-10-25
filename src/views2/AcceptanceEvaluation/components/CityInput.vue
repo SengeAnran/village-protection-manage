@@ -3,26 +3,31 @@
     <sub-tit> 设区市比选意见 </sub-tit>
     <div class="city-input-content">
       <el-row :gutter="20">
-        <el-form-item prop="cityVerify" label="比选意见" :rules="rule.select">
-          <el-radio v-model="form.cityVerify" :label="1">通过</el-radio>
-          <el-radio v-model="form.cityVerify" :label="0">驳回县级</el-radio>
-        </el-form-item>
+        <el-col :span="12">
+          <el-form-item prop="cityVerify" label="比选意见" :rules="rule.select">
+            <el-radio v-model="form.cityVerify" :label="1">通过</el-radio>
+            <el-radio v-model="form.cityVerify" :label="0">驳回县级</el-radio>
+          </el-form-item>
+        </el-col>
       </el-row>
       <section v-if="form.cityVerify === 1">
         <el-row :gutter="20">
-          <el-form-item prop="cityLevelRating" label="评价等次" :rules="rule.select">
-            <el-radio v-model="form.cityLevelRating" :label="2">优秀</el-radio>
-            <el-radio v-model="form.cityLevelRating" :label="1">良好</el-radio>
-            <el-radio v-model="form.cityLevelRating" :label="0">合格</el-radio>
-          </el-form-item>
+          <el-col :span="12">
+            <el-form-item prop="cityLevelRating" label="评价等次" :rules="rule.select">
+              <el-radio v-model="form.cityLevelRating" :label="2">优秀</el-radio>
+              <el-radio v-model="form.cityLevelRating" :label="1">良好</el-radio>
+              <el-radio v-model="form.cityLevelRating" :label="0">合格</el-radio>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item prop="cityAcceptTime" label="审核比选时间" :rules="rule.select">
-              <el-select v-model="form.cityAcceptTime" placeholder="请选择">
-                <el-option v-for="item in timeOptions" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
+              <!--              <el-select v-model="form.cityAcceptTime" disabled placeholder="请选择">-->
+              <!--                <el-option v-for="item in timeOptions" :key="item.value" :label="item.label" :value="item.value">-->
+              <!--                </el-option>-->
+              <!--              </el-select>-->
+              <el-input style="width: 200px" v-model="form.cityAcceptTime" disabled placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -31,11 +36,40 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <!-- <file-attach desc1="《浙江省未来乡村创建成效评价申请表》" desc2="《浙江省未来乡村创建成效评分》市级审核盖章扫描件" verifyProp="citySaveAnnex" :data="form.citySaveAnnex" @addFile="onFileAdd" @removeFile="onFileRemove"></file-attach> -->
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="附件上传" prop="citySaveAnnex" :rules="rule.upload">
+              <UploadFile23
+                tip="支持格式：.doc, .docx, .pdf"
+                accept=".doc,.docx,.pdf"
+                :limitSize="100"
+                v-model="form.citySaveAnnex"
+              />
+              <p style="width: 100%; color: #ff6b00" class="py-4 leading-5">
+                <i class="el-icon-warning"></i>请上传《未来乡村创建成效评价申请表》盖章扫描件
+              </p>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <!--        <file-attach-->
+        <!--          desc1="请上传《未来乡村创建成效评价申请表》盖章扫描件"-->
+        <!--          verifyProp="citySaveAnnex"-->
+        <!--          :data="form.citySaveAnnex"-->
+        <!--          @addFile="onFileAdd"-->
+        <!--          @removeFile="onFileRemove"-->
+        <!--        ></file-attach>-->
       </section>
       <section v-if="form.cityVerify === 0">
         <el-form-item label="驳回说明" prop="cityOpinion" :rules="rule.input">
-          <el-input type="textarea" :rows="5" placeholder="请输入" maxlength="800" show-word-limit v-model="form.cityOpinion" />
+          <el-input
+            type="textarea"
+            :rows="5"
+            placeholder="请输入"
+            maxlength="800"
+            show-word-limit
+            v-model="form.cityOpinion"
+          />
         </el-form-item>
       </section>
     </div>
@@ -56,7 +90,7 @@ export default {
   props: {
     form: {
       type: Object,
-      default: () => { },
+      default: () => {},
     },
   },
   data() {

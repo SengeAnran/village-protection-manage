@@ -1,7 +1,8 @@
 <template>
   <div>
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
-      <sub-tit> {{ (isEdit && '修改') || '创建' }}成效评价申请 </sub-tit>
+      <!--      <sub-tit> {{ (isEdit && '修改') || '创建' }}成效评价申请 </sub-tit>-->
+      <sub-tit> 浙江省未来乡村创建成效申请表 </sub-tit>
       <basic-input :form="form" @change="villageChange"></basic-input>
       <sub-tit> 浙江省未来乡村创建成效自评总结 </sub-tit>
       <div style="padding: 20px; padding-top: 4px">
@@ -163,6 +164,7 @@ export default {
         form.countySaveAnnex = this.form.countySaveAnnex.map((c) => c.fileId).join(',');
         form.oldSmallPics = this.form.oldSmallPics.map((c) => c.filePath).join(',');
         form.oldSmallVideo = this.form.oldSmallVideo.map((c) => c.fileId).join(',');
+        form.provisionService = form.provisionService.join(','); // 配备服务
 
         form.saveToGo = 0;
         this._saveInfo(form);
@@ -177,6 +179,7 @@ export default {
       form.countySaveAnnex = this.form.countySaveAnnex.map((c) => c.fileId).join(',');
       form.oldSmallPics = this.form.oldSmallPics.map((c) => c.filePath).join(',');
       form.oldSmallVideo = this.form.oldSmallVideo.map((c) => c.fileId).join(',');
+      form.provisionService = form.provisionService.join(','); // 配备服务
 
       form.saveToGo = 1;
       // this._saveInfo(form, '保存成功！');
@@ -241,7 +244,7 @@ export default {
     getData() {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
-        const { oldSmallVideoFile, createPerformanceAuditTimeDO } = res;
+        const { oldSmallVideoFile, createPerformanceAuditTimeDO, provisionService } = res;
         this.form = res;
         this.form.selfAssessmentSummary = res.selfAssessmentSummary || '';
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
@@ -252,6 +255,7 @@ export default {
         this.form.oldSmallPics = [];
         this.oldSmallVideoDefault = oldSmallVideoFile ? [oldSmallVideoFile] : [];
         this.form.oldSmallVideo = [];
+        this.form.provisionService = provisionService ? provisionService.split(',') : []; // 配备服务
         this.form.cityAcceptTime = createPerformanceAuditTimeDO?.id;
         this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO
           ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd

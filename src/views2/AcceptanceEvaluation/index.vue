@@ -93,9 +93,8 @@
               <span v-else>-</span>
             </template>
           </el-table-column>
-          <el-table-column label="验收时间段">
-            <!--            完善-->
-            <template v-slot="scope">{{ scope.row.cityAcceptTime + '至' }}</template>
+          <el-table-column label="验收时间段" prop="acceptTime" width="180">
+            <!--            <template v-slot="scope">{{ scope.row.cityAcceptTime + '至' }}</template>-->
           </el-table-column>
           <!--          <el-table-column label="县申请时间" prop="gmtModified" v-if="!isCounty"> </el-table-column>-->
           <!--          <el-table-column label="申请时间" prop="gmtModified" v-else></el-table-column>-->
@@ -103,10 +102,10 @@
           <el-table-column label="状态" prop="finalStatus">
             <!--  0:市级未审核、1:市级已驳回、2:省级未审核、3:省级已驳回、4:审核通过-->
             <template slot-scope="scope">
-              <p :style="{ color: textColor[scope.row.finalStatus] }">
+              <div :style="{ backgroundColor: textColor[scope.row.finalStatus] }" class="tip-point">
                 <!--                <i class="status" :class="{ active: scope.row.finalStatus === 4 }"></i>-->
-                {{ DECLARE_STATUS[scope.row.finalStatus] || '--' }}
-              </p>
+              </div>
+              {{ DECLARE_STATUS[scope.row.finalStatus] || '--' }}
             </template>
           </el-table-column>
         </template>
@@ -150,6 +149,7 @@ import {
   unifiedReporting,
   uploadScan,
   materialPrinting,
+  createReportsCanSave,
 } from '@/api2/acceptanceEvaluation';
 import { downloadFile } from '@/utils/data';
 import { CITY_LEVEL_RATING } from './constants';
@@ -193,6 +193,7 @@ export default {
       return this.isCounty ? getReportList : getAuditList;
     },
   },
+  beforeMount() {},
   methods: {
     formatMoney,
     ...mapMutations('villageMange', ['changeDeclareList']),
@@ -255,7 +256,7 @@ export default {
       }
     },
     exportList() {
-      this._exportFiles(exportList, '导出信息汇总表.xlsx');
+      this._exportFiles(exportList, '信息汇总表.xlsx');
     },
     _exportFiles(exportFunc, fileName = '导出信息汇总表 ') {
       if (!this.selections.length) {
@@ -367,13 +368,17 @@ export default {
     },
 
     newApplications() {
-      // 完善
       // 判断是否在配置的验收时间段内，是则进入新建申报页面，否责toast提示“不在验收时间内，无法新建申报”
-      this.$notify({
-        type: 'warning',
-        message: '不在验收时间内，无法新建申报',
-      });
-      this.$router.push({ name: 'NewAcceptanceEvaluation' });
+      createReportsCanSave()
+        .then(() => {
+          this.$router.push({ name: 'NewAcceptanceEvaluation' });
+        })
+        .catch(() => {
+          this.$notify({
+            type: 'warning',
+            message: '不在验收时间内，无法新建申报',
+          });
+        });
     },
     // 详情
     goDetail(scope) {
@@ -446,6 +451,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.tip-point {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  border-radius: 4px;
+}
 .status {
   display: inline-block;
   margin-right: 6px;

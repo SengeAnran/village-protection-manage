@@ -25,19 +25,19 @@
         <el-option v-for="item in cityLevelOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
     </div>
-    <div class="search-item" v-if="!(COUNTRY || COUNTRY_LEADER)">
-      <span class="label">审核比选时间：</span>
-      <el-select v-model="query.cityAcceptTime" placeholder="请选择">
+    <div class="search-item">
+      <span class="label">验收时间段：</span>
+      <el-select v-model="query.acceptTimeId" placeholder="请选择">
         <el-option v-for="item in acceptTimeOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
     </div>
-    <div class="search-item">
-      <span class="label">验收时间段：</span>
-      <el-select v-model="query.finalStatus" placeholder="请选择">
-        <el-option v-for="item in finalStatusOpt" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select>
-    </div>
+    <!--    <div class="search-item">-->
+    <!--      <span class="label">验收时间段：</span>-->
+    <!--      <el-select v-model="query.finalStatus" placeholder="请选择">-->
+    <!--        <el-option v-for="item in finalStatusOpt" :key="item.value" :label="item.label" :value="item.value">-->
+    <!--        </el-option>-->
+    <!--      </el-select>-->
+    <!--    </div>-->
     <div class="search-item">
       <span class="label">状态：</span>
       <el-select v-model="query.finalStatus" placeholder="请选择">
@@ -64,7 +64,7 @@ export default {
         villageName: '',
         declarationBatch: '',
         cityLevelRating: '',
-        cityAcceptTime: '',
+        acceptTimeId: '',
         finalStatus: '',
       }),
     },
@@ -100,7 +100,10 @@ export default {
     },
     setAcceptTimeOpt() {
       getSetListTime({ type: 1, pageNum: 1, pageSize: 50 }).then((res) => {
-        this.acceptTimeOpt = res.content.map((c) => ({ label: c.acceptanceTime, value: c.acceptanceTime }));
+        this.acceptTimeOpt = res.content.map((c) => ({
+          label: c.acceptanceTimeStart + '至' + c.acceptanceTimeEnd,
+          value: c.id,
+        }));
       });
     },
     setFinalStatusOpt() {

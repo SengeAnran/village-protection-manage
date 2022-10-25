@@ -86,7 +86,7 @@ export default {
       loading: false,
       progressPercent: 0, // 上传进度展示
       fileList: [],
-      fileName: '',
+      // fileName: '',
       data: [],
     };
   },
@@ -94,14 +94,18 @@ export default {
     fileInfo() {
       return this.value;
     },
-  },
-  watch: {
-    value(val) {
-      if (val) {
-        this.fileName = this.value.fileName || '';
-      }
+    fileName() {
+      return this.value.fileName || '';
     },
   },
+  // watch: {
+  //   value(val) {
+  //     if (val) {
+  //       console.log()
+  //       this.fileName = val.fileName || '';
+  //     }
+  //   },
+  // },
   methods: {
     async uploadImg(info) {
       try {

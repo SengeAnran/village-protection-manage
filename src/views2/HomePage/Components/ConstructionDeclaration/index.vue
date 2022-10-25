@@ -32,7 +32,7 @@ export default {
     return {
       pieDataList: [
         { name: '审核通过', value: 0 },
-        { name: '待审核', value: 0 },
+        { name: '待上报', value: 0 },
         { name: '审核未通过', value: 0 },
       ],
       total: 0,

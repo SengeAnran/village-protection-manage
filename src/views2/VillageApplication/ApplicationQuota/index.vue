@@ -31,64 +31,18 @@
         </el-table>
       </template>
     </div>
-    <el-dialog :title="title" label-position="top" :visible.sync="dialogFormVisible" width="30%">
-      <el-form ref="form">
-        <el-form-item label="地区">{{ city }}</el-form-item>
-        <div v-for="(item, index) in detailList" :key="item.batch">
-          <!--          <el-form-item :label="`第${index + 1}批申报名额配置:`"> </el-form-item>-->
-          <el-form-item :label="`${item.batch}申报名额配置:`"> </el-form-item>
-          <el-form-item>
-            <el-col :span="10">
-              <el-form-item>
-                <el-input
-                  :disabled="disabled"
-                  placeholder="请输入最低名额"
-                  type="number"
-                  v-model.number="item.minimumQuota"
-                  autocomplete="off"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="2"> ---- </el-col>
-
-            <el-col :span="10">
-              <el-form-item>
-                <el-input
-                  :disabled="disabled"
-                  placeholder="请输入最高名额"
-                  type="number"
-                  v-model.number="item.highestQuota"
-                  autocomplete="off"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-form-item>
-          <el-form-item :label="`${item.batch}验收名额配置:`"> </el-form-item>
-          <el-form-item>
-            <el-col :span="10">
-              <el-form-item>
-                <el-input
-                  :disabled="disabled"
-                  placeholder="请输入最低名额"
-                  type="number"
-                  v-model.number="detailList1[index].minimumQuota"
-                  autocomplete="off"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="2"> ---- </el-col>
-
-            <el-col :span="10">
-              <el-form-item :rules="[{ type: 'number', message: '最高名额必须为数字值' }]">
-                <el-input
-                  :disabled="disabled"
-                  placeholder="请输入最高名额"
-                  type="number"
-                  v-model.number="detailList1[index].highestQuota"
-                  autocomplete="off"
-                ></el-input>
-              </el-form-item>
-            </el-col>
+    <el-dialog :title="title" label-position="top" :visible.sync="dialogFormVisible" width="600px">
+      <el-form label-position="left" label-width="180px" ref="form">
+        <el-form-item :label="`地区 ${city}`"></el-form-item>
+        <div v-for="item in detailList" :key="item.batch">
+          <el-form-item :label="`${item.batch}申报名额配置:`">
+            <el-input
+              :disabled="disabled"
+              placeholder="请输入最低名额"
+              type="number"
+              v-model.number="item.minimumQuota"
+              autocomplete="off"
+            ></el-input>
           </el-form-item>
         </div>
       </el-form>
@@ -144,14 +98,10 @@ export default {
       this.city = item.city;
       getdetail(item.city).then((res) => {
         console.log(res);
-        this.detailList = res.filter((res) => {
-          res.city = item.city;
-          return res.type == '0';
-        });
-        this.detailList1 = res.filter((res) => {
-          res.city = item.city;
-          return res.type == '1';
-        });
+        this.detailList = res;
+        // this.detailList1 = res.filter((res) => {
+        //   return res.type == '1';
+        // });
         this.dialogFormVisible = true;
       });
     },
