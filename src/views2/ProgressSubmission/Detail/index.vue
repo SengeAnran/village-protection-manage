@@ -1,6 +1,6 @@
 <template>
   <div class="block">
-    <RouterBack>{{ VILLAGE ? '详情' : '审核' }}</RouterBack>
+    <RouterBack>{{ VILLAGE || CITY || CITY_LEADER || PROVINCE ? '详情' : '审核' }}</RouterBack>
     <div class="box-title">未来乡村项目进度报送 {{ form.reportingTime }}</div>
     <el-form style="padding-left: 14px" ref="form" class="form" label-position="top" :model="form" label-width="80px">
       <div class="input-item-wrp">

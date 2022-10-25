@@ -80,28 +80,28 @@
           <el-table-column v-if="level === 4 || level === 3" label="创建批次" prop="declarationBatch"></el-table-column>
           <el-table-column v-if="level === 2 || level === 1" label="地区" prop="name" fixed></el-table-column>
           <el-table-column v-if="level === 2 || level === 1" label="创建村数" prop="nums"></el-table-column>
-          <el-table-column label="项目数" prop="projectNum"></el-table-column>
-          <el-table-column label="已开工项目数" prop="startNum"></el-table-column>
-          <el-table-column label="项目开工比例" prop="startRate">
+          <el-table-column label="项目数" prop="projectNum" key="projectNum"></el-table-column>
+          <el-table-column label="已开工项目数" prop="startNum" key="startNum"></el-table-column>
+          <el-table-column label="项目开工比例" prop="startRate" key="startRate">
             <template slot-scope="scope"> {{ formatScore(scope.row.startRate * 100 || 0) }}% </template>
           </el-table-column>
-          <el-table-column label="计划投资（万元）" prop="investNum">
+          <el-table-column label="计划投资（万元）" prop="investNum" key="investNum">
             <template slot-scope="scope">
               {{ formatMoney(scope.row.investNum || 0) }}
             </template>
           </el-table-column>
-          <el-table-column label="完成投资(万元)" prop="completeTotalInvestment">
+          <el-table-column label="完成投资(万元)" prop="completeTotalInvestment" key="completeTotalInvestment">
             <template slot-scope="scope">
               {{ formatMoney(scope.row.completeTotalInvestment || 0) }}
             </template>
           </el-table-column>
-          <el-table-column label="投资完成率" sortable prop="rate">
+          <el-table-column label="投资完成率" sortable prop="rate" key="rate">
             <template slot-scope="scope"> {{ formatScore(scope.row.rate * 100 || 0) }}% </template>
           </el-table-column>
-          <el-table-column label="总体进度" sortable prop="overallProgress">
-            <template v-slot="scope"> {{ formatScore(scope.row.overallProgress * 100 || 0) }}% </template>
+          <el-table-column label="总体进度" sortable prop="overallProgress" key="overallProgress">
+            <template v-slot="scope"> {{ formatScore(scope.row.overallProgress || 0) }}% </template>
           </el-table-column>
-          <el-table-column v-if="level === 4" label="状态" prop="status">
+          <el-table-column v-if="level === 4" label="状态" prop="status" key="status">
             <template slot-scope="scope">
               <p :style="{ color: REPORT_STATUS_COLOR[scope.row.projectStatus] }">
                 {{ getStatusName(scope.row.projectStatus) }}
