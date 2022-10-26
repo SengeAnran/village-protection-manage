@@ -7,7 +7,6 @@
         :add-method="addMethod"
         :get-method="getMethod"
         :update-method="updateMethod"
-        :delete-method="deleteMethod"
         :before-edit-method="beforeEditMethod"
         :query.sync="query"
         :form.sync="form"
@@ -15,6 +14,7 @@
         actionWidth="180px"
         :multiple-delete="COUNTRY"
         hideSearch
+        hideDelete
         :multipleDelete="false"
         :selection="false"
         :hideView="true"
@@ -41,7 +41,7 @@
         <template v-slot:table>
           <el-table-column label="验收评价时间段">
             <template slot-scope="scope">
-              <p>{{ scope.row.acceptanceTimeStart }} 至 {{ scope.row.acceptanceTimeEnd }}</p>
+              <p>{{ scope.row.acceptanceStartTime }} 至 {{ scope.row.acceptanceEndTime }}</p>
             </template>
           </el-table-column>
         </template>
@@ -52,7 +52,7 @@
 
 <script>
 import { mapMutations } from 'vuex';
-import { deleteVillageItem, getSetList, setAdd, setDelete, setUpdate } from '@/api2/acceptanceTime';
+import { deleteVillageItem, getSetList, setAdd, setUpdate } from '@/api2/acceptanceTime';
 import rule from '@/mixins/rule';
 import role from '@/views2/mixins/role';
 import { recVerify } from '../../../api/villageManage';
@@ -68,7 +68,7 @@ export default {
         // type: type, //type 1：验收时间，2：申报批次
         acceptanceTime: [],
       },
-      deleteMethod: setDelete,
+      // deleteMethod: setDelete,
       getMethod: getSetList,
 
       dialogVisible: false,
@@ -80,19 +80,19 @@ export default {
     ...mapMutations('villageMange', ['changeDeclareList']),
     updateMethod(form) {
       const { acceptanceTime, id } = form;
-      const [acceptanceTimeStart, acceptanceTimeEnd] = acceptanceTime;
+      const [acceptanceStartTime, acceptanceEndTime] = acceptanceTime;
       return setUpdate({
-        acceptanceTimeStart,
-        acceptanceTimeEnd,
+        acceptanceStartTime,
+        acceptanceEndTime,
         id,
       });
     },
     addMethod(form) {
       const { acceptanceTime } = form;
-      const [acceptanceTimeStart, acceptanceTimeEnd] = acceptanceTime;
+      const [acceptanceStartTime, acceptanceEndTime] = acceptanceTime;
       return setAdd({
-        acceptanceTimeStart,
-        acceptanceTimeEnd,
+        acceptanceStartTime,
+        acceptanceEndTime,
       });
     },
     // 删除
@@ -107,7 +107,7 @@ export default {
       });
     },
     beforeEditMethod(item) {
-      this.form.acceptanceTime = [item.acceptanceTimeStart, item.acceptanceTimeEnd];
+      this.form.acceptanceTime = [item.acceptanceStartTime, item.acceptanceEndTime];
       // this.form.type = type; //type 1：验收时间，2：申报批次
       this.form.id = item.id;
     },

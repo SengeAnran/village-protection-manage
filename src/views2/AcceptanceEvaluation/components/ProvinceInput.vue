@@ -5,7 +5,8 @@
       <el-row :gutter="20">
         <el-form-item prop="provinceVerify" label="复核意见" :rules="rule.select">
           <el-radio v-model="form.provinceVerify" :label="1">通过</el-radio>
-          <el-radio v-model="form.provinceVerify" :label="0">不通过</el-radio>
+          <el-radio v-model="form.provinceVerify" :label="2">不通过</el-radio>
+          <el-radio v-model="form.provinceVerify" :label="0">驳回</el-radio>
         </el-form-item>
       </el-row>
       <el-row :gutter="20">

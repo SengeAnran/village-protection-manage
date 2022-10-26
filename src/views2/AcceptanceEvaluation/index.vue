@@ -51,7 +51,9 @@
 
         <template v-slot:tableAction="scope">
           <el-link class="link" @click="goDetail(scope)" type="primary" v-if="showDetail(scope.data)"> 详情 </el-link>
-          <el-link class="link" @click="goAudit(scope)" type="primary" v-if="showAudit(scope.data)"> 审核 </el-link>
+          <el-link class="link" @click="goAudit(scope)" type="primary" v-if="showAudit(scope.data)">
+            {{ PROVINCE ? '复核' : '审核' }}
+          </el-link>
           <el-link class="link" @click="edit(scope.data)" type="primary" v-if="showModify(scope.data)"> 修改</el-link>
           <el-link class="link" @click="deleteItem(scope.data.id)" type="danger" v-if="showDelete(scope.data)">
             删除
@@ -411,6 +413,7 @@ export default {
     },
 
     changeArea(val) {
+      console.log(val);
       this.query.areaId = val.areaId;
     },
     selectionChange(val) {

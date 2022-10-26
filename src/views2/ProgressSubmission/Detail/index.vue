@@ -40,12 +40,17 @@
           <el-tab-pane label="已竣工" name="second">
             <VilliageListTable
               key="已竣工"
+              use-action
               v-if="showTable"
-              type="edit"
+              type="look"
               :defaultFirstYear="defaultFirstYear"
               :form="form"
               :data="form.endLists"
-            />
+            >
+              <template v-slot:action="scope">
+                <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
+              </template>
+            </VilliageListTable>
           </el-tab-pane>
         </el-tabs>
       </el-form-item>

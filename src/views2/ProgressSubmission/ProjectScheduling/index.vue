@@ -304,11 +304,18 @@ export default {
       this.$confirm('是否导出数据？', '提示', {
         type: 'warning',
       }).then(async () => {
+        const pageNum = this.$refs.crud.page;
+        const pageSize = this.$refs.crud.size;
+        // const pageSize
         const data = {
-          ids: this.selections.map((item) => item.id),
+          // ids: this.selections.map((item) => item.id),
+          ...this.query,
+          pageNum,
+          pageSize,
         };
+        // console.log(data);
         const res = await getInforExport(data);
-        downloadFile(res, '浙江省未来乡村申报汇总.xlsx');
+        downloadFile(res, '信息汇总表.xlsx');
         this.$notify.success('导出成功');
       });
     },

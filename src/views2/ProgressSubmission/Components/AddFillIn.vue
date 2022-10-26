@@ -251,13 +251,16 @@ export default {
         }
       }
       if (this.type === 'modify' && this.modifyData.id) {
-        const { completeTotal, completeGov, completeDrive, isStart, overallProgress, monthPic } = this.modifyData;
+        const { completeTotal, completeGov, completeDrive, isStart, overallProgress, monthPic, isEnd } =
+          this.modifyData;
         this.form.completeTotal = completeTotal;
         this.form.completeGov = completeGov;
         this.form.completeDrive = completeDrive;
         this.form.isStart = isStart;
         this.form.overallProgress = overallProgress;
-        // this.form.isEnd = isEnd;
+        if (isEnd) {
+          this.form.isEnd = isEnd;
+        }
         if (monthPic) {
           this.oldPics = monthPic
             .split(',')
@@ -298,6 +301,7 @@ export default {
                 message: '提交成功!',
               });
               this.$emit('saveItem', dataFrom);
+              this.$emit('refresh');
               this.$refs.form.resetFields();
               this.$emit('input', false);
             });

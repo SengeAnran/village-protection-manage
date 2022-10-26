@@ -82,7 +82,7 @@ import rule from '@/mixins/rule';
 import SubTit from '../components/SubTit.vue';
 
 // import { getSetList } from '@/api2/villageManage';
-import { getAllSetList } from '@/api2/acceptanceTime';
+// import { getAllSetList } from '@/api2/acceptanceTime';
 export default {
   name: 'CityInput',
   mixins: [rule],
@@ -95,7 +95,7 @@ export default {
   },
   data() {
     return {
-      timeOptions: [],
+      // timeOptions: [],
     };
   },
   watch: {
@@ -107,7 +107,7 @@ export default {
     },
   },
   mounted() {
-    this.setAcceptTimeOpt();
+    // this.setAcceptTimeOpt();
   },
   methods: {
     // 县级附件上传
@@ -123,14 +123,14 @@ export default {
       }
     },
 
-    setAcceptTimeOpt() {
-      getAllSetList().then((res) => {
-        this.timeOptions = res.map((c) => {
-          const v = c.acceptanceTimeStart + ' 至 ' + c.acceptanceTimeEnd;
-          return { label: v, value: c.id };
-        });
-      });
-    },
+    // setAcceptTimeOpt() {
+    //   getAllSetList().then((res) => {
+    //     this.timeOptions = res.map((c) => {
+    //       const v = c.acceptanceTimeStart + ' 至 ' + c.acceptanceTimeEnd;
+    //       return { label: v, value: c.id };
+    //     });
+    //   });
+    // },
   },
 };
 </script>

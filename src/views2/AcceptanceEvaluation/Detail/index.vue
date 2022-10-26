@@ -60,9 +60,17 @@ export default {
     },
     showProvince() {
       const finalStatus = this.form.finalStatus;
-      return (
-        finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED
-      );
+      const canViewStatus =
+        finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED;
+      let canViewIdentity = canViewStatus;
+      if (
+        this.COUNTRY ||
+        this.COUNTRY_LEADER ||
+        ((this.CITY || this.CITY_LEADER) && finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED)
+      ) {
+        canViewIdentity = false;
+      }
+      return canViewIdentity;
     },
   },
   methods: {

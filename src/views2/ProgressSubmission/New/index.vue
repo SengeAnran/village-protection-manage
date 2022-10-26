@@ -128,6 +128,7 @@
         :modifyData="modifyData"
         :type="dialogType"
         @saveItem="saveItem"
+        @refresh="getDetail"
       />
     </el-dialog>
   </div>

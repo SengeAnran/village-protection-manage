@@ -6,6 +6,7 @@ const { apiHost2 } = config;
 export const getSetList = (data) => {
   return axios.request({
     method: 'POST',
+    // url: apiHost2 + `/api/workbench/declarationConfig/batch/list`,
     url: apiHost2 + `/api/workbench/declarationConfig/batch/list`,
     data,
   });

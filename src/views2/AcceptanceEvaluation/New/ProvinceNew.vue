@@ -47,8 +47,10 @@ export default {
         this.form.citySaveAnnex = res.countySaveAnnexFiles || [];
         this.form.oldSmallPics = (res.oldSmallPics || '').split(',').map((ele) => ({ filePath: ele, url: ele }));
         this.form.oldSmallVideo = oldSmallVideoFile ? [oldSmallVideoFile] : [];
-        this.form.cityAcceptTime = createPerformanceAuditTimeDO?.id;
-        this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd : '';
+        // this.form.cityAcceptTime = createPerformanceAuditTimeDO?.id;
+        this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO
+          ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd
+          : '';
       });
     },
     onBack() {
@@ -57,12 +59,22 @@ export default {
     onSubmit() {
       this.$refs.form.validate(async (valid) => {
         if (!valid) return;
-        await this._beforeSubmit('是否确认保存？');
+        let msg;
+        if (this.form.provinceVerify === 0) {
+          // 驳回市级重填
+          msg = '是否确认驳回该条申报信息，驳回后将流转至市级修改';
+        } else if (this.form.provinceVerify === 1) {
+          // 通过
+          msg = '是否确认通过该条申报信息';
+        } else {
+          msg = '是否确认不通过该条申报信息';
+        }
+        await this._beforeSubmit(msg);
 
         // const form = { ...this.form };
         const form = this._assignForm();
         form.saveToGoProvince = 0;
-        this._saveInfo(form);
+        this._saveInfo(form, '提交成功');
       });
     },
     async onSave() {

@@ -8,8 +8,8 @@ export const getInforExport = (params) => {
   console.log('params', params);
   return axios.request({
     method: 'get',
-    url: apiHost2 + '/api/workbench/progressReport/export/list?ids=' + params.ids.toString(),
-    // params,
+    url: apiHost2 + '/api/workbench/progressReport/export/list',
+    params,
     responseType: 'blob',
   });
 };

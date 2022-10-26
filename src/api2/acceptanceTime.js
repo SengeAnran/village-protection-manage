@@ -6,10 +6,11 @@ const { apiHost2 } = config;
 export const getSetList = (data) => {
   return axios.request({
     method: 'POST',
-    url: apiHost2 + `/api/workbench/declarationConfig/time/list`,
+    // url: apiHost2 + `/api/workbench/declarationConfig/time/list`,
+    url: apiHost2 + `/api/workbench/declarationConfig/acceptance/list`,
     data,
   });
-}
+};
 
 // 验收时间-不逮分页
 export const getAllSetList = (data) => {
@@ -18,7 +19,7 @@ export const getAllSetList = (data) => {
     url: apiHost2 + `/api/workbench/declarationConfig/timeValues`,
     data,
   });
-}
+};
 
 // 删除
 export const setDelete = (id) => {
@@ -26,24 +27,24 @@ export const setDelete = (id) => {
     method: 'get',
     url: apiHost2 + `/api/workbench/declarationConfig/time/delete/${id}`,
   });
-}
+};
 
-// 修改 
+// 修改
 export const setUpdate = (data) => {
   return axios.request({
     method: 'POST',
-    url: apiHost2 + `/api/workbench/declarationConfig/time/update`,
+    url: apiHost2 + `/api/workbench/declarationConfig/acceptance/up`,
     data,
     headers: { 'APPLICATION-ID': 4 },
   });
-}
+};
 
-//新增 
+//新增
 export const setAdd = (data) => {
   return axios.request({
     method: 'POST',
-    url: apiHost2 + `/api/workbench/declarationConfig/time/add`,
+    url: apiHost2 + `/api/workbench/declarationConfig/acceptance/up`,
     data,
     headers: { 'APPLICATION-ID': 4 },
   });
-}
+};

@@ -61,6 +61,7 @@ export default {
     query: {
       type: Object,
       default: () => ({
+        areaId: undefined,
         villageName: '',
         declarationBatch: '',
         cityLevelRating: '',
@@ -101,7 +102,7 @@ export default {
     setAcceptTimeOpt() {
       getSetListTime({ type: 1, pageNum: 1, pageSize: 50 }).then((res) => {
         this.acceptTimeOpt = res.content.map((c) => ({
-          label: c.acceptanceTimeStart + '至' + c.acceptanceTimeEnd,
+          label: c.acceptanceStartTime + '至' + c.acceptanceEndTime,
           value: c.id,
         }));
       });
