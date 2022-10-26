@@ -28,7 +28,7 @@
       <el-form label-position="right" label-width="180px" ref="form">
         <el-form-item :label="`地区: ${city}`"></el-form-item>
         <!--        <div >-->
-        <span v-for="(item, index) in detailList" :key="item.batch + index">
+        <span v-for="item in detailList" :key="item.id">
           <el-form-item label="验收时间段:"> {{ item.timeSlot || '--' }} </el-form-item>
           <el-form-item :label="`验收申报名额:`">
             <el-input
