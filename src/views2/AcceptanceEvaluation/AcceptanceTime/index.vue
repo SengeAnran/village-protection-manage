@@ -52,7 +52,7 @@
 
 <script>
 import { mapMutations } from 'vuex';
-import { deleteVillageItem, getSetList, setAdd, setUpdate } from '@/api2/acceptanceTime';
+import { getSetList, setAdd, setUpdate } from '@/api2/acceptanceTime';
 import rule from '@/mixins/rule';
 import role from '@/views2/mixins/role';
 import { recVerify } from '../../../api/villageManage';
@@ -95,17 +95,17 @@ export default {
         acceptanceEndTime,
       });
     },
-    // 删除
-    deleteItem(id) {
-      this.$confirm('是否删除该条数据？', '提示', {
-        type: 'warning',
-      }).then(async () => {
-        deleteVillageItem([id]).then(() => {
-          this.$notify.success('删除成功');
-          this.$refs.crud.getItems();
-        });
-      });
-    },
+    // // 删除
+    // deleteItem(id) {
+    //   this.$confirm('是否删除该条数据？', '提示', {
+    //     type: 'warning',
+    //   }).then(async () => {
+    //     deleteVillageItem([id]).then(() => {
+    //       this.$notify.success('删除成功');
+    //       this.$refs.crud.getItems();
+    //     });
+    //   });
+    // },
     beforeEditMethod(item) {
       this.form.acceptanceTime = [item.acceptanceStartTime, item.acceptanceEndTime];
       // this.form.type = type; //type 1：验收时间，2：申报批次

@@ -58,7 +58,7 @@
         {{ scope.row.remark || '-' }}
       </template>
     </el-table-column>
-    <el-table-column v-if="!hiddenOperation" label="操作" min-width="164px">
+    <el-table-column v-if="!hiddenOperation" fixed="right" label="操作" min-width="164px">
       <template slot-scope="scope">
         <div>
           <el-link type="primary" @click="$emit('moveUp', { data: scope.row, index: scope.$index })">上移</el-link>
@@ -138,6 +138,23 @@ export default {
   ::v-deep tr th {
     background-color: #f3f3f3;
     color: #222;
+  }
+  ::v-deep .el-table__body-wrapper {
+    /*定义滚动条样式（高宽及背景）*/
+    &::-webkit-scrollbar {
+      //width: 16px; /* 滚动条宽度， width：对应竖滚动条的宽度  height：对应横滚动条的高度*/
+      height: 10px; // 横向滚动条设高度
+    }
+    /*定义滚动条轨道（凹槽）样式*/
+    &::-webkit-scrollbar-track {
+      border-radius: 13px;
+    }
+    /*定义滑块 样式*/
+    ::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      //height: 100px; /* 滚动条滑块长度 */
+      //background-color: #ccc;
+    }
   }
 }
 </style>

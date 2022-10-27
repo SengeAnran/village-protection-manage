@@ -33,7 +33,7 @@
           <el-tab-pane label="报送中" name="first">
             <VilliageListTable key="报送中" use-action v-if="showTable" type="look" :data="form.detailLists">
               <template v-slot:action="scope">
-                <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
+                <el-link v-if="scope.data.showDetail" @click="goDetail(scope)" type="primary"> 详情 </el-link>
               </template>
             </VilliageListTable>
           </el-tab-pane>
@@ -48,7 +48,7 @@
               :data="form.endLists"
             >
               <template v-slot:action="scope">
-                <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
+                <el-link v-if="scope.data.showDetail" @click="goDetail(scope)" type="primary"> 详情 </el-link>
               </template>
             </VilliageListTable>
           </el-tab-pane>

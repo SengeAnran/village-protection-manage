@@ -135,7 +135,7 @@ function getRangeMonth(value) {
   return rangeMonth;
 }
 import { mapMutations, mapGetters } from 'vuex';
-import { deleteVillageItem, getSetList, ProjectSchedulUpdate } from '@/api2/declarationBatch';
+import { getSetList, ProjectSchedulUpdate } from '@/api2/declarationBatch';
 import rule from '@/mixins/rule';
 const type = 2; //type 1：验收时间，2：申报批次
 export default {
@@ -179,17 +179,7 @@ export default {
   mounted() {},
   methods: {
     ...mapMutations('villageMange', ['changeDeclareList']),
-    // 删除
-    deleteItem(id) {
-      this.$confirm('是否删除该条数据？', '提示', {
-        type: 'warning',
-      }).then(async () => {
-        deleteVillageItem([id]).then(() => {
-          this.$notify.success('删除成功');
-          this.$refs.crud.getItems();
-        });
-      });
-    },
+
     beforeSaveMethod() {
       // const [startTime, endTime] = this.form.declareTime;
       const [scheduleStartTime, scheduleEndTime] = this.form.schedule;

@@ -75,8 +75,8 @@
                     填报
                   </el-link>
                   <span v-else>
-                    <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
-                    <el-divider direction="vertical"></el-divider>
+                    <el-link v-if="scope.data.showDetail" @click="goDetail(scope)" type="primary"> 详情 </el-link>
+                    <el-divider v-if="scope.data.showDetail" direction="vertical"></el-divider>
                     <el-link @click="goModify(scope)" type="primary"> 修改 </el-link>
                   </span>
                 </template>
@@ -92,9 +92,9 @@
                 :data="form.endLists"
               >
                 <template v-slot:action="scope">
-                  <el-link @click="goDetail(scope)" type="primary"> 详情 </el-link>
-                  <el-divider direction="vertical"></el-divider>
-                  <el-link @click="goModify(scope)" type="primary"> 修改 </el-link>
+                  <el-link @click="goDetail(scope)" v-if="scope.data.showDetail" type="primary"> 详情 </el-link>
+                  <el-divider v-if="scope.data.showDetail" direction="vertical"></el-divider>
+                  <el-link v-if="scope.data.canEdit" @click="goModify(scope)" type="primary"> 修改 </el-link>
                 </template>
               </VilliageListTable>
             </el-tab-pane>
