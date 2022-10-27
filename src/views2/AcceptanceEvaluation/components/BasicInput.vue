@@ -238,11 +238,11 @@ export default {
     // 校验是否匹配物业
     isAllocatedRuleFun(rule, value, callback) {
       if (value === undefined) {
-        callback(new Error('填选择不能为空'));
+        callback(new Error('选择不能为空'));
       }
       if (value && (!this.form.propertyType || this.form.propertyType === 0)) {
         callback(new Error('请选择物业类型'));
-      } else if (this.form.provisionService.length === 0) {
+      } else if (value && this.form.provisionService.length === 0) {
         callback(new Error('请勾选配备服务'));
       } else {
         callback();

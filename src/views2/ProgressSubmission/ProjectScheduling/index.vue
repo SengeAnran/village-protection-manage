@@ -261,16 +261,19 @@ export default {
         this.query.county = '';
         this.query.province = '';
       } else if (val.level === 3) {
+        this.hideTableAction = true;
         this.query.village = '';
         this.query.city = '';
         this.query.county = val.area;
         this.query.province = '';
       } else if (val.level === 2) {
+        this.hideTableAction = true;
         this.query.village = '';
         this.query.city = val.area;
         this.query.county = '';
         this.query.province = '';
       } else if (val.level === 1) {
+        this.hideTableAction = true;
         this.query.village = '';
         this.query.city = '';
         this.query.county = '';

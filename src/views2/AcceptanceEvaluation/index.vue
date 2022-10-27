@@ -243,7 +243,7 @@ export default {
         this.$notify.error('需先上报后才可进行导出');
         return;
       } else {
-        this.$confirm('是否批量导出所选数据？', '提示', {
+        this.$confirm('是否导出所选材料？', '提示', {
           type: 'warning',
         }).then(async () => {
           this.selections.forEach(async (item) => {

@@ -29,7 +29,7 @@
         <el-form-item :label="`地区: ${city}`"></el-form-item>
         <!--        <div >-->
         <span v-for="item in detailList" :key="item.id">
-          <el-form-item label="验收时间段:"> {{ item.timeSlot || '--' }} </el-form-item>
+          <el-form-item label="验收时间段:"> {{ item.acceptance || '--' }} </el-form-item>
           <el-form-item :label="`验收申报名额:`">
             <el-input
               :disabled="disabled"
@@ -52,7 +52,7 @@
 
         <!--        </div>-->
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div v-if="!disabled" slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="saveItem">确 定</el-button>
       </div>

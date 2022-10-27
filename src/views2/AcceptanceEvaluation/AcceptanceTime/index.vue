@@ -12,6 +12,8 @@
         :form.sync="form"
         id-key="id"
         actionWidth="180px"
+        labelWidth="120px"
+        dialogWidth="550px"
         :multiple-delete="COUNTRY"
         hideSearch
         hideDelete
@@ -23,7 +25,7 @@
         :permission-delete="4100"
       >
         <template v-slot:form>
-          <el-form-item label="比选时间：" prop="acceptanceTime" :rules="rule.multiSelect">
+          <el-form-item label="验收时间段：" prop="acceptanceTime" :rules="rule.multiSelect">
             <el-date-picker
               v-model="form.acceptanceTime"
               value-format="yyyy-MM-dd"
