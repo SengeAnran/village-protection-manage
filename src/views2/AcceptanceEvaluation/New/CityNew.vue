@@ -65,10 +65,11 @@ export default {
     getDetail() {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
+        console.log(res);
         const { oldSmallVideoFile } = res;
         this.form = res;
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
-        this.form.citySaveAnnex = res.citySaveAnnexFiles[0] || {};
+        this.form.citySaveAnnex = res.citySaveAnnexFiles ? res.citySaveAnnexFiles[0] : {};
         this.form.oldSmallPics = (res.oldSmallPics || '').split(',').map((ele) => ({ filePath: ele, url: ele }));
         this.form.oldSmallVideo = oldSmallVideoFile ? [oldSmallVideoFile] : [];
         // this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd : '';

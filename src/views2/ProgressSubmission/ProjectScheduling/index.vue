@@ -8,7 +8,7 @@
         :query.sync="query"
         :showOrder="false"
         id-key="id"
-        actionWidth="180px"
+        actionWidth="100px"
         use-table-left
         :multiple-delete="COUNTRY"
         :hideAdd="true"
@@ -58,7 +58,7 @@
           <AreaTree @changeArea="changeArea" />
         </template>
         <template v-slot:tableAction="scope">
-          <div style="text-align: left">
+          <div style="text-align: center">
             <el-link v-if="canDetail(scope.data)" @click="goDetail(scope)" type="primary"> 详情 </el-link>
           </div>
         </template>

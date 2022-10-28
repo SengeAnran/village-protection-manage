@@ -33,7 +33,13 @@
           <el-tab-pane label="报送中" name="first">
             <VilliageListTable key="报送中" use-action v-if="showTable" type="look" :data="form.detailLists">
               <template v-slot:action="scope">
-                <el-link v-if="scope.data.showDetail" @click="goDetail(scope)" type="primary"> 详情 </el-link>
+                <el-link
+                  v-if="scope.data.showDetail || COUNTRY || COUNTRY_LEADER"
+                  @click="goDetail(scope)"
+                  type="primary"
+                >
+                  详情
+                </el-link>
               </template>
             </VilliageListTable>
           </el-tab-pane>
@@ -48,7 +54,13 @@
               :data="form.endLists"
             >
               <template v-slot:action="scope">
-                <el-link v-if="scope.data.showDetail" @click="goDetail(scope)" type="primary"> 详情 </el-link>
+                <el-link
+                  v-if="scope.data.showDetail || COUNTRY || COUNTRY_LEADER"
+                  @click="goDetail(scope)"
+                  type="primary"
+                >
+                  详情
+                </el-link>
               </template>
             </VilliageListTable>
           </el-tab-pane>
@@ -173,7 +185,7 @@ export default {
     },
     // 县级审核通过
     pass() {
-      this.$confirm('是否确认通过填报的信息，通过后该条报送信息流转至省（市）调度', '提示', {
+      this.$confirm('是否确认通过，通过后该条报送信息流转至省（市）调度', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',

@@ -86,15 +86,15 @@
               </p>
             </template>
           </el-table-column>
-          <el-table-column label="全市排名" prop="cityRanking" v-if="!isCounty" width="100">
-            <template slot-scope="scope">
-              <p v-if="scope.row.cityRanking">
-                {{ scope.row.cityAcceptTime && scope.row.cityAcceptTime.replace('-', '') }} -
-                {{ scope.row.cityRanking }}
-              </p>
-              <span v-else>-</span>
-            </template>
-          </el-table-column>
+          <!--          <el-table-column label="全市排名" prop="cityRanking" v-if="!isCounty" width="100">-->
+          <!--            <template slot-scope="scope">-->
+          <!--              <p v-if="scope.row.cityRanking">-->
+          <!--                {{ scope.row.cityAcceptTime && scope.row.cityAcceptTime.replace('-', '') }} - -->
+          <!--                {{ scope.row.cityRanking }}-->
+          <!--              </p>-->
+          <!--              <span v-else>-</span>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
           <el-table-column label="验收时间段" prop="acceptTime" width="180">
             <!--            <template v-slot="scope">{{ scope.row.cityAcceptTime + '至' }}</template>-->
           </el-table-column>

@@ -30,7 +30,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="本月完成总投资（万元）" prop="completeTotal" :rules="completeTotalInput">
-            <el-input v-model="form.completeTotal" placeholder="请输入"></el-input>
+            <el-input v-model="form.completeTotal" disabled placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -103,7 +103,7 @@
     <div class="btns">
       <div class="btn-content">
         <el-button @click="$emit('input', false)">关闭</el-button>
-        <el-button type="primary" @click="onSubmit">确定</el-button>
+        <el-button type="primary" @click="onSubmit">{{ $route.query.modify ? '提交' : '确定' }}</el-button>
       </div>
     </div>
   </el-form>
@@ -298,7 +298,7 @@ export default {
             postSaveOne(dataFrom).then(() => {
               this.$message({
                 type: 'success',
-                message: '提交成功!',
+                message: '修改成功!',
               });
               this.$emit('saveItem', dataFrom);
               this.$emit('refresh');

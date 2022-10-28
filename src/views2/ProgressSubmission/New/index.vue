@@ -332,7 +332,7 @@ export default {
               console.log(data);
               await addData(data);
               this.$notify.success({
-                title: '进度上报成功！',
+                title: '提交成功！',
               });
               this.$router.back();
             })

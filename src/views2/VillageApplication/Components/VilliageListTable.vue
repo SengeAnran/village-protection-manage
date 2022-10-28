@@ -1,5 +1,6 @@
 <template>
-  <el-table class="table-custom" :data="data">
+  <!--  <el-table class="table-custom" :height="data.length > 5 ? '600' : ''" :data="data">-->
+  <el-table class="table-custom" max-height="600" :data="data">
     <el-table-column label="序号" type="index"> </el-table-column>
     <el-table-column prop="projectName" label="项目名称"> </el-table-column>
     <el-table-column prop="constructUnit" label="建设单位">

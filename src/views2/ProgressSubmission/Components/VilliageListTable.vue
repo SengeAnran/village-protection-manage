@@ -1,5 +1,5 @@
 <template>
-  <el-table class="table-custom" :data="data" border style="width: 90%">
+  <el-table class="table-custom" max-height="600" :data="data" border style="width: 90%">
     <el-table-column label="序号" type="index" fixed> </el-table-column>
     <el-table-column prop="projectName" label="项目名称"> </el-table-column>
     <el-table-column prop="type" align="center" label="类型">
@@ -317,7 +317,6 @@ export default {
   display: block !important;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
   width: 90%;
-
   ::v-deep tr th {
     background-color: #f3f3f3;
     color: #222;
@@ -330,10 +329,18 @@ export default {
     //padding-bottom: 10px;
     &::-webkit-scrollbar {
       z-index: 10;
-      width: 10px;
-      height: 10px;
+      height: 8px;
     }
   }
+  &::v-deep .el-table__fixed-right {
+    //right: 8px !important;
+  }
+  //&::v-deep .el-table--scrollable-y .el-table__body-wrapper {
+  //  &::-webkit-scrollbar {
+  //    z-index: 10;
+  //    width: 5px;
+  //  }
+  //}
 
   &::v-deep .el-table__fixed {
     border-bottom: 5px solid rgba(238, 35, 35, 0);
