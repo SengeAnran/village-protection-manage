@@ -52,7 +52,7 @@
 import { getSetList } from '@/api2/declarationBatch';
 // eslint-disable-next-line no-unused-vars
 import { getSetList as getSetListTime } from '@/api2/acceptanceTime';
-import { DECLARE_STATUS } from '@/views2/utils/constants';
+import { DECLARE_STATUS, FINAL_STATUS } from '@/views2/utils/constants';
 import role from '@/views2/mixins/role';
 
 export default {
@@ -114,6 +114,15 @@ export default {
           value: c,
         };
       });
+      if (this.CITY || this.CITY_LEADER) {
+        const index = this.finalStatusOpt.findIndex((i) => {
+          return i.value === FINAL_STATUS.COUNTRY_REPORT_PENDING;
+        });
+        if (index === -1) {
+          return;
+        }
+        this.finalStatusOpt.splice(index, 1); // 市级必选去除县级待上报；
+      }
     },
 
     changeArea(val) {

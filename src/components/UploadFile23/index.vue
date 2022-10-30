@@ -121,6 +121,9 @@ export default {
         this.$message.success('文件上传成功');
         this.$emit('change', res);
         this.$emit('input', res);
+        // this.$emit('input', value)，这种情况不会触发表单的校验的，
+        // 因为当前组件作为一个整体，被嵌入在el-form-item中，它并不知道你的数据变化了
+        this.$parent.$emit('el.form.change'); // 通知上层数据变了
         this.loading = false;
       } catch (error) {
         // this.$refs.upload.handleRemove(info.file);
@@ -142,7 +145,7 @@ export default {
       this.progressPercent = 0;
     },
     beforeImgUpload(file) {
-      this.fileName = file.name;
+      // this.fileName = file.name;
       const suffix = file.name.split('.').slice(-1)[0];
       const isFormat = this.accept === '*' ? true : this.accept.indexOf(suffix) >= 0;
       const isLimit = file.size / 1024 / 1024 < this.limitSize;

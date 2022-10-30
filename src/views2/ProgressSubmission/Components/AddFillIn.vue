@@ -9,10 +9,11 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="类型" prop="type">
-            <el-select v-model="form.type" placeholder="" disabled>
-              <el-option v-for="item in typeOption" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
+            <el-input v-bind:value="changeType(form.type)" placeholder="-" disabled></el-input>
+            <!--            <el-select v-model="form.type" placeholder="" disabled>-->
+            <!--              <el-option v-for="item in typeOption" :key="item.value" :label="item.label" :value="item.value">-->
+            <!--              </el-option>-->
+            <!--            </el-select>-->
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -93,8 +94,8 @@
       <el-row v-if="form.isStart" :gutter="20">
         <el-col :span="18">
           <el-form-item label="是否竣工" prop="isEnd" :rules="rule.select">
-            <el-radio v-model="form.isEnd" :disabled="startDisabled" :label="0">否</el-radio>
-            <el-radio v-model="form.isEnd" :disabled="startDisabled" :label="1">是</el-radio>
+            <el-radio v-model="form.isEnd" :label="0">否</el-radio>
+            <el-radio v-model="form.isEnd" :label="1">是</el-radio>
           </el-form-item>
           <i style="color: #ff6b00">（选择“是”则该项目状态变更为“已竣工”，之后月份无法再进行填报）</i>
         </el-col>
@@ -201,7 +202,7 @@ export default {
   },
   computed: {
     completeTotal() {
-      return Number(this.form.completeGov) + Number(this.form.completeDrive);
+      return Number(this.form.completeGov) + Number(this.form.completeDrive) || '-';
     },
   },
   watch: {
@@ -246,7 +247,8 @@ export default {
           this.form.isEnd = isEnd;
         }
 
-        if (this.type === 'add' && res.isStart) {
+        // console.log(this.type, res.isStart);
+        if (this.type === 'add' && res.lastIsStart) {
           this.startDisabled = true;
         }
       }
@@ -353,6 +355,13 @@ export default {
       form.yearRate = result;
       console.log('xxxx total', currentTotal, plantTotal, result);
       return result ? result : 0;
+    },
+    // 项目类型
+    changeType(val) {
+      if (val || val === 0) {
+        return PROJECT_TYPE[val];
+      }
+      return null;
     },
 
     // 校验completeGov

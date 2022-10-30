@@ -562,7 +562,7 @@ export const defaultRoutes2 = [
       name: 'ProgressSubmissionList',
     },
     meta: {
-      title: '项目进度报送',
+      title: '项目管理调度',
       hideChild: false,
       icon: 'jindushangbao',
     },
@@ -573,7 +573,7 @@ export const defaultRoutes2 = [
         meta: {
           // icon: "cunzhuangshenbao",
           menuIds: [USER_TYPE.VILLAGE],
-          title: '项目报送',
+          title: '进度报送',
         },
         component: () => import('@/views2/ProgressSubmission/index.vue'),
       },
@@ -646,7 +646,7 @@ export const defaultRoutes2 = [
         meta: {
           // icon: "cunzhuangshenbao",
           menuIds: [USER_TYPE.VILLAGE, USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER],
-          title: '县级自评申报',
+          title: '自评申报',
         },
         component: () => import('@/views2/AcceptanceEvaluation/index.vue'),
       },
@@ -656,7 +656,7 @@ export const defaultRoutes2 = [
         meta: {
           // icon: "cunzhuangshenbao",
           menuIds: [USER_TYPE.CITY, USER_TYPE.CITY_LEADER],
-          title: '市级审核比选',
+          title: '市级比选',
         },
         component: () => import('@/views2/AcceptanceEvaluation/index.vue'),
       },
@@ -666,7 +666,7 @@ export const defaultRoutes2 = [
         meta: {
           // icon: "cunzhuangshenbao",
           menuIds: [USER_TYPE.PROVINCE],
-          title: '省级复核评价',
+          title: '省级复核',
         },
         component: () => import('@/views2/AcceptanceEvaluation/index.vue'),
       },

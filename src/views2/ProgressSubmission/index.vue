@@ -114,16 +114,20 @@
               {{ formatMoney(scope.row.investNum || 0) }}
             </template>
           </el-table-column>
-          <el-table-column label="完成投资(万元)" prop="completeTotalInvestment">
+          <el-table-column label="本月完成投资(万元)" prop="completeTotalInvestment">
             <template slot-scope="scope">
-              {{ formatMoney(scope.row.completeTotalInvestment || 0) }}
+              {{ scope.row.completeTotalInvestment ? formatMoney(scope.row.completeTotalInvestment) : '-' }}
             </template>
           </el-table-column>
-          <el-table-column label="投资完成率" sortable prop="rate">
-            <template slot-scope="scope"> {{ formatScore(scope.row.rate * 100 || 0) }}% </template>
+          <el-table-column label="本月投资完成率" sortable prop="rate">
+            <template slot-scope="scope">
+              {{ Number(scope.row.rate) ? formatScore(scope.row.rate * 100 || 0) + '%' : '-' }}
+            </template>
           </el-table-column>
-          <el-table-column label="总体进度" sortable prop="overallProgress">
-            <template v-slot="scope"> {{ formatScore(scope.row.overallProgress || 0) }}% </template>
+          <el-table-column label="本月总体进度" sortable prop="overallProgress">
+            <template v-slot="scope">
+              {{ scope.row.overallProgress ? formatScore(scope.row.overallProgress || 0) + '%' : '-' }}
+            </template>
           </el-table-column>
           <el-table-column label="状态" prop="status">
             <template slot-scope="scope">

@@ -78,7 +78,9 @@
             </template>
           </el-table-column>
           <el-table-column label="县自评得分" prop="totalCounty"></el-table-column>
-          <el-table-column label="市评价得分" prop="totalCity" v-if="!isCounty"></el-table-column>
+          <el-table-column label="市评价得分" prop="totalCity" v-if="!isCounty">
+            <template v-slot="scope">{{ scope.row.totalCity ? scope.row.totalCity : '-' }}</template>
+          </el-table-column>
           <el-table-column label="评价等次" prop="cityLevelRating" v-if="!isCounty">
             <template slot-scope="scope">
               <p>
@@ -252,7 +254,6 @@ export default {
             };
             const res = await materialPrinting(data);
             downloadFile(res, '浙江省未来乡村创建成效评价申请表', 'application/msword');
-            this.$notify.success('导出成功');
           });
         });
       }

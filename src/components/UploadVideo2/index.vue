@@ -1,15 +1,26 @@
 <template>
   <div class="upload-img-wrp" :class="{ disabled: disabled }">
-    <el-upload ref="upload" action="string" list-type="picture-card" :limit="limit" accept="video/mp4, video/quicktime"
-      :file-list="fileList" :before-upload="beforeImgUpload" :on-exceed="handleExceedImg" :on-change="emitChange"
-      :on-remove="emitChange" :http-request="uploadImg" :multiple="multiple">
+    <el-upload
+      ref="upload"
+      action="string"
+      list-type="picture-card"
+      :limit="limit"
+      accept="video/mp4, video/quicktime"
+      :file-list="fileList"
+      :before-upload="beforeImgUpload"
+      :on-exceed="handleExceedImg"
+      :on-change="emitChange"
+      :on-remove="emitChange"
+      :http-request="uploadImg"
+      :multiple="multiple"
+    >
       <div class="default-upload" slot="default">
         <i class="el-icon-plus"></i>
         <p class="desc">
           <span>上传视频</span>
         </p>
       </div>
-      <div slot="file" slot-scope="{ file }" style="height: 100%;">
+      <div slot="file" slot-scope="{ file }" style="height: 100%">
         <video class="el-upload-list__item-thumbnail" :src="file.url"></video>
         <span class="el-upload-list__item-actions">
           <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
@@ -22,12 +33,12 @@
       </div>
     </el-upload>
     <el-dialog :visible.sync="dialogVisible" :top="'5vh'">
-      <video style="width:100%; max-height: 80vh;" :src="dialogImageUrl" controls></video>
+      <video style="width: 100%; max-height: 80vh" :src="dialogImageUrl" controls></video>
     </el-dialog>
   </div>
 </template>
 <script>
-import { uploadFile2 } from "@/api/common.js";
+import { uploadFile2 } from '@/api/common.js';
 import emitter from 'element-ui/lib/mixins/emitter.js';
 
 export default {
@@ -56,7 +67,7 @@ export default {
   },
   data() {
     return {
-      dialogImageUrl: "",
+      dialogImageUrl: '',
       dialogVisible: false,
       disabled: false,
       fileList: [],
@@ -70,9 +81,10 @@ export default {
           return {
             name: list.fileName,
             url: list.filePath,
-            status: "success",
+            status: 'success',
             response: list,
             filePath: list.filePath,
+            fileId: list.fileId,
             fileName: list.fileName,
           };
         });
@@ -91,10 +103,10 @@ export default {
     async uploadImg(info) {
       try {
         const formData = new FormData();
-        formData.append("file", info.file);
-        formData.append("business", 'history');
+        formData.append('file', info.file);
+        formData.append('business', 'history');
         const res = await uploadFile2(formData);
-        this.$message.success("视频上传成功");
+        this.$message.success('视频上传成功');
         return res;
       } catch (error) {
         this.$refs.upload.handleRemove(info.file);
@@ -109,13 +121,11 @@ export default {
       this.dialogVisible = true;
     },
     beforeImgUpload(file) {
-      const isFormat =
-        file.type === "video/mp4" ||
-        file.type === "video/quicktime"
+      const isFormat = file.type === 'video/mp4' || file.type === 'video/quicktime';
       const isLt2M = file.size / 1024 / 1024 < this.size;
 
       if (!isFormat) {
-        this.$message.error("上传视频只能是 MP4、MOV 格式!");
+        this.$message.error('上传视频只能是 MP4、MOV 格式!');
         this.$refs.upload.handleRemove(file);
         return false;
       }
@@ -153,11 +163,11 @@ export default {
       this.$emit('input', dest);
       this.$emit('change', dest);
       this.dispatch('ElFormItem', 'el.form.change', [dest]);
-    }
+    },
   },
 };
 </script>
-  
+
 <style lang="scss" scoped>
 .upload-img-wrp {
   .el-icon-plus {
@@ -234,4 +244,3 @@ export default {
   }
 }
 </style>
-  

@@ -3,6 +3,7 @@
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
       <sub-tit> 申报详情</sub-tit>
       <base-info :form="form"></base-info>
+      <sub-tit> 未来乡村创建成效评分表 </sub-tit>
       <score-table :form="form" @evaluateChange="setCityRanking"></score-table>
       <city-input :form="form" @evaluateChange="setCityRanking"></city-input>
 
@@ -79,11 +80,11 @@ export default {
       this.$router.back();
     },
     setCityRanking() {
-      const { totalCity, cityAcceptTime } = this.form;
-      if (!totalCity && totalCity !== 0) {
+      const { totalCity, acceptTime } = this.form;
+      if (!totalCity || totalCity === 0) {
         return;
       }
-      if (!cityAcceptTime) {
+      if (!acceptTime) {
         return;
       }
       this._getCityRanking();
@@ -174,7 +175,7 @@ export default {
     _getCityRanking() {
       const params = {
         areaId: this.$store.getters.userInfo.areaId,
-        cityAcceptTime: this.form.cityAcceptTime,
+        acceptTime: this.form.acceptTime,
         totalCity: this.form.totalCity,
       };
       getCityRanking(params).then((res) => {

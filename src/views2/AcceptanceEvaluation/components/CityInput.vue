@@ -32,13 +32,13 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="本次审核比选排名">
-              <el-input style="width: 180px" disabled v-model="form.cityRanking" placeholder="自动排序"></el-input>
+              <el-input style="width: 180px" disabled v-model="form.cityRanking" placeholder="-"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="附件上传" prop="citySaveAnnex" :rules="rule.upload">
+            <el-form-item label="附件上传" prop="citySaveAnnex" :rules="fileUpload">
               <UploadFile23
                 tip="支持格式：.doc, .docx, .pdf"
                 accept=".doc,.docx,.pdf"
@@ -83,6 +83,12 @@ import SubTit from '../components/SubTit.vue';
 
 // import { getSetList } from '@/api2/villageManage';
 // import { getAllSetList } from '@/api2/acceptanceTime';
+const fileUp = (rule, value, callback) => {
+  if (!value.fileId) {
+    return callback(new Error('请上传'));
+  }
+  callback();
+};
 export default {
   name: 'CityInput',
   mixins: [rule],
@@ -96,6 +102,7 @@ export default {
   data() {
     return {
       // timeOptions: [],
+      fileUpload: { required: true, validator: fileUp, trigger: 'change' },
     };
   },
   watch: {
@@ -105,24 +112,31 @@ export default {
     'form.cityAcceptTime'() {
       this.$emit('evaluateChange'); // 触发排名变动
     },
+    'form.cityVerify'(val) {
+      if (val) {
+        this.form.cityOpinion = '';
+      } else {
+        this.form.cityLevelRating = undefined;
+        this.form.citySaveAnnex = {};
+      }
+    },
   },
   mounted() {
     // this.setAcceptTimeOpt();
   },
   methods: {
-    // 县级附件上传
-    onFileAdd(file) {
-      this.form['citySaveAnnex'].push(file);
-    },
-    onFileRemove(file) {
-      const index = this.form['citySaveAnnex'].findIndex((item) => {
-        return item.uid === file.uid || item.filePath === file.url;
-      });
-      if (index !== -1) {
-        this.form['citySaveAnnex'].splice(index, 1);
-      }
-    },
-
+    // // 县级附件上传
+    // onFileAdd(file) {
+    //   this.form['citySaveAnnex'].push(file);
+    // },
+    // onFileRemove(file) {
+    //   const index = this.form['citySaveAnnex'].findIndex((item) => {
+    //     return item.uid === file.uid || item.filePath === file.url;
+    //   });
+    //   if (index !== -1) {
+    //     this.form['citySaveAnnex'].splice(index, 1);
+    //   }
+    // },
     // setAcceptTimeOpt() {
     //   getAllSetList().then((res) => {
     //     this.timeOptions = res.map((c) => {

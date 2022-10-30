@@ -86,6 +86,7 @@
               <VilliageListTable
                 key="已竣工"
                 v-if="showTable"
+                is-end
                 use-action
                 type="edit"
                 :form="form"

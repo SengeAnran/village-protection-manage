@@ -65,8 +65,9 @@ function _downloadLink(url, fileName) {
 
   Message({
     type: 'success',
-    message: '成功导出文件！',
+    message: '导出成功！',
   });
+  // this.$notify.success('导出成功');
 }
 
 // 下载含有url的文件

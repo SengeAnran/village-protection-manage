@@ -34,7 +34,7 @@
             <VilliageListTable key="报送中" use-action v-if="showTable" type="look" :data="form.detailLists">
               <template v-slot:action="scope">
                 <el-link
-                  v-if="scope.data.showDetail || COUNTRY || COUNTRY_LEADER"
+                  v-if="scope.data.showDetail || this.form.projectStatus === PROJECT_STATUS.CITY_VERIFY_PENDING"
                   @click="goDetail(scope)"
                   type="primary"
                 >
@@ -49,13 +49,14 @@
               use-action
               v-if="showTable"
               type="look"
+              isEnd
               :defaultFirstYear="defaultFirstYear"
               :form="form"
               :data="form.endLists"
             >
               <template v-slot:action="scope">
                 <el-link
-                  v-if="scope.data.showDetail || COUNTRY || COUNTRY_LEADER"
+                  v-if="scope.data.showDetail || this.form.projectStatus === PROJECT_STATUS.CITY_VERIFY_PENDING"
                   @click="goDetail(scope)"
                   type="primary"
                 >

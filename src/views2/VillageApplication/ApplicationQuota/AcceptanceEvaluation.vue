@@ -25,7 +25,7 @@
       </el-table-column>
     </el-table>
     <el-dialog :title="title" label-position="top" center :visible.sync="dialogFormVisible" width="600px">
-      <el-form label-position="right" label-width="180px" ref="form">
+      <el-form label-position="right" label-width="100px" ref="form">
         <el-form-item :label="`地区: ${city}`"></el-form-item>
         <!--        <div >-->
         <span v-for="item in detailList" :key="item.id">
