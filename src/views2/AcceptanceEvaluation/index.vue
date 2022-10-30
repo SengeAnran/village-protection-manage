@@ -54,7 +54,7 @@
           <el-link class="link" @click="goAudit(scope)" type="primary" v-if="showAudit(scope.data)">
             {{ PROVINCE ? '复核' : '审核' }}
           </el-link>
-          <el-link class="link" @click="edit(scope.data)" type="primary" v-if="showModify(scope.data)"> 修改</el-link>
+          <!--          <el-link class="link" @click="edit(scope.data)" type="primary" v-if="showModify(scope.data)"> 修改</el-link>-->
           <el-link class="link" @click="deleteItem(scope.data.id)" type="danger" v-if="showDelete(scope.data)">
             删除
           </el-link>
