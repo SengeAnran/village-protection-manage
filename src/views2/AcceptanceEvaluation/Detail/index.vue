@@ -61,7 +61,9 @@ export default {
     showProvince() {
       const finalStatus = this.form.finalStatus;
       const canViewStatus =
-        finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED;
+        finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED ||
+        finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED ||
+        finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED2;
       let canViewIdentity = canViewStatus;
       if (
         this.COUNTRY ||

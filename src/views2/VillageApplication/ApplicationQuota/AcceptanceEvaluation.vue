@@ -44,7 +44,7 @@
               :disabled="disabled"
               placeholder="请输入"
               type="number"
-              v-model.number="item.goodNum"
+              v-model.number="item.excellentNum"
               autocomplete="off"
             ></el-input>
           </el-form-item>
@@ -53,7 +53,7 @@
               :disabled="disabled"
               placeholder="请输入"
               type="number"
-              v-model.number="item.excellentNum"
+              v-model.number="item.goodNum"
               autocomplete="off"
             ></el-input>
           </el-form-item>

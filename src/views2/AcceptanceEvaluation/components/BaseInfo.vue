@@ -67,29 +67,32 @@
         </el-col>
       </el-row>
     </div>
-    <sub-tit> 浙江省未来乡村创建成效自评总结 </sub-tit>
-    <div class="basic-info-module">
+    <sub-tit v-if="showForDetail"> 浙江省未来乡村创建成效自评总结 </sub-tit>
+    <div v-if="showForDetail" class="basic-info-module">
       <el-form-item label="浙江省未来乡村创建成效自评总结">
         <!--        {{ form.selfAssessmentSummary }}-->
-        <div v-if="form.selfAssessmentFile && form.selfAssessmentFile.length">
-          <view-file v-for="(item, i) in form.selfAssessmentFile" :key="i" :data="item"></view-file>
-        </div>
+        <view-file2
+          v-if="form.selfAssessmentFile && form.selfAssessmentFile.length"
+          :data="form.selfAssessmentFile"
+        ></view-file2>
         <div v-else>--</div>
       </el-form-item>
       <el-form-item label="附件">
-        <div v-if="form.countySaveAnnexFiles && form.countySaveAnnexFiles.length">
-          <view-file v-for="(item, i) in form.countySaveAnnexFiles" :key="i" :data="item"></view-file>
-        </div>
+        <view-file2
+          v-if="form.countySaveAnnexFiles && form.countySaveAnnexFiles.length"
+          :data="form.countySaveAnnexFiles"
+        ></view-file2>
         <div v-else>--</div>
       </el-form-item>
     </div>
-    <sub-tit> 浙江省未来乡村“一老一小”服务场景验收自评报告 </sub-tit>
-    <div class="basic-info-module">
+    <sub-tit v-if="showForDetail"> 浙江省未来乡村“一老一小”服务场景验收自评报告 </sub-tit>
+    <div v-if="showForDetail" class="basic-info-module">
       <el-form-item label="">
         <!--        {{ form.oldSmallSelfReport }}-->
-        <div v-if="form.oldSmallSelfReportFile && form.oldSmallSelfReportFile.length">
-          <view-file v-for="(item, i) in form.oldSmallSelfReportFile" :key="i" :data="item"></view-file>
-        </div>
+        <view-file2
+          v-if="form.oldSmallSelfReportFile && form.oldSmallSelfReportFile.length"
+          :data="form.oldSmallSelfReportFile"
+        ></view-file2>
         <div v-else>--</div>
       </el-form-item>
       <!--      <el-form-item label="“一老一小”服务场景照片">-->
@@ -105,15 +108,18 @@
 </template>
 <script>
 import SubTit from './SubTit.vue';
-import ViewFile from './ViewFile.vue';
+// import ViewFile from './ViewFile.vue';
 // import { getDetail } from '@/api2/acceptanceEvaluation';
 import { formatMoney } from '@/views2/utils/formatter';
+import role from '@/views2/mixins/role';
+import { FINAL_STATUS } from '@/views2/utils/constants';
 
 export default {
   components: {
-    ViewFile,
+    // ViewFile,
     SubTit,
   },
+  mixins: [role],
   props: {
     form: {
       type: Object,
@@ -124,8 +130,10 @@ export default {
     return {
       // 片区名称
       district: '',
+      showForDetail: true,
     };
   },
+
   computed: {
     saveVO() {
       return this.form.saveVO || {};
@@ -136,6 +144,11 @@ export default {
   },
   methods: {
     formatMoney,
+  },
+  beforeMount() {
+    if ((this.CITY || this.CITY_LEADER) && this.form.finalStatus === FINAL_STATUS.CITY_VERIFY_PENDING) {
+      this.showForDetail = false;
+    }
   },
   mounted() {},
 };

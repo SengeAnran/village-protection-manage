@@ -10,7 +10,7 @@
 
     <div style="margin-top: 50px; text-align: center">
       <el-button @click="onBack">返回</el-button>
-      <el-button type="primary" @click="onSubmit">保存</el-button>
+      <el-button type="primary" @click="onSubmit">提交</el-button>
       <!-- <el-button type="primary" @click="onSave">保存待发</el-button> -->
     </div>
   </div>
@@ -34,6 +34,8 @@ export default {
         provinceOpinion: '',
         provinceVerify: '',
         saveToGoProvince: 0,
+        selfAssessmentFile: [],
+        oldSmallSelfReportFile: [],
       },
     };
   },
@@ -41,10 +43,12 @@ export default {
     getDetail() {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
-        const { oldSmallVideoFile, createPerformanceAuditTimeDO } = res;
+        const { oldSmallVideoFile, createPerformanceAuditTimeDO, selfAssessmentFile, oldSmallSelfReportFile } = res;
         this.form = res;
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
         this.form.citySaveAnnex = res.citySaveAnnexFiles ? res.citySaveAnnexFiles[0] : {};
+        this.form.selfAssessmentFile = selfAssessmentFile ? [selfAssessmentFile] : [];
+        this.form.oldSmallSelfReportFile = oldSmallSelfReportFile ? [oldSmallSelfReportFile] : [];
         // this.form.citySaveAnnex = res.countySaveAnnexFiles || [];
         this.form.oldSmallPics = (res.oldSmallPics || '').split(',').map((ele) => ({ filePath: ele, url: ele }));
         this.form.oldSmallVideo = oldSmallVideoFile ? [oldSmallVideoFile] : [];

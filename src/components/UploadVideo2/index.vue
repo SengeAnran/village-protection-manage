@@ -32,14 +32,22 @@
         </span>
       </div>
     </el-upload>
+    <div style="display: block !important">
+      <CommonProgress v-if="loading" :progress="progressPercent" @cancel="cancelUpload" />
+    </div>
+
     <el-dialog :visible.sync="dialogVisible" :top="'5vh'">
-      <video style="width: 100%; max-height: 80vh" :src="dialogImageUrl" controls></video>
+      <video ref="video" style="width: 100%; max-height: 80vh" :src="dialogImageUrl" controls></video>
     </el-dialog>
   </div>
 </template>
 <script>
 import { uploadFile2 } from '@/api/common.js';
+import CommonProgress from './CommonProgress';
 import emitter from 'element-ui/lib/mixins/emitter.js';
+import axios from 'axios';
+const CancelToken = axios.CancelToken;
+let source = CancelToken.source();
 
 export default {
   mixins: [emitter],
@@ -65,6 +73,7 @@ export default {
       default: true,
     },
   },
+  components: { CommonProgress },
   data() {
     return {
       dialogImageUrl: '',
@@ -72,6 +81,8 @@ export default {
       disabled: false,
       fileList: [],
       data: [],
+      loading: false,
+      progressPercent: 0, // 上传进度展示
     };
   },
   watch: {
@@ -98,6 +109,14 @@ export default {
       },
       immediate: true,
     },
+    dialogVisible(val) {
+      if (!val) {
+        const video = this.$refs.video;
+        if (video) {
+          video.pause();
+        }
+      }
+    },
   },
   methods: {
     async uploadImg(info) {
@@ -105,13 +124,34 @@ export default {
         const formData = new FormData();
         formData.append('file', info.file);
         formData.append('business', 'history');
-        const res = await uploadFile2(formData);
+        this.progressPercent = 0;
+        this.loading = true;
+        const res = await uploadFile2(formData, {
+          onUploadProgress: this.onUploadProgress,
+          cancelToken: source.token,
+        });
         this.$message.success('视频上传成功');
+        this.loading = false;
         return res;
       } catch (error) {
         this.$refs.upload.handleRemove(info.file);
         throw new Error('上传失败');
       }
+    },
+    // 计算上传进度
+    onUploadProgress(progressEvent) {
+      // progressEvent.loaded:已上传文件大小
+      // progressEvent.total:被上传文件的总大小
+      this.progressPercent = Number(((progressEvent.loaded / progressEvent.total) * 100).toFixed(1));
+      console.log(this.progressPercent);
+    },
+    // 上传过程中取消
+    cancelUpload() {
+      console.log('取消');
+      source.cancel('Operation canceled by the user.');
+      source = axios.CancelToken.source();
+      this.loading = false;
+      this.progressPercent = 0;
     },
     handleRemove(file) {
       this.$refs.upload.handleRemove(file);

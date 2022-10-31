@@ -59,6 +59,8 @@ export default {
         workBoardCity: '',
         workGuideCity: '',
         workMechanismCity: '',
+        selfAssessmentFile: [],
+        oldSmallSelfReportFile: [],
       },
     };
   },
@@ -67,8 +69,10 @@ export default {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
         console.log(res);
-        const { oldSmallVideoFile } = res;
+        const { oldSmallVideoFile, selfAssessmentFile, oldSmallSelfReportFile } = res;
         this.form = res;
+        this.form.selfAssessmentFile = selfAssessmentFile ? [selfAssessmentFile] : [];
+        this.form.oldSmallSelfReportFile = oldSmallSelfReportFile ? [oldSmallSelfReportFile] : [];
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
         this.form.citySaveAnnex = res.citySaveAnnexFiles ? res.citySaveAnnexFiles[0] : {};
         this.form.oldSmallPics = (res.oldSmallPics || '').split(',').map((ele) => ({ filePath: ele, url: ele }));
@@ -94,7 +98,7 @@ export default {
       if (this.form.cityVerify === 0) {
         this.$refs.form.validateField(['cityOpinion'], async (message) => {
           if (message) return;
-          await this._beforeSubmit('是否确认保存？');
+          await this._beforeSubmit(`是否确认${this.form.cityVerify === 0 ? '提交' : '保存'}？`);
 
           // const form = { ...this.form };
           const form = this._assignForm();

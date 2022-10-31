@@ -11,11 +11,12 @@ export const uploadFile = (data) => {
     // headers: { 'APPLICATION-ID': '3' },
   });
 };
-export const uploadFile2 = (data) => {
+export const uploadFile2 = (data, config) => {
   return axios.request({
     method: 'post',
     url: apiHost2 + '/api/workbench/custom/file/upload/single',
     data,
+    ...config,
     // headers: { 'APPLICATION-ID': '3' },
   });
 };
