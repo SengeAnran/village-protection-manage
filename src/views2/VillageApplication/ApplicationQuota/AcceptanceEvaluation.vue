@@ -39,15 +39,33 @@
               autocomplete="off"
             ></el-input>
           </el-form-item>
-          <el-form-item :label="`验收固定基数:`">
+          <el-form-item :label="`优秀名额:`">
             <el-input
               :disabled="disabled"
               placeholder="请输入"
               type="number"
-              v-model.number="item.fixedBase"
+              v-model.number="item.goodNum"
               autocomplete="off"
             ></el-input>
           </el-form-item>
+          <el-form-item :label="`良好名额:`">
+            <el-input
+              :disabled="disabled"
+              placeholder="请输入"
+              type="number"
+              v-model.number="item.excellentNum"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <!--          <el-form-item :label="`验收固定基数:`">-->
+          <!--            <el-input-->
+          <!--              :disabled="disabled"-->
+          <!--              placeholder="请输入"-->
+          <!--              type="number"-->
+          <!--              v-model.number="item.fixedBase"-->
+          <!--              autocomplete="off"-->
+          <!--            ></el-input>-->
+          <!--          </el-form-item>-->
         </span>
 
         <!--        </div>-->

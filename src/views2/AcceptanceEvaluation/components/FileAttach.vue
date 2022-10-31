@@ -1,6 +1,6 @@
 <template>
   <div class="file-attach-module">
-    <el-form-item label="附件上传" :rules="required ? rule.upload : null" :prop="verifyProp">
+    <el-form-item :label="label" :rules="required ? rule.upload : null" :prop="verifyProp">
       <p style="color: #ff6b00" class="py-4 leading-5">
         <span style="display: block">
           <i class="el-icon-warning"></i>
@@ -32,6 +32,10 @@ export default {
     showDesc2: {
       type: Boolean,
       default: true,
+    },
+    label: {
+      type: String,
+      default: '附件上传',
     },
     verifyProp: {
       type: String,

@@ -69,8 +69,12 @@
     </div>
     <sub-tit> 浙江省未来乡村创建成效自评总结 </sub-tit>
     <div class="basic-info-module">
-      <el-form-item label="">
-        {{ form.selfAssessmentSummary }}
+      <el-form-item label="浙江省未来乡村创建成效自评总结">
+        <!--        {{ form.selfAssessmentSummary }}-->
+        <div v-if="form.selfAssessmentFile && form.selfAssessmentFile.length">
+          <view-file v-for="(item, i) in form.selfAssessmentFile" :key="i" :data="item"></view-file>
+        </div>
+        <div v-else>--</div>
       </el-form-item>
       <el-form-item label="附件">
         <div v-if="form.countySaveAnnexFiles && form.countySaveAnnexFiles.length">
@@ -82,12 +86,16 @@
     <sub-tit> 浙江省未来乡村“一老一小”服务场景验收自评报告 </sub-tit>
     <div class="basic-info-module">
       <el-form-item label="">
-        {{ form.oldSmallSelfReport }}
-      </el-form-item>
-      <el-form-item label="“一老一小”服务场景照片">
-        <ViewImg v-if="form.oldSmallPics && form.oldSmallPics.length" :data="form.oldSmallPics"></ViewImg>
+        <!--        {{ form.oldSmallSelfReport }}-->
+        <div v-if="form.oldSmallSelfReportFile && form.oldSmallSelfReportFile.length">
+          <view-file v-for="(item, i) in form.oldSmallSelfReportFile" :key="i" :data="item"></view-file>
+        </div>
         <div v-else>--</div>
       </el-form-item>
+      <!--      <el-form-item label="“一老一小”服务场景照片">-->
+      <!--        <ViewImg v-if="form.oldSmallPics && form.oldSmallPics.length" :data="form.oldSmallPics"></ViewImg>-->
+      <!--        <div v-else>&#45;&#45;</div>-->
+      <!--      </el-form-item>-->
       <el-form-item label="“一老一小”服务场景的视频">
         <ViewVideo2 v-if="form.oldSmallVideo && form.oldSmallVideo.length" :data="form.oldSmallVideo"></ViewVideo2>
         <div v-else>--</div>

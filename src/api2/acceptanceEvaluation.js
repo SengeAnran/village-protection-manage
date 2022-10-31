@@ -181,10 +181,11 @@ export const uploadScan = (params) => {
 };
 
 // 材料打印
-export const materialPrinting = (params) => {
+export const materialPrinting = (data) => {
   return axios.request({
-    method: 'GET',
-    url: apiHost2 + `/api/workbench/createReports/materialPrinting/${params.id}`,
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/createReports/materialPrinting`,
+    data,
     responseType: 'blob',
   });
 };

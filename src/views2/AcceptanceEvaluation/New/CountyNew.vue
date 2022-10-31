@@ -9,24 +9,45 @@
         <el-row :gutter="20">
           <el-col :span="24">
             <div class="mb-8 mt-2">
-              <el-form-item prop="selfAssessmentSummary" label="浙江省未来乡村创建成效自评总结" :rules="rule.input">
-                <el-input
-                  style="min-width: 42%; max-width: 90%"
-                  type="textarea"
-                  :rows="5"
-                  :autosize="{ minRows: 10 }"
-                  :placeholder="`一、基本情况
-二、创建方案的实施情况
-三、数字化建设与应用情况
-四、场景特别是“一老一小”场景建设情况
-五、建设投入情况
-六、工作推进情况
-七、特色和创新情况
-八、相关附件
-报告中涉及到的支撑材料可作为附件单独提供，并需提供附件清单方便查阅。`"
-                  show-word-limit
-                  v-model="form.selfAssessmentSummary"
+              <el-form-item prop="selfAssessmentSummary" label="浙江省未来乡村创建成效自评总结" :rules="rule.upload">
+                <p style="color: #ff6b00" class="py-4 leading-5">
+                  <span style="display: block">
+                    <i class="el-icon-warning"></i>
+                    请上传《浙江省未来乡村创建成效自评总结》
+                  </span>
+                </p>
+                <UploadFile2
+                  tip="支持格式：.doc,.docx"
+                  accept=".doc,.docx"
+                  :limit="1"
+                  :limitSize="100"
+                  :data="form.selfAssessmentSummary"
+                  @add="addFile"
+                  @remove="removeFile"
                 />
+                <!--                <UploadFile23-->
+                <!--                  v-model="form.createScenarioFile"-->
+                <!--                  tip="支持拓展名：.doc, .docx, .pdf"-->
+                <!--                  accept=".doc,.docx,.pdf"-->
+                <!--                  :limitSize="100"-->
+                <!--                />-->
+                <!--                                        <el-input-->
+                <!--                                          style="min-width: 42%; max-width: 90%"-->
+                <!--                                          type="textarea"-->
+                <!--                                          :rows="5"-->
+                <!--                                          :autosize="{ minRows: 10 }"-->
+                <!--                                          :placeholder="`一、基本情况-->
+                <!--                        二、创建方案的实施情况-->
+                <!--                        三、数字化建设与应用情况-->
+                <!--                        四、场景特别是“一老一小”场景建设情况-->
+                <!--                        五、建设投入情况-->
+                <!--                        六、工作推进情况-->
+                <!--                        七、特色和创新情况-->
+                <!--                        八、相关附件-->
+                <!--                        报告中涉及到的支撑材料可作为附件单独提供，并需提供附件清单方便查阅。`"-->
+                <!--                                          show-word-limit-->
+                <!--                                          v-model="form.selfAssessmentSummary"-->
+                <!--                                        />-->
               </el-form-item>
             </div>
           </el-col>
@@ -48,39 +69,54 @@
               <el-form-item
                 prop="oldSmallSelfReport"
                 label="浙江省未来乡村“一老一小”服务场景验收自评报告"
-                :rules="rule.input"
+                :rules="rule.upload"
               >
-                <el-input
-                  style="min-width: 42%; max-width: 90%"
-                  type="textarea"
-                  maxlength="500"
-                  :rows="5"
-                  :autosize="{ minRows: 5 }"
-                  :placeholder="`一、基本情况
-二、建设成效及制度建设情况
-三、数字化建设与应用情况
-四、特色和创新情况。`"
-                  show-word-limit
-                  v-model="form.oldSmallSelfReport"
+                <p style="color: #ff6b00" class="py-4 leading-5">
+                  <span style="display: block">
+                    <i class="el-icon-warning"></i>
+                    请上传《浙江省未来乡村“一老一小”服务场景验收自评报告》，并在文件内附带服务场景照片3至5张（包含场景全景照、运维现场照）
+                  </span>
+                </p>
+                <UploadFile2
+                  tip="支持格式：.doc,.docx"
+                  accept=".doc,.docx"
+                  :limit="1"
+                  :limitSize="100"
+                  :data="form.oldSmallSelfReport"
+                  @add="addFile2"
+                  @remove="removeFile2"
                 />
+                <!--                <el-input-->
+                <!--                  style="min-width: 42%; max-width: 90%"-->
+                <!--                  type="textarea"-->
+                <!--                  maxlength="500"-->
+                <!--                  :rows="5"-->
+                <!--                  :autosize="{ minRows: 5 }"-->
+                <!--                  :placeholder="`一、基本情况-->
+                <!--二、建设成效及制度建设情况-->
+                <!--三、数字化建设与应用情况-->
+                <!--四、特色和创新情况。`"-->
+                <!--                  show-word-limit-->
+                <!--                  v-model="form.oldSmallSelfReport"-->
+                <!--                />-->
               </el-form-item>
             </div>
           </el-col>
         </el-row>
-        <el-form-item
-          label="请上传有“一老一小”服务场景照片，各场景3至5张（包含场景全景照、运维现场照）"
-          :rules="rule.upload"
-          prop="oldSmallPics"
-        >
-          <p style="color: #ff6b00" class="py-4 leading-5">
-            <span style="display: block">
-              <i class="el-icon-warning"></i>
-              照片大小范围为1MB-10MB之间
-            </span>
-          </p>
-          <UploadImg2 :defaultData="oldSmallPicsDefault" v-model="form.oldSmallPics" :limit="10" />
-        </el-form-item>
-        <el-form-item label="请上传有关“一老一小”服务场景的视频" :rules="rule.upload" prop="oldSmallVideo">
+        <!--        <el-form-item-->
+        <!--          label="请上传有“一老一小”服务场景照片，各场景3至5张（包含场景全景照、运维现场照）"-->
+        <!--          :rules="rule.upload"-->
+        <!--          prop="oldSmallPics"-->
+        <!--        >-->
+        <!--          <p style="color: #ff6b00" class="py-4 leading-5">-->
+        <!--            <span style="display: block">-->
+        <!--              <i class="el-icon-warning"></i>-->
+        <!--              照片大小范围为1MB-10MB之间-->
+        <!--            </span>-->
+        <!--          </p>-->
+        <!--          <UploadImg2 :defaultData="oldSmallPicsDefault" v-model="form.oldSmallPics" :limit="10" />-->
+        <!--        </el-form-item>-->
+        <el-form-item label="请上传有关“一老一小”服务场景的视频" prop="oldSmallVideo">
           <p style="color: #ff6b00" class="py-4 leading-5">
             <span style="display: block">
               <i class="el-icon-warning"></i>
@@ -131,7 +167,7 @@ export default {
       },
       loading: true,
       hasTempData: false,
-      oldSmallPicsDefault: [],
+      // oldSmallPicsDefault: [],
       oldSmallVideoDefault: [],
     };
   },
@@ -151,6 +187,22 @@ export default {
     },
   },
   methods: {
+    addFile(val) {
+      if (val) {
+        this.form.selfAssessmentSummary.push(val);
+      }
+    },
+    removeFile() {
+      this.form.selfAssessmentSummary = [];
+    },
+    addFile2(val) {
+      if (val) {
+        this.form.oldSmallSelfReport.push(val);
+      }
+    },
+    removeFile2() {
+      this.form.oldSmallSelfReport = [];
+    },
     onBack() {
       this.$router.back();
     },
@@ -162,9 +214,11 @@ export default {
         // const form = { ...this.form };
         const form = this._assignForm();
         form.countySaveAnnex = this.form.countySaveAnnex.map((c) => c.fileId).join(',');
-        form.oldSmallPics = this.form.oldSmallPics.map((c) => c.filePath).join(',');
+        // form.oldSmallPics = this.form.oldSmallPics.map((c) => c.filePath).join(',');
         form.oldSmallVideo = this.form.oldSmallVideo.map((c) => c.fileId).join(',');
         form.provisionService = form.provisionService.join(','); // 配备服务
+        form.selfAssessmentSummary = this.form.selfAssessmentSummary.map((c) => c.fileId).join(','); // 配备服务
+        form.oldSmallSelfReport = this.form.oldSmallSelfReport.map((c) => c.fileId).join(','); // 配备服务
 
         form.saveToGo = 0;
         this._saveInfo(form);
@@ -177,7 +231,7 @@ export default {
       // const form = { ...this.form };
       const form = this._assignForm();
       form.countySaveAnnex = this.form.countySaveAnnex.map((c) => c.fileId).join(',');
-      form.oldSmallPics = this.form.oldSmallPics.map((c) => c.filePath).join(',');
+      // form.oldSmallPics = this.form.oldSmallPics.map((c) => c.filePath).join(',');
       form.oldSmallVideo = this.form.oldSmallVideo.map((c) => c.fileId).join(',');
       form.provisionService = form.provisionService.join(','); // 配备服务
 
@@ -246,13 +300,14 @@ export default {
       getDetail({ id }).then((res) => {
         const { oldSmallVideoFile, createPerformanceAuditTimeDO, provisionService } = res;
         this.form = res;
-        this.form.selfAssessmentSummary = res.selfAssessmentSummary || '';
+        this.form.selfAssessmentSummary = res.selfAssessmentFile ? [res.selfAssessmentFile] : [];
+        this.form.oldSmallSelfReport = res.oldSmallSelfReportFile ? [res.oldSmallSelfReportFile] : [];
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
-        this.oldSmallPicsDefault = (res.oldSmallPics || '')
-          .split(',')
-          .filter((ele) => Boolean(ele))
-          .map((ele) => ({ filePath: ele }));
-        this.form.oldSmallPics = [];
+        // this.oldSmallPicsDefault = (res.oldSmallPics || '')
+        //   .split(',')
+        //   .filter((ele) => Boolean(ele))
+        //   .map((ele) => ({ filePath: ele }));
+        // this.form.oldSmallPics = [];
         this.oldSmallVideoDefault = oldSmallVideoFile ? [oldSmallVideoFile] : [];
         this.form.oldSmallVideo = [];
         this.form.provisionService = provisionService ? provisionService.split(',') : []; // 配备服务

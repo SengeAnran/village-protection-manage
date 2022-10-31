@@ -248,13 +248,9 @@ export default {
         this.$confirm('是否导出所选材料？', '提示', {
           type: 'warning',
         }).then(async () => {
-          this.selections.forEach(async (item) => {
-            const data = {
-              id: item.id,
-            };
-            const res = await materialPrinting(data);
-            downloadFile(res, '浙江省未来乡村创建成效评价申请表', 'application/msword');
-          });
+          const data = this.selections.map((ele) => ele.id);
+          const res = await materialPrinting(data);
+          downloadFile(res, '未来乡村验收评价材料打印.zip', 'application/gzip');
         });
       }
     },
@@ -443,7 +439,11 @@ export default {
       return countryShow || cityShow;
     },
     showDelete(data) {
-      return this.COUNTRY && data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING;
+      return (
+        this.COUNTRY &&
+        (data.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING ||
+          data.finalStatus === FINAL_STATUS.CITY_VERIFY_REJECTED)
+      );
     },
     showUploadScanFile(data) {
       if (data.fileId) {
