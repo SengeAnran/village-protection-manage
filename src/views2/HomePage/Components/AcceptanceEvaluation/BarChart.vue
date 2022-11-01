@@ -46,7 +46,7 @@ export default {
           if (val.xAxisData && val.xAxisData.length > 0) {
             this.loadData();
           }
-        })
+        });
       },
       deep: true,
       immediate: true,
@@ -87,7 +87,7 @@ export default {
         },
         legend: {
           show: true,
-          data: ['审核通过', '待审核', '审核未通过'],
+          data: ['审核通过', '待上报', '审核未通过'],
           left: 60,
           top: 0,
           textStyle: {
@@ -100,7 +100,8 @@ export default {
         },
         tooltip: {
           trigger: 'axis',
-          axisPointer: { // 坐标轴指示器配置项。
+          axisPointer: {
+            // 坐标轴指示器配置项。
             type: 'shadow',
           },
           textStyle: {
@@ -110,13 +111,15 @@ export default {
           borderColor: 'rgba(255, 255, 255, 0.4)',
           backgroundColor: 'rgba(0, 0, 0, 0.3)',
           formatter: (params) => {
-//             let str = `
-// <div style="">
-//   <div style="">${params[0].name}</div>
-//   <div style="display: flex;"></div>
-// </div>`
+            //             let str = `
+            // <div style="">
+            //   <div style="">${params[0].name}</div>
+            //   <div style="display: flex;"></div>
+            // </div>`
             let str = params[0].name + '<br />';
-            str += `&nbsp; &nbsp;  <em>申报总数</em>: ${params[0].value + params[1].value + params[2].value}${this.unit}<br/>`;
+            str += `&nbsp; &nbsp;  <em>申报总数</em>: ${params[0].value + params[1].value + params[2].value}${
+              this.unit
+            }<br/>`;
             params.forEach((item) => {
               // console.log(item.seriesName);
               str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
@@ -247,7 +250,7 @@ export default {
           {
             stack: 'AA',
             type: 'bar',
-            name: '待审核',
+            name: '待上报',
             barWidth: 10,
             itemStyle: {
               color: '#FED887',

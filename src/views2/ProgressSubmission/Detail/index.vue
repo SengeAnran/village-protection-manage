@@ -33,11 +33,7 @@
           <el-tab-pane label="报送中" name="first">
             <VilliageListTable key="报送中" use-action v-if="showTable" type="look" :data="form.detailLists">
               <template v-slot:action="scope">
-                <el-link
-                  v-if="scope.data.showDetail || this.form.projectStatus === PROJECT_STATUS.CITY_VERIFY_PENDING"
-                  @click="goDetail(scope)"
-                  type="primary"
-                >
+                <el-link v-if="scope.data.showDetail || form.isAudit" @click="goDetail(scope)" type="primary">
                   详情
                 </el-link>
               </template>
@@ -51,15 +47,10 @@
               type="look"
               isEnd
               :defaultFirstYear="defaultFirstYear"
-              :form="form"
               :data="form.endLists"
             >
               <template v-slot:action="scope">
-                <el-link
-                  v-if="scope.data.showDetail || this.form.projectStatus === PROJECT_STATUS.CITY_VERIFY_PENDING"
-                  @click="goDetail(scope)"
-                  type="primary"
-                >
+                <el-link v-if="scope.data.showDetail || form.isAudit" @click="goDetail(scope)" type="primary">
                   详情
                 </el-link>
               </template>
@@ -69,16 +60,8 @@
       </el-form-item>
       <div id="verify"></div>
       <el-button @click="$router.back()">返回</el-button>
-      <el-button
-        v-if="this.form && this.form.projectStatus === PROJECT_STATUS.CITY_VERIFY_PENDING"
-        type="primary"
-        @click="edit()"
-        >修改</el-button
-      >
-      <el-button
-        v-if="form && form.projectStatus === PROJECT_STATUS.CITY_VERIFY_PENDING && (COUNTRY || COUNTRY_LEADER)"
-        type="primary"
-        @click="pass()"
+      <el-button v-if="this.form && form.isAudit" type="primary" @click="edit()">修改</el-button>
+      <el-button v-if="form && form.isAudit && (COUNTRY || COUNTRY_LEADER)" type="primary" @click="pass()"
         >通过</el-button
       >
     </el-form>
@@ -143,7 +126,7 @@ export default {
   created() {
     this.historyBuildings = HISTORY_BUILDINGS;
   },
-  mounted() {
+  beforeMount() {
     this.init();
   },
   methods: {
@@ -155,7 +138,10 @@ export default {
         this.form = res;
         if (res.detailLists && res.detailLists[0] && res.detailLists[0].firstYear) {
           this.defaultFirstYear = res.detailLists[0].firstYear;
+        } else if (res.endLists && res.endLists[0] && res.endLists[0].firstYear) {
+          this.defaultFirstYear = res.endLists[0].firstYear;
         }
+        // console.log(this.form);
         this.showTable = true;
         if (
           this.form &&

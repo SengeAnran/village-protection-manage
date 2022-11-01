@@ -54,14 +54,7 @@
           <!--          </div>-->
           <el-tabs v-model="activeName">
             <el-tab-pane label="报送中" name="first">
-              <VilliageListTable
-                key="报送中"
-                v-if="showTable"
-                type="edit"
-                :form="form"
-                useAction
-                :data="form.detailLists"
-              >
+              <VilliageListTable key="报送中" v-if="showTable" type="edit" useAction :data="form.detailLists">
                 <template v-slot:action="scope">
                   <el-link
                     v-if="
@@ -83,15 +76,7 @@
               </VilliageListTable>
             </el-tab-pane>
             <el-tab-pane label="已竣工" name="second">
-              <VilliageListTable
-                key="已竣工"
-                v-if="showTable"
-                is-end
-                use-action
-                type="edit"
-                :form="form"
-                :data="form.endLists"
-              >
+              <VilliageListTable key="已竣工" v-if="showTable" is-end use-action type="edit" :data="form.endLists">
                 <template v-slot:action="scope">
                   <el-link @click="goDetail(scope)" v-if="scope.data.showDetail" type="primary"> 详情 </el-link>
                   <el-divider v-if="scope.data.showDetail" direction="vertical"></el-divider>
@@ -312,7 +297,7 @@ export default {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
           if (!this.$route.query.modify && this.fillInDataList.length !== this.form.detailLists.length) {
-            return this.$notify.error('请填报所以项目的上报数据');
+            return this.$notify.error('请填报所有项目的上报数据');
           }
           this.$confirm('确认提交？')
             .then(async () => {
@@ -320,7 +305,7 @@ export default {
                 return {
                   completeDrive: Number(item.completeDrive),
                   completeGov: Number(item.completeGov),
-                  completeTotal: Number(item.completeDrive) + Number(item.completeDrive),
+                  completeTotal: Number(item.completeTotal),
                   overallProgress: Number(item.overallProgress),
                   planRate: Number(item.planRate),
                   yearRate: Number(item.yearRate),
@@ -330,7 +315,7 @@ export default {
                   monthPic: item.monthPic,
                 };
               });
-              console.log(data);
+              // console.log(data);
               await addData(data);
               this.$notify.success({
                 title: '提交成功！',

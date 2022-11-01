@@ -51,36 +51,6 @@
         {{ scope.row.planRate ? formatScore(scope.row.planRate) : '-' }}
       </template>
     </el-table-column>
-    <!--    <el-table-column-->
-    <!--      v-if="!isFirstTimeReport && lastUpdateTime"-->
-    <!--      :label="'完成投资（万元） ' + lastUpdateTime"-->
-    <!--      header-align="center"-->
-    <!--    >-->
-    <!--      <el-table-column prop="completeTotal" label="总投资">-->
-    <!--        <template slot-scope="scope">-->
-    <!--          {{ formatMoney(scope.row.completeTotal || 0) }}-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-    <!--      <el-table-column prop="completeGov" label="政府投资">-->
-    <!--        <template slot-scope="scope">-->
-    <!--          <span>{{ formatMoney(scope.row.completeGov || 0) }}</span>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-    <!--      <el-table-column prop="completeDrive" label="带动投资">-->
-    <!--        <template slot-scope="scope">-->
-    <!--          <span>{{ formatMoney(scope.row.completeDrive || 0) }}</span>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-    <!--    </el-table-column>-->
-    <!--    <el-table-column-->
-    <!--      v-if="!isFirstTimeReport && lastUpdateTime"-->
-    <!--      prop="overallProgress"-->
-    <!--      :label="'总体进度（%） ' + lastUpdateTime"-->
-    <!--      header-align="center"-->
-    <!--      width="120"-->
-    <!--    >-->
-    <!--      <template slot-scope="scope"> {{ formatScore(scope.row.overallProgress || 0) }}% </template>-->
-    <!--    </el-table-column>-->
     <el-table-column :label="isEnd ? '完成投资（万元）' : '本月完成投资（万元）'" header-align="center">
       <!-- 村级用户 -->
       <el-table-column align="center" label="总投资" width="100">
@@ -91,25 +61,6 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="政府投资" width="150">
-        <!--        <template slot-scope="scope">-->
-        <!--          <div>-->
-        <!--            <el-form-item-->
-        <!--              :prop="`tmpKey-gov-first-${scope.$index}`"-->
-        <!--              label=""-->
-        <!--              :show-message="false"-->
-        <!--              :rules="rules[`tmpKey-gov-first-${scope.$index}`]"-->
-        <!--            >-->
-        <!--              <el-input-number-->
-        <!--                v-model="form[`tmpKey-gov-first-${scope.$index}`]"-->
-        <!--                size="mini"-->
-        <!--                maxlength="20"-->
-        <!--                placeholder="请输入"-->
-        <!--                :controls="false"-->
-        <!--                :precision="2"-->
-        <!--              />-->
-        <!--            </el-form-item>-->
-        <!--          </div>-->
-        <!--        </template>-->
         <template slot-scope="scope">
           {{ scope.row.completeGov || scope.row.completeGov === 0 ? formatMoney(scope.row.completeGov || 0) : '-' }}
         </template>
@@ -131,30 +82,6 @@
         }}
       </template>
     </el-table-column>
-    <!--    <el-table-column prop="rate" label="年度投资完成率（%）">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        &lt;!&ndash; 村级用户 &ndash;&gt;-->
-    <!--        <div v-if="VILLAGE && type === 'edit'">-->
-    <!--          {{ calcRateCurrentYear(scope) }}-->
-    <!--        </div>-->
-    <!--        &lt;!&ndash; 省市级用户 &ndash;&gt;-->
-    <!--        <div v-else>-->
-    <!--          <span class="cell">{{ formatScore(scope.row.yearRate || 0, 1) }}%</span>-->
-    <!--        </div>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
-    <!--    <el-table-column prop="rate" label="计划投资完成率（%）">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        &lt;!&ndash; 县级用户 &ndash;&gt;-->
-    <!--        <div v-if="VILLAGE && type === 'edit'">-->
-    <!--          {{ calcRateTotal(scope) }}-->
-    <!--        </div>-->
-    <!--        &lt;!&ndash; 省市级用户 &ndash;&gt;-->
-    <!--        <div v-else>-->
-    <!--          <span class="cell">{{ formatScore(scope.row.planRate || 0, 1) }}%</span>-->
-    <!--        </div>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
     <el-table-column fixed="right" v-if="useAction" label="操作">
       <template slot-scope="scope">
         <slot name="action" :data="scope.row"></slot>
@@ -172,10 +99,10 @@ import role from '@/views2/mixins/role';
 export default {
   mixins: [role],
   props: {
-    form: {
-      type: Object,
-      default: () => {},
-    },
+    // form: {
+    //   type: Object,
+    //   default: () => {},
+    // },
     data: {
       type: Array,
       default: () => [],
@@ -218,34 +145,6 @@ export default {
     formatMoney,
     formatScore,
     mapType,
-    calcRateTotal(scope) {
-      const data = scope.row;
-      const form = this.form;
-      const { planFirstDrive, planFirstGov, planSecondDrive, planSecondGov } = data;
-      const plantTotal =
-        Number(planFirstDrive) + Number(planFirstGov) + Number(planSecondDrive) + Number(planSecondGov) || 1;
-      const currentTotal =
-        Number(form[`tmpKey-gov-first-${scope.$index}`] || 0) + Number(form[`tmpKey-drive-first-${scope.$index}`] || 0);
-      const result = ((currentTotal / plantTotal) * 100 || 0).toFixed(1);
-      data.planRate = result;
-      console.log('xxxx total', currentTotal, plantTotal, result);
-
-      return result ? result + '%' : '0%';
-    },
-    calcRateCurrentYear(scope) {
-      const data = scope.row;
-      const form = this.form;
-      const { planFirstDrive, planFirstGov, planSecondDrive, planSecondGov } = data;
-      const isFirstYear = this.firstYear === new Date().getFullYear();
-      const plantTotal = isFirstYear
-        ? Number(planFirstDrive) + Number(planFirstGov) || 1
-        : Number(planSecondDrive) + Number(planSecondGov) || 1;
-      const currentTotal =
-        Number(form[`tmpKey-gov-first-${scope.$index}`] || 0) + Number(form[`tmpKey-drive-first-${scope.$index}`] || 0);
-      const result = ((currentTotal / plantTotal) * 100 || 0).toFixed(1);
-      data.yearRate = result;
-      return result ? result + '%' : '0%';
-    },
     showMessage: _.debounce(function (message) {
       this.$message.error(message);
     }, 0),
@@ -275,31 +174,16 @@ export default {
       return result;
     },
     init() {
-      // console.log(this.data);
+      console.log(this.data);
       if (this.data && this.data.length > 0) {
+        // console.log()
         this.isFirstTimeReport = this.data.some((i) => {
           return i.completeDrive === null && i.completeGov === null && i.completeTotal === null;
         });
         const firstTimeValue = (this.data[0] && this.data[0].gmtModified) || '';
         this.lastUpdateTime = firstTimeValue.slice(0, 10);
         this.firstYear = (this.data[0] && this.data[0].firstYear) || 2022;
-        if (this.type === 'edit') {
-          const length = this.data.length;
-          for (let index = 0; index < length; index++) {
-            const element = this.data[index];
-            const key1 = `tmpKey-gov-first-${index}`;
-            const key2 = `tmpKey-drive-first-${index}`;
-            const key3 = `tmpKey-global-first-${index}`;
-
-            this.$set(this.form, key1, 0);
-            this.$set(this.form, key2, 0);
-            this.$set(this.form, key3, 0);
-
-            this.rules[key1] = this.createRule(element.completeGov || 0, element, 'completeGovNow');
-            this.rules[key2] = this.createRule(element.completeDrive || 0, element, 'completeDriveNow');
-            this.rules[key3] = this.createRule(element.overallProgress || 0, element, 'overallProgressNow');
-          }
-        }
+        console.log('this.type', this.type);
       }
     },
     removeItem(index) {

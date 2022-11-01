@@ -31,7 +31,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="本月完成总投资（万元）" prop="completeTotal" :rules="completeTotalInput">
-            <el-input v-model="form.completeTotal" disabled placeholder="请输入"></el-input>
+            <el-input v-model="form.completeTotal" disabled placeholder="-"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -202,12 +202,25 @@ export default {
   },
   computed: {
     completeTotal() {
-      return Number(this.form.completeGov) + Number(this.form.completeDrive) || '-';
+      let res;
+      if (this.form.completeGov === '' && this.form.completeDrive === '') {
+        // 为空时
+        return '-';
+      }
+      res =
+        (Number(this.form.completeGov).toFixed(4) * 10000 + Number(this.form.completeDrive).toFixed(4) * 10000) / 10000;
+      if (res === 0) {
+        return Number(this.form.completeGov) === 0 && Number(this.form.completeDrive) === 0 ? res : '-';
+      }
+      return (
+        (Number(this.form.completeGov).toFixed(4) * 10000 + Number(this.form.completeDrive).toFixed(4) * 10000) /
+          10000 || '-'
+      );
     },
   },
   watch: {
     completeTotal(val) {
-      if (val) {
+      if (val || val === 0) {
         this.form.completeTotal = val;
       }
     },
@@ -269,7 +282,7 @@ export default {
             .filter((ele) => Boolean(ele))
             .map((ele) => ({ filePath: ele }));
         }
-        console.log('modifyData', this.form);
+        // console.log('modifyData', this.form);
       }
 
       // this.oldMeetingPic = res.
@@ -295,7 +308,7 @@ export default {
             planRate: this.calcRateTotal(this.modifyData, this.form),
             yearRate: this.calcRateCurrentYear(this.modifyData, this.form),
           };
-          console.log(dataFrom);
+          // console.log(dataFrom);
           if (this.$route.query.modify) {
             postSaveOne(dataFrom).then(() => {
               this.$message({
@@ -335,13 +348,13 @@ export default {
       const result = ((currentTotal / plantTotal) * 100 || 0).toFixed(1);
       data.planRate = result;
       form.yearRate = result;
-      console.log('xxxx total', currentTotal, plantTotal, result);
+      // console.log('xxxx total', currentTotal, plantTotal, result);
 
       return result ? result : 0;
     },
     // 年度投资完成率（%）
     calcRateCurrentYear(scope, formData) {
-      console.log(scope);
+      // console.log(scope);
       const data = scope;
       const form = formData;
       const { planFirstDrive, planFirstGov, planSecondDrive, planSecondGov } = data;
@@ -353,7 +366,7 @@ export default {
       const result = ((currentTotal / plantTotal) * 100 || 0).toFixed(1);
       data.yearRate = result;
       form.yearRate = result;
-      console.log('xxxx total', currentTotal, plantTotal, result);
+      // console.log('xxxx total', currentTotal, plantTotal, result);
       return result ? result : 0;
     },
     // 项目类型
@@ -366,7 +379,7 @@ export default {
 
     // 校验completeGov
     completeGovInputValue(rule, value, callback) {
-      if (!value) {
+      if (!value && value !== 0) {
         callback(new Error('填写不能为空'));
       } else if (Number(value) < (Number(this.form.lastGov) || 0)) {
         callback(new Error('不可少于上月报送政府投资'));
@@ -376,7 +389,7 @@ export default {
     },
     // 校验completeTotal
     completeTotalInputValue(rule, value, callback) {
-      if (!value) {
+      if (!value && value !== 0) {
         callback(new Error('填写不能为空'));
       } else if (Number(value) < (Number(this.form.lastTotal) || 0)) {
         callback(new Error('不可少于上月报送完成总投资'));
@@ -386,7 +399,7 @@ export default {
     },
     // 校验completeDrive
     completeDriveInputValue(rule, value, callback) {
-      if (!value) {
+      if (!value && value !== 0) {
         callback(new Error('填写不能为空'));
       } else if (Number(value) < (Number(this.form.lastDrive) || 0)) {
         callback(new Error('不可少于上月报送带动投资'));
