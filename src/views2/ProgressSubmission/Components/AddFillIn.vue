@@ -228,6 +228,8 @@ export default {
   beforeMount() {
     this.initData();
     this.getData();
+    // console.log(this.modifyData);
+    console.log(Number(this.$route.query.reportingTime.slice(0, 4)));
   },
   mounted() {},
   methods: {
@@ -242,6 +244,7 @@ export default {
           };
         }),
       );
+      this.firstYear = this.modifyData.firstYear || 2022;
     },
     async getData() {
       if (this.id) {
@@ -353,15 +356,32 @@ export default {
       return result ? result : 0;
     },
     // 年度投资完成率（%）
+    /*
+     * scope 数据列表的数据
+     * formData 数据表的填报数据
+     */
     calcRateCurrentYear(scope, formData) {
+      // 第一年度计算方式：第一年度完成投资/第一年计划投资  ；
+      // 第二年度计算方式：完成投资/计划投资（和投资完成率一样）
       // console.log(scope);
       const data = scope;
       const form = formData;
       const { planFirstDrive, planFirstGov, planSecondDrive, planSecondGov } = data;
-      const isFirstYear = this.firstYear === new Date().getFullYear();
+      // 填报的年份 === 第一年
+      const isFirstYear =
+        this.firstYear ===
+        (this.$route.query.reportingTime
+          ? Number(this.$route.query.reportingTime.slice(0, 4))
+          : new Date().getFullYear());
+      // 计划总投资
       const plantTotal = isFirstYear
-        ? Number(planFirstDrive) + Number(planFirstGov) || 1
-        : Number(planSecondDrive) + Number(planSecondGov) || 1;
+        ? Number(planFirstDrive) + Number(planFirstGov)
+        : Number(planFirstDrive) + Number(planFirstGov) + Number(planSecondDrive) + Number(planSecondGov);
+      // 计划投资为0 完成率直接返回0
+      if (plantTotal === 0) {
+        return 0;
+      }
+      // 已完成投资额
       const currentTotal = Number(form.completeGov || 0) + Number(form.completeDrive || 0);
       const result = ((currentTotal / plantTotal) * 100 || 0).toFixed(1);
       data.yearRate = result;

@@ -237,7 +237,7 @@
         <el-form-item :label="PROVINCE ? '审核结果' : '比选结果'" prop="status" :rules="rule.select">
           <el-radio-group v-model="reviewForm.status" :disabled="finalStatus === FINAL_STATUS.CITY_REPORT_PENDING">
             <el-radio :label="1">通过</el-radio>
-            <el-radio :label="0">不通过</el-radio>
+            <el-radio :label="0">{{ PROVINCE ? '不通过' : '驳回' }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item
