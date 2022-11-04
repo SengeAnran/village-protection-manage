@@ -377,10 +377,6 @@ export default {
       // }
       this.queryProListOpt = res;
     },
-    handleProRegionChange(val) {
-      console.log(this.proRegion);
-      console.log(val);
-    },
     selectionChange(val) {
       this.selections = val;
     },
@@ -481,7 +477,6 @@ export default {
 
     // 修改
     edit(data) {
-      console.log(data);
       const { id } = data;
       this.$router.push({
         name: 'newApplication',

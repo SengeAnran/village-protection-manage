@@ -228,7 +228,6 @@ export default {
     },
     // 填报
     fillIn(scope) {
-      console.log(scope.data);
       this.modifyData = _.cloneDeep(scope.data);
       this.projectId = scope.data.id;
       this.dialogType = 'add';
@@ -236,7 +235,6 @@ export default {
     },
     // 修改
     goModify(scope) {
-      console.log(scope);
       this.modifyData = _.cloneDeep(scope.data);
       this.projectId = scope.data.id;
       this.dialogType = 'modify';
@@ -244,7 +242,6 @@ export default {
     },
     // 详情
     goDetail(scope) {
-      console.log(scope);
       this.detailData = _.cloneDeep(scope.data);
       this.detailId = scope.data.id;
       this.detailDialogVisible = true;
@@ -299,7 +296,15 @@ export default {
           if (!this.$route.query.modify && this.fillInDataList.length !== this.form.detailLists.length) {
             return this.$notify.error('请填报所有项目的上报数据');
           }
-          this.$confirm('确认提交？')
+          let totalValue = 0;
+          const compareValue = this.form.investNum * 1.1;
+          this.form.detailLists.forEach((i) => (totalValue += Number(i.completeTotal)));
+          this.$confirm(
+            `${totalValue > compareValue ? '填报的完成投资金额已超过计划投资金额的10%，是否确认提交?' : '确认提交？'}`,
+            {
+              showClose: false,
+            },
+          )
             .then(async () => {
               const data = this.form.detailLists.map((item) => {
                 return {
@@ -342,13 +347,13 @@ export default {
       const result = ((currentTotal / plantTotal) * 100 || 0).toFixed(1);
       data.planRate = result;
       form.yearRate = result;
-      console.log('xxxx total', currentTotal, plantTotal, result);
+      // console.log('xxxx total', currentTotal, plantTotal, result);
 
       return result ? result + '%' : '0%';
     },
     // 年度投资完成率（%）
     calcRateCurrentYear(scope, formData) {
-      console.log(scope);
+      // console.log(scope);
       const data = scope;
       const form = formData;
       const { planFirstDrive, planFirstGov, planSecondDrive, planSecondGov } = data;
@@ -360,7 +365,7 @@ export default {
       const result = ((currentTotal / plantTotal) * 100 || 0).toFixed(1);
       data.yearRate = result;
       form.yearRate = result;
-      console.log('xxxx total', currentTotal, plantTotal, result);
+      // console.log('xxxx total', currentTotal, plantTotal, result);
       return result ? result + '%' : '0%';
     },
   },

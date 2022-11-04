@@ -68,7 +68,6 @@ export default {
     getDetail() {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
-        console.log(res);
         const { oldSmallVideoFile, selfAssessmentFile, oldSmallSelfReportFile } = res;
         this.form = res;
         this.form.selfAssessmentFile = selfAssessmentFile ? [selfAssessmentFile] : [];

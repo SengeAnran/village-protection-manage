@@ -47,18 +47,18 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="上月报送完成总投资（万元）" prop="lastTotal">
+          <el-form-item label="之前报送完成总投资（万元）" prop="lastTotal">
             <span>{{ formatMoney(form.lastTotal || 0) }}</span>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="上月报送政府投资（万元）" prop="lastGov">
+          <el-form-item label="之前报送政府投资（万元）" prop="lastGov">
             <span>{{ formatMoney(form.lastGov || 0) }}</span>
             <!--            <el-input v-model="form.lastGov" placeholder="请输入联系人" disabled></el-input>-->
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="上月报送带动投资（万元）" prop="lastDrive">
+          <el-form-item label="之前报送带动投资（万元）" prop="lastDrive">
             <span>{{ formatMoney(form.lastDrive || 0) }}</span>
           </el-form-item>
         </el-col>
@@ -70,7 +70,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="上月报送总体进度（%）" prop="lastOverallProgress">
+          <el-form-item label="之前报送总体进度（%）" prop="lastOverallProgress">
             <span>{{ formatScore(form.lastOverallProgress || 0) }}%</span>
           </el-form-item>
         </el-col>
@@ -150,11 +150,11 @@ export default {
         completeTotal: '', // 本月完成总投资（万元）
         completeGov: '', // 其中政府投资（万元）
         completeDrive: '', // 其中带动投资（万元）
-        lastTotal: '', // 上月报送完成总投资（万元）
-        lastGov: '', // 上月报送政府投资（万元）
-        lastDrive: '', // 上月报送带动投资（万元）
+        lastTotal: '', // 之前报送完成总投资（万元）
+        lastGov: '', // 之前报送政府投资（万元）
+        lastDrive: '', // 之前报送带动投资（万元）
         overallProgress: '', // 本月总体进度（%）
-        lastOverallProgress: '', // 上月报送总体进度（%）
+        lastOverallProgress: '', // 之前报送总体进度（%）
         isStart: '', // 是否开工
         monthPic: [], // 本月项目进度情况照片
         isEnd: '', // 是否竣工
@@ -229,7 +229,7 @@ export default {
     this.initData();
     this.getData();
     // console.log(this.modifyData);
-    console.log(Number(this.$route.query.reportingTime.slice(0, 4)));
+    // console.log(Number(this.$route.query.reportingTime.slice(0, 4)));
   },
   mounted() {},
   methods: {
@@ -402,7 +402,7 @@ export default {
       if (!value && value !== 0) {
         callback(new Error('填写不能为空'));
       } else if (Number(value) < (Number(this.form.lastGov) || 0)) {
-        callback(new Error('不可少于上月报送政府投资'));
+        callback(new Error('不可少于之前报送政府投资'));
       } else {
         callback();
       }
@@ -412,7 +412,7 @@ export default {
       if (!value && value !== 0) {
         callback(new Error('填写不能为空'));
       } else if (Number(value) < (Number(this.form.lastTotal) || 0)) {
-        callback(new Error('不可少于上月报送完成总投资'));
+        callback(new Error('不可少于之前报送完成总投资'));
       } else {
         callback();
       }
@@ -422,17 +422,17 @@ export default {
       if (!value && value !== 0) {
         callback(new Error('填写不能为空'));
       } else if (Number(value) < (Number(this.form.lastDrive) || 0)) {
-        callback(new Error('不可少于上月报送带动投资'));
+        callback(new Error('不可少于之前报送带动投资'));
       } else {
         callback();
       }
     },
     // 校验overallProgress
     overallProgressInputValue(rule, value, callback) {
-      if (!value) {
+      if (!value && value !== 0) {
         callback(new Error('填写不能为空'));
       } else if (Number(value) < (Number(this.form.lastOverallProgress) || 0)) {
-        callback(new Error('不可少于上月报送总体进度'));
+        callback(new Error('不可少于之前报送总体进度'));
       } else {
         callback();
       }

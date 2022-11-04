@@ -41,17 +41,44 @@
             >
             </el-date-picker>
           </el-form-item>
-          <!--          <el-form-item label="项目调度时间：" prop="schedule" :rules="rules.multiSelect">-->
-          <!--            <el-date-picker-->
-          <!--              v-model="form.schedule"-->
-          <!--              value-format="yyyy-MM"-->
-          <!--              type="monthrange"-->
-          <!--              range-separator="至"-->
-          <!--              start-placeholder="开始日期"-->
-          <!--              end-placeholder="结束日期"-->
-          <!--            >-->
-          <!--            </el-date-picker>-->
-          <!--          </el-form-item>-->
+          <el-form-item label="项目调度时间：" prop="scheduleStartYear" :rules="scheduleYearRule">
+            <el-date-picker
+              style="width: 160px"
+              v-model="form.scheduleStartYear"
+              value-format="yyyy"
+              type="year"
+              placeholder="请选择开始年份"
+            >
+            </el-date-picker>
+            ——
+            <el-date-picker
+              style="width: 160px"
+              v-model="form.scheduleEndYear"
+              value-format="yyyy"
+              type="year"
+              placeholder="请选择结束年份"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="">
+            <el-select style="width: 160px" v-model="form.scheduleStartMonth" placeholder="请选择开始月份">
+              <el-option v-for="item in monthOptions" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+            ——
+            <el-select style="width: 160px" v-model="form.scheduleEndMonth" placeholder="请选择开始月份">
+              <el-option v-for="item in monthOptions" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+            <!--            <el-date-picker-->
+            <!--              style="width: 160px"-->
+            <!--              v-model="form.scheduleEndMonth"-->
+            <!--              value-format="MM"-->
+            <!--              type="month"-->
+            <!--              placeholder="请选择结束年份"-->
+            <!--            >-->
+            <!--            </el-date-picker>-->
+          </el-form-item>
           <!--          <el-form-item label="申报时间：">-->
           <!--            <el-col :span="11">-->
           <!--              &lt;!&ndash; <el-date-picker type="date" placeholder="选择日期" v-model="form.startTime"> </el-date-picker> &ndash;&gt;-->
@@ -134,7 +161,11 @@ export default {
         // type: type, //type 1：验收时间，2：申报批次
         batch: '',
         declareTime: [],
-        // schedule: [],
+        scheduleStartMonth: '',
+        scheduleEndMonth: '',
+        scheduleStartYear: '',
+        scheduleEndYear: '',
+        // scheduleMonth: [],
         // endTime: '',
         // startTime: '',
       },
@@ -154,6 +185,60 @@ export default {
           },
         ],
       },
+      scheduleYearRule: [
+        {
+          type: 'string',
+          required: true,
+          validator: this.scheduleYearTime,
+          trigger: ['change'],
+        },
+      ],
+      monthOptions: [
+        {
+          value: 1,
+          label: '1月',
+        },
+        {
+          value: 2,
+          label: '2月',
+        },
+        {
+          value: 3,
+          label: '3月',
+        },
+        {
+          value: 4,
+          label: '4月',
+        },
+        {
+          value: 5,
+          label: '5月',
+        },
+        {
+          value: 6,
+          label: '6月',
+        },
+        {
+          value: 7,
+          label: '8月',
+        },
+        {
+          value: 9,
+          label: '9月',
+        },
+        {
+          value: 10,
+          label: '10月',
+        },
+        {
+          value: 11,
+          label: '11月',
+        },
+        {
+          value: 12,
+          label: '12月',
+        },
+      ],
     };
   },
   computed: {
@@ -173,18 +258,37 @@ export default {
         ...this.form,
         startTime,
         endTime,
+        scheduleStartYear: Number(this.form.scheduleStartYear),
+        scheduleEndYear: Number(this.form.scheduleEndYear),
         // scheduleStartTime,
         // scheduleEndTime,
       };
     },
     beforeEditMethod(item) {
-      console.log(item, 11111);
+      // console.log(item, 11111);
       this.form.batch = item.batch;
       // this.form.type = type; //type 1：验收时间，2：申报批次
       this.form.id = item.id;
+      this.form.scheduleStartMonth = item.scheduleStartMonth;
+      this.form.scheduleEndMonth = item.scheduleEndMonth;
+      this.form.scheduleStartYear = String(item.scheduleStartYear);
+      this.form.scheduleEndYear = String(item.scheduleEndYear);
       this.form.declareTime = [item.startTime, item.endTime];
-      this.form.schedule = [item.scheduleStartTime, item.scheduleEndTime];
+      // this.form.schedule = [item.scheduleStartTime, item.scheduleEndTime];
       // this.form.startTime = ;
+    },
+    // 调度时间年份校验
+    scheduleYearTime(rule, value, callback) {
+      if (!this.form.scheduleStartYear || !this.form.scheduleEndYear) {
+        callback(new Error('请选择'));
+      }
+      if (
+        this.form.scheduleStartYear >= this.form.scheduleEndYear ||
+        this.form.scheduleEndYear - this.form.scheduleStartYear >= 3
+      ) {
+        callback(new Error('请选择一到两年内的时间范围'));
+      }
+      callback();
     },
   },
 };

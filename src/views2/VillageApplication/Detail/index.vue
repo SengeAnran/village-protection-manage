@@ -412,7 +412,7 @@ export default {
       });
     },
     init() {
-      console.log('init');
+      // console.log('init');
       this.loading = true;
       const { id } = this.$route.query;
       if (!id) return;
@@ -508,7 +508,7 @@ export default {
     },
     // 修改
     edit(data) {
-      console.log(data);
+      // console.log(data);
       const { id } = data;
       this.$router.push({
         name: 'newApplication',

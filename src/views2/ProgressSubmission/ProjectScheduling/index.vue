@@ -139,7 +139,6 @@ export default {
   data() {
     // const date = new Date();
     // const year = date.getFullYear().toString();
-    //console.log(year);
 
     return {
       level: '',
@@ -224,11 +223,10 @@ export default {
     } else {
       this.level = 1;
     }
-    console.log([12, 13].toString());
   },
   mounted() {
     const opts = Object.keys(REPORT_STATUS).map((ele) => {
-      console.log(ele);
+      // console.log(ele);
       return {
         label: REPORT_STATUS[ele],
         value: parseInt(ele),
@@ -367,7 +365,6 @@ export default {
     // 查询申报批次和类型
     async getTypeDeclaration() {
       const res = await queryTypeDeclaration();
-      console.log(res);
       if (res.type) {
         this.dialogDeclareTypeOpt2 = res.type.map((item) => {
           if (item === '1002') {
@@ -412,7 +409,6 @@ export default {
       } else {
         this.batchInfo = {};
       }
-      console.log(res);
     },
     showDialog() {
       this.dialogVisible = true;
@@ -422,9 +418,7 @@ export default {
       this.dialogVisible = false;
     },
     async getDialogDataList(params) {
-      console.log(params);
       const res = await getRecVillages(params);
-      console.log(res);
       return res;
     },
     // 详情

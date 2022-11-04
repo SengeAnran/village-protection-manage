@@ -2,7 +2,11 @@
   <div class="basic-info-module">
     <el-row :gutter="20">
       <el-col :span="8">
-        <el-form-item prop="areaId" label="创建村名称" :rules="rule.select" v-if="villageType === 1">
+        <el-form-item prop="areaId" label=" " label-suffix="" :rules="rule.select" v-if="villageType === 1">
+          <template v-slot:label>
+            创建村名称
+            <label style="color: rgb(255, 107, 0)"> &nbsp;(总体进度未达到90%的村庄无法选择)</label>
+          </template>
           <VillageSelect ref="villageSelect" v-model="saveVO.villageName" @change="changeAddress('areaId', $event)" />
         </el-form-item>
       </el-col>

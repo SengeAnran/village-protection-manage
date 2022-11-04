@@ -237,7 +237,7 @@ export default {
     formatScore,
     async getData() {
       if (this.type === 'add') {
-        console.log(this.detailData);
+        // console.log(this.detailData);
         this.form = this.detailData;
         if (this.form.monthPic) {
           this.oldPics = this.form.monthPic

@@ -165,7 +165,6 @@ export default {
   data() {
     // const date = new Date();
     // const year = date.getFullYear().toString();
-    //console.log(year);
 
     return {
       REPORT_STATUS_COLOR,
@@ -233,11 +232,9 @@ export default {
       this.query.isAudit = 1;
     }
     this.getBatchInfo();
-    console.log([12, 13].toString());
   },
   mounted() {
     const opts = Object.keys(REPORT_STATUS).map((ele) => {
-      console.log(ele);
       return {
         label: REPORT_STATUS[ele],
         value: parseInt(ele),
@@ -284,7 +281,6 @@ export default {
     },
     // 地区
     changeArea(val) {
-      console.log(val);
       this.query.areaId = val.areaId;
     },
     tableRowClassName({ row }) {
@@ -317,7 +313,6 @@ export default {
           pageNum,
           pageSize,
         };
-        console.log(data);
         const res = await getInforExport(data);
         downloadFile(res, '信息汇总表.xlsx');
         // this.$notify.success('导出成功');
@@ -368,7 +363,6 @@ export default {
     // 查询申报批次和类型
     async getTypeDeclaration() {
       const res = await queryTypeDeclaration();
-      console.log(res);
       if (res.type) {
         this.dialogDeclareTypeOpt2 = res.type.map((item) => {
           if (item === '1002') {
@@ -413,7 +407,6 @@ export default {
       } else {
         this.batchInfo = {};
       }
-      console.log(res);
     },
     showDialog() {
       this.dialogVisible = true;
@@ -423,9 +416,7 @@ export default {
       this.dialogVisible = false;
     },
     async getDialogDataList(params) {
-      console.log(params);
       const res = await getRecVillages(params);
-      console.log(res);
       return res;
     },
     // 详情

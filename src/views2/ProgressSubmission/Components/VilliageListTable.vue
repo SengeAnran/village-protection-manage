@@ -174,16 +174,13 @@ export default {
       return result;
     },
     init() {
-      console.log(this.data);
       if (this.data && this.data.length > 0) {
-        // console.log()
         this.isFirstTimeReport = this.data.some((i) => {
           return i.completeDrive === null && i.completeGov === null && i.completeTotal === null;
         });
         const firstTimeValue = (this.data[0] && this.data[0].gmtModified) || '';
         this.lastUpdateTime = firstTimeValue.slice(0, 10);
         this.firstYear = (this.data[0] && this.data[0].firstYear) || 2022;
-        console.log('this.type', this.type);
       }
     },
     removeItem(index) {

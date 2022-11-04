@@ -172,7 +172,7 @@ export default {
   computed: {
     ...mapGetters(['userInfo']),
     roleId() {
-      console.log(this.userInfo.roleId);
+      // console.log(this.userInfo.roleId);
       return this.userInfo.roleId;
     },
   },

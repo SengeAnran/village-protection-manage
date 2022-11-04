@@ -304,13 +304,10 @@ export default {
       for (let i = 0; i < data.length; i++) {
         data[i].citySaveAnnexFiles &&
           data[i].citySaveAnnexFiles.forEach((a) => {
-            console.log(111, a.filePath);
             this._downloadLink(a.filePath, a.fileName);
           });
         data[i].countySaveAnnexFiles &&
           data[i].countySaveAnnexFiles.forEach((b) => {
-            console.log(111, b.filePath);
-
             this._downloadLink(b.filePath, b.fileName);
           });
       }
@@ -410,7 +407,6 @@ export default {
     },
 
     changeArea(val) {
-      console.log(val);
       this.query.areaId = val.areaId;
     },
     selectionChange(val) {

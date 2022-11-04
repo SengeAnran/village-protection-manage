@@ -84,7 +84,7 @@ export default {
       getQuotaList(this.list).then((res) => {
         this.tableData = res?.content;
         this.loading = false;
-        console.log(res);
+        // console.log(res);
       });
     },
     /**
@@ -96,7 +96,7 @@ export default {
       this.disabled = false;
       this.city = item.city;
       getdetail(item.city).then((res) => {
-        console.log(res);
+        // console.log(res);
         this.detailList = res;
         this.dialogFormVisible = true;
       });
@@ -121,7 +121,7 @@ export default {
      */
     detaliClick(item) {
       getdetail(item.city).then((res) => {
-        console.log(res);
+        // console.log(res);
         this.detailList = res;
       });
       this.dialogFormVisible = true;
