@@ -16,6 +16,7 @@
         actionWidth="180px"
         :multiple-delete="userInfo.roleId === 3"
         hideSearch
+        hideDelete
         :multipleDelete="false"
         :selection="false"
         :hideView="true"
@@ -190,7 +191,7 @@ export default {
           type: 'string',
           required: true,
           validator: this.scheduleYearTime,
-          trigger: ['change'],
+          trigger: 'change',
         },
       ],
       monthOptions: [

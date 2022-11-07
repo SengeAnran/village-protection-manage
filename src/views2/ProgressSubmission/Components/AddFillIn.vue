@@ -373,6 +373,7 @@ export default {
         (this.$route.query.reportingTime
           ? Number(this.$route.query.reportingTime.slice(0, 4))
           : new Date().getFullYear());
+      // console.log(isFirstYear);
       // 计划总投资
       const plantTotal = isFirstYear
         ? Number(planFirstDrive) + Number(planFirstGov)

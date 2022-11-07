@@ -254,7 +254,7 @@ export default {
       } else {
         this.fillInDataList.splice(index, 1, data); // 修改
       }
-      const addIndex = index === -1 ? this.fillInDataList.length - 1 : index;
+      // const addIndex = index === -1 ? this.fillInDataList.length - 1 : index;
       const dataListIndex = this.form.detailLists.findIndex((i) => i.id === data.id);
       const row = this.form.detailLists[dataListIndex];
       row.completeDrive = data.completeDrive;
@@ -265,8 +265,10 @@ export default {
       row.isStart = data.isStart;
       row.isEnd = data.isEnd;
       row.monthPic = data.monthPic;
-      this.calcRateTotal(row, this.fillInDataList[addIndex]);
-      this.calcRateCurrentYear(row, this.fillInDataList[addIndex]);
+      row.planRate = data.planRate;
+      row.yearRate = data.yearRate;
+      // this.calcRateTotal(row, this.fillInDataList[addIndex]);
+      // this.calcRateCurrentYear(row, this.fillInDataList[addIndex]);
     },
     saveItemOld(data) {
       const index = this.fillInDataList.findIndex((i) => i.id === data.id);
