@@ -2,7 +2,7 @@
   <div class="basic-info-module">
     <el-row :gutter="20">
       <el-col :span="8">
-        <el-form-item prop="areaId" label=" " label-suffix="" :rules="rule.select" v-if="villageType === 1">
+        <el-form-item prop="areaId" label=" " label-suffix="" :rules="rule.select">
           <template v-slot:label>
             创建村名称
             <label style="color: rgb(255, 107, 0)"> &nbsp;(总体进度未达到90%的村庄无法选择)</label>
@@ -12,7 +12,7 @@
       </el-col>
       <el-col :span="8">
         <el-form-item label="创建批次">
-          <el-input disabled v-model.number="baseInfo.declarationBatch" placeholder="请输入" maxlength="8"></el-input>
+          <el-input disabled v-model="baseInfo.declarationBatch" placeholder="请输入" maxlength="8"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="8">
@@ -117,7 +117,7 @@ export default {
   data() {
     return {
       // 片区名称
-      villageType: 1,
+      // villageType: 1,
       propertyOptions: [
         {
           label: '是',
@@ -189,9 +189,9 @@ export default {
     },
   },
   watch: {
-    villageType() {
-      this._resetBaseInfo();
-    },
+    // villageType() {
+    //   this._resetBaseInfo();
+    // },
     form(val) {
       if (val.saveVO) {
         const { declarationId, areaId } = val;
@@ -200,8 +200,8 @@ export default {
         this.$nextTick(() => {
           declarationId && (this.form.declarationId = declarationId);
           areaId && (this.form.declarationId = declarationId);
-
-          val.saveVO.decType === 1 && this.$refs.villageSelect.setValue(val.saveVO.villageName);
+          // val.saveVO.decType === 1 && this.$refs.villageSelect.setValue(val.saveVO.villageName);
+          val.saveVO.villageName && this.$refs.villageSelect.setValue(val.saveVO.villageName);
         });
       }
     },

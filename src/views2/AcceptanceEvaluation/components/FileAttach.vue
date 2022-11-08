@@ -16,7 +16,7 @@
         tip="支持格式：.doc, .docx, .pdf"
         accept=".doc,.docx,.pdf"
         :data="data"
-        :limitSize="70"
+        :limitSize="100"
         @add="addFile"
         @remove="removeFile"
       />

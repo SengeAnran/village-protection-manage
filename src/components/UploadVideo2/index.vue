@@ -130,7 +130,9 @@ export default {
           onUploadProgress: this.onUploadProgress,
           cancelToken: source.token,
         });
-        this.$message.success('视频上传成功');
+        if (res.fileId) {
+          this.$message.success('视频上传成功');
+        }
         this.loading = false;
         return res;
       } catch (error) {
@@ -147,7 +149,6 @@ export default {
     },
     // 上传过程中取消
     cancelUpload() {
-      console.log('取消');
       source.cancel('Operation canceled by the user.');
       source = axios.CancelToken.source();
       this.loading = false;

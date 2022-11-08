@@ -126,6 +126,29 @@
               <p>{{ scope.row.startTime.slice(0, 10) }}——{{ scope.row.endTime.slice(0, 10) }}</p>
             </template>
           </el-table-column>
+          <el-table-column label="项目调度时间">
+            <template slot-scope="scope">
+              <p>
+                {{ scope.row.scheduleStartYear
+                }}{{
+                  scope.row.scheduleStartMonth
+                    ? '-' +
+                      (String(scope.row.scheduleStartMonth).length === 1
+                        ? '0' + scope.row.scheduleStartMonth
+                        : scope.row.scheduleStartMonth)
+                    : ''
+                }}——{{ scope.row.scheduleEndYear
+                }}{{
+                  scope.row.scheduleEndMonth
+                    ? '-' +
+                      (String(scope.row.scheduleEndMonth).length === 1
+                        ? '0' + scope.row.scheduleEndMonth
+                        : scope.row.scheduleEndMonth)
+                    : ''
+                }}
+              </p>
+            </template>
+          </el-table-column>
         </template>
       </Crud>
     </div>

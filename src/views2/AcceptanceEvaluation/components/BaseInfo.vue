@@ -4,7 +4,8 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <div class="mb-8">
-            <el-form-item label="片区名称"> {{ form.name }} </el-form-item>
+            <!--            现在无片区-->
+            <el-form-item label="创建村名称"> {{ saveVO.villageName || form.name }} </el-form-item>
           </div>
         </el-col>
         <el-col :span="8">
