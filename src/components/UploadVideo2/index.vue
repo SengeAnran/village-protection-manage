@@ -162,7 +162,8 @@ export default {
       this.dialogVisible = true;
     },
     beforeImgUpload(file) {
-      const isFormat = file.type === 'video/mp4' || file.type === 'video/quicktime';
+      const lastName = file.name.slice(-4);
+      const isFormat = (file.type === 'video/mp4' && lastName === '.mp4') || file.type === 'video/quicktime';
       const isLt2M = file.size / 1024 / 1024 < this.size;
 
       if (!isFormat) {
