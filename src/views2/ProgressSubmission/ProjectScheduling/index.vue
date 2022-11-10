@@ -154,7 +154,8 @@ export default {
         city: '',
         county: '',
         province: '',
-        village: '',
+        // village: '',
+        createBy: '',
         projectStatus: null,
       },
       declareYearOpt: [
@@ -254,25 +255,25 @@ export default {
       this.level = val.level;
       if (val.level === 4) {
         this.hideTableAction = false;
-        this.query.village = val.area;
+        this.query.createBy = val.createBy;
         this.query.city = '';
         this.query.county = '';
         this.query.province = '';
       } else if (val.level === 3) {
         this.hideTableAction = true;
-        this.query.village = '';
+        this.query.createBy = '';
         this.query.city = '';
         this.query.county = val.area;
         this.query.province = '';
       } else if (val.level === 2) {
         this.hideTableAction = true;
-        this.query.village = '';
+        this.query.createBy = '';
         this.query.city = val.area;
         this.query.county = '';
         this.query.province = '';
       } else if (val.level === 1) {
         this.hideTableAction = true;
-        this.query.village = '';
+        this.query.createBy = '';
         this.query.city = '';
         this.query.county = '';
         this.query.province = val.area;
