@@ -8,13 +8,10 @@
       <score-table :form="form" disabled></score-table>
       <city-info v-if="showCity" :form="form"></city-info>
       <province-info v-if="showProvince" :form="form"></province-info>
-      <div
-        class="extra-content"
-        v-if="form.multipartFileVO && form.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED"
-      >
+      <div class="extra-content" v-if="showDownLoad(form)">
         <sub-tit class="mb-4"> 扫描件下载 </sub-tit>
         <div class="extra-content">
-          <view-file :data="[form.multipartFileVO]"></view-file>
+          <view-file2 :data="form.multipartFileVO"></view-file2>
         </div>
       </div>
     </el-form>
@@ -88,6 +85,9 @@ export default {
           data.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED);
       return countryShow || cityShow;
     },
+    showDownLoad(data) {
+      return data.multipartFileVO && data.multipartFileVO.length > 0;
+    },
     // 修改
     edit(data) {
       const { id } = data;
@@ -99,12 +99,19 @@ export default {
     getData() {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
-        const { oldSmallVideoFile, oldSmallSelfReportFile, createPerformanceAuditTimeDO, selfAssessmentFile } = res;
+        const {
+          oldSmallVideoFile,
+          oldSmallSelfReportFile,
+          createPerformanceAuditTimeDO,
+          selfAssessmentFile,
+          multipartFileVO,
+        } = res;
         this.form = res;
         // this.form.oldSmallPics = (res.oldSmallPics || '').split(',').map((ele) => ({ filePath: ele, url: ele }));
         this.form.oldSmallVideo = oldSmallVideoFile ? [oldSmallVideoFile] : [];
         // this.form.cityAcceptTime = createPerformanceAuditTimeDO?.id;
         this.form.selfAssessmentFile = selfAssessmentFile ? [selfAssessmentFile] : [];
+        this.form.multipartFileVO = multipartFileVO ? [multipartFileVO] : [];
         this.form.oldSmallSelfReportFile = oldSmallSelfReportFile ? [oldSmallSelfReportFile] : [];
         this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO
           ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd
