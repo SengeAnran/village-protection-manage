@@ -231,9 +231,10 @@
             </el-col>
           </el-row>
         </div>
-        <el-form-item class="list-table" label="" prop="projects" :rules="listRules">
+        <el-form-item v-show="showTableList" class="list-table" label="" prop="projects" :rules="listRules">
           <VilliageListTable
             :data="form.projects"
+            :scheduleStartYear="scheduleStartYear"
             :hiddenEdit="false"
             :hiddenDetail="true"
             @remove="removeListItem"
@@ -242,7 +243,7 @@
             @moveDown="moveDownItem"
           />
         </el-form-item>
-        <el-button class="add-wrp" plain size="small" @click="handleAddRow">
+        <el-button v-show="showTableList" class="add-wrp" plain size="small" @click="handleAddRow">
           <i class="el-icon-plus"></i> 添加
         </el-button>
       </div>
@@ -255,6 +256,7 @@
     <CreateProjectDialog
       v-model="dialogVisible"
       :editData="editProjectForm"
+      :scheduleStartYear="scheduleStartYear"
       :dateRange="[form.startTime, form.endTime]"
       @change="handleAdd"
       @closed="handleAddClose"
@@ -339,6 +341,7 @@ export default {
       oldMeetingPic: [],
 
       initLoading: true,
+      scheduleStartYear: '',
     };
   },
   computed: {
@@ -346,8 +349,22 @@ export default {
     showSaveBtn() {
       return this.type === 'add';
     },
+    showTableList() {
+      return this.form.declarationBatch;
+    },
   },
-  watch: {},
+  watch: {
+    'form.declarationBatch': function (val) {
+      if (val) {
+        const findIndex = this.batchOptions.findIndex((i) => i.label === val);
+        if (findIndex === -1) {
+          return;
+        }
+        this.scheduleStartYear = this.batchOptions[findIndex].scheduleStartYear;
+        // this.scheduleStartYear = 2019;
+      }
+    },
+  },
   mounted() {
     // if (this.type === "edit") {
     //   this.form = this.data;
@@ -412,6 +429,7 @@ export default {
           return {
             label: c.batch,
             value: c.id,
+            scheduleStartYear: c.scheduleStartYear,
           };
         });
       });

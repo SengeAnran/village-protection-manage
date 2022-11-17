@@ -9,7 +9,7 @@
     @closed="$emit('closed')"
   >
     <el-form :rules="rule" ref="projectForm" :model="projectForm" label-width="260px">
-      <el-form-item label="项目名称：" prop="projectName" :rules="rules.inputMaxRequire">
+      <el-form-item label="项目名称：" prop="projectName" :rules="rules.inputMaxRequire50">
         <el-input v-model="projectForm.projectName"></el-input>
       </el-form-item>
       <el-form-item label="建设单位：" prop="constructUnit" :rules="rules.inputMax">
@@ -35,7 +35,7 @@
       <el-form-item label="用地情况（m²）：" prop="landUse">
         <el-input-number v-model="projectForm.landUse" :maxlength="8" :min="0" class="number"></el-input-number>
       </el-form-item>
-      <el-form-item :label="`${projectForm.firstYear}年计划投资（万元）：`">
+      <el-form-item :label="`${scheduleStartYear}年计划投资（万元）：`">
         <plain-text
           :value="(projectForm.planFirstGov || 0) + (projectForm.planFirstDrive || 0)"
           :formatter="formatMoney"
@@ -60,7 +60,7 @@
           class="number"
         ></el-input-number>
       </el-form-item>
-      <el-form-item :label="`${projectForm.firstYear + 1}年计划投资（万元）：`">
+      <el-form-item :label="`${scheduleStartYear + 1}年计划投资（万元）：`">
         <!--  (projectForm.planSecondGov || 0) 兼容undefined      -->
         <plain-text
           :value="(projectForm.planSecondGov || 0) + (projectForm.planSecondDrive || 0)"
@@ -117,6 +117,11 @@ export default {
       type: Boolean,
       default: true,
     },
+    scheduleStartYear: {
+      // 第一年
+      type: [Number, String],
+      default: '-',
+    },
     editData: {
       type: Object,
       default: null,
@@ -146,7 +151,6 @@ export default {
         arrangements: '', // 运行维护管理安排
         remark: '', // 备注
         type: null,
-        firstYear: new Date().getFullYear(),
         // 富文本
       },
       rules: {
@@ -157,6 +161,15 @@ export default {
         inputMaxRequire: [
           { message: '长度不得超过20个字符', trigger: 'change', max: 20 },
           { message: '长度不得超过20个字符', trigger: 'blur', max: 20 },
+          {
+            required: true,
+            message: '请输入',
+            trigger: 'blur',
+          },
+        ],
+        inputMaxRequire50: [
+          { message: '长度不得超过50个字符', trigger: 'change', max: 50 },
+          { message: '长度不得超过50个字符', trigger: 'blur', max: 50 },
           {
             required: true,
             message: '请输入',

@@ -85,6 +85,11 @@ export default {
       type: Array,
       default: () => [],
     },
+    scheduleStartYear: {
+      // 第一年
+      type: [Number, String],
+      default: '-',
+    },
     hiddenOperation: {
       // 隐藏操作栏
       type: Boolean,
@@ -115,7 +120,7 @@ export default {
   computed: {
     ...mapGetters(['userInfo']),
     firstYear() {
-      return this.data.find((ele) => ele.firstYear)?.firstYear || new Date().getFullYear();
+      return this.data.find((ele) => ele.firstYear)?.firstYear || this.scheduleStartYear;
     },
   },
   methods: {
