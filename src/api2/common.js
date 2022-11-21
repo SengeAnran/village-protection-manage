@@ -6,7 +6,7 @@ const { apiHost2 } = config;
 export const getSonAreas = (params) => {
   return axios.request({
     method: 'GET',
-    url: apiHost2 + `/api/main/dropList/sonAreas`,
+    url: apiHost2 + `/api/workbench/dropList/sonAreas`,
     params,
   });
 };

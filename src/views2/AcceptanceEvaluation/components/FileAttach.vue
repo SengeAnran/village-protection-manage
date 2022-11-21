@@ -13,8 +13,8 @@
         </span>
       </p>
       <UploadFile2
-        tip="支持格式：.doc, .docx, .pdf"
-        accept=".doc,.docx,.pdf"
+        tip="支持格式：.doc, .docx"
+        accept=".doc,.docx"
         :data="data"
         :limitSize="100"
         @add="addFile"

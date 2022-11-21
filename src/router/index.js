@@ -60,6 +60,8 @@ router.beforeEach(async (to, from, next) => {
         if (viewType === '2') {
           // console.log('去详情页');
           localStorage.setItem('viewType', 0);
+          localStorage.setItem('onlyShowDetail', true);
+          store.commit('app/SET_ONLY_SHOW_DETAIL', true);
           next(`/villageApplication2/villageDetails?id=${localStorage.getItem('id')}`);
           return;
         }

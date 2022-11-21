@@ -162,7 +162,7 @@ export default {
       this.dialogVisible = true;
     },
     beforeImgUpload(file) {
-      const lastName = file.name.slice(-4);
+      const lastName = file.name.slice(-4).toLowerCase(); // 防止大写后缀
       const isFormat = (file.type === 'video/mp4' && lastName === '.mp4') || file.type === 'video/quicktime';
       const isLt2M = file.size / 1024 / 1024 < this.size;
 
