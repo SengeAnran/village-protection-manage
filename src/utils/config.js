@@ -1,5 +1,7 @@
 const proConfig = {
   // apiHost: '/api/lswhcl', // 老
+  // apiHost: '/v2/admin/apiProxy',
+  // apiHost2: '/v2/admin/apiWX',
   apiHost: '/v2/apiProxy',
   apiHost2: '/v2/apiWX',
   apiHost3: '/v2/apiWX',
