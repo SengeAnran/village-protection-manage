@@ -20,7 +20,7 @@
                   tip="支持格式：.doc,.docx"
                   accept=".doc,.docx"
                   :limit="1"
-                  :limitSize="100"
+                  :limitSize="200"
                   :data="form.selfAssessmentSummary"
                   @add="addFile"
                   @remove="removeFile"
