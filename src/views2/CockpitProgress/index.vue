@@ -41,6 +41,18 @@
                 </el-option>
               </el-select>
             </div>
+            <div class="search-item">
+              <span class="label">创建批次：</span>
+              <el-select v-model="query.declarationBatch" placeholder="请选择">
+                <el-option
+                  v-for="item in queryDeclareTypeOpt"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
           </div>
         </template>
         <template v-slot:tableAction="scope">
@@ -57,6 +69,7 @@
         <template v-slot:table>
           <el-table-column label="地区" prop="fullName"></el-table-column>
           <el-table-column label="村庄名称" prop="village" width="100"> </el-table-column>
+          <el-table-column label="创建批次" prop="batch"></el-table-column>
           <el-table-column label="指标完成率" prop="completionRate">
             <template slot-scope="scope">
               {{ (scope.row.completionRate && `${scope.row.completionRate}%`) || '--' }}
@@ -104,6 +117,7 @@ import { pageQuery } from '@/api2/cockpitProgress';
 import AuditPopup from './AuditPopup.vue';
 import ReasonPopup from './ReasonPopup.vue';
 import role from '@/views2/mixins/role';
+import { queryBatchInfo } from '@/api2/villageManage';
 
 export default {
   mixins: [role],
@@ -111,6 +125,12 @@ export default {
   data() {
     return {
       declareStatusOpt: [
+        {
+          label: '全部',
+          value: '',
+        },
+      ],
+      queryDeclareTypeOpt: [
         {
           label: '全部',
           value: '',
@@ -125,6 +145,7 @@ export default {
         completionRateMax: undefined,
         finalStatus: undefined,
         village: undefined,
+        declarationBatch: '',
       },
       cascaderProps: CASCADER_PROPS, // 级联选择prop
 
@@ -142,11 +163,23 @@ export default {
   beforeMount() {
     this.declareStatus = DECLARE_STATUS;
     this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(DECLARE_STATUS));
+    this.getBatchInfo();
   },
   mounted() {},
   methods: {
     ...mapMutations('villageMange', ['changeDeclareList']),
 
+    // 批次
+    async getBatchInfo() {
+      const res = await queryBatchInfo();
+      const opt = (res?.content || []).map((i) => {
+        return {
+          label: i.batch,
+          value: i.batch,
+        };
+      });
+      this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(opt);
+    },
     newApplications() {
       this.$router.push({ name: 'newApplication' });
     },
