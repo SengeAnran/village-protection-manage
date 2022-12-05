@@ -48,13 +48,8 @@
             </div>
             <div class="search-item mb-4">
               <span class="label">报送时间：</span>
-              <el-select v-model="query.declarationBatch" placeholder="请选择">
-                <el-option
-                  v-for="item in queryDeclareTypeOpt"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
+              <el-select v-model="query.time" placeholder="请选择">
+                <el-option v-for="item in queryTimeOpt" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </div>
@@ -87,11 +82,11 @@
         <!--        </template>-->
 
         <template v-slot:table>
-          <el-table-column v-if="level === 4" label="报送时间" prop="reportingTime" fixed></el-table-column>
+          <el-table-column v-if="level === 4" label="报送时间" prop="reportingTime"></el-table-column>
           <el-table-column v-if="level === 4 || level === 3" label="村（片区）名称" prop="name"></el-table-column>
           <el-table-column v-if="level === 4 || level === 3" label="创建批次" prop="declarationBatch"></el-table-column>
-          <el-table-column v-if="level === 2 || level === 1" label="地区" prop="name" fixed></el-table-column>
-          <el-table-column v-if="level === 2 || level === 1" label="本月已报送" prop="nums"></el-table-column>
+          <el-table-column v-if="level === 2 || level === 1" label="地区" prop="name"></el-table-column>
+          <el-table-column v-if="level === 2 || level === 1" label="本月已报送" prop="monthNums"></el-table-column>
           <el-table-column v-if="level === 2 || level === 1" label="创建村数" prop="nums"></el-table-column>
           <el-table-column label="项目数" prop="projectNum" key="projectNum"></el-table-column>
           <el-table-column label="已开工项目数" prop="startNum" key="startNum"></el-table-column>
@@ -129,7 +124,7 @@
 <script>
 import { mapMutations } from 'vuex';
 
-import { queryBatchInfo, queryTypeDeclaration, getRecVillages, deleteVillageItem } from '@/api2/villageManage';
+import { queryBatchInfo, queryTypeDeclaration, getRecVillages, deleteVillageItem, getTime } from '@/api2/villageManage';
 import {
   DECLEAR_TYPE,
   DECLEAR_STATUS,
@@ -160,7 +155,7 @@ export default {
       query: {
         declarationBatch: '',
         finalStatus: '',
-        reportingTime: '', // 报送时间
+        time: '', // 报送时间
         name: '',
         date: '',
         areaId: '',
@@ -178,6 +173,12 @@ export default {
         },
       ],
       queryDeclareTypeOpt: [
+        {
+          label: '全部',
+          value: '',
+        },
+      ],
+      queryTimeOpt: [
         {
           label: '全部',
           value: '',
@@ -225,6 +226,7 @@ export default {
       this.query.isAudit = 0;
     }
     this.getBatchInfo();
+    this.getTimeInfo();
     if (this.VILLAGE) {
       this.hideTableAction = false;
     }
@@ -375,6 +377,17 @@ export default {
         };
       });
       this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(opt);
+    },
+    // 报送时间
+    async getTimeInfo() {
+      const res = await getTime();
+      const opt = (res || []).map((i) => {
+        return {
+          label: i,
+          value: i,
+        };
+      });
+      this.queryTimeOpt = this.queryTimeOpt.concat(opt);
     },
     // 查询申报批次和类型
     async getTypeDeclaration() {
