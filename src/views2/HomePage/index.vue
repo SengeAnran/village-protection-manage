@@ -1,15 +1,25 @@
 <template>
-  <div class="block">
+  <div class="page">
     <top-fixed-box :query="query" />
-    <top-data />
-    <!--    <div class="box-title">未来乡村建设申报</div>-->
-    <!--    <ConstructionDeclaration />-->
-    <!--    <div class="box-title">项目进度报送</div>-->
-    <!--    <ProgressSubmission />-->
-    <!--    <div class="box-title">验收评价</div>-->
-    <!--    <AcceptanceEvaluation />-->
-    <!--    &lt;!&ndash;  <div class="box-title">优秀案例</div>&ndash;&gt;-->
-    <!--    <ExcellentCases v-if="false" />-->
+    <div class="content-box">
+      <top-data />
+      <div class="box-title">未来乡村建设申报</div>
+      <ConstructionDeclaration />
+      <div class="box-title">项目进度报送</div>
+      <ProgressSubmission />
+      <div class="box-title">验收评价</div>
+      <AcceptanceEvaluation />
+      <div class="box-title">优秀案例</div>
+      <ExcellentCases v-if="false" />
+      <div class="box-title">未来乡村建设申报</div>
+      <ConstructionDeclaration />
+      <div class="box-title">项目进度报送</div>
+      <ProgressSubmission />
+      <div class="box-title">验收评价</div>
+      <AcceptanceEvaluation />
+      <div class="box-title">优秀案例</div>
+      <ExcellentCases v-if="false" />
+    </div>
   </div>
 </template>
 
@@ -41,9 +51,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.block {
+.page {
   position: relative;
-  margin-top: 58px;
+  width: calc(100% + 30px);
+  transform: translateX(-15px);
+  //margin-top: 58px;
+}
+.content-box {
+  height: calc(100vh - 279px);
+  padding: 0 15px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .box-title {
   height: 40px;

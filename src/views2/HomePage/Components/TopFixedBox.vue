@@ -31,17 +31,21 @@ export default {
 
 <style lang="scss" scoped>
 .box {
-  z-index: 2;
-  position: fixed;
-  top: 141px;
-  left: 70px;
+  width: calc(100% - 30px);
+  margin-left: 15px;
   display: flex;
   height: 48px;
-  width: calc(100% - 30px);
   background: #f5faff;
   box-shadow: 0px 2px 6px 0px rgba(0, 62, 115, 0.19);
   .titles-list {
     display: flex;
+    .title-list-item {
+      font-size: 18px;
+      font-family: PingFangSC-Medium, PingFang SC;
+      font-weight: 500;
+      color: #333333;
+      line-height: 26px;
+    }
   }
 }
 </style>

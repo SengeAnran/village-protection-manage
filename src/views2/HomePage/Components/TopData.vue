@@ -75,6 +75,7 @@ export default {
 
 <style lang="scss" scoped>
 .items {
+  background-color: white;
   width: 100%;
   //display: flex;
   //justify-content: space-between;

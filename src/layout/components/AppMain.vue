@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: "AppMain",
+  name: 'AppMain',
   data() {
     return {
       isRouterAlive: true,
@@ -50,7 +50,7 @@ export default {
 <style lang="scss" scoped>
 .app-main {
   /* 80= navbar header 72  152  */
-  min-height: calc(100vh - 152px);
+  min-height: calc(100vh - 201px);
   width: 100%;
   position: relative;
   overflow: hidden;
