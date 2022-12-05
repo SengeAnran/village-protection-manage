@@ -46,6 +46,18 @@
                 </el-option>
               </el-select>
             </div>
+            <div class="search-item mb-4">
+              <span class="label">报送时间：</span>
+              <el-select v-model="query.declarationBatch" placeholder="请选择">
+                <el-option
+                  v-for="item in queryDeclareTypeOpt"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
           </div>
         </template>
         <template v-slot:insert>
@@ -79,6 +91,7 @@
           <el-table-column v-if="level === 4 || level === 3" label="村（片区）名称" prop="name"></el-table-column>
           <el-table-column v-if="level === 4 || level === 3" label="创建批次" prop="declarationBatch"></el-table-column>
           <el-table-column v-if="level === 2 || level === 1" label="地区" prop="name" fixed></el-table-column>
+          <el-table-column v-if="level === 2 || level === 1" label="本月已报送" prop="nums"></el-table-column>
           <el-table-column v-if="level === 2 || level === 1" label="创建村数" prop="nums"></el-table-column>
           <el-table-column label="项目数" prop="projectNum" key="projectNum"></el-table-column>
           <el-table-column label="已开工项目数" prop="startNum" key="startNum"></el-table-column>
