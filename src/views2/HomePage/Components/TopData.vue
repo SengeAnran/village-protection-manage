@@ -59,7 +59,7 @@ export default {
     };
   },
   mounted() {
-    this.getData();
+    // this.getData();
   },
   methods: {
     getData() {

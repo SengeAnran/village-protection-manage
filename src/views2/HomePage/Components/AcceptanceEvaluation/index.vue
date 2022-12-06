@@ -7,7 +7,7 @@
       <TotalSummary :data="data" />
     </div>
     <div class="right-content">
-      <BarChart v-if="showBar" :chart-data="chartData"/>
+      <BarChart v-if="showBar" :chart-data="chartData" />
     </div>
   </div>
 </template>
@@ -35,7 +35,7 @@ export default {
     };
   },
   mounted() {
-    this.getData();
+    // this.getData();
     window.addEventListener('resize', () => {
       if (this.flag) {
         this.flag = false;
@@ -43,7 +43,7 @@ export default {
         setTimeout(() => {
           this.flag = true;
           this.showBar = true;
-        },200);
+        }, 200);
       }
     });
   },
@@ -55,10 +55,18 @@ export default {
     getData() {
       getAcceptanceStatistics({ declarationBatch: this.batch }).then((res) => {
         this.data = res || {};
-        this.chartData.xAxisData = res.cityCountVOList.map((i) => {return i.cityName});
-        this.chartData.dataList1 = res.cityCountVOList.map((i) => {return i.passTotalCount});
-        this.chartData.dataList2 = res.cityCountVOList.map((i) => {return i.readyPassTotalCount});
-        this.chartData.dataList3 = res.cityCountVOList.map((i) => {return i.noPassTotalCount});
+        this.chartData.xAxisData = res.cityCountVOList.map((i) => {
+          return i.cityName;
+        });
+        this.chartData.dataList1 = res.cityCountVOList.map((i) => {
+          return i.passTotalCount;
+        });
+        this.chartData.dataList2 = res.cityCountVOList.map((i) => {
+          return i.readyPassTotalCount;
+        });
+        this.chartData.dataList3 = res.cityCountVOList.map((i) => {
+          return i.noPassTotalCount;
+        });
       });
     },
   },
