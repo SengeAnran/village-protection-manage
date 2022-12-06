@@ -468,18 +468,18 @@ export const defaultRoutes = [
 
 export const defaultRoutes2 = [
   // 未来乡村
-  // 首页
-  {
-    path: '/homePage',
-    component: () => import('@/views2/HomePage/index'),
-    name: 'HomePage',
-    meta: {
-      menuIds: [USER_TYPE.PROVINCE],
-      title: '首页',
-      hideChild: true,
-      icon: 'shouye',
-    },
-  },
+  // // 首页
+  // {
+  //   path: '/homePage',
+  //   component: () => import('@/views2/HomePage/index'),
+  //   name: 'HomePage',
+  //   meta: {
+  //     menuIds: [USER_TYPE.PROVINCE],
+  //     title: '首页',
+  //     hideChild: true,
+  //     icon: 'shouye',
+  //   },
+  // },
   // 村庄申报 / 村庄审核
   {
     path: '/villageApplication2',
