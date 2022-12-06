@@ -31,7 +31,7 @@ export default {
 
 <style lang="scss" scoped>
 .box {
-  width: calc(100% - 30px);
+  width: calc(100% - 34px);
   margin-left: 15px;
   display: flex;
   height: 48px;
