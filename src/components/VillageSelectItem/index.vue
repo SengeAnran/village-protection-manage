@@ -1,9 +1,15 @@
 <template>
-  <el-cascader v-model="cascaderValue" style="max-width: 240px;" :props="villageProps" @change="onChange"></el-cascader>
+  <el-cascader
+    v-model="cascaderValue"
+    style="max-width: 240px"
+    :props="villageProps"
+    @change="onChange"
+    :placeholder="placeholder"
+  ></el-cascader>
 </template>
 <script>
 import store from '@/store';
-import { getSonAreas } from "@/api2/common";
+import { getSonAreas } from '@/api2/common';
 
 export default {
   props: {
@@ -11,6 +17,10 @@ export default {
     checkStrictly: {
       type: Boolean,
       default: false,
+    },
+    placeholder: {
+      type: String,
+      default: '请选择',
     },
   },
   data() {
@@ -46,7 +56,6 @@ export default {
         return;
       }
       getSonAreas({ areaId: node.value.areaId }).then((res) => {
-        console.log(res);
         const nodes = res.map((c) => {
           return {
             label: c.areaName,

@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <top-fixed-box :query="query" />
+    <top-fixed-box :query="query" @changeArea="changeArea" />
     <div class="content-box">
       <top-data />
       <div class="box-title">未来乡村建设申报</div>
@@ -43,9 +43,16 @@ export default {
   data() {
     return {
       query: {
-        areaId: '',
+        areaId: '33',
+        declarationBatch: '',
       },
     };
+  },
+  methods: {
+    changeArea(val) {
+      this.query.areaId = val.areaId;
+      console.log(val);
+    },
   },
 };
 </script>
