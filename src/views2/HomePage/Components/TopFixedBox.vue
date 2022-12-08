@@ -6,14 +6,23 @@
         :class="{ active: activeIndex === index }"
         v-for="(item, index) in titleList"
         :key="index"
+        @click="changeActive(index)"
       >
         {{ item }}
       </div>
     </div>
-    <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea" placeholder="浙江省" />
-    <el-select v-model="query.declarationBatch" placeholder="请选择">
-      <el-option v-for="item in batchOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-    </el-select>
+    <div class="box-right">
+      <VillageSelectItem
+        class="location-select"
+        checkStrictly
+        v-model="query.areaId"
+        @change="changeArea"
+        placeholder="浙江省"
+      />
+      <el-select v-model="query.declarationBatch" placeholder="请选择">
+        <el-option v-for="item in batchOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+      </el-select>
+    </div>
   </div>
 </template>
 
@@ -49,23 +58,39 @@ export default {
         this.batchOpt.concat(...res.content.map((c) => ({ label: c.batch, value: c.batch })));
       });
     },
+    // 切换模块
+    changeActive(index) {
+      this.activeIndex = index;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@mixin ArtFont {
+  color: black;
+  //background: linear-gradient(0deg, black 1.513671875%, black 100%);
+  //-webkit-background-clip: text;
+  //-webkit-text-fill-color: transparent;
+}
 .box {
+  position: relative;
+  z-index: 2;
   width: calc(100% - 34px);
   margin-left: 15px;
+  //margin-bottom: 2px;
   display: flex;
+  justify-content: space-between;
   height: 48px;
   background: #f5faff;
+  padding-right: 20px;
   box-shadow: 0px 2px 6px 0px rgba(0, 62, 115, 0.19);
   & > div {
     display: flex;
     align-items: center;
   }
   .titles-list {
+    cursor: pointer;
     display: flex;
     margin-left: 10px;
     .title-list-item {
@@ -81,6 +106,24 @@ export default {
     .active {
       font-weight: 500;
       color: #333333;
+    }
+  }
+  .location-select {
+    margin-right: 12px;
+    &::v-deep .el-input__inner::-webkit-input-placeholder {
+      color: #606266;
+    }
+    &::v-deep .el-input__inner::-moz-placeholder {
+      /* Mozilla Firefox 19+ */
+      color: #606266;
+    }
+    &::v-deep .el-input__inner::-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 */
+      color: #606266;
+    }
+    &::v-deep .el-input__inner::-ms-input-placeholder {
+      /* Internet Explorer 10-11 */
+      color: #606266;
     }
   }
 }

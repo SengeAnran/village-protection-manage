@@ -2,13 +2,22 @@
   <div class="page">
     <top-fixed-box :query="query" @changeArea="changeArea" />
     <div class="content-box">
-      <top-data />
-      <div class="box-title">未来乡村建设申报</div>
-      <ConstructionDeclaration />
-      <div class="box-title">项目进度报送</div>
-      <ProgressSubmission />
-      <div class="box-title">验收评价</div>
-      <AcceptanceEvaluation />
+      <BaseBox>
+        <!--        建设概况-->
+        <ConstructionOverview></ConstructionOverview>
+      </BaseBox>
+      <BaseBox>
+        <ConstructionDeclaration />
+      </BaseBox>
+      <BaseBox>
+        <div class="box-title">项目进度报送</div>
+        <ProgressSubmission />
+      </BaseBox>
+      <BaseBox>
+        <div class="box-title">验收评价</div>
+        <AcceptanceEvaluation />
+      </BaseBox>
+
       <div class="box-title">优秀案例</div>
       <ExcellentCases v-if="false" />
       <div class="box-title">未来乡村建设申报</div>
@@ -24,7 +33,8 @@
 </template>
 
 <script>
-import TopData from './Components/TopData.vue';
+import ConstructionOverview from './Components/ConstructionOverview';
+import BaseBox from './Components/BaseBox';
 import TopFixedBox from './Components/TopFixedBox.vue';
 import ConstructionDeclaration from './Components/ConstructionDeclaration';
 import ProgressSubmission from './Components/ProgressSubmission';
@@ -34,11 +44,12 @@ export default {
   name: 'index',
   components: {
     TopFixedBox,
-    TopData,
+    ConstructionOverview,
     ConstructionDeclaration,
     ProgressSubmission,
     AcceptanceEvaluation,
     ExcellentCases,
+    BaseBox,
   },
   data() {
     return {
@@ -65,8 +76,8 @@ export default {
   //margin-top: 58px;
 }
 .content-box {
-  height: calc(100vh - 279px);
-  padding: 0 15px;
+  height: calc(100vh - 282px);
+  padding: 10px 15px 0;
   overflow-y: scroll;
   overflow-x: hidden;
 }

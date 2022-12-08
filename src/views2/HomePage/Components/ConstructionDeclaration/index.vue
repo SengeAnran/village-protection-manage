@@ -1,8 +1,5 @@
 <template>
-  <div class="show-box">
-    <div class="select-batch">
-      <SelectBatch @changeSelect="changeSelect" />
-    </div>
+  <base-box-item name="申报总数" :count="378" unit="个">
     <div class="left-content">
       <PieChart
         v-if="showBar"
@@ -18,16 +15,15 @@
     <div class="right-content">
       <BarChart v-if="showBar" key="1" :chart-data="chartData" />
     </div>
-  </div>
+  </base-box-item>
 </template>
 
 <script>
 import PieChart from './PieChart';
-import SelectBatch from '@/views2/HomePage/Components/SelectBatch';
 import BarChart from './BarChart';
 import { getCountVillage } from '@/api2/homePage';
 export default {
-  components: { PieChart, SelectBatch, BarChart },
+  components: { PieChart, BarChart },
   data() {
     return {
       pieDataList: [
@@ -88,22 +84,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.show-box {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  .left-content {
-    //width: 471px;
-    flex: 1;
-    height: 239px;
-    //background-color: pink;
-  }
-  .right-content {
-    flex: 1.4;
-    //width: 540px;
-    height: 239px;
-    //background-color: pink;
-  }
+.left-content {
+  //width: 471px;
+  flex: 1;
+  height: 239px;
+  //background-color: pink;
+}
+.right-content {
+  flex: 1;
+  //width: 540px;
+  height: 239px;
+  //background-color: pink;
 }
 .select-batch {
   position: absolute;

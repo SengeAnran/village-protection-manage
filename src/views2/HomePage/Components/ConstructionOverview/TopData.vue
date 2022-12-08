@@ -26,28 +26,28 @@ export default {
     return {
       dataList: [
         {
-          label: '未来乡村创建总数',
-          num: 0,
+          label: '创建总数',
+          num: 33,
           unit: '个',
           color: '#5F59FF',
-          backgroundImg: require('../img/bg_02.png'),
-          iconImg: require('../img/icon_01.png'),
+          backgroundImg: require('./img/bg_01.png'),
+          iconImg: require('./img/icon_01.png'),
         },
         {
           label: '在建数',
-          num: 0,
+          num: 20,
           unit: '个',
           color: '#FEC447',
-          backgroundImg: require('../img/bg_01.png'),
-          iconImg: require('../img/icon_02.png'),
+          backgroundImg: require('./img/bg_02.png'),
+          iconImg: require('./img/icon_02.png'),
         },
         {
           label: '验收数',
-          num: 0,
+          num: 44,
           unit: '个',
           color: '#3DC899',
-          backgroundImg: require('../img/bg_03.png'),
-          iconImg: require('../img/icon_03.png'),
+          backgroundImg: require('./img/bg_03.png'),
+          iconImg: require('./img/icon_03.png'),
         },
       ],
       labelInfoSet: {
@@ -81,16 +81,17 @@ export default {
   //justify-content: space-between;
   //justify-content: space-between;
   //flex-wrap: wrap;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
   .item {
     margin: 0 auto;
     max-width: 350px;
-    height: 102px;
+    height: 94px;
     display: flex;
     align-items: center;
+    background-size: 100% 100% !important;
     img {
-      margin-left: 30px;
-      margin-right: 16px;
+      margin-left: 16px;
+      margin-right: 12px;
       width: 48px;
       height: 48px;
     }

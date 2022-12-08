@@ -50,7 +50,7 @@ export default {
 <style lang="scss" scoped>
 .app-main {
   /* 80= navbar header 72  152  */
-  min-height: calc(100vh - 201px);
+  min-height: calc(100vh - 202px);
   width: 100%;
   position: relative;
   overflow: hidden;
