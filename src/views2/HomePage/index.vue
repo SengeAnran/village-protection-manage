@@ -1,45 +1,36 @@
 <template>
   <div class="page">
-    <top-fixed-box :query="query" @changeArea="changeArea" />
+    <top-fixed-box />
     <div class="content-box">
       <BaseBox>
         <!--        建设概况-->
-        <ConstructionOverview></ConstructionOverview>
+        <ConstructionOverview />
       </BaseBox>
       <BaseBox>
         <ConstructionDeclaration />
       </BaseBox>
       <BaseBox>
-        <div class="box-title">项目进度报送</div>
+        <!--        项目调度-->
+        <ProjectScheduling />
         <ProgressSubmission />
       </BaseBox>
       <BaseBox>
         <div class="box-title">验收评价</div>
         <AcceptanceEvaluation />
       </BaseBox>
-
-      <div class="box-title">优秀案例</div>
-      <ExcellentCases v-if="false" />
-      <div class="box-title">未来乡村建设申报</div>
-      <ConstructionDeclaration />
-      <div class="box-title">项目进度报送</div>
-      <ProgressSubmission />
-      <div class="box-title">验收评价</div>
-      <AcceptanceEvaluation />
-      <div class="box-title">优秀案例</div>
-      <ExcellentCases v-if="false" />
     </div>
   </div>
 </template>
 
 <script>
 import ConstructionOverview from './Components/ConstructionOverview';
+import ProjectScheduling from './Components/ProjectScheduling';
 import BaseBox from './Components/BaseBox';
 import TopFixedBox from './Components/TopFixedBox.vue';
 import ConstructionDeclaration from './Components/ConstructionDeclaration';
 import ProgressSubmission from './Components/ProgressSubmission';
 import AcceptanceEvaluation from './Components/AcceptanceEvaluation';
-import ExcellentCases from './Components/ExcellentCases';
+// import ExcellentCases from './Components/ExcellentCases';
 export default {
   name: 'index',
   components: {
@@ -48,23 +39,14 @@ export default {
     ConstructionDeclaration,
     ProgressSubmission,
     AcceptanceEvaluation,
-    ExcellentCases,
+    // ExcellentCases,
     BaseBox,
+    ProjectScheduling,
   },
   data() {
-    return {
-      query: {
-        areaId: '33',
-        declarationBatch: '',
-      },
-    };
+    return {};
   },
-  methods: {
-    changeArea(val) {
-      this.query.areaId = val.areaId;
-      console.log(val);
-    },
-  },
+  methods: {},
 };
 </script>
 

@@ -22,7 +22,6 @@ export default {
           xAxisData: [],
           dataList1: [],
           dataList2: [],
-          dataList3: [],
         };
       },
     },
@@ -210,7 +209,7 @@ export default {
           {
             stack: 'AA',
             z: 1,
-            name: '审核通过',
+            name: '已开工项目',
             data: this.dataList1,
             type: 'bar',
             barMaxWidth: 'auto',
@@ -261,7 +260,7 @@ export default {
           {
             stack: 'AA',
             type: 'bar',
-            name: '待上报',
+            name: '未开工项目',
             barWidth: 10,
             itemStyle: {
               color: '#FED887',
@@ -278,54 +277,15 @@ export default {
             },
             data: this.dataList2,
           },
-          {
-            stack: 'AA',
-            z: 1,
-            name: '审核未通过',
-            data: this.dataList3,
-            type: 'bar',
-            barMaxWidth: 'auto',
-            barWidth: 10,
-            itemStyle: {
-              // color: {
-              //   x: 0,
-              //   y: 0,
-              //   x2: 0,
-              //   y2: 1,
-              //   type: 'linear',
-              //   global: false,
-              //   colorStops: [
-              //     {
-              //       offset: 0,
-              //       color: '#90E4FA',
-              //     },
-              //     {
-              //       offset: 1,
-              //       color: '#8CE1F9',
-              //     },
-              //   ],
-              // },
-              color: '#FF9D9D',
-              borderRadius: [2, 2, 0, 0],
-            },
-            label: {
-              show: false,
-              position: 'top',
-              distance: 10,
-              color: '#fff',
-            },
-          },
         ],
       };
       return option;
     },
     loadData() {
-      const { xAxisData, dataList1, dataList2, dataList3, dataList4 } = this.chartData;
+      const { xAxisData, dataList1, dataList2 } = this.chartData;
       this.xAxisData = xAxisData;
       this.dataList1 = dataList1;
       this.dataList2 = dataList2;
-      this.dataList3 = dataList3;
-      this.dataList4 = dataList4;
       this.setData();
     },
   },

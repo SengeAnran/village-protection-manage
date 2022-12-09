@@ -1,16 +1,7 @@
 <template>
-  <base-box-item name="申报总数" :count="378" unit="个">
+  <base-box-item name="申报总数" :count="total" unit="个" :icon="iconUrl">
     <div class="left-content">
-      <PieChart
-        v-if="showBar"
-        :list="pieDataList"
-        :isPercent="false"
-        unit="个"
-        showMinTitle
-        :total="total"
-        totalUnit="个"
-        minTitle="申报总数"
-      />
+      <PieChart v-if="showBar" :list="pieDataList" :isPercent="false" unit="个" totalUnit="个" minTitle="申报总数" />
     </div>
     <div class="right-content">
       <BarChart v-if="showBar" key="1" :chart-data="chartData" />
@@ -19,6 +10,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import PieChart from './PieChart';
 import BarChart from './BarChart';
 import { getCountVillage } from '@/api2/homePage';
@@ -27,23 +19,36 @@ export default {
   data() {
     return {
       pieDataList: [
-        { name: '审核通过', value: 0 },
-        { name: '待上报', value: 0 },
-        { name: '审核未通过', value: 0 },
+        { name: '省级审核通过', value: 0 },
+        { name: '市、县待上报', value: 0 },
+        { name: '省级审核未通过', value: 0 },
       ],
       total: 0,
       showBar: true,
       flag: true,
       chartData: {
+        name: '各地市创建申报情况',
         xAxisData: [],
         dataList1: [],
         dataList2: [],
         dataList3: [],
       },
+      iconUrl: require('./icon.png'),
     };
   },
+  computed: {
+    ...mapGetters(['area', 'location', 'batch']),
+  },
+  watch: {
+    area() {
+      this.getData();
+    },
+    batch() {
+      this.getData();
+    },
+  },
   mounted() {
-    this.getData('');
+    this.getData();
     window.addEventListener('resize', () => {
       if (this.flag) {
         this.flag = false;
@@ -56,13 +61,14 @@ export default {
     });
   },
   methods: {
-    changeSelect(val) {
-      this.getData(val);
-    },
-    getData(val) {
-      getCountVillage({ declarationBatch: val }).then((res) => {
+    getData() {
+      const data = {
+        batch: this.batch,
+        ...this.location,
+      };
+      getCountVillage(data).then((res) => {
         this.chartData.xAxisData = res.cityCountVOList.map((i) => {
-          return i.cityName;
+          return i.name;
         });
         this.chartData.dataList1 = res.cityCountVOList.map((i) => {
           return i.passTotalCount;
@@ -95,11 +101,5 @@ export default {
   //width: 540px;
   height: 239px;
   //background-color: pink;
-}
-.select-batch {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  z-index: 10;
 }
 </style>

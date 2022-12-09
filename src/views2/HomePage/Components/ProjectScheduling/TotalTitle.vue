@@ -3,8 +3,7 @@
     <div class="t-icon" v-if="icon"><img :src="icon" alt="" /></div>
     <div class="t-desc">{{ name }}</div>
     <div class="t-num">
-      <RollNum :num="count" class="num" :fixed="fixed" :style="{ fontSize: countSize + 'px' }" />
-      <span>{{ unit }}</span>
+      <RollNum :num="count" class="num" :style="{ fontSize: countSize + 'px' }" /> <span>{{ unit }}</span>
     </div>
   </div>
 </template>
@@ -13,7 +12,7 @@ export default {
   props: {
     icon: {
       type: [String, Boolean],
-      default: require('./progress-icon.png'),
+      default: '',
     },
     name: {
       type: String,
@@ -28,10 +27,6 @@ export default {
     countSize: {
       type: [String, Number],
       default: 30,
-    },
-    fixed: {
-      type: [Number, String],
-      default: 'auto',
     },
   },
 };

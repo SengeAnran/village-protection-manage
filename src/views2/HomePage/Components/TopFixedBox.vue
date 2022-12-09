@@ -19,7 +19,7 @@
         @change="changeArea"
         placeholder="浙江省"
       />
-      <el-select v-model="query.declarationBatch" placeholder="请选择">
+      <el-select v-model="query.declarationBatch" placeholder="请选择" @change="batchChange">
         <el-option v-for="item in batchOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
     </div>
@@ -28,35 +28,49 @@
 
 <script>
 import { getSetList } from '@/api2/declarationBatch';
+import { mapMutations } from 'vuex';
 
 export default {
-  props: {
-    query: {
-      type: Object,
-      default: () => {},
-    },
-  },
   name: 'TopFixedBox',
   data() {
     return {
+      query: {
+        areaId: '',
+        declarationBatch: '全部批次',
+      },
       titleList: ['建设概况', '创建申报', '项目调度', '项目调度'],
       activeIndex: 0,
       batchOpt: [
         {
           label: '全部批次',
-          value: '',
+          value: '全部批次',
         },
       ],
     };
   },
+  beforeMount() {
+    this.setBatchOpt();
+  },
   methods: {
+    ...mapMutations('home', ['SET_AREA_COUNTY', 'SET_AREA_CITY', 'SET_AREA_PROVINCE', 'SET_BATCH']),
     changeArea(val) {
-      this.$emit('changeArea', val);
+      console.log(val);
+      if (val.level === '2') {
+        return this.SET_AREA_CITY(val.areaName);
+      }
+      if (val.level === '3') {
+        return this.SET_AREA_COUNTY(val.areaName);
+      }
+      this.SET_AREA_PROVINCE(val.areaName);
     },
     setBatchOpt() {
       getSetList({ type: 2, pageNum: 1, pageSize: 50 }).then((res) => {
-        this.batchOpt.concat(...res.content.map((c) => ({ label: c.batch, value: c.batch })));
+        this.batchOpt = this.batchOpt.concat(...res.content.map((c) => ({ label: c.batch, value: c.batch })));
       });
+    },
+    batchChange(val) {
+      console.log('batchChange');
+      this.SET_BATCH(val);
     },
     // 切换模块
     changeActive(index) {

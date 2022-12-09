@@ -1,8 +1,5 @@
 <template>
   <div class="show-box">
-    <div class="select-batch">
-      <SelectBatch @changeSelect="changeSelect" />
-    </div>
     <div class="left-content">
       <TotalSummary :data="data" />
     </div>
@@ -14,11 +11,10 @@
 
 <script>
 import FinanceIncome from '@/views2/HomePage/Components/ProgressSubmission/FinanceIncome';
-import SelectBatch from '@/views2/HomePage/Components/SelectBatch';
 import TotalSummary from './TotalSummary.vue';
 import { getProjectProgressReportNew } from '@/api2/homePage';
 export default {
-  components: { FinanceIncome, SelectBatch, TotalSummary },
+  components: { FinanceIncome, TotalSummary },
   data() {
     return {
       showBar: true,

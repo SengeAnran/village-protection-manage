@@ -20,6 +20,15 @@ export const getCountVillage = (data) => {
     headers: { 'APPLICATION-ID': 4 },
   });
 };
+// 【首页】项目开工率
+export const getProjectRate = (data) => {
+  return axios.request({
+    method: 'post',
+    url: apiHost2 + `/api/workbench/index/projectRate`,
+    data,
+    headers: { 'APPLICATION-ID': 4 },
+  });
+};
 // 【首页】项目进度报送
 export const getProjectProgressReport = (params) => {
   return axios.request({

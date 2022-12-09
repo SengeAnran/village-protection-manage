@@ -55,7 +55,7 @@ export default {
     },
     legendLeft: {
       type: String,
-      default: '54%',
+      default: '50%',
     },
   },
   watch: {
@@ -104,6 +104,20 @@ export default {
           left: this.legendLeft,
           top: 'center',
           orient: 'vertical',
+          formatter: (name) => {
+            const item = this.list.find((d) => d.name === name);
+            // if (this.isPercent) {
+            //   return [`{name|${name}}`, `         {percent|${item.percent}}`].join('');
+            // } else {
+            //   return [`{name|${name}}`, `         {value|${item.value}${this.unit}}`].join('');
+            // }
+
+            return [
+              `{name|${name}}`,
+              `         {value|${item.value}${this.unit}}`,
+              `         {value|${item.percent}%}`,
+            ].join('');
+          },
           textStyle: {
             padding: [0, 0, 0, 8],
             rich: {
@@ -129,14 +143,6 @@ export default {
                 align: 'right',
               },
             },
-          },
-          formatter: (name) => {
-            const item = this.list.find((d) => d.name === name);
-            if (this.isPercent) {
-              return [`{name|${name}}`, `         {percent|${item.percent}}`].join('');
-            } else {
-              return [`{name|${name}}`, `         {value|${item.value}${this.unit}}`].join('');
-            }
           },
         },
         title: {
