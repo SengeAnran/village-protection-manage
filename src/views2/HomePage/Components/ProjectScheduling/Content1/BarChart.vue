@@ -19,11 +19,24 @@ export default {
       default: () => {
         return {
           name: '',
+          name1: '',
+          name2: '',
+          name3: '',
           xAxisData: [],
           dataList1: [],
           dataList2: [],
+          dataList3: [],
+          otherUnit: '',
         };
       },
+    },
+    hideTooltip: {
+      type: Boolean,
+      default: false,
+    },
+    hideLegend: {
+      type: Boolean,
+      default: false,
     },
   },
   name: 'CityEvolution',
@@ -35,9 +48,13 @@ export default {
       dataList2: [],
       dataList3: [],
       dataList4: [],
+      name1: '',
+      name2: '',
+      name3: '',
       data: [],
       timmerOneAnim: null,
-      unit: '个',
+      unit: '%',
+      otherUnit: '个',
     };
   },
   watch: {
@@ -96,8 +113,8 @@ export default {
           bottom: '15%',
         },
         legend: {
-          show: true,
-          data: ['审核通过', '待上报', '审核未通过'],
+          show: !this.hideLegend,
+          data: [this.name1], // 顶部样例
           right: 0,
           top: 0,
           textStyle: {
@@ -109,6 +126,8 @@ export default {
           itemHeight: 10,
         },
         tooltip: {
+          // 标签
+          show: !this.hideTooltip,
           trigger: 'axis',
           axisPointer: {
             // 坐标轴指示器配置项。
@@ -128,17 +147,22 @@ export default {
             // </div>`
             // let str = params[0].name + '<br />';
             let str = '';
-            // str += `&nbsp; &nbsp;  <em>申报总数</em>: ${params[0].value + params[1].value + params[2].value}${
-            //   this.unit
-            // }<br/>`;
             params.forEach((item) => {
-              str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
-                                    "></span>
-                                        ${item.seriesName}
-                                        :
-                                      ${item.value}${this.unit}
+              // str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
+              //                       "></span>
+              //                           ${item.seriesName}
+              //                           :
+              //                         ${item.value}${this.unit}
+              //                           <br/>`;
+              str += `<span style="font-size:16px;">&nbsp; &nbsp;${item.seriesName}:  &nbsp;&nbsp;${item.value}${this.unit}</span>
                                         <br/>`;
             });
+            str += `<span>&nbsp; &nbsp;  <em>${this.name2}</em>:  &nbsp;${this.dataList2[params[0].dataIndex]}${
+              this.otherUnit
+            }<br/></span>`;
+            str += `<span>&nbsp; &nbsp;  <em>${this.name3}</em>:  &nbsp;${this.dataList3[params[0].dataIndex]}${
+              this.otherUnit
+            }<br/></span>`;
             return str;
           },
         },
@@ -209,7 +233,7 @@ export default {
           {
             stack: 'AA',
             z: 1,
-            name: '已开工项目',
+            name: this.name1,
             data: this.dataList1,
             type: 'bar',
             barMaxWidth: 'auto',
@@ -257,35 +281,65 @@ export default {
             //   },
             // },
           },
-          {
-            stack: 'AA',
-            type: 'bar',
-            name: '未开工项目',
-            barWidth: 10,
-            itemStyle: {
-              color: '#FED887',
-              borderRadius: [2, 2, 0, 0],
-            },
-            label: {
-              show: false,
-              position: 'top',
-              distance: 10,
-              color: '#FFFFFF',
-              textStyle: {
-                fontSize: 22,
-              },
-            },
-            data: this.dataList2,
-          },
+          // {
+          //   stack: 'AA',
+          //   show: false,
+          //   type: 'bar',
+          //   name: this.name2,
+          //   barWidth: 10,
+          //   itemStyle: {
+          //     color: '#FED887',
+          //     borderRadius: [2, 2, 0, 0],
+          //   },
+          //   label: {
+          //     show: false,
+          //     position: 'top',
+          //     distance: 10,
+          //     color: '#FFFFFF',
+          //     textStyle: {
+          //       fontSize: 22,
+          //     },
+          //   },
+          //   data: this.dataList2,
+          // },
+          // {
+          //   stack: 'AA',
+          //   type: 'bar',
+          //   show: false,
+          //   name: this.name3,
+          //   barWidth: 10,
+          //   itemStyle: {
+          //     color: '#FED887',
+          //     borderRadius: [2, 2, 0, 0],
+          //   },
+          //   label: {
+          //     show: false,
+          //     position: 'top',
+          //     distance: 10,
+          //     color: '#FFFFFF',
+          //     textStyle: {
+          //       fontSize: 22,
+          //     },
+          //   },
+          //   data: this.dataList3,
+          // },
         ],
       };
       return option;
     },
     loadData() {
-      const { xAxisData, dataList1, dataList2 } = this.chartData;
+      const { xAxisData, dataList1, dataList2, dataList3, name1, name2, name3, otherUnit } = this.chartData;
       this.xAxisData = xAxisData;
       this.dataList1 = dataList1;
       this.dataList2 = dataList2;
+      this.dataList3 = dataList3;
+      this.name1 = name1;
+      this.name2 = name2;
+      this.name3 = name3;
+      if (otherUnit) {
+        this.otherUnit = otherUnit;
+      }
+
       this.setData();
     },
   },

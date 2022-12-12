@@ -4,7 +4,7 @@
       <PieChart v-if="showBar" :list="pieDataList" :isPercent="false" unit="个" totalUnit="个" minTitle="申报总数" />
     </div>
     <div class="right-content">
-      <BarChart v-if="showBar" key="1" :chart-data="chartData" />
+      <BaseBarChart v-if="showBar" key="1" :chart-data="chartData" />
     </div>
   </base-box-item>
 </template>
@@ -12,10 +12,9 @@
 <script>
 import { mapGetters } from 'vuex';
 import PieChart from './PieChart';
-import BarChart from './BarChart';
 import { getCountVillage } from '@/api2/homePage';
 export default {
-  components: { PieChart, BarChart },
+  components: { PieChart },
   data() {
     return {
       pieDataList: [
@@ -32,6 +31,10 @@ export default {
         dataList1: [],
         dataList2: [],
         dataList3: [],
+        name1: '审核通过',
+        name2: '待上报',
+        name3: '审核未通过',
+        unit: '个',
       },
       iconUrl: require('./icon.png'),
     };

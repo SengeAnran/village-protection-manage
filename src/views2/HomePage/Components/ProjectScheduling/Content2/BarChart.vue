@@ -7,6 +7,7 @@
 <script>
 import * as echarts from 'echarts';
 
+// import { getFinancePublicTrend } from '@/api/Overview/CityEvolution/api';
 export default {
   props: {
     batch: {
@@ -21,7 +22,6 @@ export default {
           name1: '',
           name2: '',
           name3: '',
-          unit: '',
           xAxisData: [],
           dataList1: [],
           dataList2: [],
@@ -39,6 +39,7 @@ export default {
       default: false,
     },
   },
+  name: 'CityEvolution',
   data() {
     return {
       charts: null,
@@ -72,6 +73,22 @@ export default {
   mounted() {
     const charts = this.$refs.charts;
     this.charts = echarts.init(charts);
+    // this.$nextTick(() => {
+    //   this.loadData();
+    // });
+
+    // var count = 0;
+    // if (this.timmerOneAnim) {
+    //   clearInterval(this.timmerOneAnim);
+    // }
+    // this.timmerOneAnim = setInterval(() => {
+    //   this.charts.dispatchAction({
+    //     type: 'showTip',
+    //     seriesIndex: 0,
+    //     dataIndex: count % this.dataList1.length,
+    //   });
+    //   count++;
+    // }, 4500);
   },
   methods: {
     setData() {
@@ -131,15 +148,21 @@ export default {
             // let str = params[0].name + '<br />';
             let str = '';
             params.forEach((item) => {
-              str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
-                                    "></span>
-                                        ${item.seriesName}
-                                        :
-                                      ${item.value}${this.unit}
-                                        <br/>`;
-              // str += `<span style="font-size:16px;">&nbsp; &nbsp;${item.seriesName}:  &nbsp;&nbsp;${item.value}${this.unit}</span>
+              // str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
+              //                       "></span>
+              //                           ${item.seriesName}
+              //                           :
+              //                         ${item.value}${this.unit}
               //                           <br/>`;
+              str += `<span style="font-size:16px;">&nbsp; &nbsp;${item.seriesName}:  &nbsp;&nbsp;${item.value}${this.unit}</span>
+                                        <br/>`;
             });
+            str += `<span>&nbsp; &nbsp;  <em>${this.name2}</em>:  &nbsp;${this.dataList2[params[0].dataIndex]}${
+              this.otherUnit
+            }<br/></span>`;
+            str += `<span>&nbsp; &nbsp;  <em>${this.name3}</em>:  &nbsp;${this.dataList3[params[0].dataIndex]}${
+              this.otherUnit
+            }<br/></span>`;
             return str;
           },
         },
@@ -258,36 +281,54 @@ export default {
             //   },
             // },
           },
+          // {
+          //   stack: 'AA',
+          //   show: false,
+          //   type: 'bar',
+          //   name: this.name2,
+          //   barWidth: 10,
+          //   itemStyle: {
+          //     color: '#FED887',
+          //     borderRadius: [2, 2, 0, 0],
+          //   },
+          //   label: {
+          //     show: false,
+          //     position: 'top',
+          //     distance: 10,
+          //     color: '#FFFFFF',
+          //     textStyle: {
+          //       fontSize: 22,
+          //     },
+          //   },
+          //   data: this.dataList2,
+          // },
+          // {
+          //   stack: 'AA',
+          //   type: 'bar',
+          //   show: false,
+          //   name: this.name3,
+          //   barWidth: 10,
+          //   itemStyle: {
+          //     color: '#FED887',
+          //     borderRadius: [2, 2, 0, 0],
+          //   },
+          //   label: {
+          //     show: false,
+          //     position: 'top',
+          //     distance: 10,
+          //     color: '#FFFFFF',
+          //     textStyle: {
+          //       fontSize: 22,
+          //     },
+          //   },
+          //   data: this.dataList3,
+          // },
         ],
       };
-      if (this.dataList2 && this.dataList2.length > 0) {
-        option.series.push({
-          stack: 'BB',
-          show: false,
-          type: 'bar',
-          name: this.name2,
-          barWidth: 10,
-          itemStyle: {
-            color: '#FED887',
-            borderRadius: [2, 2, 0, 0],
-          },
-          label: {
-            show: false,
-            position: 'top',
-            distance: 10,
-            color: '#FFFFFF',
-            textStyle: {
-              fontSize: 22,
-            },
-          },
-          data: this.dataList2,
-        });
-        option.legend.data.push(this.name2);
-      }
       return option;
     },
     loadData() {
-      const { xAxisData, dataList1, dataList2, dataList3, name1, name2, name3, otherUnit, unit } = this.chartData;
+      const { xAxisData, dataList1, dataList2, dataList3, name1, name2, name3, otherUnit } = this.chartData;
       this.xAxisData = xAxisData;
       this.dataList1 = dataList1;
       this.dataList2 = dataList2;
@@ -297,9 +338,6 @@ export default {
       this.name3 = name3;
       if (otherUnit) {
         this.otherUnit = otherUnit;
-      }
-      if (unit) {
-        this.unit = unit;
       }
 
       this.setData();
@@ -313,7 +351,7 @@ export default {
   width: 100%;
   height: 100%;
   padding-top: 20px;
-  padding-left: 12px;
+  padding-left: 20px;
   box-sizing: border-box;
   .line_charts {
     height: 100%;

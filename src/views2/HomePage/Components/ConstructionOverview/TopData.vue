@@ -18,7 +18,8 @@
 </template>
 
 <script>
-import { getPreviewsNum } from '@/api2/homePage';
+import { getConstructionOverview } from '@/api2/homePage';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'TopData',
@@ -58,15 +59,30 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapGetters(['area', 'location', 'batch']),
+  },
+  watch: {
+    area() {
+      this.getData();
+    },
+    batch() {
+      this.getData();
+    },
+  },
   mounted() {
     this.getData();
   },
   methods: {
     getData() {
-      getPreviewsNum().then((res) => {
-        this.dataList[0].num = res.totalNum;
-        this.dataList[1].num = res.buildingNum;
-        this.dataList[2].num = res.completeNum;
+      const data = {
+        batch: this.batch,
+        ...this.location,
+      };
+      getConstructionOverview(data).then((res) => {
+        this.dataList[0].num = res.totalNumberCreated;
+        this.dataList[1].num = res.numberUnderConstruction;
+        this.dataList[2].num = res.acceptanceNumber;
       });
     },
   },

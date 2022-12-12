@@ -38,7 +38,7 @@ export default {
         areaId: '',
         declarationBatch: '全部批次',
       },
-      titleList: ['建设概况', '创建申报', '项目调度', '项目调度'],
+      titleList: ['建设概况', '创建申报', '项目调度', '验收评价'],
       activeIndex: 0,
       batchOpt: [
         {

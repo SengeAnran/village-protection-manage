@@ -7,15 +7,15 @@
         <ConstructionOverview />
       </BaseBox>
       <BaseBox>
+        <!--        创建申报-->
         <ConstructionDeclaration />
       </BaseBox>
       <BaseBox>
         <!--        项目调度-->
         <ProjectScheduling />
-        <ProgressSubmission />
       </BaseBox>
       <BaseBox>
-        <div class="box-title">验收评价</div>
+        <!--        验收评价-->
         <AcceptanceEvaluation />
       </BaseBox>
     </div>
@@ -28,7 +28,6 @@ import ProjectScheduling from './Components/ProjectScheduling';
 import BaseBox from './Components/BaseBox';
 import TopFixedBox from './Components/TopFixedBox.vue';
 import ConstructionDeclaration from './Components/ConstructionDeclaration';
-import ProgressSubmission from './Components/ProgressSubmission';
 import AcceptanceEvaluation from './Components/AcceptanceEvaluation';
 // import ExcellentCases from './Components/ExcellentCases';
 export default {
@@ -37,7 +36,6 @@ export default {
     TopFixedBox,
     ConstructionOverview,
     ConstructionDeclaration,
-    ProgressSubmission,
     AcceptanceEvaluation,
     // ExcellentCases,
     BaseBox,

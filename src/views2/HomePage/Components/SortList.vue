@@ -147,7 +147,7 @@ export default {
     display: flex;
     align-items: center;
     .name {
-      min-width: 35px;
+      min-width: 50px;
       font-size: 12px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;

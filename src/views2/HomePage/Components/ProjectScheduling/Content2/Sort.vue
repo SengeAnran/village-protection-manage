@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import SortList from '../SortList';
+import SortList from '../../SortList';
 import { mapGetters } from 'vuex';
 import { getRanking } from '@/api2/homePage';
 export default {

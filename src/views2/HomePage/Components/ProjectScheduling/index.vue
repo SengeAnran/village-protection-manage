@@ -1,126 +1,25 @@
 <template>
   <div class="project-scheduling">
-    <button class="change-button"><span>首末排名</span></button>
-    <div v-if="activeIndex">
-      <base-box-item name="项目开工率" :count="total" unit="%" :icon="iconUrl" :fixed="1">
-        <div class="left-content">
-          <TotalTitle class="rall-num" name="项目总数" :count="otherNumber" unit="个" />
-          <PieChart
-            v-if="showBar"
-            :list="pieDataList"
-            :isPercent="false"
-            unit="个"
-            totalUnit="个"
-            minTitle="申报总数"
-          />
-        </div>
-        <div class="right-content">
-          <BarChart v-if="showBar" key="1" :chart-data="chartData" />
-        </div>
-      </base-box-item>
-      <base-box-item name="投资完成率" :count="total" unit="%" :icon="iconUrl2" :fixed="1">
-        <div class="left-content">
-          <!--          <TotalSummary :data="data" />-->
-        </div>
-        <div class="right-content">
-          <BarChart v-if="showBar" key="1" :chart-data="chartData" />
-        </div>
-      </base-box-item>
-    </div>
+    <button class="change-button" @click="activeIndex = !activeIndex">
+      <span>{{ activeIndex ? '首末排名' : '关键指标' }}</span>
+    </button>
+    <Content1 v-if="activeIndex"></Content1>
+    <Content2 v-if="!activeIndex"></Content2>
+    <!-- 报送预警   -->
+    <SubmitEarlyWarn />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import PieChart from './PieChart';
-import BarChart from './BarChart';
-import TotalTitle from './TotalTitle';
-import { getCountVillage, getProjectRate } from '@/api2/homePage';
+import Content1 from '@/views2/HomePage/Components/ProjectScheduling/Content1/index';
+import Content2 from '@/views2/HomePage/Components/ProjectScheduling/Content2/index';
+import SubmitEarlyWarn from './SubmitEarlyWarn/index';
 export default {
-  components: { PieChart, BarChart, TotalTitle },
+  components: { Content1, Content2, SubmitEarlyWarn },
   data() {
     return {
-      pieDataList: [
-        { name: '已开工项目', value: 0, percent: 0 },
-        { name: '未开工项目', value: 0, percent: 0 },
-      ],
-      otherNumber: 0,
-      total: 0,
-      showBar: true,
-      flag: true,
-      chartData: {
-        name: '各地市项目开工情况',
-        xAxisData: [],
-        dataList1: [],
-        dataList2: [],
-      },
-      iconUrl: require('./icon.png'),
-      iconUrl2: require('./icon2.png'),
       activeIndex: true,
     };
-  },
-  computed: {
-    ...mapGetters(['area', 'location', 'batch']),
-  },
-  watch: {
-    area() {
-      this.getData();
-    },
-    batch() {
-      this.getData();
-    },
-  },
-  mounted() {
-    this.getData();
-    window.addEventListener('resize', () => {
-      if (this.flag) {
-        this.flag = false;
-        this.showBar = false;
-        setTimeout(() => {
-          this.flag = true;
-          this.showBar = true;
-        }, 200);
-      }
-    });
-  },
-  methods: {
-    getData() {
-      const data = {
-        batch: this.batch,
-        ...this.location,
-      };
-      getProjectRate(data).then((res) => {
-        this.pieDataList[0].value = res.startNum;
-        this.pieDataList[0].percent = (res.startRate * 100).toFixed(1);
-        this.pieDataList[1].percent = (res.notStartRate * 100).toFixed(1);
-        this.pieDataList[1].value = res.notStartNum;
-        this.total = res.startRate * 100;
-        this.otherNumber = res.projectNum;
-        this.chartData.xAxisData = res.projectCommencementRates.map((i) => {
-          return i.name;
-        });
-        this.chartData.dataList1 = res.projectCommencementRates.map((i) => {
-          return i.startNum;
-        });
-        this.chartData.dataList2 = res.projectCommencementRates.map((i) => {
-          return i.notStartNum;
-        });
-      });
-      getCountVillage(data).then((res) => {
-        this.chartData.xAxisData = res.cityCountVOList.map((i) => {
-          return i.name;
-        });
-        this.chartData.dataList1 = res.cityCountVOList.map((i) => {
-          return i.passTotalCount;
-        });
-        this.chartData.dataList2 = res.cityCountVOList.map((i) => {
-          return i.readyPassTotalCount;
-        });
-        this.chartData.dataList3 = res.cityCountVOList.map((i) => {
-          return i.noPassTotalCount;
-        });
-      });
-    },
   },
 };
 </script>

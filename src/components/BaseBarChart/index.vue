@@ -7,6 +7,7 @@
 <script>
 import * as echarts from 'echarts';
 
+// import { getFinancePublicTrend } from '@/api/Overview/CityEvolution/api';
 export default {
   props: {
     batch: {
@@ -18,27 +19,20 @@ export default {
       default: () => {
         return {
           name: '',
-          name1: '',
-          name2: '',
-          name3: '',
-          unit: '',
           xAxisData: [],
           dataList1: [],
           dataList2: [],
           dataList3: [],
+          name1: '',
+          name2: '',
+          name3: '',
+          unit: '',
           otherUnit: '',
         };
       },
     },
-    hideTooltip: {
-      type: Boolean,
-      default: false,
-    },
-    hideLegend: {
-      type: Boolean,
-      default: false,
-    },
   },
+  name: 'CityEvolution',
   data() {
     return {
       charts: null,
@@ -47,13 +41,10 @@ export default {
       dataList2: [],
       dataList3: [],
       dataList4: [],
-      name1: '',
-      name2: '',
-      name3: '',
       data: [],
       timmerOneAnim: null,
-      unit: '%',
-      otherUnit: '个',
+      unit: '个',
+      colors: ['#1492FF', '#FED887', '#FF9D9D'],
     };
   },
   watch: {
@@ -72,6 +63,22 @@ export default {
   mounted() {
     const charts = this.$refs.charts;
     this.charts = echarts.init(charts);
+    // this.$nextTick(() => {
+    //   this.loadData();
+    // });
+
+    // var count = 0;
+    // if (this.timmerOneAnim) {
+    //   clearInterval(this.timmerOneAnim);
+    // }
+    // this.timmerOneAnim = setInterval(() => {
+    //   this.charts.dispatchAction({
+    //     type: 'showTip',
+    //     seriesIndex: 0,
+    //     dataIndex: count % this.dataList1.length,
+    //   });
+    //   count++;
+    // }, 4500);
   },
   methods: {
     setData() {
@@ -96,8 +103,8 @@ export default {
           bottom: '15%',
         },
         legend: {
-          show: !this.hideLegend,
-          data: [this.name1], // 顶部样例
+          show: true,
+          data: [this.name1, this.name2, this.name3],
           right: 0,
           top: 0,
           textStyle: {
@@ -109,8 +116,6 @@ export default {
           itemHeight: 10,
         },
         tooltip: {
-          // 标签
-          show: !this.hideTooltip,
           trigger: 'axis',
           axisPointer: {
             // 坐标轴指示器配置项。
@@ -130,6 +135,9 @@ export default {
             // </div>`
             // let str = params[0].name + '<br />';
             let str = '';
+            // str += `&nbsp; &nbsp;  <em>申报总数</em>: ${params[0].value + params[1].value + params[2].value}${
+            //   this.unit
+            // }<br/>`;
             params.forEach((item) => {
               str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
                                     "></span>
@@ -137,8 +145,6 @@ export default {
                                         :
                                       ${item.value}${this.unit}
                                         <br/>`;
-              // str += `<span style="font-size:16px;">&nbsp; &nbsp;${item.seriesName}:  &nbsp;&nbsp;${item.value}${this.unit}</span>
-              //                           <br/>`;
             });
             return str;
           },
@@ -234,7 +240,7 @@ export default {
               //     },
               //   ],
               // },
-              color: '#1492FF',
+              color: this.colors[0],
               borderRadius: [2, 2, 0, 0],
             },
             label: {
@@ -258,50 +264,85 @@ export default {
             //   },
             // },
           },
-        ],
-      };
-      if (this.dataList2 && this.dataList2.length > 0) {
-        option.series.push({
-          stack: 'BB',
-          show: false,
-          type: 'bar',
-          name: this.name2,
-          barWidth: 10,
-          itemStyle: {
-            color: '#FED887',
-            borderRadius: [2, 2, 0, 0],
+          {
+            stack: 'AA',
+            type: 'bar',
+            name: this.name2,
+            barWidth: 10,
+            itemStyle: {
+              color: this.colors[1],
+              borderRadius: [2, 2, 0, 0],
+            },
+            label: {
+              show: false,
+              position: 'top',
+              distance: 10,
+              color: '#FFFFFF',
+              textStyle: {
+                fontSize: 22,
+              },
+            },
+            data: this.dataList2,
           },
-          label: {
-            show: false,
-            position: 'top',
-            distance: 10,
-            color: '#FFFFFF',
-            textStyle: {
-              fontSize: 22,
+          {
+            stack: 'AA',
+            z: 1,
+            name: this.name3,
+            data: this.dataList3,
+            type: 'bar',
+            barMaxWidth: 'auto',
+            barWidth: 10,
+            itemStyle: {
+              // color: {
+              //   x: 0,
+              //   y: 0,
+              //   x2: 0,
+              //   y2: 1,
+              //   type: 'linear',
+              //   global: false,
+              //   colorStops: [
+              //     {
+              //       offset: 0,
+              //       color: '#90E4FA',
+              //     },
+              //     {
+              //       offset: 1,
+              //       color: '#8CE1F9',
+              //     },
+              //   ],
+              // },
+              color: this.colors[2],
+              borderRadius: [2, 2, 0, 0],
+            },
+            label: {
+              show: false,
+              position: 'top',
+              distance: 10,
+              color: '#fff',
             },
           },
-          data: this.dataList2,
-        });
-        option.legend.data.push(this.name2);
-      }
+        ],
+      };
       return option;
     },
     loadData() {
-      const { xAxisData, dataList1, dataList2, dataList3, name1, name2, name3, otherUnit, unit } = this.chartData;
+      const { xAxisData, dataList1, dataList2, dataList3, dataList4, name1, name2, name3, otherUnit, unit, colors } =
+        this.chartData;
       this.xAxisData = xAxisData;
       this.dataList1 = dataList1;
       this.dataList2 = dataList2;
       this.dataList3 = dataList3;
+      this.dataList4 = dataList4;
       this.name1 = name1;
       this.name2 = name2;
       this.name3 = name3;
+      this.unit = unit;
       if (otherUnit) {
         this.otherUnit = otherUnit;
       }
-      if (unit) {
-        this.unit = unit;
+      if (colors && colors.length > 0) {
+        this.colors = colors;
       }
-
       this.setData();
     },
   },
@@ -313,7 +354,7 @@ export default {
   width: 100%;
   height: 100%;
   padding-top: 20px;
-  padding-left: 12px;
+  padding-left: 20px;
   box-sizing: border-box;
   .line_charts {
     height: 100%;
