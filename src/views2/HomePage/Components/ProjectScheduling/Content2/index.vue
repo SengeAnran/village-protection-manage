@@ -2,15 +2,15 @@
   <div class="content">
     <base-box-item name="项目开工率" :count="total" unit="%" :icon="iconUrl" :fixed="1">
       <div class="left-content">
-        <Sort />
+        <Sort :list-data="dataList1" name="县（市、区）开工率排名" @changeType="changeType1" />
       </div>
       <div class="right-content">
-        <Sort />
+        <Sort name="村庄开工率排名" />
       </div>
     </base-box-item>
     <base-box-item name="投资完成率" style="margin-top: 30px" :count="total2" unit="%" :icon="iconUrl2" :fixed="1">
       <div class="left-content">
-        <Sort />
+        <Sort name="县（市、区）投资完成率排名" />
       </div>
       <div class="right-content">
         <Sort />
@@ -31,52 +31,28 @@
 <script>
 import { mapGetters } from 'vuex';
 import Sort from './Sort';
-import { getProgressReport, getProgressReportTotal, getProjectRate } from '@/api2/homePage';
+import {
+  getProgressReport,
+  getProgressReportTotal,
+  getProjectCommencementRate5thPro,
+  getProjectRate,
+} from '@/api2/homePage';
 export default {
   components: { Sort },
   data() {
     return {
-      pieDataList: [
-        { name: '已开工项目', value: 0, percent: 0 },
-        { name: '未开工项目', value: 0, percent: 0 },
-      ],
-      data: {},
-      otherNumber: 0,
       total: 0,
       total2: 0,
       total3: 0,
-      showBar: true,
-      flag: true,
-      chartData: {
-        name: '各地市项目开工情况',
-        xAxisData: [],
-        name1: '项目开工率',
-        name2: '已开工项目数',
-        name3: '未开工项目数',
-        dataList1: [],
-        dataList2: [],
-        dataList3: [],
-      },
-      chartData2: {
-        name: '各地市项目投资完成情况',
-        name1: '投资完成率',
-        name2: '计划投资',
-        name3: '完成投资',
-        otherUnit: '万元',
-        xAxisData: [],
-        dataList1: [],
-        dataList2: [],
-        dataList3: [],
-      },
-      chartData3: {
-        name: '各地市总体进度情况',
-        name1: '投资完成率',
-        xAxisData: [],
-        dataList1: [],
-      },
       iconUrl: require('./icon.png'),
       iconUrl2: require('./icon2.png'),
       iconUrl3: require('./icon3.png'),
+      dataList1: [],
+      dataList2: [],
+      dataList3: [],
+      dataList4: [],
+      dataList5: [],
+      dataList6: [],
     };
   },
   computed: {
@@ -157,6 +133,39 @@ export default {
       });
       //
     },
+    changeType1(val = true) {
+      const data = {
+        batch: this.batch,
+        ...this.location,
+        order: val ? 0 : 1,
+      };
+      getProjectCommencementRate5thPro(data).then((res) => {
+        this.dataList1 = res.map((i) => {
+          return {
+            name: i.name,
+            value: i.rate || 0,
+            unit: '%',
+            tapList: [
+              {
+                name: '项目开工率',
+                value: i.rate || 0,
+                unit: '%',
+              },
+              {
+                name: '已开工项目数',
+                value: i.startNum || 0,
+                unit: '个',
+              },
+              {
+                name: '未开工项目数',
+                value: i.notNum || 0,
+                unit: '个',
+              },
+            ],
+          };
+        });
+      });
+    },
   },
 };
 </script>
@@ -194,11 +203,7 @@ export default {
     flex: 1;
     height: 239px;
     //background-color: pink;
-    .rall-num {
-      position: absolute;
-      top: 50px;
-      left: 51.5%;
-    }
+    margin-right: 32px;
   }
   .right-content {
     flex: 1;

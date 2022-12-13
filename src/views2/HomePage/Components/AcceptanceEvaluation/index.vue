@@ -5,7 +5,7 @@
         <PieChart v-if="showBar" :list="pieDataList" :isPercent="false" unit="个" totalUnit="个" minTitle="申报总数" />
       </div>
       <div class="right-content">
-        <BaseBarChart v-if="showBar" key="1" :chart-data="chartData" />
+        <BaseBarChart v-if="showBar" key="1" :chart-data="chartData" @goDetail="goDetail" />
       </div>
     </base-box-item>
     <base-box-item name="评价等次总数" style="margin-top: 30px" :count="total2" unit="个" :icon="iconUrl2">
@@ -21,24 +21,28 @@
         />
       </div>
       <div class="right-content">
-        <BaseBarChart v-if="showBar" key="1" :chart-data="chartData2" />
+        <BaseBarChart v-if="showBar" key="1" :chart-data="chartData2" @goDetail="goDetail2" />
       </div>
     </base-box-item>
     <base-box-item name="成效评分" style="margin-top: 30px" :icon="iconUrl3" hideNum>
       <div class="all-content">
-        <BarChart v-if="showBar" key="2" :chart-data="chartData3" />
+        <el-select v-model="fraction" placeholder="请选择" @change="batchChange">
+          <el-option v-for="item in batchOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+        </el-select>
+        <BarChart v-if="showBar" key="2" :chart-data="chartData3" @goDetail="goDetail2" />
       </div>
     </base-box-item>
     <base-box-item name="“一老一小”服务场景建设情况" style="margin-top: 30px" :icon="iconUrl4" hideNum>
       <div class="all-content">
         <label-info style="margin-top: 24px; margin-left: 20px" label="服务场景建设数" :num="total4" unit="个" />
-        <BarChart v-if="showBar" key="3" :chart-data="chartData4" hideLegend />
+        <BarChart v-if="showBar" key="3" :chart-data="chartData4" @goDetail="goDetail2" hideLegend />
       </div>
     </base-box-item>
   </section>
 </template>
 
 <script>
+import { selectOpt } from './data';
 import { mapGetters } from 'vuex';
 import PieChart from './PieChart';
 import BarChart from './BarChart';
@@ -100,10 +104,16 @@ export default {
         xAxisData: [],
         dataList1: [],
       },
+      listData: [],
+      listData2: [],
+      listData3: [],
+      listData4: [],
       iconUrl: require('./icon.png'),
       iconUrl2: require('./icon2.png'),
       iconUrl3: require('./icon3.png'),
       iconUrl4: require('./icon4.png'),
+      fraction: 0, //分数统计规则
+      batchOpt: selectOpt,
     };
   },
   computed: {
@@ -132,58 +142,105 @@ export default {
   },
   methods: {
     getData() {
+      this.fraction = 0;
       const data = {
         batch: this.batch,
         ...this.location,
       };
       getAcceptanceStatistics(data).then((res) => {
-        this.chartData.xAxisData = res.cityCountVOList.map((i) => {
-          return i.name;
-        });
-        this.chartData.dataList1 = res.cityCountVOList.map((i) => {
-          return i.passTotalCount;
-        });
-        this.chartData.dataList2 = res.cityCountVOList.map((i) => {
-          return i.readyPassTotalCount;
-        });
-        this.chartData.dataList3 = res.cityCountVOList.map((i) => {
-          return i.noPassTotalCount;
-        });
+        const { cityCountVOList } = res;
+        if (cityCountVOList) {
+          this.listData = cityCountVOList;
+          this.chartData.xAxisData = cityCountVOList.map((i) => {
+            return i.name;
+          });
+          this.chartData.dataList1 = cityCountVOList.map((i) => {
+            return i.passTotalCount;
+          });
+          this.chartData.dataList2 = cityCountVOList.map((i) => {
+            return i.readyPassTotalCount;
+          });
+          this.chartData.dataList3 = cityCountVOList.map((i) => {
+            return i.noPassTotalCount;
+          });
+        }
         this.pieDataList[0].value = res.passTotalCount;
         this.pieDataList[1].value = res.readyPassTotalCount;
         this.pieDataList[2].value = res.noPassTotalCount;
         this.total = res.declarationTotalCount;
       });
       getEvaluationGradeCount(data).then((res) => {
-        this.chartData2.xAxisData = res.gradeVOS.map((i) => {
-          return i.name;
-        });
-        this.chartData4.xAxisData = this.chartData2.xAxisData;
-        this.chartData3.xAxisData = this.chartData2.xAxisData;
-        this.chartData4.dataList1 = res.gradeVOS.map((i) => {
-          return i.oldSmallReportNum;
-        });
-        this.chartData3.dataList1 = res.gradeVOS.map((i) => {
-          return i.totalCounty;
-        });
-        this.chartData3.dataList2 = res.gradeVOS.map((i) => {
-          return i.totalCity;
-        });
-        this.chartData2.dataList1 = res.gradeVOS.map((i) => {
-          return i.excellent;
-        });
-        this.chartData2.dataList2 = res.gradeVOS.map((i) => {
-          return i.good;
-        });
-        this.chartData2.dataList3 = res.gradeVOS.map((i) => {
-          return i.qualified;
-        });
+        const { gradeVOS } = res;
+        if (gradeVOS) {
+          this.listData2 = gradeVOS;
+          this.chartData2.xAxisData = gradeVOS.map((i) => {
+            return i.name;
+          });
+          this.chartData4.xAxisData = this.chartData2.xAxisData;
+          this.chartData3.xAxisData = this.chartData2.xAxisData;
+          this.chartData4.dataList1 = gradeVOS.map((i) => {
+            return i.oldSmallReportNum;
+          });
+          this.chartData3.dataList1 = gradeVOS.map((i) => {
+            return i.totalCounty;
+          });
+          this.chartData3.dataList2 = gradeVOS.map((i) => {
+            return i.totalCity;
+          });
+          this.chartData2.dataList1 = gradeVOS.map((i) => {
+            return i.excellent;
+          });
+          this.chartData2.dataList2 = gradeVOS.map((i) => {
+            return i.good;
+          });
+          this.chartData2.dataList3 = gradeVOS.map((i) => {
+            return i.qualified;
+          });
+        }
         this.pieDataList2[0].value = res.excellent;
         this.pieDataList2[1].value = res.good;
         this.pieDataList2[2].value = res.qualified;
         this.total2 = res.excellent + res.good + res.qualified;
         this.total4 = Number(res.oldSmallReportNum);
       });
+    },
+    goDetail(name) {
+      const index = this.listData.findIndex((i) => i.name === name);
+      console.log(this.listData[index]);
+    },
+    goDetail2(name) {
+      const index = this.listData2.findIndex((i) => i.name === name);
+      console.log(this.listData[index]);
+    },
+    getEffectivenessData(val) {
+      const data = {
+        batch: this.batch,
+        fraction: val,
+        ...this.location,
+      };
+      getEvaluationGradeCount(data).then((res) => {
+        const { gradeVOS } = res;
+        if (gradeVOS) {
+          this.listData2 = gradeVOS;
+          this.chartData3.xAxisData = gradeVOS.map((i) => {
+            return i.name;
+          });
+          this.chartData3.dataList1 = gradeVOS.map((i) => {
+            return i.totalCounty;
+          });
+          this.chartData3.dataList2 = gradeVOS.map((i) => {
+            return i.totalCity;
+          });
+        }
+        this.pieDataList2[0].value = res.excellent;
+        this.pieDataList2[1].value = res.good;
+        this.pieDataList2[2].value = res.qualified;
+        this.total2 = res.excellent + res.good + res.qualified;
+        this.total4 = Number(res.oldSmallReportNum);
+      });
+    },
+    batchChange(val) {
+      this.getEffectivenessData(val);
     },
   },
 };
@@ -205,5 +262,11 @@ export default {
 .all-content {
   flex: 1;
   min-height: 219px;
+  position: relative;
+  .el-select {
+    position: absolute;
+    top: -20px;
+    right: 5px;
+  }
 }
 </style>

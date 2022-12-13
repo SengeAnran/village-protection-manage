@@ -4,7 +4,7 @@
       <PieChart v-if="showBar" :list="pieDataList" :isPercent="false" unit="个" totalUnit="个" minTitle="申报总数" />
     </div>
     <div class="right-content">
-      <BaseBarChart v-if="showBar" key="1" :chart-data="chartData" />
+      <BaseBarChart v-if="showBar" key="1" :chart-data="chartData" @goDetail="goDetail" />
     </div>
   </base-box-item>
 </template>
@@ -36,6 +36,7 @@ export default {
         name3: '审核未通过',
         unit: '个',
       },
+      listData: [],
       iconUrl: require('./icon.png'),
     };
   },
@@ -70,23 +71,37 @@ export default {
         ...this.location,
       };
       getCountVillage(data).then((res) => {
-        this.chartData.xAxisData = res.cityCountVOList.map((i) => {
-          return i.name;
-        });
-        this.chartData.dataList1 = res.cityCountVOList.map((i) => {
-          return i.passTotalCount;
-        });
-        this.chartData.dataList2 = res.cityCountVOList.map((i) => {
-          return i.readyPassTotalCount;
-        });
-        this.chartData.dataList3 = res.cityCountVOList.map((i) => {
-          return i.noPassTotalCount;
-        });
+        const { cityCountVOList } = res;
+        if (cityCountVOList && cityCountVOList.length > 0) {
+          this.listData = cityCountVOList;
+          this.chartData.xAxisData = cityCountVOList.map((i) => {
+            return i.name;
+          });
+          this.chartData.dataList1 = cityCountVOList.map((i) => {
+            return i.passTotalCount;
+          });
+          this.chartData.dataList2 = cityCountVOList.map((i) => {
+            return i.readyPassTotalCount;
+          });
+          this.chartData.dataList3 = cityCountVOList.map((i) => {
+            return i.noPassTotalCount;
+          });
+        } else {
+          this.chartData.xAxisData = [];
+          this.chartData.dataList1 = [];
+          this.chartData.dataList2 = [];
+          this.chartData.dataList3 = [];
+        }
+
         this.pieDataList[0].value = res.passTotalCount;
         this.pieDataList[1].value = res.readyPassTotalCount;
         this.pieDataList[2].value = res.noPassTotalCount;
         this.total = res.passTotalCount + res.readyPassTotalCount + res.noPassTotalCount;
       });
+    },
+    goDetail(name) {
+      const index = this.listData.findIndex((i) => i.name === name);
+      console.log(this.listData[index]);
     },
   },
 };

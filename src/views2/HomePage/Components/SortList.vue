@@ -46,41 +46,6 @@ export default {
             value: 33,
             unit: '个',
           },
-          {
-            name: '杭州',
-            value: 15,
-            unit: '个',
-          },
-          {
-            name: '杭州',
-            value: 37,
-            unit: '个',
-          },
-          {
-            name: '湖州',
-            value: 33,
-            unit: '个',
-          },
-          {
-            name: '杭州',
-            value: 15,
-            unit: '个',
-          },
-          {
-            name: '杭州',
-            value: 37,
-            unit: '个',
-          },
-          {
-            name: '湖州',
-            value: 33,
-            unit: '个',
-          },
-          {
-            name: '杭州',
-            value: 15,
-            unit: '个',
-          },
         ];
       },
     },

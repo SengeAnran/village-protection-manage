@@ -1,6 +1,10 @@
 <template>
   <div class="bar-chart">
-    <div class="line_charts" ref="charts"></div>
+    <div
+      class="line_charts"
+      ref="charts"
+      :style="{ zoom: zoom, transform: `scale(${1 / zoom}, ${1 / zoom})`, transformOrigin: '0 0' }"
+    ></div>
   </div>
 </template>
 
@@ -45,6 +49,7 @@ export default {
       timmerOneAnim: null,
       unit: '个',
       colors: ['#1492FF', '#FED887', '#FF9D9D'],
+      zoom: 1,
     };
   },
   watch: {
@@ -63,6 +68,9 @@ export default {
   mounted() {
     const charts = this.$refs.charts;
     this.charts = echarts.init(charts);
+
+    // 消除zoom缩放导致鼠标偏移
+    this.zoom = 1 / document.body.style.zoom;
     // this.$nextTick(() => {
     //   this.loadData();
     // });
@@ -84,6 +92,11 @@ export default {
     setData() {
       this.charts.clear();
       this.charts.setOption(this.getOptions());
+      this.charts.on('click', (params) => {
+        if (params.name) {
+          this.$emit('goDetail', params.name);
+        }
+      });
     },
     getOptions() {
       const option = {

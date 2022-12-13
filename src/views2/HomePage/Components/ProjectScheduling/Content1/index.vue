@@ -6,7 +6,7 @@
         <PieChart v-if="showBar" :list="pieDataList" :isPercent="false" unit="个" totalUnit="个" minTitle="申报总数" />
       </div>
       <div class="right-content">
-        <BarChart v-if="showBar" key="1" :chart-data="chartData" />
+        <BarChart v-if="showBar" key="1" :chart-data="chartData" @goDetail="goDetail" />
       </div>
     </base-box-item>
     <base-box-item name="投资完成率" style="margin-top: 30px" :count="total2" unit="%" :icon="iconUrl2" :fixed="1">
@@ -14,13 +14,13 @@
         <TotalSummary :data="data" />
       </div>
       <div class="right-content">
-        <BarChart v-if="showBar" key="1" :chart-data="chartData2" />
+        <BarChart v-if="showBar" key="1" :chart-data="chartData2" @goDetail="goDetail2" />
       </div>
     </base-box-item>
 
     <base-box-item name="总体进度" style="margin-top: 30px" :count="total3" unit="%" :icon="iconUrl3" :fixed="1">
       <div class="all-content">
-        <BarChart v-if="showBar" key="1" :chart-data="chartData3" hideTooltip hideLegend />
+        <BarChart v-if="showBar" key="1" :chart-data="chartData3" hideTooltip hideLegend @goDetail="goDetail2" />
       </div>
     </base-box-item>
   </div>
@@ -75,6 +75,8 @@ export default {
         xAxisData: [],
         dataList1: [],
       },
+      listData: [],
+      listData2: [],
       iconUrl: require('./icon.png'),
       iconUrl2: require('./icon2.png'),
       iconUrl3: require('./icon3.png'),
@@ -118,18 +120,22 @@ export default {
         this.pieDataList[1].value = res.notStartNum;
         this.total = res.startRate * 100;
         this.otherNumber = res.projectNum;
-        this.chartData.xAxisData = res.projectCommencementRates.map((i) => {
-          return i.name;
-        });
-        this.chartData.dataList1 = res.projectCommencementRates.map((i) => {
-          return (i.rate * 100).toFixed(1) || 0;
-        });
-        this.chartData.dataList2 = res.projectCommencementRates.map((i) => {
-          return i.startNum;
-        });
-        this.chartData.dataList3 = res.projectCommencementRates.map((i) => {
-          return i.notStartNum;
-        });
+        const { projectCommencementRates } = res;
+        if (projectCommencementRates) {
+          this.listData = projectCommencementRates;
+          this.chartData.xAxisData = projectCommencementRates.map((i) => {
+            return i.name;
+          });
+          this.chartData.dataList1 = projectCommencementRates.map((i) => {
+            return (i.rate * 100).toFixed(1) || 0;
+          });
+          this.chartData.dataList2 = projectCommencementRates.map((i) => {
+            return i.startNum;
+          });
+          this.chartData.dataList3 = projectCommencementRates.map((i) => {
+            return i.notStartNum;
+          });
+        }
       });
       //投资完成率
       getProgressReportTotal(data).then((res) => {
@@ -143,6 +149,7 @@ export default {
           return i.name;
         });
         this.chartData3.xAxisData = this.chartData2.xAxisData;
+        this.listData2 = res;
         this.chartData2.dataList1 = res.map((i) => {
           return (i.rate * 100).toFixed(1) || 0;
         });
@@ -171,6 +178,14 @@ export default {
       //     return i.noPassTotalCount;
       //   });
       // });
+    },
+    goDetail(name) {
+      const index = this.listData.findIndex((i) => i.name === name);
+      console.log(this.listData[index]);
+    },
+    goDetail2(name) {
+      const index = this.listData2.findIndex((i) => i.name === name);
+      console.log(this.listData[index]);
     },
   },
 };

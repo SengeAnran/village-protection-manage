@@ -1,54 +1,71 @@
 <template>
   <div class="sort">
-    <base-min-title>各地市未来乡村创建数排名</base-min-title>
+    <div class="btns">
+      <button :class="{ active: activeIndex }" @click="changeType(true)">前五名</button>
+      <button :class="{ active: !activeIndex }" @click="changeType(false)">后五名</button>
+    </div>
+    <base-min-title>{{ name }}</base-min-title>
     <SortList :listData="listData"></SortList>
   </div>
 </template>
 
 <script>
 import SortList from '../../SortList';
-import { mapGetters } from 'vuex';
-import { getRanking } from '@/api2/homePage';
 export default {
   name: 'Sort',
+  props: {
+    listData: {
+      type: Array,
+      default: () => {},
+    },
+    name: {
+      type: String,
+      default: '',
+    },
+  },
   components: { SortList },
   data() {
     return {
-      listData: [],
+      activeIndex: true,
     };
   },
-  computed: {
-    ...mapGetters(['area', 'location', 'batch']),
-  },
-  watch: {
-    area() {
-      this.getData();
-    },
-    batch() {
-      this.getData();
-    },
-  },
-  mounted() {
-    this.getData();
-  },
   methods: {
-    getData() {
-      const data = {
-        batch: this.batch,
-        ...this.location,
-      };
-      getRanking(data).then((res) => {
-        this.listData = res.map((i) => {
-          return {
-            name: i.name,
-            value: i.numberOfCreated,
-            unit: '个',
-          };
-        });
-      });
+    changeType(val) {
+      this.activeIndex = val;
+      this.$emit('changeType', val);
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.sort {
+  padding-top: 25px;
+  position: relative;
+  .btns {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    button {
+      width: 82px;
+      height: 32px;
+      border-radius: 19px;
+      font-size: 14px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      line-height: 22px;
+      background: #ffffff;
+      color: #333333;
+      border: 1px solid #cccccc;
+      &:first-child {
+        margin-right: 12px;
+      }
+    }
+    .active {
+      background: #1492ff;
+      color: white;
+      border: none;
+    }
+  }
+}
+</style>

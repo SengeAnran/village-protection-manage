@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="right-content">
-      <base-bar-chart v-if="showBar" key="1" :chart-data="chartData" />
+      <base-bar-chart v-if="showBar" key="1" :chart-data="chartData" @goDetail="goDetail" />
     </div>
   </base-box-item>
 </template>
@@ -56,6 +56,7 @@ export default {
           imgUrl: require('./green_code.png'),
         },
       ],
+      listData: [],
       iconUrl: require('./icon.png'),
     };
   },
@@ -93,19 +94,27 @@ export default {
         this.codeDataList[0].value = res.notSubmitted;
         this.codeDataList[1].value = res.submissionTimeout;
         this.codeDataList[2].value = res.normalSubmission;
-        this.chartData.xAxisData = res.warningVOList.map((i) => {
-          return i.name;
-        });
-        this.chartData.dataList1 = res.warningVOList.map((i) => {
-          return i.normalSubmission;
-        });
-        this.chartData.dataList2 = res.warningVOList.map((i) => {
-          return i.submissionTimeout;
-        });
-        this.chartData.dataList3 = res.warningVOList.map((i) => {
-          return i.notSubmitted;
-        });
+        const { warningVOList } = res;
+        if (warningVOList) {
+          this.listData = warningVOList;
+          this.chartData.xAxisData = warningVOList.map((i) => {
+            return i.name;
+          });
+          this.chartData.dataList1 = warningVOList.map((i) => {
+            return i.normalSubmission;
+          });
+          this.chartData.dataList2 = warningVOList.map((i) => {
+            return i.submissionTimeout;
+          });
+          this.chartData.dataList3 = warningVOList.map((i) => {
+            return i.notSubmitted;
+          });
+        }
       });
+    },
+    goDetail(name) {
+      const index = this.listData.findIndex((i) => i.name === name);
+      console.log(this.listData[index]);
     },
   },
 };
