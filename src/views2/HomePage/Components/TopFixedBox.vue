@@ -3,7 +3,7 @@
     <div class="titles-list">
       <div
         class="title-list-item"
-        :class="{ active: activeIndex === index }"
+        :class="{ active: value === index }"
         v-for="(item, index) in titleList"
         :key="index"
         @click="changeActive(index)"
@@ -32,6 +32,15 @@ import { mapMutations } from 'vuex';
 
 export default {
   name: 'TopFixedBox',
+  props: {
+    value: {
+      type: Number,
+    },
+  },
+  model: {
+    prop: 'value',
+    event: 'update',
+  },
   data() {
     return {
       query: {
@@ -74,7 +83,8 @@ export default {
     },
     // 切换模块
     changeActive(index) {
-      this.activeIndex = index;
+      this.$emit('update', index);
+      this.$emit('toBox', index);
     },
   },
 };

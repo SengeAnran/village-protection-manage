@@ -86,20 +86,38 @@ export const getProjectCommencementRate5thVillage = (data) => {
     headers: { 'APPLICATION-ID': 4 },
   });
 };
-// 【首页】投资完成率前五名、后五名
-export const getInvestmentCompletedRate5th = (data) => {
+// 【首页】投资完成率前五名、后五名-省市县
+export const getInvestmentCompletedRate5thPro = (data) => {
   return axios.request({
     method: 'post',
-    url: apiHost2 + `/api/workbench/index/investmentCompletedRate5th`,
+    url: apiHost2 + `/api/workbench/index/investmentCompletedRate5th/pro`,
     data,
     headers: { 'APPLICATION-ID': 4 },
   });
 };
-// 【首页】总体进度前五名、后五名
-export const getOverallProgressRate5th = (data) => {
+// 【首页】投资完成率前五名、后五名-村
+export const getInvestmentCompletedRate5thVillage = (data) => {
   return axios.request({
     method: 'post',
-    url: apiHost2 + `/api/workbench/index/overallProgressRate5th`,
+    url: apiHost2 + `/api/workbench/index/investmentCompletedRate5th/village`,
+    data,
+    headers: { 'APPLICATION-ID': 4 },
+  });
+};
+// 【首页】总体进度前五名、后五名-省市县
+export const getOverallProgressRate5thPro = (data) => {
+  return axios.request({
+    method: 'post',
+    url: apiHost2 + `/api/workbench/index/overallProgressRate5th/pro`,
+    data,
+    headers: { 'APPLICATION-ID': 4 },
+  });
+};
+// 【首页】总体进度前五名、后五名-村
+export const getOverallProgressRate5thVillage = (data) => {
+  return axios.request({
+    method: 'post',
+    url: apiHost2 + `/api/workbench/index/overallProgressRate5th/village`,
     data,
     headers: { 'APPLICATION-ID': 4 },
   });

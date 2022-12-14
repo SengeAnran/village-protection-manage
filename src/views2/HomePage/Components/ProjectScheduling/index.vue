@@ -4,7 +4,7 @@
       <span>{{ activeIndex ? '首末排名' : '关键指标' }}</span>
     </button>
     <Content1 v-if="activeIndex"></Content1>
-    <Content2 v-if="!activeIndex"></Content2>
+    <Content2 class="content2" v-if="!activeIndex"></Content2>
     <!-- 报送预警   -->
     <SubmitEarlyWarn />
   </div>
@@ -68,6 +68,9 @@ export default {
     //width: 540px;
     height: 239px;
     //background-color: pink;
+  }
+  .content2 {
+    padding: 0 20px;
   }
 }
 </style>

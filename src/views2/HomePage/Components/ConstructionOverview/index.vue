@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Map from './Map';
+import Map from './Map/index';
 import TopData from './TopData';
 import Sort from './Sort';
 export default {

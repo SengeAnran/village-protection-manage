@@ -2,27 +2,51 @@
   <div class="content">
     <base-box-item name="项目开工率" :count="total" unit="%" :icon="iconUrl" :fixed="1">
       <div class="left-content">
-        <Sort :list-data="dataList1" name="县（市、区）开工率排名" @changeType="changeType1" />
+        <Sort :list-data="dataList1" name="县（市、区）开工率排名" @changeType="changeType1" @goDetail="goDetail1" />
       </div>
       <div class="right-content">
-        <Sort name="村庄开工率排名" />
+        <Sort :list-data="dataList2" name="村庄开工率排名" @changeType="changeType2" @goDetail="goDetail1" />
       </div>
     </base-box-item>
     <base-box-item name="投资完成率" style="margin-top: 30px" :count="total2" unit="%" :icon="iconUrl2" :fixed="1">
       <div class="left-content">
-        <Sort name="县（市、区）投资完成率排名" />
+        <Sort
+          :list-data="dataList3"
+          bar-color="#817CFB"
+          name="县（市、区）投资完成率排名"
+          @changeType="changeType3"
+          @goDetail="goDetail2"
+        />
       </div>
       <div class="right-content">
-        <Sort />
+        <Sort
+          :list-data="dataList4"
+          bar-color="#817CFB"
+          name="村庄投资完成率排名"
+          @changeType="changeType4"
+          @goDetail="goDetail2"
+        />
       </div>
     </base-box-item>
 
     <base-box-item name="总体进度" style="margin-top: 30px" :count="total3" unit="%" :icon="iconUrl3" :fixed="1">
       <div class="left-content">
-        <Sort />
+        <Sort
+          :list-data="dataList5"
+          bar-color="#44CA9C"
+          name="县（市、区）投资完成率排名"
+          @changeType="changeType5"
+          @goDetail="goDetail3"
+        />
       </div>
       <div class="right-content">
-        <Sort />
+        <Sort
+          :list-data="dataList6"
+          bar-color="#44CA9C"
+          name="村庄投资完成率排名"
+          @changeType="changeType6"
+          @goDetail="goDetail3"
+        />
       </div>
     </base-box-item>
   </div>
@@ -32,9 +56,14 @@
 import { mapGetters } from 'vuex';
 import Sort from './Sort';
 import {
+  getInvestmentCompletedRate5thPro,
+  getInvestmentCompletedRate5thVillage,
+  getOverallProgressRate5thPro,
+  getOverallProgressRate5thVillage,
   getProgressReport,
   getProgressReportTotal,
   getProjectCommencementRate5thPro,
+  getProjectCommencementRate5thVillage,
   getProjectRate,
 } from '@/api2/homePage';
 export default {
@@ -85,53 +114,34 @@ export default {
         batch: this.batch,
         ...this.location,
       };
+      this.changeType1();
+      this.changeType2();
+      this.changeType3();
+      this.changeType4();
+      this.changeType5();
+      this.changeType6();
       //项目开工率
       getProjectRate(data).then((res) => {
-        this.pieDataList[0].value = res.startNum;
-        this.pieDataList[0].percent = (res.startRate * 100).toFixed(1);
-        this.pieDataList[1].percent = (res.notStartRate * 100).toFixed(1);
-        this.pieDataList[1].value = res.notStartNum;
         this.total = res.startRate * 100;
-        this.otherNumber = res.projectNum;
-        this.chartData.xAxisData = res.projectCommencementRates.map((i) => {
-          return i.name;
-        });
-        this.chartData.dataList1 = res.projectCommencementRates.map((i) => {
-          return (i.rate * 100).toFixed(1) || 0;
-        });
-        this.chartData.dataList2 = res.projectCommencementRates.map((i) => {
-          return i.startNum;
-        });
-        this.chartData.dataList3 = res.projectCommencementRates.map((i) => {
-          return i.notStartNum;
-        });
       });
       //投资完成率
       getProgressReportTotal(data).then((res) => {
         // 投资完成率
         this.total2 = res.rate * 100;
-        this.data = res;
       });
       getProgressReport(data).then((res) => {
-        // 投资完成率
-        this.chartData2.xAxisData = res.map((i) => {
-          return i.name;
-        });
-        this.chartData3.xAxisData = this.chartData2.xAxisData;
-        this.chartData2.dataList1 = res.map((i) => {
-          return (i.rate * 100).toFixed(1) || 0;
-        });
-        this.chartData3.dataList1 = res.map((i) => {
-          return (i.overallProgress * 1).toFixed(2);
-        });
-        this.chartData2.dataList2 = res.map((i) => {
-          return (i.investNum * 1).toFixed(2);
-        });
-        this.chartData2.dataList3 = res.map((i) => {
-          return (i.completeTotal * 1).toFixed(2);
-        });
+        if (res.length > 0) {
+          this.total3 =
+            (
+              res.reduce((prev, cur, index) => {
+                if (index === 1) {
+                  return prev.overallProgress * 1 + cur.overallProgress * 1;
+                }
+                return prev + cur.overallProgress * 1;
+              }) / res.length
+            ).toFixed(1) * 1;
+        }
       });
-      //
     },
     changeType1(val = true) {
       const data = {
@@ -143,12 +153,12 @@ export default {
         this.dataList1 = res.map((i) => {
           return {
             name: i.name,
-            value: i.rate || 0,
+            value: i.rate * 100 || 0,
             unit: '%',
             tapList: [
               {
                 name: '项目开工率',
-                value: i.rate || 0,
+                value: i.rate * 100 || 0,
                 unit: '%',
               },
               {
@@ -162,15 +172,183 @@ export default {
                 unit: '个',
               },
             ],
+            ...i,
           };
         });
       });
+    },
+    changeType2(val = true) {
+      const data = {
+        batch: this.batch,
+        ...this.location,
+        order: val ? 0 : 1,
+      };
+      getProjectCommencementRate5thVillage(data).then((res) => {
+        this.dataList2 = res.map((i) => {
+          return {
+            name: i.name,
+            value: i.rate * 100 || 0,
+            unit: '%',
+            tapList: [
+              {
+                name: '项目开工率',
+                value: i.rate * 100 || 0,
+                unit: '%',
+              },
+              {
+                name: '已开工项目数',
+                value: i.startNum || 0,
+                unit: '个',
+              },
+              {
+                name: '未开工项目数',
+                value: i.notNum || 0,
+                unit: '个',
+              },
+            ],
+            ...i,
+          };
+        });
+      });
+    },
+    changeType3(val = true) {
+      const data = {
+        batch: this.batch,
+        ...this.location,
+        order: val ? 0 : 1,
+      };
+      getInvestmentCompletedRate5thPro(data).then((res) => {
+        this.dataList3 = res.map((i) => {
+          return {
+            name: i.name,
+            value: i.rate * 100 || 0,
+            unit: '%',
+            tapList: [
+              {
+                name: '投资完成率',
+                value: i.rate * 100 || 0,
+                unit: '%',
+              },
+              {
+                name: '计划投资',
+                value: i.investNum || 0,
+                unit: '万',
+              },
+              {
+                name: '完成投资',
+                value: i.completeTotal || 0,
+                unit: '万',
+              },
+            ],
+            ...i,
+          };
+        });
+      });
+    },
+    changeType4(val = true) {
+      const data = {
+        batch: this.batch,
+        ...this.location,
+        order: val ? 0 : 1,
+      };
+      getInvestmentCompletedRate5thVillage(data).then((res) => {
+        this.dataList4 = res.map((i) => {
+          return {
+            name: i.name,
+            value: i.rate * 100 || 0,
+            unit: '%',
+            tapList: [
+              {
+                name: '投资完成率',
+                value: i.rate * 100 || 0,
+                unit: '%',
+              },
+              {
+                name: '计划投资',
+                value: i.investNum || 0,
+                unit: '万',
+              },
+              {
+                name: '完成投资',
+                value: i.completeTotal || 0,
+                unit: '万',
+              },
+            ],
+            ...i,
+          };
+        });
+      });
+    },
+    changeType5(val = true) {
+      const data = {
+        batch: this.batch,
+        ...this.location,
+        order: val ? 0 : 1,
+      };
+      getOverallProgressRate5thPro(data).then((res) => {
+        this.dataList5 = res.map((i) => {
+          return {
+            name: i.name,
+            value: i.rate || 0,
+            unit: '%',
+            ...i,
+            // tapList: [
+            //   {
+            //     name: '项目开工率',
+            //     value: i.rate * 100 || 0,
+            //     unit: '%',
+            //   },
+            //   {
+            //     name: '已开工项目数',
+            //     value: i.startNum || 0,
+            //     unit: '个',
+            //   },
+            //   {
+            //     name: '未开工项目数',
+            //     value: i.notNum || 0,
+            //     unit: '个',
+            //   },
+            // ],
+          };
+        });
+      });
+    },
+    changeType6(val = true) {
+      const data = {
+        batch: this.batch,
+        ...this.location,
+        order: val ? 0 : 1,
+      };
+      getOverallProgressRate5thVillage(data).then((res) => {
+        this.dataList6 = res.map((i) => {
+          return {
+            name: i.name,
+            value: i.rate || 0,
+            unit: '%',
+            ...i,
+          };
+        });
+      });
+    },
+    goDetail1(val) {
+      console.log(val);
+    },
+    goDetail2(val) {
+      console.log(val);
+    },
+    goDetail3(val) {
+      console.log(val);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.content {
+  &::v-deep .total-title-wrp {
+    margin-left: 0 !important;
+  }
+}
 .project-scheduling {
   position: relative;
   padding-top: 40px;
@@ -201,14 +379,14 @@ export default {
     //width: 471px;
     position: relative;
     flex: 1;
-    height: 239px;
+    height: 210px;
     //background-color: pink;
     margin-right: 32px;
   }
   .right-content {
     flex: 1;
     //width: 540px;
-    height: 239px;
+    height: 210px;
     //background-color: pink;
   }
   .all-content {

@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <top-fixed-box />
+    <top-fixed-box v-model="activeIndex" @toBox="toBox" />
     <div class="content-box">
       <BaseBox>
         <!--        建设概况-->
@@ -42,9 +42,56 @@ export default {
     ProjectScheduling,
   },
   data() {
-    return {};
+    return {
+      activeIndex: 0,
+      contentTopList: [], // 各模块的位置
+      isClick: false,
+    };
   },
-  methods: {},
+  watch: {
+    // activeIndex(val) {
+    //   this.toBox(val);
+    // },
+  },
+  mounted() {
+    document.querySelector('.content-box').addEventListener('scroll', this.initScroll);
+  },
+  destroyed() {
+    document.querySelector('.content-box').removeEventListener('scroll', this.initScroll);
+  },
+  methods: {
+    toBox(index) {
+      this.isClick = true;
+      const dom = document.querySelectorAll('.base-box')[index];
+      const box = document.querySelector('.content-box');
+      const offsetTop = dom.offsetTop - 58;
+      box.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth',
+      });
+      setTimeout(() => {
+        this.isClick = false;
+      });
+    },
+    initScroll() {
+      const dom = document.querySelector('.content-box');
+      const scrollTop = dom.scrollTop;
+      const divs = [...document.querySelectorAll('.base-box')];
+      divs.forEach((item, index) => {
+        this.contentTopList[index] = item.offsetTop - 58;
+      });
+      // 判断当前是否是点击定位的，如果不是，才有滚动定位的效果
+      if (!this.isClick) {
+        let navIndex = 0;
+        this.contentTopList.forEach((i, index) => {
+          if (scrollTop >= i) {
+            navIndex = index;
+          }
+        });
+        this.activeIndex = navIndex;
+      }
+    },
+  },
 };
 </script>
 

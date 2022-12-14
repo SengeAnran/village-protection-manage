@@ -4,13 +4,15 @@
       <button :class="{ active: activeIndex }" @click="changeType(true)">前五名</button>
       <button :class="{ active: !activeIndex }" @click="changeType(false)">后五名</button>
     </div>
-    <base-min-title>{{ name }}</base-min-title>
-    <SortList :listData="listData"></SortList>
+    <base-min-title class="min-title">{{ name }}</base-min-title>
+
+    <SortList :listData="listData" :bar-color="barColor" @goDetail="(val) => $emit('goDetail', val)"></SortList>
   </div>
 </template>
 
 <script>
 import SortList from '../../SortList';
+import { mapGetters } from 'vuex';
 export default {
   name: 'Sort',
   props: {
@@ -22,12 +24,28 @@ export default {
       type: String,
       default: '',
     },
+    // 条形图颜色
+    barColor: {
+      type: String,
+      default: '#70ABF8',
+    },
   },
   components: { SortList },
   data() {
     return {
       activeIndex: true,
     };
+  },
+  computed: {
+    ...mapGetters(['area', 'location', 'batch']),
+  },
+  watch: {
+    area() {
+      this.activeIndex = true;
+    },
+    batch() {
+      this.activeIndex = true;
+    },
   },
   methods: {
     changeType(val) {
@@ -57,6 +75,7 @@ export default {
       background: #ffffff;
       color: #333333;
       border: 1px solid #cccccc;
+      outline: none;
       &:first-child {
         margin-right: 12px;
       }
@@ -66,6 +85,10 @@ export default {
       color: white;
       border: none;
     }
+  }
+  .min-title {
+    display: block;
+    margin-bottom: 21px;
   }
 }
 </style>

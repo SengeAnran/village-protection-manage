@@ -162,22 +162,18 @@ export default {
         this.chartData2.dataList3 = res.map((i) => {
           return (i.completeTotal * 1).toFixed(2);
         });
+        if (res.length > 0) {
+          this.total3 =
+            (
+              res.reduce((prev, cur, index) => {
+                if (index === 1) {
+                  return prev.overallProgress * 1 + cur.overallProgress * 1;
+                }
+                return prev + cur.overallProgress * 1;
+              }) / res.length
+            ).toFixed(1) * 1;
+        }
       });
-
-      // getCountVillage(data).then((res) => {
-      //   this.chartData.xAxisData = res.cityCountVOList.map((i) => {
-      //     return i.name;
-      //   });
-      //   this.chartData.dataList1 = res.cityCountVOList.map((i) => {
-      //     return i.passTotalCount;
-      //   });
-      //   this.chartData.dataList2 = res.cityCountVOList.map((i) => {
-      //     return i.readyPassTotalCount;
-      //   });
-      //   this.chartData.dataList3 = res.cityCountVOList.map((i) => {
-      //     return i.noPassTotalCount;
-      //   });
-      // });
     },
     goDetail(name) {
       const index = this.listData.findIndex((i) => i.name === name);
