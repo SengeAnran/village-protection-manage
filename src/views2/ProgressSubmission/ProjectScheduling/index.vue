@@ -19,6 +19,7 @@
         :permission-add="0"
         :permission-edit="0"
         :permission-delete="10004"
+        :default-size="20"
         @selectionChange="selectionChange"
       >
         <template v-slot:search>

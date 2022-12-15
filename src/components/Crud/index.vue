@@ -522,6 +522,11 @@ export default {
       type: Function,
       default: () => '',
     },
+    // 每页个数
+    defaultSize: {
+      type: Number,
+      default: 10,
+    },
   },
   data() {
     return {
@@ -563,6 +568,9 @@ export default {
       }
       return text;
     },
+  },
+  beforeMount() {
+    this.size = this.defaultSize;
   },
   mounted() {
     this.getItems();
