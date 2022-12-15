@@ -2,10 +2,10 @@
   <div class="content">
     <base-box-item name="项目开工率" :count="total" unit="%" :icon="iconUrl" :fixed="1">
       <div class="left-content">
-        <Sort :list-data="dataList1" name="县（市、区）开工率排名" @changeType="changeType1" @goDetail="goDetail1" />
+        <Sort :list-data="dataList1" name="县（市、区）开工率排名" @changeType="changeType1" @goDetail="goDetail" />
       </div>
       <div class="right-content">
-        <Sort :list-data="dataList2" name="村庄开工率排名" @changeType="changeType2" @goDetail="goDetail1" />
+        <Sort :list-data="dataList2" name="村庄开工率排名" @changeType="changeType2" @goDetail="goDetail" />
       </div>
     </base-box-item>
     <base-box-item name="投资完成率" style="margin-top: 30px" :count="total2" unit="%" :icon="iconUrl2" :fixed="1">
@@ -15,7 +15,7 @@
           bar-color="#817CFB"
           name="县（市、区）投资完成率排名"
           @changeType="changeType3"
-          @goDetail="goDetail2"
+          @goDetail="goDetail"
         />
       </div>
       <div class="right-content">
@@ -24,7 +24,7 @@
           bar-color="#817CFB"
           name="村庄投资完成率排名"
           @changeType="changeType4"
-          @goDetail="goDetail2"
+          @goDetail="goDetail"
         />
       </div>
     </base-box-item>
@@ -36,7 +36,7 @@
           bar-color="#44CA9C"
           name="县（市、区）投资完成率排名"
           @changeType="changeType5"
-          @goDetail="goDetail3"
+          @goDetail="goDetail"
         />
       </div>
       <div class="right-content">
@@ -45,7 +45,7 @@
           bar-color="#44CA9C"
           name="村庄投资完成率排名"
           @changeType="changeType6"
-          @goDetail="goDetail3"
+          @goDetail="goDetail"
         />
       </div>
     </base-box-item>
@@ -330,14 +330,18 @@ export default {
         });
       });
     },
-    goDetail1(val) {
-      console.log(val);
-    },
-    goDetail2(val) {
-      console.log(val);
-    },
-    goDetail3(val) {
-      console.log(val);
+    goDetail(val) {
+      if ((val.id || val.id === 0) && !this.isGoing && val.reportingTime) {
+        // isGoing防止多次路由
+        this.isGoing = true;
+        this.$router.push({
+          name: 'ProgressSubmissionDetails',
+          query: {
+            id: val.id,
+            reportingTime: val.reportingTime,
+          },
+        });
+      }
     },
   },
 };

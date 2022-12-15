@@ -65,7 +65,7 @@ export default {
     chartData: {
       handler: function (val) {
         this.$nextTick(() => {
-          if (val.xAxisData && val.xAxisData.length > 0) {
+          if (val.xAxisData) {
             this.loadData();
           }
         });

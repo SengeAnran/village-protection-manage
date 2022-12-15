@@ -14,13 +14,13 @@
         <TotalSummary :data="data" />
       </div>
       <div class="right-content">
-        <BarChart v-if="showBar" key="1" :chart-data="chartData2" @goDetail="goDetail2" />
+        <BarChart v-if="showBar" key="1" :chart-data="chartData2" @goDetail="goDetail" />
       </div>
     </base-box-item>
 
     <base-box-item name="总体进度" style="margin-top: 30px" :count="total3" unit="%" :icon="iconUrl3" :fixed="1">
       <div class="all-content">
-        <BarChart v-if="showBar" key="1" :chart-data="chartData3" hideTooltip hideLegend @goDetail="goDetail2" />
+        <BarChart v-if="showBar" key="1" :chart-data="chartData3" hideTooltip hideLegend @goDetail="goDetail" />
       </div>
     </base-box-item>
   </div>
@@ -80,6 +80,7 @@ export default {
       iconUrl: require('./icon.png'),
       iconUrl2: require('./icon2.png'),
       iconUrl3: require('./icon3.png'),
+      isGoing: false,
     };
   },
   computed: {
@@ -177,12 +178,27 @@ export default {
     },
     goDetail(name) {
       const index = this.listData.findIndex((i) => i.name === name);
+      if (
+        (this.listData[index].id || this.listData[index].id === 0) &&
+        !this.isGoing &&
+        this.listData[index].reportingTime
+      ) {
+        // isGoing防止多次路由
+        this.isGoing = true;
+        this.$router.push({
+          name: 'ProgressSubmissionDetails',
+          query: {
+            id: this.listData[index].id,
+            reportingTime: this.listData[index].reportingTime,
+          },
+        });
+      }
       console.log(this.listData[index]);
     },
-    goDetail2(name) {
-      const index = this.listData2.findIndex((i) => i.name === name);
-      console.log(this.listData[index]);
-    },
+    // goDetail2(name) {
+    //   const index = this.listData2.findIndex((i) => i.name === name);
+    //   console.log(this.listData[index]);
+    // },
   },
 };
 </script>

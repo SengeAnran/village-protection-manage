@@ -63,7 +63,7 @@ export default {
   methods: {
     ...mapMutations('home', ['SET_AREA_COUNTY', 'SET_AREA_CITY', 'SET_AREA_PROVINCE', 'SET_BATCH']),
     changeArea(val) {
-      console.log(val);
+      // console.log(val);
       if (val.level === '2') {
         return this.SET_AREA_CITY(val.areaName);
       }
@@ -78,7 +78,7 @@ export default {
       });
     },
     batchChange(val) {
-      console.log('batchChange');
+      // console.log('batchChange');
       this.SET_BATCH(val);
     },
     // 切换模块

@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 import app from './app';
 import user from './user';
 import home from './home';
-import map from './map';
 
 import villageMange from './villageMange'; // 村庄申报、村庄审核
 import projectAcceptance from './projectAcceptance'; // 村庄申报、村庄审核
@@ -17,7 +16,6 @@ const store = new Vuex.Store({
     villageMange,
     projectAcceptance,
     home,
-    map,
   },
   getters: {
     systemTitle: (state) => state.user.systemTitle,

@@ -39,5 +39,14 @@ export default {
       state.location.province = value;
       state.area = value;
     },
+    RESET_DATA(state) {
+      state.batch = ''; // 批次
+      state.location = {
+        city: '',
+        county: '',
+        province: defaultLocation,
+      };
+      state.area = defaultLocation;
+    },
   },
 };

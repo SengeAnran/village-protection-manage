@@ -85,6 +85,9 @@ export default {
   },
   methods: {
     initChart() {
+      if (this.chart != null && this.chart !== '' && this.chart !== undefined) {
+        this.chart.dispose(); //销毁
+      }
       this.chart = echarts.init(this.$refs.pieChart);
       this.chart.setOption(this.getOptions());
     },

@@ -4,7 +4,7 @@
       <PieChart v-if="showBar" :list="pieDataList" :isPercent="false" unit="个" totalUnit="个" minTitle="申报总数" />
     </div>
     <div class="right-content">
-      <BaseBarChart v-if="showBar" key="1" :chart-data="chartData" @goDetail="goDetail" />
+      <BaseBarChart v-if="showBar" key="申报总数sbzs" :chart-data="chartData" @goDetail="goDetail" />
     </div>
   </base-box-item>
 </template>
@@ -36,6 +36,7 @@ export default {
         name3: '审核未通过',
         unit: '个',
       },
+      isGoing: false,
       listData: [],
       iconUrl: require('./icon.png'),
     };
@@ -101,7 +102,16 @@ export default {
     },
     goDetail(name) {
       const index = this.listData.findIndex((i) => i.name === name);
-      console.log(this.listData[index]);
+      if ((this.listData[index].id || this.listData[index].id === 0) && !this.isGoing) {
+        // isGoing防止多次路由
+        this.isGoing = true;
+        this.$router.push({
+          name: 'villageDetails',
+          query: {
+            id: this.listData[index].id,
+          },
+        });
+      }
     },
   },
 };

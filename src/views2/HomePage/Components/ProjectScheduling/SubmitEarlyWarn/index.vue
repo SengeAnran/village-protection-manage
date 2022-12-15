@@ -58,6 +58,7 @@ export default {
       ],
       listData: [],
       iconUrl: require('./icon.png'),
+      isGoing: false,
     };
   },
   computed: {
@@ -114,6 +115,22 @@ export default {
     },
     goDetail(name) {
       const index = this.listData.findIndex((i) => i.name === name);
+      console.log(this.listData[index]);
+      if (
+        (this.listData[index].id || this.listData[index].id === 0) &&
+        !this.isGoing &&
+        this.listData[index].reportingTime
+      ) {
+        // isGoing防止多次路由
+        this.isGoing = true;
+        this.$router.push({
+          name: 'ProgressSubmissionDetails',
+          query: {
+            id: this.listData[index].id,
+            reportingTime: this.listData[index].reportingTime,
+          },
+        });
+      }
       console.log(this.listData[index]);
     },
   },

@@ -56,7 +56,7 @@ export default {
     chartData: {
       handler: function (val) {
         this.$nextTick(() => {
-          if (val.xAxisData && val.xAxisData.length > 0) {
+          if (val.xAxisData) {
             this.loadData();
           }
         });
@@ -71,22 +71,6 @@ export default {
 
     // 消除zoom缩放导致鼠标偏移
     this.zoom = 1 / document.body.style.zoom;
-    // this.$nextTick(() => {
-    //   this.loadData();
-    // });
-
-    // var count = 0;
-    // if (this.timmerOneAnim) {
-    //   clearInterval(this.timmerOneAnim);
-    // }
-    // this.timmerOneAnim = setInterval(() => {
-    //   this.charts.dispatchAction({
-    //     type: 'showTip',
-    //     seriesIndex: 0,
-    //     dataIndex: count % this.dataList1.length,
-    //   });
-    //   count++;
-    // }, 4500);
   },
   methods: {
     setData() {
@@ -141,16 +125,7 @@ export default {
           borderColor: 'rgba(255, 255, 255, 0.4)',
           backgroundColor: 'rgba(0, 0, 0, 0.3)',
           formatter: (params) => {
-            //             let str = `
-            // <div style="">
-            //   <div style="">${params[0].name}</div>
-            //   <div style="display: flex;"></div>
-            // </div>`
-            // let str = params[0].name + '<br />';
             let str = '';
-            // str += `&nbsp; &nbsp;  <em>申报总数</em>: ${params[0].value + params[1].value + params[2].value}${
-            //   this.unit
-            // }<br/>`;
             params.forEach((item) => {
               str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
                                     "></span>

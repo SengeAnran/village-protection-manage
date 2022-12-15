@@ -5,7 +5,7 @@
         <PieChart v-if="showBar" :list="pieDataList" :isPercent="false" unit="个" totalUnit="个" minTitle="申报总数" />
       </div>
       <div class="right-content">
-        <BaseBarChart v-if="showBar" key="1" :chart-data="chartData" @goDetail="goDetail" />
+        <BaseBarChart v-if="showBar" key="xmdd" :chart-data="chartData" @goDetail="goDetail" />
       </div>
     </base-box-item>
     <base-box-item name="评价等次总数" style="margin-top: 30px" :count="total2" unit="个" :icon="iconUrl2">
@@ -21,7 +21,7 @@
         />
       </div>
       <div class="right-content">
-        <BaseBarChart v-if="showBar" key="1" :chart-data="chartData2" @goDetail="goDetail2" />
+        <BaseBarChart v-if="showBar" key="sbzs" :chart-data="chartData2" @goDetail="goDetail" />
       </div>
     </base-box-item>
     <base-box-item name="成效评分" style="margin-top: 30px" :icon="iconUrl3" hideNum>
@@ -29,13 +29,13 @@
         <el-select v-model="fraction" placeholder="请选择" @change="batchChange">
           <el-option v-for="item in batchOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
         </el-select>
-        <BarChart v-if="showBar" key="2" :chart-data="chartData3" @goDetail="goDetail2" />
+        <BarChart v-if="showBar" key="2" :chart-data="chartData3" @goDetail="goDetail" />
       </div>
     </base-box-item>
     <base-box-item name="“一老一小”服务场景建设情况" style="margin-top: 30px" :icon="iconUrl4" hideNum>
       <div class="all-content">
         <label-info style="margin-top: 24px; margin-left: 20px" label="服务场景建设数" :num="total4" unit="个" />
-        <BarChart v-if="showBar" key="3" :chart-data="chartData4" @goDetail="goDetail2" hideLegend />
+        <BarChart v-if="showBar" key="3" :chart-data="chartData4" @goDetail="goDetail" hideLegend />
       </div>
     </base-box-item>
   </section>
@@ -114,6 +114,7 @@ export default {
       iconUrl4: require('./icon4.png'),
       fraction: 0, //分数统计规则
       batchOpt: selectOpt,
+      isGoing: false,
     };
   },
   computed: {
@@ -170,8 +171,11 @@ export default {
         this.total = res.declarationTotalCount;
       });
       getEvaluationGradeCount(data).then((res) => {
-        const { gradeVOS } = res;
+        let { gradeVOS } = res;
+        gradeVOS = gradeVOS ? gradeVOS : [];
+        console.log('gradeVOS', gradeVOS);
         if (gradeVOS) {
+          console.log('gradeVOS');
           this.listData2 = gradeVOS;
           this.chartData2.xAxisData = gradeVOS.map((i) => {
             return i.name;
@@ -206,11 +210,16 @@ export default {
     },
     goDetail(name) {
       const index = this.listData.findIndex((i) => i.name === name);
-      console.log(this.listData[index]);
-    },
-    goDetail2(name) {
-      const index = this.listData2.findIndex((i) => i.name === name);
-      console.log(this.listData[index]);
+      if ((this.listData[index].id || this.listData[index].id === 0) && !this.isGoing) {
+        // isGoing防止多次路由
+        this.isGoing = true;
+        this.$router.push({
+          name: 'AcceptanceEvaluationDetails',
+          query: {
+            id: this.listData[index].id,
+          },
+        });
+      }
     },
     getEffectivenessData(val) {
       const data = {
