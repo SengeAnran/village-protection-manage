@@ -19,7 +19,6 @@
         :permission-add="0"
         :permission-edit="0"
         :permission-delete="10004"
-        :tableRowClassName="tableRowClassName"
         @selectionChange="selectionChange"
       >
         <template v-slot:search>
@@ -78,7 +77,7 @@
           <el-table-column v-if="level === 4" label="报送时间" prop="reportingTime" fixed></el-table-column>
           <el-table-column v-if="level === 4 || level === 3" label="村（片区）名称" prop="name"></el-table-column>
           <el-table-column v-if="level === 4 || level === 3" label="创建批次" prop="declarationBatch"></el-table-column>
-          <el-table-column v-if="level === 2 || level === 1" label="地区" prop="name" fixed></el-table-column>
+          <el-table-column v-if="level === 2 || level === 1" label="地区" prop="name"></el-table-column>
           <el-table-column v-if="level === 2 || level === 1" label="创建村数" prop="nums"></el-table-column>
           <el-table-column label="项目数" prop="projectNum" key="projectNum"></el-table-column>
           <el-table-column label="已开工项目数" prop="startNum" key="startNum"></el-table-column>
@@ -280,9 +279,6 @@ export default {
       }
       this.$refs.crud.search();
       // this.query.areaId = val.areaId;
-    },
-    tableRowClassName({ row }) {
-      return row.completeTotalInvestment > row.investNum ? 'row-danger' : '';
     },
     ...mapMutations('villageMange', ['changeDeclareList']),
     normalizeSelectOptions(obj) {

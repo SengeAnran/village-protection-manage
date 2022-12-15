@@ -29,6 +29,7 @@ export default {
   position: relative;
   padding-top: 40px;
   .change-button {
+    outline: none;
     position: absolute;
     top: 0;
     right: 20px;
@@ -45,6 +46,7 @@ export default {
     span::before {
       content: '';
       display: inline-block;
+      margin-right: 8px;
       width: 14px;
       height: 11px;
       background: url('./change_icon.png') no-repeat;

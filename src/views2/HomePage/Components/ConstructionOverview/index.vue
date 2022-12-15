@@ -1,6 +1,8 @@
 <template>
   <div class="content">
-    <Map></Map>
+    <div class="left-content">
+      <Map v-if="showBar"></Map>
+    </div>
     <div class="right-content">
       <top-data />
       <Sort />
@@ -18,6 +20,24 @@ export default {
     Map,
     TopData,
     Sort,
+  },
+  data() {
+    return {
+      showBar: true,
+      flag: true,
+    };
+  },
+  mounted() {
+    window.addEventListener('resize', () => {
+      if (this.flag) {
+        this.flag = false;
+        this.showBar = false;
+        setTimeout(() => {
+          this.flag = true;
+          this.showBar = true;
+        }, 200);
+      }
+    });
   },
 };
 </script>
