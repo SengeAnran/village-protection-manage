@@ -143,7 +143,6 @@ export default {
     return {
       level: '',
       REPORT_STATUS_COLOR,
-      PROJECT_STATUS,
       hideTableAction: true,
       query: {
         declarationBatch: '',
@@ -422,13 +421,7 @@ export default {
     },
     // 详情
     goDetail(scope) {
-      const { id, reportingTime, projectStatus } = scope.data;
-      if (projectStatus === this.PROJECT_STATUS.COMPLETED) {
-        return this.$router.push({
-          name: 'ProgressSubmissionDetails',
-          query: { id: id, reportingTime, detail: true, showComplete: true },
-        });
-      }
+      const { id, reportingTime } = scope.data;
       this.$router.push({ name: 'ProgressSubmissionDetails', query: { id: id, reportingTime, detail: true } });
     },
   },

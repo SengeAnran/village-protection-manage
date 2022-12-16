@@ -1,6 +1,6 @@
 <template>
   <div class="village-manage block">
-    <div v-if="$route.name === 'VillageApplyList2'" v-loading="loading">
+    <div v-if="$route.name === 'VillageApplyList2'">
       <div class="text-lg mb-4">申报列表</div>
       <Crud
         ref="crud"
@@ -8,10 +8,12 @@
         :delete-method="deleteMethod"
         :query.sync="query"
         :showOrder="false"
-        :selection="canSelection"
+        selection
         id-key="id"
         actionWidth="200px"
         :multiple-delete="COUNTRY"
+        showExport
+        :export-method="exportMethod"
         :hideAdd="true"
         :hideEdit="true"
         :hideView="true"
@@ -19,6 +21,8 @@
         :permission-add="0"
         :permission-edit="0"
         :permission-delete="10004"
+        :export-file-name="exportFileName"
+        exportName="导出信息汇总表"
         @selectionChange="selectionChange"
       >
         <template v-slot:search>
@@ -73,7 +77,6 @@
           <el-button v-if="VILLAGE" type="primary" icon="el-icon-plus" @click="newApplications"> 新建申报</el-button>
         </template>
         <template v-slot:export>
-          <el-button icon="el-icon-download" type="primary" plain @click="exportList"> 导出信息汇总表 </el-button>
           <el-button v-if="COUNTRY || COUNTRY_LEADER" icon="el-icon-download" type="primary" plain @click="exportDatas"
             >材料打印
           </el-button>
@@ -212,7 +215,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapMutations } from 'vuex';
+import { mapMutations } from 'vuex';
 import {
   queryBatchInfo,
   getVillageList,
@@ -255,7 +258,6 @@ export default {
   mixins: [rule, role],
   data() {
     return {
-      canSelection: true, // 是否可选
       FINAL_STATUS,
       exportFileName: '创建申报信息汇总表',
       selections: [],
@@ -267,7 +269,6 @@ export default {
         county: '', //县中文名称
       },
       proRegion: '', // 省级选地区
-      loading: false,
       queryDeclareTypeOpt: [
         {
           label: '全部',
@@ -305,23 +306,9 @@ export default {
       sortRule: { required: true, validator: sort, trigger: 'blur' },
       getMethod: getVillageList,
       deleteMethod: deleteVillageItem,
-      // exportMethod: getvillagesExport,
+      exportMethod: getvillagesExport,
       submitSortMethod: recVerify,
     };
-  },
-  beforeRouteEnter: function (to, from, next) {
-    if (from.name === 'villageDetails') {
-      return next((vm) => {
-        vm.initQuery();
-      });
-    }
-    next();
-  },
-  beforeRouteLeave: function (to, from, next) {
-    if (to.name === 'villageDetails') {
-      this.SET_SEARCH_QUERY(this.query);
-    }
-    next();
   },
   beforeMount() {
     this.declareStatus = DECLARE_STATUS;
@@ -331,9 +318,7 @@ export default {
       this.getCityList();
     }
     if (this.PROVINCE) {
-      this.query.finalStatus = FINAL_STATUS.PROVINCE_VERIFY_PENDING + ''; // 省级待审核
       this.getProList();
-      this.canSelection = false;
     }
   },
   watch: {
@@ -341,23 +326,10 @@ export default {
       [this.query.city, this.query.county] = val;
     },
   },
-  computed: {
-    ...mapGetters(['searchQuery']),
-  },
   mounted() {},
   methods: {
     formatMoney,
     ...mapMutations('villageMange', ['changeDeclareList']),
-    ...mapMutations('search', ['SET_SEARCH_QUERY', 'RESET_SEARCH_QUERY']),
-    initQuery() {
-      if (this.searchQuery && Object.keys(this.searchQuery).length > 0) {
-        Object.keys(this.searchQuery).map((i) => {
-          this.query[i] = this.searchQuery[i];
-        });
-        this.proRegion = [this.query.city, this.query.county];
-        this.RESET_SEARCH_QUERY();
-      }
-    },
     normalizeSelectOptions(obj) {
       if (!Object.prototype.toString.call(obj).slice(8, -1) === 'Object') return [];
       return Object.keys(obj).map((key) => {
@@ -426,45 +398,6 @@ export default {
           downloadFile(res, '未来乡村创建申报材料打印.zip', 'application/gzip');
           // this.$notify.success('导出成功');
         });
-      }
-    },
-    exportList() {
-      if (this.PROVINCE) {
-        return this._proExportFiles(getvillagesExport, this.exportFileName + '.xlsx');
-      }
-      this._exportFiles(getvillagesExport, this.exportFileName + '.xlsx');
-    },
-    _exportFiles(exportFunc, fileName = '导出信息汇总表 ') {
-      if (!this.selections.length) {
-        this.$message.warning('请选择需要导出的数据');
-        return;
-      }
-      this.$confirm('是否批量导出所选数据？', '提示', {
-        type: 'warning',
-      }).then(async () => {
-        this.loading = true;
-        try {
-          const data = {
-            declarationIds: this.selections.map((item) => item.id),
-          };
-          const res = await exportFunc(data);
-          downloadFile(res, fileName);
-        } finally {
-          this.loading = false;
-        }
-      });
-    },
-    // 省级导出
-    async _proExportFiles(exportFunc, fileName = '导出信息汇总表 ') {
-      this.loading = true;
-      try {
-        const data = {
-          declarationIds: [],
-        };
-        const res = await exportFunc(data);
-        downloadFile(res, fileName);
-      } finally {
-        this.loading = false;
       }
     },
     // 统一上报

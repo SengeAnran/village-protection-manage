@@ -8,7 +8,7 @@
         :delete-method="deleteMethod"
         :query.sync="query"
         :showOrder="false"
-        selection
+        :selection="canSelection"
         id-key="id"
         actionWidth="180px"
         :multiple-delete="COUNTRY || COUNTRY_LEADER"
@@ -139,7 +139,7 @@
   </div>
 </template>
 <script>
-import { mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import rule from '@/mixins/rule';
 import role from '@/views2/mixins/role';
 import ListSearch from './components/ListSearch.vue';
@@ -165,6 +165,7 @@ export default {
   mixins: [rule, role],
   data() {
     return {
+      canSelection: true, // 是否可选
       DECLARE_STATUS,
       CITY_LEVEL_RATING,
       textColor: FINAL_STATUE_COLOR,
@@ -190,6 +191,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['searchQuery']),
     isCounty() {
       return this.COUNTRY || this.COUNTRY_LEADER;
     },
@@ -197,10 +199,30 @@ export default {
       return this.isCounty ? getReportList : getAuditList;
     },
   },
-  beforeMount() {},
+  beforeMount() {
+    if (this.PROVINCE) {
+      this.query.finalStatus = FINAL_STATUS.PROVINCE_VERIFY_PENDING + ''; // 省级待审核
+      this.canSelection = false;
+    }
+  },
+  beforeRouteEnter: function (to, from, next) {
+    if (from.name === 'NewAcceptanceEvaluation') {
+      return next((vm) => {
+        vm.initQuery();
+      });
+    }
+    next();
+  },
+  beforeRouteLeave: function (to, from, next) {
+    if (to.name === 'NewAcceptanceEvaluation') {
+      this.SET_SEARCH_QUERY(this.query);
+    }
+    next();
+  },
   methods: {
-    formatMoney,
     ...mapMutations('villageMange', ['changeDeclareList']),
+    ...mapMutations('search', ['SET_SEARCH_QUERY', 'RESET_SEARCH_QUERY']),
+    formatMoney,
     normalizeSelectOptions(obj) {
       if (!Object.prototype.toString.call(obj).slice(8, -1) === 'Object') return [];
       return Object.keys(obj).map((key) => {
@@ -209,6 +231,14 @@ export default {
           value: key,
         };
       });
+    },
+    initQuery() {
+      if (this.searchQuery && Object.keys(this.searchQuery).length > 0) {
+        Object.keys(this.searchQuery).map((i) => {
+          this.query[i] = this.searchQuery[i];
+        });
+        this.RESET_SEARCH_QUERY();
+      }
     },
     onFileAdd(file, key) {
       this.form2[key].push(file);
@@ -255,6 +285,9 @@ export default {
       }
     },
     exportList() {
+      if (this.PROVINCE) {
+        return this._proExportFiles(exportList, '信息汇总表.xlsx');
+      }
       this._exportFiles(exportList, '信息汇总表.xlsx');
     },
     _exportFiles(exportFunc, fileName = '导出信息汇总表 ') {
@@ -276,6 +309,19 @@ export default {
           this.loading = false;
         }
       });
+    },
+    // 省级导出
+    async _proExportFiles(exportFunc, fileName = '导出信息汇总表 ') {
+      this.loading = true;
+      try {
+        const data = {
+          declarationIds: [],
+        };
+        const res = await exportFunc(data);
+        downloadFile(res, fileName);
+      } finally {
+        this.loading = false;
+      }
     },
     // 导出附件
     exportEnclosure() {

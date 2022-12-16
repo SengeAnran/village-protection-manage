@@ -168,6 +168,7 @@ export default {
 
     return {
       REPORT_STATUS_COLOR,
+      PROJECT_STATUS,
       query: {
         declarationBatch: '',
         finalStatus: '',
@@ -421,7 +422,13 @@ export default {
     },
     // 详情
     goDetail(scope) {
-      const { id, reportingTime } = scope.data;
+      const { id, reportingTime, projectStatus } = scope.data;
+      if (projectStatus === this.PROJECT_STATUS.COMPLETED) {
+        return this.$router.push({
+          name: 'ProgressSubmissionDetails',
+          query: { id: id, reportingTime, showComplete: true },
+        });
+      }
       this.$router.push({ name: 'ProgressSubmissionDetails', query: { id: id, reportingTime } });
     },
     // 修改

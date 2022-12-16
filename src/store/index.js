@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import app from './app';
 import user from './user';
 import home from './home';
+import search from './search';
 
 import villageMange from './villageMange'; // 村庄申报、村庄审核
 import projectAcceptance from './projectAcceptance'; // 村庄申报、村庄审核
@@ -16,6 +17,7 @@ const store = new Vuex.Store({
     villageMange,
     projectAcceptance,
     home,
+    search,
   },
   getters: {
     systemTitle: (state) => state.user.systemTitle,
@@ -30,6 +32,7 @@ const store = new Vuex.Store({
     area: (state) => state.home.area,
     location: (state) => state.home.location,
     batch: (state) => state.home.batch,
+    searchQuery: (state) => state.search.searchQuery,
   },
 });
 

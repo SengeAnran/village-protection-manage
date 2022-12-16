@@ -1,6 +1,7 @@
 <template>
   <div class="block">
     <div>
+      <div class="text-lg mb-4">报送列表</div>
       <Crud
         ref="crud"
         :get-method="getMethod"
@@ -8,23 +9,25 @@
         :query.sync="query"
         :showOrder="false"
         id-key="id"
-        actionWidth="100px"
-        use-table-left
+        actionWidth="180px"
         :multiple-delete="COUNTRY"
         :hideAdd="true"
         :hideEdit="true"
         :hideView="true"
-        :hideTableAction="hideTableAction"
         :hideDelete="true"
         :permission-add="0"
         :permission-edit="0"
         :permission-delete="10004"
-        :default-size="20"
+        :tableRowClassName="tableRowClassName"
         @selectionChange="selectionChange"
       >
         <template v-slot:search>
-          <div class="text-lg mb-4">调度列表</div>
-          <div class="inline-flex mb-2 pl-0" style="flex-wrap: wrap">
+          <div v-if="VILLAGE || COUNTRY || COUNTRY_LEADER" class="inline-flex mb-2 pl-0" style="flex-wrap: wrap">
+            <div class="search-item mb-4">
+              <span class="label">报送时间：</span>
+              <el-date-picker v-model="query.reportingTime" type="month" placeholder="请选择" value-format="yyyy-MM">
+              </el-date-picker>
+            </div>
             <div v-if="!VILLAGE" class="search-item mb-4">
               <span class="label">村（片区）名称：</span>
               <el-input
@@ -46,20 +49,43 @@
                 </el-option>
               </el-select>
             </div>
+            <!--            <div v-if="!COUNTRY" class="search-item mb-4">-->
+            <!--              <span class="label">地区：</span>-->
+            <!--              <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea" />-->
+            <!--              &lt;!&ndash;              <el-select v-model="query.declarationBatch" placeholder="请选择">&ndash;&gt;-->
+            <!--              &lt;!&ndash;                <el-option&ndash;&gt;-->
+            <!--              &lt;!&ndash;                  v-for="item in queryDeclareTypeOpt"&ndash;&gt;-->
+            <!--              &lt;!&ndash;                  :key="item.value"&ndash;&gt;-->
+            <!--              &lt;!&ndash;                  :label="item.label"&ndash;&gt;-->
+            <!--              &lt;!&ndash;                  :value="item.value"&ndash;&gt;-->
+            <!--              &lt;!&ndash;                >&ndash;&gt;-->
+            <!--              &lt;!&ndash;                </el-option>&ndash;&gt;-->
+            <!--              &lt;!&ndash;              </el-select>&ndash;&gt;-->
+            <!--            </div>-->
+
+            <div v-if="VILLAGE" class="search-item mb-4">
+              <span class="label">状态：</span>
+              <el-select v-model="query.projectStatus" placeholder="请选择">
+                <el-option v-for="(item, index) of reportStateOPt" :key="index" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </div>
           </div>
         </template>
-        <template v-slot:insert>
-          <el-button icon="el-icon-download" style="margin-bottom: 20px" type="primary" plain @click="exportMethod">
+        <template v-slot:export>
+          <el-button v-if="VILLAGE" icon="el-icon-download" type="primary" plain @click="exportMethod">
             导出信息汇总表
           </el-button>
           <!--          <el-button icon="el-icon-download" type="primary" plain @click="exportMethod2"> 导出项目进度表 </el-button>-->
         </template>
-        <template v-slot:tableLeft>
-          <AreaTree @changeArea="changeArea" />
-        </template>
         <template v-slot:tableAction="scope">
-          <div style="text-align: center">
+          <div style="text-align: left">
+            <el-link v-if="canVerify(scope.data)" @click="goDetail(scope)" type="primary"> 审核 </el-link>
             <el-link v-if="canDetail(scope.data)" @click="goDetail(scope)" type="primary"> 详情 </el-link>
+            <!--            <el-divider v-if="canReport(scope.data)" direction="vertical"></el-divider>-->
+            <div style="display: inline-block">
+              <el-link v-if="canReport(scope.data)" @click="edit(scope.data)" type="primary"> 报送</el-link>
+            </div>
           </div>
         </template>
 
@@ -75,33 +101,35 @@
         <!--        </template>-->
 
         <template v-slot:table>
-          <el-table-column v-if="level === 4" label="报送时间" prop="reportingTime" fixed></el-table-column>
-          <el-table-column v-if="level === 4 || level === 3" label="村（片区）名称" prop="name"></el-table-column>
-          <el-table-column v-if="level === 4 || level === 3" label="创建批次" prop="declarationBatch"></el-table-column>
-          <el-table-column v-if="level === 2 || level === 1" label="地区" prop="name"></el-table-column>
-          <el-table-column v-if="level === 2 || level === 1" label="创建村数" prop="nums"></el-table-column>
-          <el-table-column label="项目数" prop="projectNum" key="projectNum"></el-table-column>
-          <el-table-column label="已开工项目数" prop="startNum" key="startNum"></el-table-column>
-          <el-table-column label="项目开工比例" prop="startRate" key="startRate">
+          <el-table-column label="报送时间" prop="reportingTime" fixed></el-table-column>
+          <el-table-column label="村（片区）名称" prop="name"></el-table-column>
+          <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
+          <el-table-column label="项目数" prop="projectNum"></el-table-column>
+          <el-table-column label="已开工项目数" prop="startNum"></el-table-column>
+          <el-table-column label="项目开工比例" prop="startRate">
             <template slot-scope="scope"> {{ formatScore(scope.row.startRate * 100 || 0) }}% </template>
           </el-table-column>
-          <el-table-column label="计划投资（万元）" prop="investNum" key="investNum">
+          <el-table-column label="计划投资（万元）" prop="investNum">
             <template slot-scope="scope">
               {{ formatMoney(scope.row.investNum || 0) }}
             </template>
           </el-table-column>
-          <el-table-column label="完成投资(万元)" prop="completeTotalInvestment" key="completeTotalInvestment">
+          <el-table-column label="本月完成投资(万元)" prop="completeTotalInvestment">
             <template slot-scope="scope">
-              {{ formatMoney(scope.row.completeTotalInvestment || 0) }}
+              {{ scope.row.completeTotalInvestment ? formatMoney(scope.row.completeTotalInvestment) : '-' }}
             </template>
           </el-table-column>
-          <el-table-column label="投资完成率" sortable prop="rate" key="rate">
-            <template slot-scope="scope"> {{ formatScore(scope.row.rate * 100 || 0) }}% </template>
+          <el-table-column label="本月投资完成率" sortable prop="rate">
+            <template slot-scope="scope">
+              {{ Number(scope.row.rate) ? formatScore(scope.row.rate * 100 || 0) + '%' : '-' }}
+            </template>
           </el-table-column>
-          <el-table-column label="总体进度" sortable prop="overallProgress" key="overallProgress">
-            <template v-slot="scope"> {{ formatScore(scope.row.overallProgress || 0) }}% </template>
+          <el-table-column label="本月总体进度" sortable prop="overallProgress">
+            <template v-slot="scope">
+              {{ scope.row.overallProgress ? formatScore(scope.row.overallProgress || 0) + '%' : '-' }}
+            </template>
           </el-table-column>
-          <el-table-column v-if="level === 4" label="状态" prop="status" key="status">
+          <el-table-column label="状态" prop="status">
             <template slot-scope="scope">
               <p :style="{ color: REPORT_STATUS_COLOR[scope.row.projectStatus] }">
                 {{ getStatusName(scope.row.projectStatus) }}
@@ -115,7 +143,6 @@
 </template>
 <script>
 import { mapMutations } from 'vuex';
-
 import { queryBatchInfo, queryTypeDeclaration, getRecVillages, deleteVillageItem } from '@/api2/villageManage';
 import {
   DECLEAR_TYPE,
@@ -125,39 +152,31 @@ import {
   REPORT_STATUS,
   PROJECT_STATUS,
   // PRO_DECLEAR_STATUS,
-} from '../constants';
-import { recVerify } from '@/api/villageManage';
+} from './constants';
+import { recVerify } from '../../api/villageManage';
 import { downloadFile } from '@/utils/data';
 import role from '@/views2/mixins/role';
-import AreaTree from '@/views2/ProgressSubmission/Components/AreaTree';
-import { exportDetail, getInforExport, getList } from '@/api2/progressSubmission';
+
+import { exportDetail, getInforExport, getList, getProgressReportCheck } from '@/api2/progressSubmission';
 import { formatMoney, formatScore } from '@/views2/utils/formatter';
 // import qs from "qs";
 export default {
   mixins: [role],
-  components: { AreaTree },
   data() {
     // const date = new Date();
     // const year = date.getFullYear().toString();
 
     return {
-      level: '',
       REPORT_STATUS_COLOR,
-      PROJECT_STATUS,
-      hideTableAction: true,
       query: {
         declarationBatch: '',
         finalStatus: '',
-        reportingTime: '', // 报送时间
         name: '',
+        reportingTime: '', // 报送时间
         date: '',
         areaId: '',
-        city: '',
-        county: '',
-        province: '',
-        // village: '',
-        createBy: '',
         projectStatus: null,
+        isAudit: undefined,
       },
       declareYearOpt: [
         {
@@ -210,25 +229,12 @@ export default {
     //   this.declareStatusOpt = this.declareStatusOpt.concat(this.normalizeSelectOptions(PRO_DECLEAR_STATUS));
     // }
     if (this.COUNTRY || this.COUNTRY_LEADER) {
-      this.query.isAudit = 0;
+      this.query.isAudit = 1;
     }
     this.getBatchInfo();
-    if (this.VILLAGE) {
-      this.hideTableAction = false;
-    }
-    if (this.VILLAGE) {
-      this.level = 4;
-    } else if (this.COUNTRY || this.COUNTRY_LEADER) {
-      this.level = 3;
-    } else if (this.CITY || this.COUNTRY_LEADER) {
-      this.level = 2;
-    } else {
-      this.level = 1;
-    }
   },
   mounted() {
     const opts = Object.keys(REPORT_STATUS).map((ele) => {
-      // console.log(ele);
       return {
         label: REPORT_STATUS[ele],
         value: parseInt(ele),
@@ -241,46 +247,44 @@ export default {
     this.reportStateOPt = opts;
   },
   methods: {
-    formatScore,
     formatMoney,
+    formatScore,
     getStatusName,
+    canVerify(data) {
+      const hasPerm = this.CITY || this.COUNTRY_LEADER;
+      if (data.projectStatus !== PROJECT_STATUS.CITY_VERIFY_PENDING) {
+        return false;
+      }
+      return hasPerm;
+    },
     canDetail(data) {
-      const hasPerm = this.level === 4;
+      const hasPerm = this.VILLAGE;
       if (data.projectStatus === PROJECT_STATUS.TO_BE_REPORT) {
         return false;
       }
       return hasPerm;
     },
-    // 改变地区
-    changeArea(val) {
-      this.level = val.level;
-      if (val.level === 4) {
-        this.hideTableAction = false;
-        this.query.createBy = val.createBy;
-        this.query.city = '';
-        this.query.county = '';
-        this.query.province = '';
-      } else if (val.level === 3) {
-        this.hideTableAction = true;
-        this.query.createBy = '';
-        this.query.city = '';
-        this.query.county = val.area;
-        this.query.province = '';
-      } else if (val.level === 2) {
-        this.hideTableAction = true;
-        this.query.createBy = '';
-        this.query.city = val.area;
-        this.query.county = '';
-        this.query.province = '';
-      } else if (val.level === 1) {
-        this.hideTableAction = true;
-        this.query.createBy = '';
-        this.query.city = '';
-        this.query.county = '';
-        this.query.province = val.area;
+    canReport(data) {
+      const hasPerm = this.VILLAGE;
+      if (data.projectStatus !== PROJECT_STATUS.TO_BE_REPORT) {
+        // 已报送则不可在报送
+        return false;
       }
-      this.$refs.crud.search();
-      // this.query.areaId = val.areaId;
+      if (!hasPerm) {
+        return false;
+      }
+      // const day = new Date().getDate();
+      // if (day > 18) {
+      //   return false;
+      // }
+      return true;
+    },
+    // 地区
+    changeArea(val) {
+      this.query.areaId = val.areaId;
+    },
+    tableRowClassName({ row }) {
+      return row.completeTotalInvestment > row.investNum ? 'row-danger' : '';
     },
     ...mapMutations('villageMange', ['changeDeclareList']),
     normalizeSelectOptions(obj) {
@@ -297,10 +301,6 @@ export default {
     },
     // 导出信息汇总表
     async exportMethod() {
-      // if (this.selections.length === 0) {
-      //   this.$notify.error('请选择需要导出的数据');
-      //   return;
-      // }
       this.$confirm('是否导出数据？', '提示', {
         type: 'warning',
       }).then(async () => {
@@ -313,10 +313,9 @@ export default {
           pageNum,
           pageSize,
         };
-        // console.log(data);
         const res = await getInforExport(data);
         downloadFile(res, '信息汇总表.xlsx');
-        this.$notify.success('导出成功');
+        // this.$notify.success('导出成功');
       });
     },
     // 导出项目进度表
@@ -422,43 +421,57 @@ export default {
     },
     // 详情
     goDetail(scope) {
-      const { id, reportingTime, projectStatus } = scope.data;
-      if (projectStatus === this.PROJECT_STATUS.COMPLETED) {
-        return this.$router.push({
-          name: 'ProgressSubmissionDetails',
-          query: { id: id, reportingTime, detail: true, showComplete: true },
+      const { id, reportingTime } = scope.data;
+      this.$router.push({ name: 'ProgressSubmissionDetails', query: { id: id, reportingTime } });
+    },
+    // 修改
+    edit(data) {
+      const { id, reportingTime } = data;
+      getProgressReportCheck({ id, reportingTime }).then(() => {
+        this.$router.push({
+          name: 'NewProgressSubmission',
+          query: { id, reportingTime },
         });
+      });
+    },
+    // 删除
+    deleteItem(id) {
+      this.$confirm('是否删除该条数据？', '提示', {
+        type: 'warning',
+      }).then(async () => {
+        deleteVillageItem([id]).then(() => {
+          this.$notify.success('删除成功');
+          this.$refs.crud.getItems();
+        });
+      });
+    },
+
+    /**
+     * @desc 判断action按钮是否显示
+     * @param {String} actionName 按钮名称
+     * @param {Number} declareStatus 审核状态码
+     */
+    actionControl(actionName, declareStatus) {
+      if (this.COUNTRY) {
+        // 县级
+        return this.XIANJI_ACTION[actionName] && this.XIANJI_ACTION[actionName](declareStatus);
+      } else if (this.CITY) {
+        return (
+          // 市级
+          this.SHIJI_ACTION[actionName] && this.SHIJI_ACTION[actionName](declareStatus)
+        );
+      } else if (this.PROVINCE) {
+        return (
+          // 省
+          this.ADMIN_ACTION[actionName] && this.ADMIN_ACTION[actionName](declareStatus)
+        );
       }
-      this.$router.push({ name: 'ProgressSubmissionDetails', query: { id: id, reportingTime, detail: true } });
+      return false;
     },
   },
 };
 </script>
 <style lang="scss" scoped>
-.block {
-  background-color: unset;
-  &::v-deep .search {
-    background-color: white;
-    padding: 20px 16px;
-    border-radius: 4px;
-  }
-  &::v-deep .table-box {
-    padding: 20px 0 0;
-    background-color: rgb(246 246 246);
-    .table-right {
-      border-radius: 4px;
-      padding: 12px 25px;
-      background-color: white;
-    }
-    .table-left {
-      width: fit-content;
-      padding: 15px 2px;
-      margin-right: 20px;
-      background-color: white;
-      border-radius: 4px;
-    }
-  }
-}
 .search-item {
   margin-right: 20px;
   white-space: nowrap;

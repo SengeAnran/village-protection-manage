@@ -285,7 +285,7 @@ export default {
       type: String,
       default: '',
     },
-    // 表格是否开启多选模式
+    // 表格高度
     tableHeight: {
       type: String,
       default: '',

@@ -29,45 +29,50 @@ export default {
   },
   methods: {
     isDownload(url, name) {
-      this.$confirm(`是否下载附件 ${name}`, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm(`是否下载附件 ${name}`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
         .then(() => {
           this.download(url, name);
         })
-        .catch(() => { });
+        .catch(() => {});
     },
     download(url, name) {
-      let a = document.createElement("a");
+      let a = document.createElement('a');
       a.download = `${name}.doc`;
-      a.style.display = "none";
+      a.style.display = 'none';
       a.href = `${url}?response-content-type=application/octet-stream`;
-      a.setAttribute("target", "_self");
+      a.setAttribute('target', '_self');
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
 
       setTimeout(() => {
         this.$message({
-          type: "success",
-          message: "下载成功!",
+          type: 'success',
+          message: '下载成功!',
         });
       }, 200);
     },
-    preview(url, name) {
-      this.$confirm(`是否在线预览附件 ${name}`, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          const dest = 'https://jqy.zjagri.cn/kkfile/onlinePreview?officePreviewType=pdf&url=' + encodeURIComponent(window.btoa(url));
-          window.open(dest, '_blank');
-        })
-        .catch(() => { });
+    preview(url) {
+      const dest =
+        'https://jqy.zjagri.cn/kkfile/onlinePreview?officePreviewType=pdf&url=' + encodeURIComponent(window.btoa(url));
+      window.open(dest, '_blank');
     },
+    // preview(url, name) {
+    //   this.$confirm(`是否在线预览附件 ${name}`,  提示", {
+    //     confirmButtonText: "确定",
+    //     cancelButtonText: "取消",
+    //     type: "warning",
+    //   })
+    //     .then(() => {
+    //       const dest = 'https://jqy.zjagri.cn/kkfile/onlinePreview?officePreviewType=pdf&url=' + encodeURIComponent(window.btoa(url));
+    //       window.open(dest, '_blank');
+    //     })
+    //     .catch(() => { });
+    // },
   },
 };
 </script>

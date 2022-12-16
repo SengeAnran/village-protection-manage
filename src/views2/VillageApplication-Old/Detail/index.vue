@@ -388,7 +388,6 @@ export default {
       }
     },
     cityVerify(val) {
-      console.log('cityVerify', val);
       if (val === true) {
         this.$nextTick(() => {
           this.init();
@@ -526,17 +525,16 @@ export default {
     showEdit() {
       // 可修改逻辑：
       // 村级，县级： 县级待上报 || 市级驳回 || 省级驳回到县级
-      // 市级： 省级驳回到市级且该页面为非编辑模式下 或 市级待上报状态
+      // 市级： 省级驳回到市级且该页面为非编辑模式下
       if (
         ((this.VILLAGE || this.COUNTRY || this.COUNTRY_LEADER) &&
           (this.form.finalStatus === FINAL_STATUS.COUNTRY_REPORT_PENDING ||
             this.form.finalStatus === FINAL_STATUS.CITY_VERIFY_REJECTED ||
             (this.form.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED && this.form.rejectType === 1))) ||
         ((this.CITY || this.CITY_LEADER) &&
-          ((this.form.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED &&
-            this.form.rejectType === 2 &&
-            !this.cityVerify) ||
-            this.form.finalStatus === FINAL_STATUS.CITY_REPORT_PENDING))
+          this.form.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED &&
+          this.form.rejectType === 2 &&
+          !this.cityVerify)
       ) {
         return true;
       }

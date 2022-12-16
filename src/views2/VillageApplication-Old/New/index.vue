@@ -2,7 +2,6 @@
   <div class="block" v-loading="initLoading">
     <el-form ref="form" class="form" label-position="top" :model="form" label-width="80px">
       <h3 class="text-gray-800 text-2xl mb-3">{{ type === 'add' ? '新建申报' : '修改申报' }}</h3>
-      <!--      <base-box-title>浙江省未来乡村创建申报表</base-box-title>-->
       <div class="detail-top">
         <el-row :gutter="20">
           <el-col :span="12">

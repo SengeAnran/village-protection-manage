@@ -132,11 +132,8 @@ export default {
   methods: {
     formatMoney,
     init() {
-      const { id, reportingTime, showComplete } = this.$route.query;
+      const { id, reportingTime } = this.$route.query;
       if (!id) return;
-      if (showComplete) {
-        this.activeName = 'second';
-      }
       getDetail({ id, reportingTime }).then((res) => {
         this.form = res;
         if (res.detailLists && res.detailLists[0] && res.detailLists[0].firstYear) {

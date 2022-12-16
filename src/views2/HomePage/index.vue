@@ -69,7 +69,7 @@ export default {
       this.isClick = true;
       const dom = document.querySelectorAll('.base-box')[index];
       const box = document.querySelector('.content-box');
-      const offsetTop = dom.offsetTop - 58;
+      const offsetTop = dom.offsetTop - 57;
       box.scrollTo({
         top: offsetTop,
         behavior: 'smooth',
