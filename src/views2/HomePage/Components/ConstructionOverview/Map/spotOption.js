@@ -64,7 +64,7 @@ export default function getSpotOption(data, map) {
             borderColor: '#43A8FF', //描边颜色
             label: {
               show: true,
-              color: '#FFFFFF',
+              color: 'black',
               fontSize: 12,
               fontFamily: 'Microsoft YaHei',
             },
