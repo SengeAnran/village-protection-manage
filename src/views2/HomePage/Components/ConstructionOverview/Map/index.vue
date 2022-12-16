@@ -15,7 +15,7 @@ import { getProviceJSON, getCityJSON, getCountyJSON } from '@/api2/get-json';
 import { mapOption } from '@/config/mapOption';
 import { cityMap } from '@/config/cityMap';
 import { countyMap } from '@/config/countyMap';
-import { mapMutations, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import { getRanking } from '@/api2/homePage';
 
 export default {
@@ -67,19 +67,19 @@ export default {
       this.zoom = 1 / document.body.style.zoom;
     });
   },
-  beforeDestroy() {
-    this['home/RESET_DATA']();
-  },
   methods: {
-    ...mapMutations(['home/RESET_DATA']),
     // 初次加载绘制地图
-    async mapEchartsInit() {
+    mapEchartsInit() {
       // echarts.registerMap('浙江省', dapuJson); //引入地图文件
       // const areaName = '浙江省';
       this.myChart = echarts.init(this.$refs.map); // 获取展示区域
-      if (this.areaCode === '330000') {
-        this.requestGetProvinceJson();
-      }
+      // if (this.areaCode === '330000') {
+      //   this.requestGetProvinceJson();
+      // }
+      const params = {
+        name: this.area,
+      };
+      this.echartsMapClick(params);
     },
     // 地图点击
     echartsMapClick(params) {
@@ -145,7 +145,7 @@ export default {
             areaCode: '330000',
           },
         });
-        this.$emit('map-change', this.deepTree[0].params);
+        // this.$emit('map-change', this.deepTree[0].params);
         // this._saveMapInfo(this.deepTree[0].params);
 
         //注册地图
@@ -202,23 +202,6 @@ export default {
         this.renderMap(params.areaName, arr);
       });
     },
-    // 打点
-    async selectMart(item, index) {
-      this.showDim = false;
-      this.list[index].show = !this.list[index].show;
-      if (
-        this.list.every((item) => {
-          return item.show === false;
-        })
-      ) {
-        const map = this.deepTree[this.deepTree.length - 1].params.areaName;
-        const data = this.deepTree[this.deepTree.length - 1].mapData;
-        await this.getData();
-        this.renderMap(map, data);
-      } else {
-        this.getData();
-      }
-    },
 
     /* 获取列表数据 */
     async getListData() {
@@ -234,6 +217,7 @@ export default {
         };
       });
       const optionData = this.convertData(this.listData);
+      console.log('optionData', optionData);
 
       this.myChart.clear();
       this.myChart.setOption(getSpotOption(optionData, this.area), true); // 打点
@@ -277,68 +261,6 @@ export default {
     //   this.initIconAndButton();
     //   this.requestGetCityJSON(this.deepTree[this.firstLevelOpt[this.firstLevel]].params);
     // },
-    // 获取打点数据
-    // async getData() {
-    //   let res, data;
-    //   if (this.area) {
-    //     data = {
-    //       q1: this.list[0].show,
-    //       q2: this.list[1].show,
-    //       q3: this.list[2].show,
-    //       q4: this.list[3].show,
-    //       areaName: this.areaName,
-    //     };
-    //     res = await getConlocationDistribution(data);
-    //   } else {
-    //     data = {
-    //       q1: this.list[0].show,
-    //       q2: this.list[1].show,
-    //       q3: this.list[2].show,
-    //       q4: this.list[3].show,
-    //       areaId: this.areaId,
-    //     };
-    //     res = await getLocationDistribution(data);
-    //   }
-    //   const optionData = {
-    //     data1: [],
-    //     data2: [],
-    //     data3: [],
-    //     data4: [],
-    //   };
-    //   if (res.q1) {
-    //     optionData.data1 = res.q1.map((item) => {
-    //       return {
-    //         name: item.name,
-    //         value: [Number(item.areaY), Number(item.areaX)],
-    //       };
-    //     });
-    //   }
-    //   if (res.q2) {
-    //     optionData.data2 = res.q2.map((item) => {
-    //       return {
-    //         name: item.name,
-    //         value: [Number(item.areaY), Number(item.areaX)],
-    //       };
-    //     });
-    //   }
-    //   if (res.q3) {
-    //     optionData.data3 = res.q3.map((item) => {
-    //       return {
-    //         name: item.name,
-    //         value: [Number(item.areaY), Number(item.areaX)],
-    //       };
-    //     });
-    //   }
-    //   if (res.q4) {
-    //     optionData.data4 = res.q4.map((item) => {
-    //       return {
-    //         name: item.name,
-    //         value: [Number(item.areaY), Number(item.areaX)],
-    //       };
-    //     });
-    //   }
-    //   this.myChart.setOption(getSpotOption(optionData, this.areaName), true);
-    // },
     changeArea() {
       // console.log('myChart', this.area);
       const params = {
@@ -356,15 +278,15 @@ export default {
       /*获取地图数据*/
       this.myChart.showLoading();
       const mapFeatures = echarts.getMap(this.area).geoJson.features;
-      // console.log('mapFeatures', mapFeatures);
+      console.log('mapFeatures', mapFeatures);
       this.myChart.hideLoading();
       mapFeatures.forEach((v) => {
         // 地区名称
         const name = v.properties.name;
         // 地区经纬度
-        this.geoCoordMap[name] = v.properties.centroid;
+        this.geoCoordMap[name] = v.properties.centroid || v.properties.center;
       });
-      // console.log('geoCoordMap', this.geoCoordMap);
+      console.log('geoCoordMap', this.geoCoordMap);
     },
     // _saveMapInfo(data) {
     //   const { areaLevel, areaCode, areaName } = data;
@@ -386,6 +308,7 @@ export default {
           });
         }
       }
+      console.log('res', res);
       return res;
     },
   },

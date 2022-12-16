@@ -29,6 +29,7 @@ import BaseBox from './Components/BaseBox';
 import TopFixedBox from './Components/TopFixedBox.vue';
 import ConstructionDeclaration from './Components/ConstructionDeclaration';
 import AcceptanceEvaluation from './Components/AcceptanceEvaluation';
+import { mapMutations } from 'vuex';
 // import ExcellentCases from './Components/ExcellentCases';
 export default {
   name: 'index',
@@ -59,7 +60,11 @@ export default {
   destroyed() {
     document.querySelector('.content-box').removeEventListener('scroll', this.initScroll);
   },
+  beforeDestroy() {
+    this['home/RESET_DATA']();
+  },
   methods: {
+    ...mapMutations(['home/RESET_DATA']),
     toBox(index) {
       this.isClick = true;
       const dom = document.querySelectorAll('.base-box')[index];

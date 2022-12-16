@@ -2,6 +2,8 @@ import bgImg from './bubble.png';
 export default function getSpotOption(data, map) {
   const maxSize4Pin = 36;
   const minSize4Pin = 26;
+  // const maxFontSize = 16;
+  // const minFontSize = 11;
   let max, min;
   const sortData = data.map((i) => i.value[2]).sort((a, b) => a - b);
   max = sortData[sortData.length - 1];
@@ -106,6 +108,9 @@ export default function getSpotOption(data, map) {
         // colorBy: 'series',
         symbol: `image://${bgImg}`,
         symbolSize: function (val) {
+          if (max === min) {
+            return maxSize4Pin;
+          }
           const a = (maxSize4Pin - minSize4Pin) / (max - min);
           // let b = minSize4Pin - a * min;
           // b = maxSize4Pin - a * max;
@@ -131,8 +136,20 @@ export default function getSpotOption(data, map) {
             // position: 'center',
             show: true, // 是否常显
             textStyle: {
+              // color: '#1492FF',
               color: '#fff',
-              fontSize: 9,
+              fontWeight: 500,
+              fontSize: 14,
+              // fontSize: function (val) {
+              //   if (max === min) {
+              //     return maxFontSize;
+              //   }
+              //   const a = (maxFontSize - minFontSize) / (max - min);
+              //   // let b = minSize4Pin - a * min;
+              //   // b = maxSize4Pin - a * max;
+              //   // return  val[2] ;
+              //   return a * (val[2] - min) + minFontSize;
+              // },
             },
           },
           emphasis: {
@@ -141,6 +158,7 @@ export default function getSpotOption(data, map) {
         },
         itemStyle: {
           normal: {
+            // color: '#2D7EE7',
             color: '#2D7EE7',
             borderColor: 'rgba(45,126,231,0.2)',
             borderWidth: 8,
