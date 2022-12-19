@@ -140,7 +140,7 @@ export default {
 .table-custom {
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
   overflow: hidden;
-  width: 90%;
+  width: 98%;
   ::v-deep tr th {
     background-color: #f3f3f3;
     color: #222;

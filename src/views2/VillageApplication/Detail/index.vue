@@ -4,171 +4,51 @@
       <RouterBack>详情</RouterBack>
       <!--      <el-button class="export-button" @click="clickExport">导出</el-button>-->
     </div>
-    <div class="box-title">申报详情</div>
+    <BaseBoxTitle>浙江省未来乡村创建申报表</BaseBoxTitle>
+    <declaration-form :form="form"> </declaration-form>
     <div class="examine-result">
-      <img v-if="finalStatus === 4" src="../imgs/pass.png" alt="" />
-      <img v-if="finalStatus === 3" src="../imgs/pro_reject.png" alt="" />
-      <img v-if="finalStatus === 1" src="../imgs/reject.png" alt="" />
+      <img v-if="finalStatus || finalStatus === 0" :src="require(`../imgs/${finalStatus}.png`)" alt="" />
     </div>
+    <BaseBoxTitle>浙江省未来乡村创建方案</BaseBoxTitle>
+    <p class="content mt-4 mb-10">
+      <ViewFileSingle v-if="form.createScenario" :data="form.createScenario" />
+      <span v-else>--</span>
+    </p>
+    <BaseBoxTitle>浙江省未来乡村创建项目备案表</BaseBoxTitle>
     <el-form style="padding-left: 14px" ref="form" class="form" label-position="top" :model="form" label-width="80px">
-      <div class="input-item-wrp">
-        <el-form-item label="创建村（片区）名称" prop="villageId">
-          <p class="content">
-            {{ form.name }}
-          </p>
-        </el-form-item>
-        <!--        <el-form-item label="推荐次序" prop="countrySortNum">-->
-        <!--          <p class="content">{{ form.countrySortNum || '&#45;&#45;' }}</p>-->
-        <!--        </el-form-item>-->
-        <el-form-item label="创建批次" prop="declarationBatch">
-          <p class="content">{{ form.declarationBatch }}</p>
-        </el-form-item>
-        <el-form-item label="创建周期" prop="resPopulation">
-          <p class="content">{{ (form.startTime || '').slice(0, 7) }} 至 {{ (form.endTime || '').slice(0, 7) }}</p>
-        </el-form-item>
-        <el-form-item label="领办领导">
-          <p class="content">{{ form.leader }}</p>
-        </el-form-item>
-        <el-form-item label="建设单位">
-          <p class="content">{{ form.construct }}</p>
-        </el-form-item>
-        <el-form-item label="联系人">
-          <p class="content">{{ form.contactPerson }}</p>
-        </el-form-item>
-        <el-form-item label="联系方式" prop="resPopulation">
-          <p class="content">{{ form.phone }}</p>
-        </el-form-item>
-        <el-form-item label="户籍人口数（万人）" prop="resPopulation">
-          <p class="content">{{ form.huNum }}</p>
-        </el-form-item>
-        <el-form-item label="常住人口数（万人）" prop="resPopulation">
-          <p class="content">{{ form.personNum }}</p>
-        </el-form-item>
-        <el-form-item label="计划总投资（万元）" prop="resPopulation">
-          <p class="content">{{ formatMoney(form.investNum) }}</p>
-        </el-form-item>
-        <el-form-item label="村级集体经济年经营性收入（万元）" prop="resPopulation">
-          <p class="content">{{ formatMoney(form.incomeNum) }}</p>
-        </el-form-item>
-        <el-form-item label="村庄属性：" prop="resPopulation">
-          <p class="content">{{ form.villageProperty.toString() }}</p>
-        </el-form-item>
-      </div>
-      <div>
-        <div class="input-item-wrp">
-          <el-form-item label="基本情况" prop="introduction">
-            <p class="content">{{ form.basicText }}</p>
-          </el-form-item>
+      <div class="form-base-info">
+        <div class="location">{{ form.city + ' ' + form.name }}</div>
+        <div class="item">
+          <div class="item-label">填表人</div>
+          <div class="item-value">{{ form.projectFilingPerson }}</div>
         </div>
-        <div class="input-item-wrp">
-          <el-form-item label="村民代表会议（村民会议）关于未来乡村建设方案决议情况" prop="introduction">
-            <p class="content">{{ form.meetingText }}</p>
-            <p class="mt-2">
-              <ViewImg v-if="form.meetingPic && form.meetingPic.length" :data="form.meetingPic"></ViewImg>
-            </p>
-          </el-form-item>
+        <div class="item">
+          <div class="item-label">联系电话</div>
+          <div class="item-value">{{ form.projectFilingPhone }}</div>
         </div>
-        <div class="input-item-wrp">
-          <el-form-item label="乡、镇（街道）人民政府（办事处）意见" prop="introduction">
-            <p class="content">{{ form.townText }}</p>
-          </el-form-item>
+        <div class="item">
+          <div class="item-label">审核人</div>
+          <div class="item-value">{{ form.projectFilingAudit }}</div>
         </div>
-        <div class="input-item-wrp">
-          <el-form-item label="县（市、区）部门审核意见" prop="introduction">
-            <p class="content">{{ form.departmentText }}</p>
-          </el-form-item>
-        </div>
-        <div class="input-item-wrp">
-          <el-form-item label="县（市、区）人民政府意见" prop="introduction">
-            <p class="content">{{ form.governmentText }}</p>
-          </el-form-item>
-        </div>
-        <hr />
-        <h4 class="block-tit">浙江省未来乡村创建方案</h4>
-        <p class="content mt-4">
-          <ViewFile2 v-if="form.createScenario && form.createScenario.length" :data="form.createScenario" />
-          <span v-else>--</span>
-        </p>
-        <!-- <div class="input-item-wrp mt-4">
-          <el-form-item label="附件：" prop="introduction">
-            <div v-if="form.annexFiles && form.annexFiles.length > 0">
-              <p class="content fu-file" v-for="(item, index) in form.annexFiles" :key="index">
-                <a :href="item.filePath">
-                  <i class="el-icon-link"></i>
-                  <span>
-                  {{ item.fileName }}
-                </span>
-                </a>
-              </p>
-            </div>
-
-          </el-form-item>
-        </div> -->
-      </div>
-      <hr style="margin-top: 18px" />
-      <h4 class="block-tit">未来乡村创建项目备案表</h4>
-      <div class="input-item-wrp">
-        <el-form-item label="负责人" prop="resPopulation">
-          <p class="content">{{ form.projectFilingPerson }}</p>
-        </el-form-item>
-        <el-form-item label="联系电话" prop="resPopulation">
-          <p class="content">{{ form.projectFilingPhone }}</p>
-        </el-form-item>
-        <el-form-item label="审核人" prop="resPopulation">
-          <p class="content">{{ form.projectFilingAudit }}</p>
-        </el-form-item>
       </div>
       <el-form-item v-if="!loading">
         <VilliageListTable :data="form.projects" :hiddenEdit="false" :hiddenDetail="true" hiddenOperation />
       </el-form-item>
-      <div id="verify"></div>
     </el-form>
+
+    <div id="verify"></div>
     <!-- 审核详情 -->
     <!-- 市级审核详情。如果是市级角色，并且处于编辑模式则不展示此结果 -->
     <div
       v-if="
-        ((cityVerify && !CITY && !CITY_LEADER) || !cityVerify) &&
-        finalStatus > FINAL_STATUS.CITY_VERIFY_PENDING &&
-        finalStatus <= FINAL_STATUS.CITY_REPORT_PENDING &&
-        finalStatus !== FINAL_STATUS.COUNTRY_REPORT_PENDING
+        ((cityVerify && !CITY && !CITY_LEADER && !PROVINCE) || !cityVerify) &&
+        (finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED || finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED)
       "
     >
-      <div class="box-title">审核详情</div>
+      <BaseBoxTitle>省级审核</BaseBoxTitle>
       <el-form style="padding-left: 14px" ref="form" class="form" label-position="top" :model="form" label-width="80px">
-        <!-- 市级审核结果-->
-        <div class="examine-item">
-          <div class="examine-title">设区市比选意见</div>
-          <div class="input-item-wrp">
-            <el-form-item label="比选结果" prop="introduction">
-              <p class="content">{{ verifyRes(form.cityVerify) }}</p>
-            </el-form-item>
-          </div>
-          <div class="input-item-wrp">
-            <el-form-item label="比选意见" prop="introduction">
-              <p class="content">{{ form.cityOpinion }}</p>
-            </el-form-item>
-          </div>
-          <div class="input-item-wrp" v-if="form.stampedFile && form.stampedFile.length > 0">
-            <el-form-item label="附件上传" prop="introduction">
-              <ViewFile2 :data="form.stampedFile" />
-            </el-form-item>
-          </div>
-          <div class="input-item-wrp">
-            <el-form-item label="比选时间" prop="introduction">
-              <p class="content">{{ form.cityAuditTime }}</p>
-            </el-form-item>
-          </div>
-        </div>
         <!--          省级审核结果-->
-        <div
-          v-if="
-            ((cityVerify && !PROVINCE) || !cityVerify) &&
-            (finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED ||
-              finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED)
-          "
-          class="examine-item"
-        >
-          <div class="examine-title">省级审核详情</div>
+        <div class="examine-item">
           <div class="input-item-wrp">
             <el-form-item label="审核结果" prop="introduction">
               <p class="content">{{ verifyRes(form.provinceVerify) }}</p>
@@ -180,26 +60,6 @@
               <p class="content">{{ form.provinceOpinion }}</p>
             </el-form-item>
           </div>
-          <!--            <div class="input-item-wrp">-->
-          <!--              <el-form-item label="审核意见附件" prop="introduction">-->
-          <!--&lt;!&ndash;                <p class="content fu-file" v-for="(item, index) in form.provinceAuditFile" :key="index">&ndash;&gt;-->
-          <!--&lt;!&ndash;                  <a :href="item.filePath">&ndash;&gt;-->
-          <!--&lt;!&ndash;                    <i class="el-icon-link"></i>&ndash;&gt;-->
-          <!--&lt;!&ndash;                    <span>&ndash;&gt;-->
-          <!--&lt;!&ndash;                    {{ item.fileName }}&ndash;&gt;-->
-          <!--&lt;!&ndash;                  </span>&ndash;&gt;-->
-          <!--&lt;!&ndash;                  </a>&ndash;&gt;-->
-          <!--&lt;!&ndash;                </p>&ndash;&gt;-->
-          <!--                <p class="content fu-file" v-if="form.provinceAuditFile">-->
-          <!--                  <a :href="form.provinceAuditFile.filePath">-->
-          <!--                    <i class="el-icon-link"></i>-->
-          <!--                    <span>-->
-          <!--                    {{ form.provinceAuditFile.fileName }}-->
-          <!--                  </span>-->
-          <!--                  </a>-->
-          <!--                </p>-->
-          <!--              </el-form-item>-->
-          <!--            </div>-->
           <div class="input-item-wrp">
             <el-form-item label="审核时间" prop="introduction">
               <p class="content">{{ form.provinceAuditTime }}</p>
@@ -295,6 +155,7 @@
 </template>
 <script>
 import VilliageListTable from '../Components/VilliageListTable';
+import DeclarationForm from '../Components/DeclarationForm';
 import rule from '@/mixins/rule';
 import role from '@/views2/mixins/role';
 import { getVillageItemDetail, getvillageDetailExport, verify } from '@/api2/villageManage';
@@ -321,6 +182,7 @@ export default {
   },
   components: {
     VilliageListTable,
+    DeclarationForm, // 申报表
   },
   data() {
     return {
@@ -328,7 +190,7 @@ export default {
       form: {
         annexFiles: [], // 附件
         cityAuditFile: [], // 附件
-        stampedFile: [], // 附件
+        stampedFile: null, // 附件
         provinceAuditFile: [], // 附件
         villageName: '', //村庄地址
         town: '', //村庄地址
@@ -436,9 +298,9 @@ export default {
           }
         }
         const stampedFile = res.stampedFile;
-        this.form.stampedFile = stampedFile ? [stampedFile] : [];
+        this.form.stampedFile = stampedFile;
         this.form.meetingPic = meetingPic;
-        this.form.createScenario = res.createScenarioFile ? [res.createScenarioFile] : [];
+        this.form.createScenario = res.createScenarioFile;
         this.reviewForm.stampedFiles = stampedFile ? stampedFile : {};
         this.loading = false;
         // console.log(this.form.stampedFile);
@@ -578,8 +440,8 @@ export default {
 }
 .examine-result {
   position: absolute;
-  right: 40px;
-  top: 140px;
+  right: 7px;
+  top: 38px;
 }
 .form {
   max-width: 1600px;
@@ -675,6 +537,29 @@ export default {
   .bottom-button {
     padding: 32px 0px 20px;
     text-align: right;
+  }
+  .form-base-info {
+    display: flex;
+    margin-top: 27px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    line-height: 22px;
+    .location {
+      color: #333333;
+    }
+    .item {
+      display: flex;
+      margin-left: 48px;
+      .item-label {
+        color: #999999;
+        margin-right: 24px;
+      }
+      .item-value {
+        color: #333333;
+      }
+    }
   }
 }
 </style>
