@@ -107,7 +107,7 @@ export default {
   },
   data() {
     return {
-      tableData: TABLE_DATA,
+      tableData: TABLE_DATA.slice(0, -1), // 浅拷贝
       TABLE_TITLE: [
         { prop: 'firstColumn', width: 240 },
         { prop: 'secondColumn' },
