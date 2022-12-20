@@ -1,16 +1,10 @@
 <template>
   <div class="page">
-    <RouterBack>详情</RouterBack>
     <el-form ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
-      <base-box-title> 浙江省未来乡村创建成效申请表 </base-box-title>
-      <BaseInfoTable v-if="showBaseInfoTable" :form="form" />
-      <div class="examine-result">
-        <img v-if="finalStatus || finalStatus === 0" :src="require(`../imgs/${finalStatus}.png`)" alt="" />
-      </div>
-      <base-box-title> 物业服务配备表 </base-box-title>
-      <PropertyTable :form="form" />
+      <RouterBack>详情</RouterBack>
+      <sub-tit> 浙江省未来乡村创建成效申请表 </sub-tit>
       <BaseInfo :form="form" />
-      <base-box-title> 未来乡村创建成效评分表 </base-box-title>
+      <sub-tit> 未来乡村创建成效评分表 </sub-tit>
       <score-table :form="form" disabled></score-table>
       <city-info v-if="showCity" :form="form"></city-info>
       <province-info v-if="showProvince" :form="form"></province-info>
@@ -31,11 +25,10 @@
 
 <script>
 import BaseInfo from '../components/BaseInfo.vue';
-import BaseInfoTable from './BaseInfoTable';
-import PropertyTable from './PropertyTable';
 import ScoreTable from '../components/ScoreTable.vue';
 import CityInfo from '../components/CityInfo.vue';
 import ProvinceInfo from '../components/ProvinceInfo.vue';
+import SubTit from '../components/SubTit.vue';
 
 import { getDetail } from '@/api2/acceptanceEvaluation';
 
@@ -44,13 +37,11 @@ import role from '@/views2/mixins/role';
 
 export default {
   name: 'index',
-  components: { BaseInfo, ScoreTable, CityInfo, ProvinceInfo, BaseInfoTable, PropertyTable },
+  components: { BaseInfo, ScoreTable, CityInfo, ProvinceInfo, SubTit },
   mixins: [role],
   data() {
     return {
       form: {},
-      finalStatus: null,
-      showBaseInfoTable: false,
     };
   },
   computed: {
@@ -108,22 +99,28 @@ export default {
     getData() {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
-        const { oldSmallVideoFile, createPerformanceAuditTimeDO, multipartFileVO } = res;
+        const {
+          oldSmallVideoFile,
+          oldSmallSelfReportFile,
+          createPerformanceAuditTimeDO,
+          selfAssessmentFile,
+          multipartFileVO,
+        } = res;
         this.form = res;
-        this.finalStatus = res.finalStatus;
         // this.form.oldSmallPics = (res.oldSmallPics || '').split(',').map((ele) => ({ filePath: ele, url: ele }));
         this.form.oldSmallVideo = oldSmallVideoFile ? [oldSmallVideoFile] : [];
         // this.form.cityAcceptTime = createPerformanceAuditTimeDO?.id;
+        this.form.selfAssessmentFile = selfAssessmentFile ? [selfAssessmentFile] : [];
         this.form.multipartFileVO = multipartFileVO ? [multipartFileVO] : [];
+        this.form.oldSmallSelfReportFile = oldSmallSelfReportFile ? [oldSmallSelfReportFile] : [];
         this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO
           ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd
           : '';
-        this.showBaseInfoTable = true;
         // console.log('xxxxx', this.form.oldSmallPics, this.form.oldSmallVideo);
       });
     },
   },
-  beforeMount() {
+  mounted() {
     this.getData();
   },
 };
@@ -136,13 +133,5 @@ export default {
 }
 .extra-content {
   padding: 0 20px;
-}
-.demo-ruleForm {
-  position: relative;
-}
-.examine-result {
-  position: absolute;
-  right: 7px;
-  top: -23px;
 }
 </style>

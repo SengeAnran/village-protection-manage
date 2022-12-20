@@ -68,8 +68,8 @@
     <!--    <el-dialog title="详情" :visible.sync="dialogVisible" width="90%">-->
     <!--      <VillageListHistoryTable :data="historyList" />-->
     <!--    </el-dialog>-->
-    <el-dialog class="new-dialog" title="详情" :visible.sync="detailDialogVisible" width="90%">
-      <AddFillInDetail v-if="detailDialogVisible" v-model="detailDialogVisible" :id="detailId" :type="type" />
+    <el-dialog class="new-dialog" title="详情" :visible.sync="detailDialogVisible" width="797px">
+      <AddFillInDetail v-if="detailDialogVisible" :id="detailId" :type="type" :reportingTime="form.reportingTime" />
     </el-dialog>
   </div>
 </template>

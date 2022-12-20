@@ -1,5 +1,5 @@
 <template>
-  <div class="table">
+  <div class="table-content">
     <el-table :data="tableData" border :show-header="false" :span-method="arraySpanMethod">
       <el-table-column
         v-for="(item, index) in TABLE_TITLE"
@@ -107,7 +107,7 @@ export default {
   },
   data() {
     return {
-      tableData: TABLE_DATA.slice(0, -1), // 浅拷贝
+      tableData: TABLE_DATA.slice(0), // 浅拷贝
       TABLE_TITLE: [
         { prop: 'firstColumn', width: 240 },
         { prop: 'secondColumn' },
@@ -160,7 +160,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table {
+.table-content {
   margin-bottom: 41px;
   padding: 0 20px;
   width: 100%;
