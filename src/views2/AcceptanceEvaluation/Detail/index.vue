@@ -2,18 +2,11 @@
   <div class="page">
     <RouterBack>详情</RouterBack>
     <el-form ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
-      <base-box-title> 浙江省未来乡村创建成效申请表 </base-box-title>
-      <BaseInfoTable v-if="showBaseInfoTable" :form="form" />
-      <div class="examine-result">
-        <img v-if="finalStatus || finalStatus === 0" :src="require(`../imgs/${finalStatus}.png`)" alt="" />
-      </div>
-      <base-box-title> 物业服务配备表 </base-box-title>
-      <PropertyTable :form="form" />
-      <BaseInfo :form="form" />
+      <BaseInfo :showBaseInfoTable="showBaseInfoTable" :form="form" />
       <base-box-title> 未来乡村创建成效评分表 </base-box-title>
       <score-table :form="form" disabled></score-table>
-      <city-info v-if="showCity" :form="form"></city-info>
-      <province-info v-if="showProvince" :form="form"></province-info>
+      <!--      <city-info v-if="showCity" :form="form"></city-info>-->
+      <!--      <province-info v-if="showProvince" :form="form"></province-info>-->
       <div class="extra-content" v-if="showDownLoad(form)">
         <sub-tit class="mb-4"> 扫描件下载 </sub-tit>
         <div class="extra-content">
@@ -31,8 +24,8 @@
 
 <script>
 import BaseInfo from '../components/BaseInfo.vue';
-import BaseInfoTable from './BaseInfoTable';
-import PropertyTable from './PropertyTable';
+import BaseInfoTable from '../components/BaseInfoTable';
+import PropertyTable from '../components/PropertyTable';
 import ScoreTable from '../components/ScoreTable.vue';
 import CityInfo from '../components/CityInfo.vue';
 import ProvinceInfo from '../components/ProvinceInfo.vue';
@@ -139,10 +132,5 @@ export default {
 }
 .demo-ruleForm {
   position: relative;
-}
-.examine-result {
-  position: absolute;
-  right: 7px;
-  top: -23px;
 }
 </style>

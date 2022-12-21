@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <div style="position: relative">
+    <base-box-title> 浙江省未来乡村创建成效申请表 </base-box-title>
+    <BaseInfoTable v-if="showBaseInfoTable" :form="form" />
+    <div class="examine-result">
+      <img v-if="finalStatus || finalStatus === 0" :src="require(`../imgs/${finalStatus}.png`)" alt="" />
+    </div>
+    <base-box-title> 物业服务配备表 </base-box-title>
+    <PropertyTable :form="form" />
     <base-box-title v-if="showForDetail"> 浙江省未来乡村创建成效自评总结 </base-box-title>
     <div v-if="showForDetail" class="basic-info-module">
       <el-form-item label="浙江省未来乡村创建成效自评总结">
@@ -35,6 +42,8 @@
 <script>
 // import ViewFile from './ViewFile.vue';
 // import { getDetail } from '@/api2/acceptanceEvaluation';
+import BaseInfoTable from './BaseInfoTable';
+import PropertyTable from './PropertyTable';
 import { formatMoney } from '@/views2/utils/formatter';
 import role from '@/views2/mixins/role';
 import { FINAL_STATUS } from '@/views2/utils/constants';
@@ -42,12 +51,18 @@ import { FINAL_STATUS } from '@/views2/utils/constants';
 export default {
   components: {
     // ViewFile,
+    PropertyTable,
+    BaseInfoTable,
   },
   mixins: [role],
   props: {
     form: {
       type: Object,
       default: () => ({}),
+    },
+    showBaseInfoTable: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -59,11 +74,8 @@ export default {
   },
 
   computed: {
-    saveVO() {
-      return this.form.saveVO || {};
-    },
-    villageType() {
-      return this.saveVO.decType;
+    finalStatus() {
+      return this.form.finalStatus;
     },
   },
   methods: {
@@ -80,5 +92,10 @@ export default {
 <style lang="scss" scoped>
 .basic-info-module {
   padding: 20px;
+}
+.examine-result {
+  position: absolute;
+  right: 7px;
+  top: -23px;
 }
 </style>

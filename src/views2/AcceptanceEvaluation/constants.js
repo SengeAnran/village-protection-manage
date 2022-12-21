@@ -38,7 +38,7 @@ export const COUNTY_DEFAULT_FORM = {
   workGuideCounty: '',
   workMechanismCounty: '',
   selfAssessmentSummary: [],
-  selfAssessmentFile: [],
+  selfAssessmentFile: {},
   // oldSmallPics: [],
   oldSmallSelfReport: [],
   oldSmallVideo: [],

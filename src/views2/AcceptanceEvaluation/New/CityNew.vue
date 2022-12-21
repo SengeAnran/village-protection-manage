@@ -1,8 +1,7 @@
 <template>
   <div>
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
-      <sub-tit> 申报详情</sub-tit>
-      <base-info :form="form"></base-info>
+      <base-info :showBaseInfoTable="showBaseInfoTable" :form="form"></base-info>
       <sub-tit> 未来乡村创建成效评分表 </sub-tit>
       <score-table :form="form" @evaluateChange="setCityRanking"></score-table>
       <city-input :form="form" @evaluateChange="setCityRanking"></city-input>
@@ -59,24 +58,24 @@ export default {
         workBoardCity: '',
         workGuideCity: '',
         workMechanismCity: '',
-        selfAssessmentFile: [],
-        oldSmallSelfReportFile: [],
+        selfAssessmentFile: {},
+        oldSmallSelfReportFile: {},
       },
+      showBaseInfoTable: false,
     };
   },
   methods: {
     getDetail() {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
-        const { oldSmallVideoFile, selfAssessmentFile, oldSmallSelfReportFile } = res;
+        const { oldSmallVideoFile } = res;
         this.form = res;
-        this.form.selfAssessmentFile = selfAssessmentFile ? [selfAssessmentFile] : [];
-        this.form.oldSmallSelfReportFile = oldSmallSelfReportFile ? [oldSmallSelfReportFile] : [];
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
         this.form.citySaveAnnex = res.citySaveAnnexFiles ? res.citySaveAnnexFiles[0] : {};
         this.form.oldSmallPics = (res.oldSmallPics || '').split(',').map((ele) => ({ filePath: ele, url: ele }));
         this.form.oldSmallVideo = oldSmallVideoFile ? [oldSmallVideoFile] : [];
         // this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd : '';
+        this.showBaseInfoTable = true;
       });
     },
     onBack() {

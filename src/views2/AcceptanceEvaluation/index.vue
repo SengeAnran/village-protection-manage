@@ -206,7 +206,7 @@ export default {
     }
   },
   beforeRouteEnter: function (to, from, next) {
-    if (from.name === 'NewAcceptanceEvaluation') {
+    if (from.name === 'NewAcceptanceEvaluation' || from.name === 'AcceptanceEvaluationDetails') {
       return next((vm) => {
         vm.initQuery();
       });
@@ -214,7 +214,7 @@ export default {
     next();
   },
   beforeRouteLeave: function (to, from, next) {
-    if (to.name === 'NewAcceptanceEvaluation') {
+    if (to.name === 'NewAcceptanceEvaluation' || to.name === 'AcceptanceEvaluationDetails') {
       this.SET_SEARCH_QUERY(this.query);
     }
     next();

@@ -2,9 +2,9 @@
   <div>
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" label-position="top">
       <sub-tit> 申报详情 </sub-tit>
-      <base-info :form="form"></base-info>
+      <base-info :showBaseInfoTable="showBaseInfoTable" :form="form"></base-info>
       <score-table :form="form" disabled></score-table>
-      <city-info :form="form"></city-info>
+      <!--      <city-info :form="form"></city-info>-->
       <province-input :form="form"></province-input>
     </el-form>
 
@@ -34,21 +34,20 @@ export default {
         provinceOpinion: '',
         provinceVerify: '',
         saveToGoProvince: 0,
-        selfAssessmentFile: [],
-        oldSmallSelfReportFile: [],
+        selfAssessmentFile: {},
+        oldSmallSelfReportFile: {},
       },
+      showBaseInfoTable: false,
     };
   },
   methods: {
     getDetail() {
       const id = this.$route.query.id;
       getDetail({ id }).then((res) => {
-        const { oldSmallVideoFile, createPerformanceAuditTimeDO, selfAssessmentFile, oldSmallSelfReportFile } = res;
+        const { oldSmallVideoFile, createPerformanceAuditTimeDO } = res;
         this.form = res;
         this.form.countySaveAnnex = res.countySaveAnnexFiles || [];
         this.form.citySaveAnnex = res.citySaveAnnexFiles ? res.citySaveAnnexFiles[0] : {};
-        this.form.selfAssessmentFile = selfAssessmentFile ? [selfAssessmentFile] : [];
-        this.form.oldSmallSelfReportFile = oldSmallSelfReportFile ? [oldSmallSelfReportFile] : [];
         // this.form.citySaveAnnex = res.countySaveAnnexFiles || [];
         this.form.oldSmallPics = (res.oldSmallPics || '').split(',').map((ele) => ({ filePath: ele, url: ele }));
         this.form.oldSmallVideo = oldSmallVideoFile ? [oldSmallVideoFile] : [];
@@ -56,6 +55,7 @@ export default {
         this.form.cityAcceptTimeStr = createPerformanceAuditTimeDO
           ? createPerformanceAuditTimeDO?.acceptanceTimeStart + ' 至 ' + createPerformanceAuditTimeDO?.acceptanceTimeEnd
           : '';
+        this.showBaseInfoTable = true;
       });
     },
     onBack() {

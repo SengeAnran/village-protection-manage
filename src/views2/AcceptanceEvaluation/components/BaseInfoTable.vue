@@ -26,6 +26,15 @@
 
               <!--              <p class="content">比选时间:{{ form.cityAuditTime }}</p>-->
             </div>
+            <!--          省级复核评价意见-->
+            <div v-else-if="row.secondColumn === 'provinceOpinion'">
+              <p class="content">
+                {{ form.provinceVerify === 0 ? '驳回市级重填' : form.provinceVerify === 1 ? '通过' : '不通过' }}
+                {{ form.provinceOpinion }}
+              </p>
+
+              <!--              <p class="content">比选时间:{{ form.cityAuditTime }}</p>-->
+            </div>
             <!--            一般情况-->
             <span v-else>{{ form[row.secondColumn] }} </span>
           </span>
@@ -91,6 +100,32 @@ export default {
     villageType() {
       return this.saveVO.decType;
     },
+    showCity() {
+      const finalStatus = this.form.finalStatus;
+      const canViewStatus =
+        finalStatus !== FINAL_STATUS.COUNTRY_REPORT_PENDING && finalStatus != FINAL_STATUS.CITY_VERIFY_PENDING;
+      let canViewIdentity = canViewStatus;
+      if ((this.COUNTRY || this.COUNTRY_LEADER) && finalStatus !== FINAL_STATUS.CITY_VERIFY_REJECTED) {
+        canViewIdentity = false;
+      }
+      return canViewIdentity;
+    },
+    showProvince() {
+      const finalStatus = this.form.finalStatus;
+      const canViewStatus =
+        finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED ||
+        finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED ||
+        finalStatus === FINAL_STATUS.PROVINCE_VERIFY_REJECTED2;
+      let canViewIdentity = canViewStatus;
+      if (
+        this.COUNTRY ||
+        this.COUNTRY_LEADER ||
+        ((this.CITY || this.CITY_LEADER) && finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED)
+      ) {
+        canViewIdentity = false;
+      }
+      return canViewIdentity;
+    },
   },
   data() {
     return {
@@ -117,26 +152,37 @@ export default {
         if (columnIndex === 3) {
           return [1, 2];
         }
-      } else if (rowIndex > 1 && rowIndex < 4) {
+      }
+      if (rowIndex > 1 && rowIndex < 4) {
         if (columnIndex === 1) {
           return [1, 4];
         }
-      } else if (rowIndex === 4) {
+      }
+      if (this.form.finalStatus === FINAL_STATUS.CITY_VERIFY_REJECTED) {
+        if (rowIndex === 4) {
+          if (columnIndex === 1) {
+            return [1, 4];
+          }
+        }
+      }
+      if (rowIndex === 4) {
         if (columnIndex === 0) {
           return [2, 1];
         }
-      } else if (rowIndex === 5) {
+      }
+      if (rowIndex === 5) {
         if (columnIndex === 0) {
           return [1, 5];
         }
       }
+      if (rowIndex === 6) {
+        if (columnIndex === 1) {
+          return [1, 4];
+        }
+      }
     },
     initData() {
-      if (
-        this.form.finalStatus !== FINAL_STATUS.COUNTRY_REPORT_PENDING &&
-        this.form.finalStatus !== FINAL_STATUS.CITY_VERIFY_PENDING
-      ) {
-        console.log(this.form.cityVerify);
+      if (this.showCity) {
         if (this.form.cityVerify === 1) {
           this.tableData.push({
             firstColumn: `设区市比选意见`,
@@ -161,6 +207,15 @@ export default {
             fifthColumn: '',
           });
         }
+      }
+      if (this.showProvince) {
+        this.tableData.push({
+          firstColumn: `省复核意见`,
+          secondColumn: 'provinceOpinion',
+          thirdColumn: '',
+          fourthColumn: '',
+          fifthColumn: '',
+        });
       }
     },
     verifyRes(index) {

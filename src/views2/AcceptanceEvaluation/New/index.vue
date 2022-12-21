@@ -1,5 +1,6 @@
 <template>
   <div class="page-new">
+    <RouterBack>详情</RouterBack>
     <CountyNew v-if="COUNTRY || COUNTRY_LEADER" />
     <CityNew v-else-if="CITY || CITY_LEADER" />
     <ProvinceNew v-else />
