@@ -761,12 +761,29 @@ export const defaultRoutes2 = [
       name: 'CockpitProgressList',
     },
     meta: {
-      menuIds: [USER_TYPE.PROVINCE, USER_TYPE.CITY, USER_TYPE.CITY_LEADER, USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER],
+      menuIds: [
+        USER_TYPE.PROVINCE,
+        USER_TYPE.CITY,
+        USER_TYPE.CITY_LEADER,
+        USER_TYPE.COUNTRY,
+        USER_TYPE.COUNTRY_LEADER,
+        USER_TYPE.VILLAGE,
+      ],
       title: '驾驶舱进度',
       hideChild: false,
       icon: 'xiangmuyanshou',
     },
     children: [
+      {
+        path: '/cockpitProgress/index',
+        name: 'CockpitProgressList',
+        meta: {
+          // icon: "cunzhuangshenbao",
+          menuIds: [USER_TYPE.VILLAGE],
+          title: '村级自查',
+        },
+        component: () => import('@/views2/CockpitProgress/index.vue'),
+      },
       {
         path: '/cockpitProgress/index',
         name: 'CockpitProgressList',

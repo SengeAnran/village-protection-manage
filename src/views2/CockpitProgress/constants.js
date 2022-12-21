@@ -2,7 +2,7 @@ import { getAreaList } from '@/api2/cockpitProgress';
 
 // 审核状态码
 export const DECLARE_STATUS = {
-  '-1': '未发布',
+  '-1': '未上线',
   0: '复核退回',
   1: '已上线',
   2: '待省级审核',

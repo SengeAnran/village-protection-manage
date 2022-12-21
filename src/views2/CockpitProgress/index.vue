@@ -218,6 +218,8 @@ export default {
         return [0, 1].includes(status) ? '审核' : '查看';
       } else if (this.PROVINCE) {
         return [2, 3].includes(status) ? '审核' : '查看';
+      } else if (this.VILLAGE) {
+        return [0].includes(status) ? '' : '--';
       }
       return '--';
     },

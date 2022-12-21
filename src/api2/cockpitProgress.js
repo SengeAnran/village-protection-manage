@@ -25,6 +25,7 @@ export const auditProgress = (data) => {
   return axios.request({
     method: 'POST',
     url: apiHost2 + `/api/workbench/village/progress/audit`,
+    headers: { 'APPLICATION-ID': 4 },
     data,
   });
 };
