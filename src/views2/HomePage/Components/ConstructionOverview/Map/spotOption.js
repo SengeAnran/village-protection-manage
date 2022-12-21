@@ -5,6 +5,12 @@ export default function getSpotOption(data, map) {
   // const maxFontSize = 16;
   // const minFontSize = 11;
   let max, min;
+  const mapData = data.map((i) => {
+    return {
+      name: i.name,
+      value: i.value[2],
+    };
+  });
   const sortData = data.map((i) => i.value[2]).sort((a, b) => a - b);
   max = sortData[sortData.length - 1];
   min = sortData[0];
@@ -13,7 +19,31 @@ export default function getSpotOption(data, map) {
     tooltip: {
       trigger: 'item',
     },
+    visualMap: {
+      // 可视地图
+      show: false,
+      borderColor: 'white',
+      min: min,
+      max: max,
+      y: 'center',
+      splitNumber: 5,
+      calculable: true,
+      textGap: 15,
+      text: [''],
+      seriesIndex: [0],
+      inRange: {
+        // color: ['#CEE9FF', '#D6DCFF'],
+        color: ['#FFEFCE', '#CEE9FF', '#C6F2E3', '#D6DCFF'],
+      },
+      outOfRange: {
+        color: ['#8c8c8c'],
+      },
+      textStyle: {
+        color: '#fff',
+      },
+    },
     geo: {
+      // 地理坐标系组件用于地图的绘制
       map: map, // 使用 registerMap 注册的地图名称。
       show: true, // 是否显示地理坐标系组件。
       roam: false, // 是否开启鼠标缩放和平移漫游。默认不开启。如果只想要开启缩放或者平移，
@@ -98,6 +128,7 @@ export default function getSpotOption(data, map) {
           show: false,
           formatter: '{b}',
         },
+        data: mapData,
       },
       {
         name: '未来乡村创建数',
