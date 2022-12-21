@@ -173,9 +173,9 @@ export default {
       getEvaluationGradeCount(data).then((res) => {
         let { gradeVOS } = res;
         gradeVOS = gradeVOS ? gradeVOS : [];
-        console.log('gradeVOS', gradeVOS);
+        // console.log('gradeVOS', gradeVOS);
         if (gradeVOS) {
-          console.log('gradeVOS');
+          // console.log('gradeVOS');
           this.listData2 = gradeVOS;
           this.chartData2.xAxisData = gradeVOS.map((i) => {
             return i.name;

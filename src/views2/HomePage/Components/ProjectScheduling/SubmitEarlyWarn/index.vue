@@ -115,7 +115,6 @@ export default {
     },
     goDetail(name) {
       const index = this.listData.findIndex((i) => i.name === name);
-      console.log(this.listData[index]);
       if (
         (this.listData[index].id || this.listData[index].id === 0) &&
         !this.isGoing &&
@@ -131,7 +130,6 @@ export default {
           },
         });
       }
-      console.log(this.listData[index]);
     },
   },
 };

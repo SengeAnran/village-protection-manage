@@ -118,7 +118,7 @@ export default {
         this.requestGetProvinceJson();
         return true;
       } else {
-        console.log('点击错误');
+        // console.log('点击错误');
         return false;
       }
     },
@@ -217,7 +217,7 @@ export default {
         };
       });
       const optionData = this.convertData(this.listData);
-      console.log('optionData', optionData);
+      // console.log('optionData', optionData);
 
       this.myChart.clear();
       this.myChart.setOption(getSpotOption(optionData, this.area), true); // 打点
@@ -278,7 +278,7 @@ export default {
       /*获取地图数据*/
       this.myChart.showLoading();
       const mapFeatures = echarts.getMap(this.area).geoJson.features;
-      console.log('mapFeatures', mapFeatures);
+      // console.log('mapFeatures', mapFeatures);
       this.myChart.hideLoading();
       mapFeatures.forEach((v) => {
         // 地区名称
@@ -286,7 +286,7 @@ export default {
         // 地区经纬度
         this.geoCoordMap[name] = v.properties.centroid || v.properties.center;
       });
-      console.log('geoCoordMap', this.geoCoordMap);
+      // console.log('geoCoordMap', this.geoCoordMap);
     },
     // _saveMapInfo(data) {
     //   const { areaLevel, areaCode, areaName } = data;
@@ -295,7 +295,11 @@ export default {
     //   this['map/setAreaLevel'](areaLevel);
     //   this['map/setAreaName'](areaName);
     // },
-
+    /**
+     *
+     * @param data 数据
+     * @returns {*[]}
+     */
     convertData(data) {
       // 打点数据
       const res = [];
@@ -308,7 +312,6 @@ export default {
           });
         }
       }
-      console.log('res', res);
       return res;
     },
   },

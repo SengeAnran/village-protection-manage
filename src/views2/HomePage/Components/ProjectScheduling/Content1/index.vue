@@ -193,7 +193,7 @@ export default {
           },
         });
       }
-      console.log(this.listData[index]);
+      // console.log(this.listData[index]);
     },
     // goDetail2(name) {
     //   const index = this.listData2.findIndex((i) => i.name === name);
