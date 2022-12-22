@@ -9,7 +9,7 @@ const publicPath = process.env.VUE_APP_ENV === 'production' ? '/v2/admin' : '/ad
 // const publicPath = config.routerBase;
 module.exports = {
   publicPath,
-  productionSourceMap: false,
+  productionSourceMap: true,
   lintOnSave: false,
   css: {
     loaderOptions: {

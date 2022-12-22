@@ -83,7 +83,7 @@ export default function getSpotOption(data, map) {
       {
         name: '浙农游',
         type: 'map',
-        mapType: map,
+        map: map,
         roam: false,
         zoom: 1,
         itemStyle: {

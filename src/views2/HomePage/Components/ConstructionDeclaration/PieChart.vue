@@ -1,5 +1,9 @@
 <template>
-  <div class="chart" ref="pieChart"></div>
+  <div
+    class="chart"
+    ref="pieChart"
+    :style="{ zoom: zoom, transform: `scale(${1 / zoom}, ${1 / zoom})`, transformOrigin: '0 0' }"
+  ></div>
 </template>
 
 <script>
@@ -72,10 +76,14 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      zoom: 1,
+    };
   },
   mounted() {
     this.initChart();
+    // 消除zoom缩放导致鼠标偏移
+    this.zoom = 1 / document.body.style.zoom;
   },
   beforeDestroy() {
     if (this.chart) {

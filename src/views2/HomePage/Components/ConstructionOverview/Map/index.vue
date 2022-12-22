@@ -59,9 +59,11 @@ export default {
     },
   },
   mounted() {
-    this.$nextTick(() => {
-      this.mapEchartsInit(); // 绘画地图
-      this.getListData(); // 获取数据并打点
+    this.$nextTick(async () => {
+      const res = await this.mapEchartsInit(); // 绘画地图
+      if (res) {
+        this.getListData(); // 获取数据并打点
+      }
       // this.myChart.on('click', this.echartsMapClick);
       // 消除zoom缩放导致鼠标偏移
       this.zoom = 1 / document.body.style.zoom;
@@ -69,20 +71,17 @@ export default {
   },
   methods: {
     // 初次加载绘制地图
-    mapEchartsInit() {
+    async mapEchartsInit() {
       // echarts.registerMap('浙江省', dapuJson); //引入地图文件
       // const areaName = '浙江省';
       this.myChart = echarts.init(this.$refs.map); // 获取展示区域
-      // if (this.areaCode === '330000') {
-      //   this.requestGetProvinceJson();
-      // }
       const params = {
         name: this.area,
       };
-      this.echartsMapClick(params);
+      return await this.echartsMapClick(params);
     },
     // 地图点击
-    echartsMapClick(params) {
+    async echartsMapClick(params) {
       // console.log('点击了');
       if (params.name in this.cityAreaMap) {
         // 点击的为市级
@@ -97,8 +96,7 @@ export default {
         //如果点击的是11个市，绘制选中地区的二级地图
         this.city = params.name;
         this.areaId = String(Number(this.areaCode) / 100);
-        this.requestGetCityJSON(data);
-        return true;
+        return await this.requestGetCityJSON(data);
       } else if (params.name in this.countyAreaMap) {
         // 点击的为区县级
         this.areaName = params.name;
@@ -112,11 +110,9 @@ export default {
         //如果点击的是区县，绘制选中地区的三级地图
         // this.area = params.name;
         this.areaId = String(Number(this.areaCode));
-        this.requestGetCountyJSON(data);
-        return true;
+        return await this.requestGetCountyJSON(data);
       } else if (params.name === '浙江省') {
-        this.requestGetProvinceJson();
-        return true;
+        return await this.requestGetProvinceJson();
       } else {
         // console.log('点击错误');
         return false;
@@ -124,82 +120,91 @@ export default {
     },
     //绘制浙江省地图
     requestGetProvinceJson() {
-      getProviceJSON().then((res) => {
-        let arr = [];
-        for (let i = 0; i < res.features.length; i++) {
-          let obj = {
-            name: res.features[i].properties.name,
-            areaName: res.features[i].properties.name,
-            areaCode: res.features[i].properties.adcode,
-            areaLevel: 'city',
-          };
-          arr.push(obj);
-        }
-        this.mapData = arr;
-        this.deepTree.push({
-          mapData: arr,
-          params: {
-            name: '浙江省',
-            areaName: '浙江省',
-            areaLevel: 'province',
-            areaCode: '330000',
-          },
-        });
-        // this.$emit('map-change', this.deepTree[0].params);
-        // this._saveMapInfo(this.deepTree[0].params);
+      return new Promise((resolve) => {
+        getProviceJSON().then((res) => {
+          let arr = [];
+          for (let i = 0; i < res.features.length; i++) {
+            let obj = {
+              name: res.features[i].properties.name,
+              areaName: res.features[i].properties.name,
+              areaCode: res.features[i].properties.adcode,
+              areaLevel: 'city',
+            };
+            arr.push(obj);
+          }
+          this.mapData = arr;
+          this.deepTree.push({
+            mapData: arr,
+            params: {
+              name: '浙江省',
+              areaName: '浙江省',
+              areaLevel: 'province',
+              areaCode: '330000',
+            },
+          });
+          // this.$emit('map-change', this.deepTree[0].params);
+          // this._saveMapInfo(this.deepTree[0].params);
 
-        //注册地图
-        this.$echarts.registerMap('浙江省', res);
-        //绘制地图
-        this.renderMap('浙江省', arr);
+          //注册地图
+          this.$echarts.registerMap('浙江省', res);
+          //绘制地图
+          this.renderMap('浙江省', arr);
+          resolve(true);
+        });
       });
     },
     // 加载市级地图
     requestGetCityJSON(params) {
       // console.log(params)
       this.areaLevel = params.areaLevel;
-      getCityJSON(params.areaCode).then((res) => {
-        this.$echarts.registerMap(params.areaName, res);
-        let arr = [];
-        for (let i = 0; i < res.features.length; i++) {
-          let obj = {
-            name: res.features[i].properties.name,
-            areaName: res.features[i].properties.name,
-            areaCode: res.features[i].properties.adcode,
-            areaLevel: 'districts',
-          };
-          arr.push(obj);
-        }
-        this.mapData = arr;
-        this.deepTree.push({ mapData: arr, params: params });
-        this.$emit('map-change', params);
-        // this._saveMapInfo(params);
+      return new Promise((resolve) => {
+        getCityJSON(params.areaCode).then((res) => {
+          this.$echarts.registerMap(params.areaName, res);
+          let arr = [];
+          for (let i = 0; i < res.features.length; i++) {
+            let obj = {
+              name: res.features[i].properties.name,
+              areaName: res.features[i].properties.name,
+              areaCode: res.features[i].properties.adcode,
+              areaLevel: 'districts',
+            };
+            arr.push(obj);
+          }
+          this.mapData = arr;
+          this.deepTree.push({ mapData: arr, params: params });
+          this.$emit('map-change', params);
+          // this._saveMapInfo(params);
 
-        this.renderMap(params.areaName, arr);
+          this.renderMap(params.areaName, arr);
+          resolve(true);
+        });
       });
     },
     // 加载区县级地图
     requestGetCountyJSON(params) {
       // console.log(params)
       this.areaLevel = params.areaLevel;
-      getCountyJSON(params.areaCode).then((res) => {
-        this.$echarts.registerMap(params.areaName, res);
-        let arr = [];
-        for (let i = 0; i < res.features.length; i++) {
-          let obj = {
-            name: res.features[i].properties.name,
-            areaName: res.features[i].properties.name,
-            areaCode: res.features[i].properties.adcode,
-            areaLevel: 'town',
-          };
-          arr.push(obj);
-        }
-        this.mapData = arr;
-        this.deepTree.push({ mapData: arr, params: params });
-        this.$emit('map-change', params);
-        // this._saveMapInfo(params);
+      return new Promise((resolve) => {
+        getCountyJSON(params.areaCode).then((res) => {
+          this.$echarts.registerMap(params.areaName, res);
+          let arr = [];
+          for (let i = 0; i < res.features.length; i++) {
+            let obj = {
+              name: res.features[i].properties.name,
+              areaName: res.features[i].properties.name,
+              areaCode: res.features[i].properties.adcode,
+              areaLevel: 'town',
+            };
+            arr.push(obj);
+          }
+          this.mapData = arr;
+          this.deepTree.push({ mapData: arr, params: params });
+          this.$emit('map-change', params);
+          // this._saveMapInfo(params);
 
-        this.renderMap(params.areaName, arr);
+          this.renderMap(params.areaName, arr);
+          resolve(true);
+        });
       });
     },
 
@@ -261,12 +266,12 @@ export default {
     //   this.initIconAndButton();
     //   this.requestGetCityJSON(this.deepTree[this.firstLevelOpt[this.firstLevel]].params);
     // },
-    changeArea() {
+    async changeArea() {
       // console.log('myChart', this.area);
       const params = {
         name: this.area,
       };
-      const res = this.echartsMapClick(params);
+      const res = await this.echartsMapClick(params);
       // console.log('res', res);
       if (res) {
         // 获取到地图的情况下才获取数据
