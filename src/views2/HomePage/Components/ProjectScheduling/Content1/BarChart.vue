@@ -64,11 +64,9 @@ export default {
   },
   watch: {
     chartData: {
-      handler: function (val) {
+      handler: function () {
         this.$nextTick(() => {
-          if (val.xAxisData && val.xAxisData.length > 0) {
-            this.loadData();
-          }
+          this.loadData();
         });
       },
       deep: true,
@@ -121,8 +119,8 @@ export default {
         },
         grid: {
           top: '28%',
-          left: '10%',
-          right: '10%',
+          left: '5%',
+          right: '5%',
           bottom: '15%',
         },
         legend: {
@@ -170,12 +168,16 @@ export default {
               str += `<span style="font-size:16px;">&nbsp; &nbsp;${item.seriesName}:  &nbsp;&nbsp;${item.value}${this.unit}</span>
                                         <br/>`;
             });
-            str += `<span>&nbsp; &nbsp;  <em>${this.name2}</em>:  &nbsp;${this.dataList2[params[0].dataIndex]}${
-              this.otherUnit
-            }<br/></span>`;
-            str += `<span>&nbsp; &nbsp;  <em>${this.name3}</em>:  &nbsp;${this.dataList3[params[0].dataIndex]}${
-              this.otherUnit
-            }<br/></span>`;
+            if (this.name2 && this.dataList2.length > 0) {
+              str += `<span>&nbsp; &nbsp;  <em>${this.name2}</em>:  &nbsp;${this.dataList2[params[0].dataIndex]}${
+                this.otherUnit
+              }<br/></span>`;
+            }
+            if (this.name3 && this.dataList3.length > 0) {
+              str += `<span>&nbsp; &nbsp;  <em>${this.name3}</em>:  &nbsp;${this.dataList3[params[0].dataIndex]}${
+                this.otherUnit
+              }<br/></span>`;
+            }
             return str;
           },
         },
@@ -198,6 +200,7 @@ export default {
             },
           },
           axisLabel: {
+            interval: 0, // 坐标轴刻度标签的显示间隔，在类目轴中有效；默认会采用标签不重叠的策略间隔显示标签；可以设置成0强制显示所有标签；如果设置为1，表示『隔一个标签显示一个标签』，如果值为2，表示隔两个标签显示一个标签，以此类推。
             color: '#666666',
             textStyle: {
               fontSize: 12,
@@ -294,48 +297,6 @@ export default {
             //   },
             // },
           },
-          // {
-          //   stack: 'AA',
-          //   show: false,
-          //   type: 'bar',
-          //   name: this.name2,
-          //   barWidth: 10,
-          //   itemStyle: {
-          //     color: '#FED887',
-          //     borderRadius: [2, 2, 0, 0],
-          //   },
-          //   label: {
-          //     show: false,
-          //     position: 'top',
-          //     distance: 10,
-          //     color: '#FFFFFF',
-          //     textStyle: {
-          //       fontSize: 22,
-          //     },
-          //   },
-          //   data: this.dataList2,
-          // },
-          // {
-          //   stack: 'AA',
-          //   type: 'bar',
-          //   show: false,
-          //   name: this.name3,
-          //   barWidth: 10,
-          //   itemStyle: {
-          //     color: '#FED887',
-          //     borderRadius: [2, 2, 0, 0],
-          //   },
-          //   label: {
-          //     show: false,
-          //     position: 'top',
-          //     distance: 10,
-          //     color: '#FFFFFF',
-          //     textStyle: {
-          //       fontSize: 22,
-          //     },
-          //   },
-          //   data: this.dataList3,
-          // },
         ],
       };
       return option;

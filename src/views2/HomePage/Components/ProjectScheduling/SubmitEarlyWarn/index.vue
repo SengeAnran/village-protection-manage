@@ -92,25 +92,26 @@ export default {
         ...this.location,
       };
       getSubmitEarlyWarning(data).then((res) => {
-        this.codeDataList[0].value = res.notSubmitted;
-        this.codeDataList[1].value = res.submissionTimeout;
-        this.codeDataList[2].value = res.normalSubmission;
-        const { warningVOList } = res;
+        this.codeDataList[0].value = res?.notSubmitted || 0;
+        this.codeDataList[1].value = res?.submissionTimeout || 0;
+        this.codeDataList[2].value = res?.normalSubmission || 0;
+        const warningVOList = res.warningVOList || [];
+        this.listData = warningVOList;
+        this.chartData.xAxisData = warningVOList.map((i) => {
+          return i.name;
+        });
+        this.chartData.dataList1 = warningVOList.map((i) => {
+          return i.normalSubmission;
+        });
+        this.chartData.dataList2 = warningVOList.map((i) => {
+          return i.submissionTimeout;
+        });
+        this.chartData.dataList3 = warningVOList.map((i) => {
+          return i.notSubmitted;
+        });
         if (warningVOList) {
-          this.listData = warningVOList;
-          this.chartData.xAxisData = warningVOList.map((i) => {
-            return i.name;
-          });
-          this.chartData.dataList1 = warningVOList.map((i) => {
-            return i.normalSubmission;
-          });
-          this.chartData.dataList2 = warningVOList.map((i) => {
-            return i.submissionTimeout;
-          });
-          this.chartData.dataList3 = warningVOList.map((i) => {
-            return i.notSubmitted;
-          });
         }
+        console.log(this.chartData.xAxisData);
       });
     },
     goDetail(name) {

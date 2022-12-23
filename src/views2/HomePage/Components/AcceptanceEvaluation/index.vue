@@ -149,58 +149,51 @@ export default {
         ...this.location,
       };
       getAcceptanceStatistics(data).then((res) => {
-        const { cityCountVOList } = res;
-        if (cityCountVOList) {
-          this.listData = cityCountVOList;
-          this.chartData.xAxisData = cityCountVOList.map((i) => {
-            return i.name;
-          });
-          this.chartData.dataList1 = cityCountVOList.map((i) => {
-            return i.passTotalCount;
-          });
-          this.chartData.dataList2 = cityCountVOList.map((i) => {
-            return i.readyPassTotalCount;
-          });
-          this.chartData.dataList3 = cityCountVOList.map((i) => {
-            return i.noPassTotalCount;
-          });
-        }
+        const cityCountVOList = res?.cityCountVOList || [];
+        this.listData = cityCountVOList;
+        this.chartData.xAxisData = cityCountVOList.map((i) => {
+          return i.name;
+        });
+        this.chartData.dataList1 = cityCountVOList.map((i) => {
+          return i.passTotalCount;
+        });
+        this.chartData.dataList2 = cityCountVOList.map((i) => {
+          return i.readyPassTotalCount;
+        });
+        this.chartData.dataList3 = cityCountVOList.map((i) => {
+          return i.noPassTotalCount;
+        });
         this.pieDataList[0].value = res.passTotalCount;
         this.pieDataList[1].value = res.readyPassTotalCount;
         this.pieDataList[2].value = res.noPassTotalCount;
-        this.total = res.declarationTotalCount;
+        this.total = res?.declarationTotalCount || 0;
       });
       getEvaluationGradeCount(data).then((res) => {
-        let { gradeVOS } = res;
-        gradeVOS = gradeVOS ? gradeVOS : [];
-        // console.log('gradeVOS', gradeVOS);
-        if (gradeVOS) {
-          // console.log('gradeVOS');
-          this.listData2 = gradeVOS;
-          this.chartData2.xAxisData = gradeVOS.map((i) => {
-            return i.name;
-          });
-          this.chartData4.xAxisData = this.chartData2.xAxisData;
-          this.chartData3.xAxisData = this.chartData2.xAxisData;
-          this.chartData4.dataList1 = gradeVOS.map((i) => {
-            return i.oldSmallReportNum;
-          });
-          this.chartData3.dataList1 = gradeVOS.map((i) => {
-            return i.totalCounty;
-          });
-          this.chartData3.dataList2 = gradeVOS.map((i) => {
-            return i.totalCity;
-          });
-          this.chartData2.dataList1 = gradeVOS.map((i) => {
-            return i.excellent;
-          });
-          this.chartData2.dataList2 = gradeVOS.map((i) => {
-            return i.good;
-          });
-          this.chartData2.dataList3 = gradeVOS.map((i) => {
-            return i.qualified;
-          });
-        }
+        let gradeVOS = res?.gradeVOS || [];
+        this.listData2 = gradeVOS;
+        this.chartData2.xAxisData = gradeVOS.map((i) => {
+          return i.name;
+        });
+        this.chartData4.xAxisData = this.chartData2.xAxisData;
+        this.chartData3.xAxisData = this.chartData2.xAxisData;
+        this.chartData4.dataList1 = gradeVOS.map((i) => {
+          return i.oldSmallReportNum;
+        });
+        this.chartData3.dataList1 = gradeVOS.map((i) => {
+          return i.totalCounty;
+        });
+        this.chartData3.dataList2 = gradeVOS.map((i) => {
+          return i.totalCity;
+        });
+        this.chartData2.dataList1 = gradeVOS.map((i) => {
+          return i.excellent;
+        });
+        this.chartData2.dataList2 = gradeVOS.map((i) => {
+          return i.good;
+        });
+        this.chartData2.dataList3 = gradeVOS.map((i) => {
+          return i.qualified;
+        });
         this.pieDataList2[0].value = res.excellent;
         this.pieDataList2[1].value = res.good;
         this.pieDataList2[2].value = res.qualified;

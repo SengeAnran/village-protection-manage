@@ -20,7 +20,7 @@
 
     <base-box-item name="总体进度" style="margin-top: 30px" :count="total3" unit="%" :icon="iconUrl3" :fixed="1">
       <div class="all-content">
-        <BarChart v-if="showBar" key="1" :chart-data="chartData3" hideTooltip hideLegend @goDetail="goDetail" />
+        <BarChart v-if="showBar" key="1" :chart-data="chartData3" hideLegend @goDetail="goDetail" />
       </div>
     </base-box-item>
   </div>
@@ -71,7 +71,7 @@ export default {
       },
       chartData3: {
         name: '各地市总体进度情况',
-        name1: '投资完成率',
+        name1: '总体进度',
         xAxisData: [],
         dataList1: [],
       },
@@ -120,7 +120,7 @@ export default {
         this.pieDataList[1].percent = (res.notStartRate * 100).toFixed(1);
         this.pieDataList[1].value = res.notStartNum;
         this.total = res.startRate * 100;
-        this.otherNumber = res.projectNum;
+        this.otherNumber = res?.projectNum || 0;
         const { projectCommencementRates } = res;
         if (projectCommencementRates) {
           this.listData = projectCommencementRates;
@@ -141,8 +141,11 @@ export default {
       //投资完成率
       getProgressReportTotal(data).then((res) => {
         // 投资完成率
-        this.total2 = res.rate * 100;
+
+        const rate = res ? res.rate || 0 : 0;
+        this.total2 = rate * 100;
         this.data = res;
+        console.log(this.data);
       });
       getProgressReport(data).then((res) => {
         // 投资完成率
@@ -173,6 +176,8 @@ export default {
                 return prev + cur.overallProgress * 1;
               }) / res.length
             ).toFixed(1) * 1;
+        } else {
+          this.total3 = 0;
         }
       });
     },

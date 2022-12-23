@@ -2,12 +2,12 @@
   <div class="module-wrp">
     <div class="gap"></div>
     <TotalTitle name="计划投资" unit="万元" countSize="24" :icon="false" :count="Number(formatMoney(totalPlan))" />
-    <TotalItem :social="data.planDrive" :government="data.planGov" />
+    <TotalItem :social="data?.planDrive || 0" :government="data?.planGov || 0" />
     <!--    <TotalItem background-color="#70abf8" />-->
     <div class="gap"></div>
     <TotalTitle name="完成投资" unit="万元" countSize="24" :icon="false" :count="Number(formatMoney(totalComplete))" />
     <!--    <TotalItem background-color="#fed887" />-->
-    <TotalItem :social="data.completeDrive" :government="data.completeGov" />
+    <TotalItem :social="data?.completeDrive || 0" :government="data?.completeGov || 0" />
   </div>
 </template>
 <script>
@@ -25,11 +25,11 @@ export default {
   },
   computed: {
     totalPlan() {
-      const { plan } = this.data;
+      const plan = this.data ? this.data.plan : 0;
       return (plan || 0).toFixed(2);
     },
     totalComplete() {
-      const { complete } = this.data;
+      const complete = this.data ? this.data.complete : 0;
       return complete || 0;
     },
   },

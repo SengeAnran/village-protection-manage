@@ -54,11 +54,9 @@ export default {
   },
   watch: {
     chartData: {
-      handler: function (val) {
+      handler: function () {
         this.$nextTick(() => {
-          if (val.xAxisData) {
-            this.loadData();
-          }
+          this.loadData();
         });
       },
       deep: true,
@@ -95,8 +93,8 @@ export default {
         },
         grid: {
           top: '28%',
-          left: '10%',
-          right: '10%',
+          left: '5%',
+          right: '5%',
           bottom: '15%',
         },
         legend: {
@@ -156,6 +154,7 @@ export default {
             },
           },
           axisLabel: {
+            interval: 0, // 坐标轴刻度标签的显示间隔，在类目轴中有效；默认会采用标签不重叠的策略间隔显示标签；可以设置成0强制显示所有标签；如果设置为1，表示『隔一个标签显示一个标签』，如果值为2，表示隔两个标签显示一个标签，以此类推。
             color: '#666666',
             textStyle: {
               fontSize: 12,
