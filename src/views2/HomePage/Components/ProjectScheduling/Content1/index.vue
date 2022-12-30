@@ -167,15 +167,11 @@ export default {
           return (i.completeTotal * 1).toFixed(2);
         });
         if (res.length > 0) {
-          this.total3 =
-            (
-              res.reduce((prev, cur, index) => {
-                if (index === 1) {
-                  return prev.overallProgress * 1 + cur.overallProgress * 1;
-                }
-                return prev + cur.overallProgress * 1;
-              }) / res.length
-            ).toFixed(1) * 1;
+          const total =
+            res.reduce((prev, cur) => {
+              return prev + cur.overallProgress * 1;
+            }, 0) / res.length;
+          this.total3 = total.toFixed(1) * 1;
         } else {
           this.total3 = 0;
         }

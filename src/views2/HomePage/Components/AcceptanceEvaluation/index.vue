@@ -96,6 +96,7 @@ export default {
         unit: '分',
         xAxisData: [],
         dataList1: [],
+        dataList2: [],
       },
       chartData4: {
         name: '各地市“一老一小”建设服务情况',
@@ -180,10 +181,10 @@ export default {
           return i.oldSmallReportNum;
         });
         this.chartData3.dataList1 = gradeVOS.map((i) => {
-          return i.totalCounty;
+          return i.totalCity;
         });
         this.chartData3.dataList2 = gradeVOS.map((i) => {
-          return i.totalCity;
+          return i.totalCounty;
         });
         this.chartData2.dataList1 = gradeVOS.map((i) => {
           return i.excellent;
