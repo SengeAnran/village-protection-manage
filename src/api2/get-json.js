@@ -1,8 +1,7 @@
 import * as request from '../utils/mapRequest';
-const api = process.env.VUE_APP_ENV === 'production' ? '/screen' : '/admin';
-console.log(api);
-// let api = '/screen';
-// let api = '';
+import config from '@/utils/config';
+// const api = process.env.VUE_APP_ENV === 'production' ? '/v2/admin' : '/admin';
+const api = config.routerBase;
 
 // 获取浙江省JSON
 export const getProviceJSON = (path, params) => request.get(api + `/map/330000full.json`, params);
