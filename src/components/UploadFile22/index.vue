@@ -106,7 +106,7 @@ export default {
     },
     beforeImgUpload(file) {
       //console.log(file);
-      const suffix = file.name.split('.').slice(-1)[0];
+      const suffix = file.name.split('.').slice(-1)[0].toLowerCase();
       const isFormat = this.accept === '*' ? true : this.accept.indexOf(suffix) >= 0;
       const isLimit = file.size / 1024 / 1024 < this.limitSize;
 

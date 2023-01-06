@@ -270,3 +270,12 @@ export const getProList = () => {
     headers: { 'APPLICATION-ID': `${4}` },
   });
 };
+
+// 获取所有的报送时间
+export const getTime = () => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + '/api/workbench/progressReport/getTime',
+    headers: { 'APPLICATION-ID': `${4}` },
+  });
+};

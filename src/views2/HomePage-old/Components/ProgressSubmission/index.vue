@@ -32,7 +32,7 @@ export default {
     };
   },
   mounted() {
-    this.getData('');
+    // this.getData('');
     window.addEventListener('resize', () => {
       if (this.flag) {
         this.flag = false;
