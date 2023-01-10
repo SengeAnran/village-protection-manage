@@ -20,7 +20,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: '请选择',
+      default: '全部',
     },
   },
   data() {

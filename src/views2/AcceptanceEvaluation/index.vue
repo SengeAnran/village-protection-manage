@@ -19,6 +19,7 @@
         :permission-add="0"
         :permission-edit="0"
         :permission-delete="10004"
+        :default-page="defaultPage"
         @selectionChange="selectionChange"
       >
         <template v-slot:search>
@@ -176,7 +177,9 @@ export default {
         cityLevelRating: '',
         cityAcceptTime: '',
         finalStatus: '',
+        acceptTimeId: '',
       },
+      defaultPage: 1,
       // getMethod: getAuditList,
       deleteMethod: deleteItem,
       exportMethod: exportList,
@@ -215,7 +218,8 @@ export default {
   },
   beforeRouteLeave: function (to, from, next) {
     if (to.name === 'NewAcceptanceEvaluation' || to.name === 'AcceptanceEvaluationDetails') {
-      this.SET_SEARCH_QUERY(this.query);
+      const page = this.$refs.crud.page;
+      this.SET_SEARCH_QUERY({ ...this.query, page });
     }
     next();
   },
@@ -236,6 +240,10 @@ export default {
       if (this.searchQuery && Object.keys(this.searchQuery).length > 0) {
         Object.keys(this.searchQuery).map((i) => {
           this.query[i] = this.searchQuery[i];
+          const { page } = this.query;
+          if (page) {
+            this.defaultPage = page;
+          }
         });
         this.RESET_SEARCH_QUERY();
       }

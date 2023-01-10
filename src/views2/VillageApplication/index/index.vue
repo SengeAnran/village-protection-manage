@@ -7,6 +7,7 @@
         :get-method="getMethod"
         :delete-method="deleteMethod"
         :query.sync="query"
+        :defaultPage="defaultPage"
         :showOrder="false"
         :selection="canSelection"
         id-key="id"
@@ -266,6 +267,7 @@ export default {
         city: '', // 市中文名称
         county: '', //县中文名称
       },
+      defaultPage: 1,
       proRegion: '', // 省级选地区
       loading: false,
       queryDeclareTypeOpt: [
@@ -319,7 +321,9 @@ export default {
   },
   beforeRouteLeave: function (to, from, next) {
     if (to.name === 'villageDetails') {
-      this.SET_SEARCH_QUERY(this.query);
+      const page = this.$refs.crud.page;
+      this.SET_SEARCH_QUERY({ ...this.query, page });
+      // this.SET_SEARCH_QUERY(this.query);
     }
     next();
   },
@@ -355,6 +359,11 @@ export default {
           this.query[i] = this.searchQuery[i];
         });
         this.proRegion = [this.query.city, this.query.county];
+        const { page } = this.query;
+        if (page) {
+          this.defaultPage = page;
+          console.log(this.defaultPage);
+        }
         this.RESET_SEARCH_QUERY();
       }
     },

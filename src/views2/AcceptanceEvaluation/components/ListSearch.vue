@@ -86,34 +86,64 @@ export default {
   },
   methods: {
     setBatchOpt() {
+      const baseItem = [
+        {
+          label: '全部',
+          value: '',
+        },
+      ];
       getSetList({ type: 2, pageNum: 1, pageSize: 50 }).then((res) => {
-        this.batchOpt = res.content.map((c) => ({ label: c.batch, value: c.batch }));
+        this.batchOpt = baseItem.concat(...res.content.map((c) => ({ label: c.batch, value: c.batch })));
       });
     },
     setCityLevelOpt() {
       const level = ['合格', '良好', '优秀'];
-      this.cityLevelOpt = level.map((c, index) => {
-        return {
-          label: c,
-          value: index,
-        };
-      });
+      const baseItem = [
+        {
+          label: '全部',
+          value: '',
+        },
+      ];
+      this.cityLevelOpt = baseItem.concat(
+        ...level.map((c, index) => {
+          return {
+            label: c,
+            value: index,
+          };
+        }),
+      );
     },
     setAcceptTimeOpt() {
+      const baseItem = [
+        {
+          label: '全部',
+          value: '',
+        },
+      ];
       getSetListTime({ type: 1, pageNum: 1, pageSize: 50 }).then((res) => {
-        this.acceptTimeOpt = res.content.map((c) => ({
-          label: c.acceptanceStartTime + '至' + c.acceptanceEndTime,
-          value: c.id,
-        }));
+        this.acceptTimeOpt = baseItem.concat(
+          ...res.content.map((c) => ({
+            label: c.acceptanceStartTime + '至' + c.acceptanceEndTime,
+            value: c.id,
+          })),
+        );
       });
     },
     setFinalStatusOpt() {
-      this.finalStatusOpt = Object.keys(DECLARE_STATUS).map((c) => {
-        return {
-          label: DECLARE_STATUS[c],
-          value: c,
-        };
-      });
+      const baseItem = [
+        {
+          label: '全部',
+          value: '',
+        },
+      ];
+      this.finalStatusOpt = baseItem.concat(
+        ...Object.keys(DECLARE_STATUS).map((c) => {
+          return {
+            label: DECLARE_STATUS[c],
+            value: c,
+          };
+        }),
+      );
       if (this.CITY || this.CITY_LEADER) {
         const index = this.finalStatusOpt.findIndex((i) => {
           return i.value === FINAL_STATUS.COUNTRY_REPORT_PENDING;

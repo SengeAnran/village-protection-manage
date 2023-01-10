@@ -225,6 +225,7 @@
       <!--分页-->
       <div style="text-align: right">
         <el-pagination
+          :key="page"
           v-if="!hidePagination"
           style="margin-top: 15px"
           background
@@ -527,6 +528,11 @@ export default {
       type: Number,
       default: 10,
     },
+    // 页数
+    defaultPage: {
+      type: Number,
+      default: 1,
+    },
   },
   data() {
     return {
@@ -544,6 +550,13 @@ export default {
     };
   },
   watch: {
+    defaultPage(val) {
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.page = val;
+        });
+      });
+    },
     page() {
       this.getItems();
     },
@@ -814,7 +827,6 @@ export default {
           try {
             this.loading = true;
             let data = this.form;
-            console.log(data);
             if (this.beforeSaveMethod) {
               data = this.beforeSaveMethod();
             }
