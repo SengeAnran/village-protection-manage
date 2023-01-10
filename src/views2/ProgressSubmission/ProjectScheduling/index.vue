@@ -19,6 +19,7 @@
         :permission-add="0"
         :permission-edit="0"
         :permission-delete="10004"
+        :tableRowClassName="tableRowClassName"
         :default-size="20"
         @selectionChange="selectionChange"
       >
@@ -309,6 +310,9 @@ export default {
     },
     selectionChange(val) {
       this.selections = val;
+    },
+    tableRowClassName({ row }) {
+      return row.completeTotalInvestment > row.investNum ? 'row-danger' : '';
     },
     // 导出信息汇总表
     async exportMethod() {
