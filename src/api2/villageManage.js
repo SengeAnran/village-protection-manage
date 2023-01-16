@@ -144,11 +144,11 @@ export const getvillageDetailExport = (params) => {
   });
 };
 // 导出村庄详情
-export const getvillagesExport = (data) => {
+export const getvillagesExport = (params) => {
   return axios.request({
-    method: 'post',
+    method: 'get',
     url: apiHost2 + '/api/workbench/villageDeclaration/export/list',
-    data,
+    params,
     responseType: 'blob',
   });
 };

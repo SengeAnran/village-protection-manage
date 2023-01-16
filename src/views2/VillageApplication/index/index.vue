@@ -454,7 +454,8 @@ export default {
         this.loading = true;
         try {
           const data = {
-            declarationIds: this.selections.map((item) => item.id),
+            // declarationIds: this.selections.map((item) => item.id),
+            ...this.query,
           };
           const res = await exportFunc(data);
           downloadFile(res, fileName);
@@ -468,7 +469,8 @@ export default {
       this.loading = true;
       try {
         const data = {
-          declarationIds: [],
+          // declarationIds: [],
+          ...this.query,
         };
         const res = await exportFunc(data);
         downloadFile(res, fileName);
