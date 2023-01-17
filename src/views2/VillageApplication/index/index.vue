@@ -438,6 +438,8 @@ export default {
       }
     },
     exportList() {
+      // console.log(this.$refs.crud);
+      // if (Array.isArray([])) return;
       if (this.PROVINCE) {
         return this._proExportFiles(getvillagesExport, this.exportFileName + '.xlsx');
       }
@@ -453,8 +455,11 @@ export default {
       }).then(async () => {
         this.loading = true;
         try {
+          const crud = this.$refs.crud;
           const data = {
             // declarationIds: this.selections.map((item) => item.id),
+            pageNum: crud.page,
+            pageSize: crud.size,
             ...this.query,
           };
           const res = await exportFunc(data);
@@ -468,8 +473,11 @@ export default {
     async _proExportFiles(exportFunc, fileName = '导出信息汇总表 ') {
       this.loading = true;
       try {
+        const crud = this.$refs.crud;
         const data = {
           // declarationIds: [],
+          pageNum: crud.page,
+          pageSize: crud.size,
           ...this.query,
         };
         const res = await exportFunc(data);
