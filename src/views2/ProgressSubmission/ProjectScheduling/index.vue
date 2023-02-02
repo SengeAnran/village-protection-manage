@@ -110,7 +110,7 @@
           <el-table-column label="总体进度" sortable prop="overallProgress" key="overallProgress">
             <template v-slot="scope"> {{ formatScore(scope.row.overallProgress || 0) }}% </template>
           </el-table-column>
-          <el-table-column v-if="level === 4" label="状态" prop="status" key="status">
+          <el-table-column v-if="level === 4 || level === 3" label="状态" prop="status" key="status">
             <template slot-scope="scope">
               <p :style="{ color: REPORT_STATUS_COLOR[scope.row.projectStatus] }">
                 {{ getStatusName(scope.row.projectStatus) }}

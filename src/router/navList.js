@@ -474,7 +474,7 @@ export const defaultRoutes2 = [
     component: () => import('@/views2/HomePage/index'),
     name: 'HomePage',
     meta: {
-      menuIds: [USER_TYPE.PROVINCE],
+      menuIds: [USER_TYPE.COUNTRY, USER_TYPE.COUNTRY_LEADER, USER_TYPE.CITY, USER_TYPE.CITY_LEADER, USER_TYPE.PROVINCE],
       title: '首页',
       hideChild: true,
       icon: 'shouye',

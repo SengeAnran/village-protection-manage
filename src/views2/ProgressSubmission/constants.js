@@ -76,6 +76,7 @@ export function getStatusName(status) {
     3: '本月未报送',
     4: '本月报送超时',
     5: '已竣工',
+    '-1': '该批次报送已结束',
   };
   return statusList[status];
 }
@@ -86,4 +87,5 @@ export const REPORT_STATUS_COLOR = Object.freeze({
   3: '#FF6B00', // 本月未报送
   4: '#D40000', // 本月报送超时
   5: '#CCCCCC', // 已竣工
+  '-1': '#CCCCCC', // 该批次报送已结束
 });

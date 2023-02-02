@@ -34,7 +34,7 @@
         <Sort
           :list-data="dataList5"
           bar-color="#44CA9C"
-          name="县（市、区）投资完成率排名"
+          name="县（市、区）总体进度排名"
           @changeType="changeType5"
           @goDetail="goDetail"
         />
@@ -43,7 +43,7 @@
         <Sort
           :list-data="dataList6"
           bar-color="#44CA9C"
-          name="村庄投资完成率排名"
+          name="村庄总体进度排名"
           @changeType="changeType6"
           @goDetail="goDetail"
         />

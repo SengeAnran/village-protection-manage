@@ -17,7 +17,7 @@
         checkStrictly
         v-model="query.areaId"
         @change="changeArea"
-        placeholder="浙江省"
+        :placeholder="userInfo.areaName"
       />
       <el-select v-model="query.declarationBatch" placeholder="请选择" @change="batchChange">
         <el-option v-for="item in batchOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
@@ -28,7 +28,7 @@
 
 <script>
 import { getSetList } from '@/api2/declarationBatch';
-import { mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'TopFixedBox',
@@ -57,14 +57,26 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapGetters(['userInfo']),
+  },
   beforeMount() {
+    this.initArea();
     this.setBatchOpt();
   },
   methods: {
     ...mapMutations('home', ['SET_AREA_COUNTY', 'SET_AREA_CITY', 'SET_AREA_PROVINCE', 'SET_BATCH']),
+    initArea() {
+      if (/市$/.test(this.userInfo.areaName)) {
+        return this.SET_AREA_CITY(this.userInfo.areaName);
+      } else if (this.userInfo.areaName === '浙江省') {
+        this.SET_AREA_PROVINCE(this.userInfo.areaName);
+      } else {
+        return this.SET_AREA_COUNTY(this.userInfo.areaName);
+      }
+    },
     changeArea(val) {
-      // console.log(val);
-      if (val.level === '2') {
+      if (val.level === '2' || /市$/.test(val.areaName)) {
         return this.SET_AREA_CITY(val.areaName);
       }
       if (val.level === '3') {

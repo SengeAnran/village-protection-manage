@@ -1,5 +1,6 @@
 <template>
-  <base-box-item name="报送预警" hideNum style="margin-top: 30px" :icon="iconUrl">
+  <base-box-item name="本月报送预警" hideNum style="margin-top: 30px" :icon="iconUrl">
+    <el-button class="detail-btn" @click="dialogVisible = true">预警详情</el-button>
     <div class="left-content">
       <div class="code-list">
         <div class="code-item" v-for="(item, index) in codeDataList" :key="index">
@@ -11,22 +12,24 @@
     <div class="right-content">
       <base-bar-chart v-if="showBar" key="1" :chart-data="chartData" @goDetail="goDetail" />
     </div>
+    <early-warn-detail :dialog="dialogVisible" @closeView="dialogVisible = false" />
   </base-box-item>
 </template>
 
 <script>
+import EarlyWarnDetail from '@/views2/HomePage/Components/ProjectScheduling/SubmitEarlyWarn/EarlyWarnDetail';
 import { mapGetters } from 'vuex';
 // import BarChart from './BarChart';
 import { getSubmitEarlyWarning } from '@/api2/homePage';
 export default {
-  // components: { BarChart },
+  components: { EarlyWarnDetail },
   data() {
     return {
       total: 0,
       showBar: true,
       flag: true,
       chartData: {
-        name: '各地市报送预警情况',
+        name: '各地市本月报送预警情况',
         name1: '正常报送',
         name2: '报送超时',
         name3: '未报送',
@@ -59,6 +62,7 @@ export default {
       listData: [],
       iconUrl: require('./icon.png'),
       isGoing: false,
+      dialogVisible: false,
     };
   },
   computed: {
@@ -137,6 +141,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.detail-btn {
+  position: absolute;
+  right: 10px;
+  top: -40px;
+}
 .left-content {
   //width: 471px;
   flex: 1;

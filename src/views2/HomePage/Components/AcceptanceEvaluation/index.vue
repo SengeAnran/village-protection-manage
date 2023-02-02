@@ -99,7 +99,7 @@ export default {
         dataList2: [],
       },
       chartData4: {
-        name: '各地市“一老一小”建设服务情况',
+        name: '各地市“一老一小”服务场景建设情况',
         name1: '服务场景建设数',
         unit: '个',
         xAxisData: [],
