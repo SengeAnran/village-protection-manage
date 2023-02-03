@@ -2,7 +2,7 @@ const defaultLocation = '浙江省';
 export default {
   namespaced: true,
   state: {
-    batch: '', // 批次
+    batch: [], // 批次
     location: {
       city: '',
       county: '',
@@ -13,7 +13,7 @@ export default {
   mutations: {
     SET_BATCH(state, param) {
       if (param === '全部批次') {
-        return (state.batch = '');
+        return (state.batch = []);
       }
       state.batch = param;
       console.log(state.batch);

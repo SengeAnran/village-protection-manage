@@ -16,14 +16,20 @@
 import { Header, AppMain, Navbar, Sidebar } from './components';
 import ResizeMixin from './mixin/ResizeHandler';
 import { mapState } from 'vuex';
+import { alertPrompt } from '@/api2/common';
+import role from '@/views2/mixins/role';
 
 export default {
   name: 'Layout',
+  mixin: [role],
   components: {
     Header,
     AppMain,
     Navbar,
     Sidebar,
+  },
+  mounted() {
+    this.alertPrompt();
   },
   mixins: [ResizeMixin],
   computed: {
@@ -45,11 +51,42 @@ export default {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false });
     },
+    alertPrompt() {
+      // 提示
+      if (!this.VILLAGE && !this.COUNTRY && !this.COUNTRY_LEADER) {
+        return;
+      }
+      alertPrompt().then((res) => {
+        if (res) {
+          this.$notify({
+            title: '提示',
+            dangerouslyUseHTMLString: true,
+            customClass: 'notice-body',
+            message: `
+              <div>
+                <span>您本月的项目调度还未完成报送（审核），请及时完成。</span>
+                <span style="color: #1492FF; float: right; cursor: pointer">前往</span>
+               </div>`,
+            duration: 0,
+            type: 'warning',
+            onClick: this.goDetail,
+          });
+        }
+      });
+    },
+    goDetail() {
+      this.$router.push({
+        name: this.VILLAGE ? 'ProgressSubmissionList' : 'ProjectSchedulingList',
+      });
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.notice-body {
+  width: auto;
+}
 .showDetail {
   top: 0 !important;
   margin-left: 0 !important;

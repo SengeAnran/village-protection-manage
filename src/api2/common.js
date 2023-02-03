@@ -10,3 +10,11 @@ export const getSonAreas = (params) => {
     params,
   });
 };
+// 预警提示
+export const alertPrompt = (params) => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/progressReport/alertPrompt`,
+    params,
+  });
+};

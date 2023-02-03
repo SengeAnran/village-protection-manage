@@ -168,3 +168,13 @@ export const getEvaluationGradeCount = (data) => {
     headers: { 'APPLICATION-ID': 4 },
   });
 };
+
+// 【首页】预警详情
+export const getEarlyWarningDetail = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/index/earlyWarning/detail`,
+    data,
+    // headers: { 'APPLICATION-ID': 4 },
+  });
+};

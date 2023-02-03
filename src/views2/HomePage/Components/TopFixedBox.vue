@@ -19,7 +19,13 @@
         @change="changeArea"
         :placeholder="userInfo.areaName"
       />
-      <el-select v-model="query.declarationBatch" placeholder="请选择" @change="batchChange">
+      <el-select
+        v-model="query.declarationBatch"
+        multiple
+        placeholder="全部批次"
+        @change="batchChange"
+        style="width: 200px"
+      >
         <el-option v-for="item in batchOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
     </div>
@@ -45,15 +51,15 @@ export default {
     return {
       query: {
         areaId: '',
-        declarationBatch: '全部批次',
+        declarationBatch: [],
       },
       titleList: ['建设概况', '创建申报', '项目调度', '验收评价'],
       activeIndex: 0,
       batchOpt: [
-        {
-          label: '全部批次',
-          value: '全部批次',
-        },
+        // {
+        //   label: '全部批次',
+        //   value: '全部批次',
+        // },
       ],
     };
   },
@@ -90,7 +96,6 @@ export default {
       });
     },
     batchChange(val) {
-      // console.log('batchChange');
       this.SET_BATCH(val);
     },
     // 切换模块
@@ -146,6 +151,23 @@ export default {
   }
   .location-select {
     margin-right: 12px;
+    &::v-deep .el-input__inner::-webkit-input-placeholder {
+      color: #606266;
+    }
+    &::v-deep .el-input__inner::-moz-placeholder {
+      /* Mozilla Firefox 19+ */
+      color: #606266;
+    }
+    &::v-deep .el-input__inner::-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 */
+      color: #606266;
+    }
+    &::v-deep .el-input__inner::-ms-input-placeholder {
+      /* Internet Explorer 10-11 */
+      color: #606266;
+    }
+  }
+  .el-select {
     &::v-deep .el-input__inner::-webkit-input-placeholder {
       color: #606266;
     }

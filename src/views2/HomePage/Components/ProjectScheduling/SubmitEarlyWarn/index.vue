@@ -1,6 +1,6 @@
 <template>
   <base-box-item name="本月报送预警" hideNum style="margin-top: 30px" :icon="iconUrl">
-    <el-button class="detail-btn" @click="dialogVisible = true">预警详情</el-button>
+    <el-button class="detail-btn" @click="dialogVisible = !dialogVisible">预警详情</el-button>
     <div class="left-content">
       <div class="code-list">
         <div class="code-item" v-for="(item, index) in codeDataList" :key="index">
