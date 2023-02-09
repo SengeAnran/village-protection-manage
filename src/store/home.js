@@ -40,7 +40,7 @@ export default {
       state.area = value;
     },
     RESET_DATA(state) {
-      state.batch = ''; // 批次
+      state.batch = []; // 批次
       state.location = {
         city: '',
         county: '',

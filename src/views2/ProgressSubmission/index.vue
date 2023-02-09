@@ -235,7 +235,9 @@ export default {
     this.getBatchInfo();
   },
   mounted() {
+    console.log(REPORT_STATUS);
     const opts = Object.keys(REPORT_STATUS).map((ele) => {
+      console.log('ele', ele);
       return {
         label: REPORT_STATUS[ele],
         value: parseInt(ele),
@@ -253,21 +255,29 @@ export default {
     getStatusName,
     canVerify(data) {
       const hasPerm = this.CITY || this.COUNTRY_LEADER;
-      if (data.projectStatus !== PROJECT_STATUS.CITY_VERIFY_PENDING) {
+      if (data.projectStatus !== this.PROJECT_STATUS.CITY_VERIFY_PENDING) {
         return false;
       }
       return hasPerm;
     },
     canDetail(data) {
       const hasPerm = this.VILLAGE;
-      if (data.projectStatus === PROJECT_STATUS.TO_BE_REPORT) {
+      if (
+        data.projectStatus === this.PROJECT_STATUS.TO_BE_FIRST_REPORT ||
+        data.projectStatus === this.PROJECT_STATUS.TO_BE_REPORT ||
+        data.projectStatus === this.PROJECT_STATUS.TO_BE_LATTER_REPORT
+      ) {
         return false;
       }
       return hasPerm;
     },
     canReport(data) {
       const hasPerm = this.VILLAGE;
-      if (data.projectStatus !== PROJECT_STATUS.TO_BE_REPORT) {
+      if (
+        data.projectStatus !== this.PROJECT_STATUS.TO_BE_FIRST_REPORT &&
+        data.projectStatus !== this.PROJECT_STATUS.TO_BE_REPORT &&
+        data.projectStatus !== this.PROJECT_STATUS.TO_BE_LATTER_REPORT
+      ) {
         // 已报送则不可在报送
         return false;
       }
@@ -423,7 +433,7 @@ export default {
     // 详情
     goDetail(scope) {
       const { id, reportingTime, projectStatus } = scope.data;
-      if (projectStatus === this.PROJECT_STATUS.COMPLETED) {
+      if (projectStatus === this.PROJECT_STATUS.COMPLETED || projectStatus === this.PROJECT_STATUS.NEW_COMPLETED) {
         return this.$router.push({
           name: 'ProgressSubmissionDetails',
           query: { id: id, reportingTime, showComplete: true },

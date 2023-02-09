@@ -262,7 +262,11 @@ export default {
     getStatusName,
     canDetail(data) {
       const hasPerm = this.level === 4;
-      if (data.projectStatus === PROJECT_STATUS.TO_BE_REPORT) {
+      if (
+        data.projectStatus === this.PROJECT_STATUS.TO_BE_FIRST_REPORT ||
+        data.projectStatus === this.PROJECT_STATUS.TO_BE_REPORT ||
+        data.projectStatus === this.PROJECT_STATUS.TO_BE_LATTER_REPORT
+      ) {
         return false;
       }
       return hasPerm;
@@ -453,7 +457,7 @@ export default {
     // 详情
     goDetail(scope) {
       const { id, reportingTime, projectStatus } = scope.data;
-      if (projectStatus === this.PROJECT_STATUS.COMPLETED) {
+      if (projectStatus === this.PROJECT_STATUS.COMPLETED || projectStatus === this.PROJECT_STATUS.NEW_COMPLETED) {
         return this.$router.push({
           name: 'ProgressSubmissionDetails',
           query: { id: id, reportingTime, detail: true, showComplete: true },
