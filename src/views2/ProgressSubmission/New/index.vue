@@ -129,6 +129,7 @@ import AddFillIn from '../Components/AddFillIn';
 import rule from '@/mixins/rule';
 import { addData, getDetail, getHistory } from '@/api2/progressSubmission';
 import { formatMoney } from '@/views2/utils/formatter';
+import { PROJECT_STATUS } from '@/views2/ProgressSubmission/constants';
 const tableList = (rule, value, callback) => {
   if (value.length) {
     const notNum = value.some((i) => {
@@ -156,6 +157,7 @@ export default {
   },
   data() {
     return {
+      PROJECT_STATUS,
       projectId: null,
       modifyData: {},
       activeName: 'first',
@@ -224,6 +226,36 @@ export default {
           return i.planGovInvestment === null;
         });
         this.showTable = true;
+        // 上半月已报送
+        if (this.$route.query.secondUpdate && this.form.upStatus !== this.PROJECT_STATUS.FIRST_UNREPORTED) {
+          this.form.detailLists.forEach((i) => {
+            const {
+              completeDrive,
+              completeGov,
+              completeTotal,
+              overallProgress,
+              id,
+              isStart,
+              monthPic,
+              isEnd,
+              planRate,
+              yearRate,
+            } = i;
+            const dataFrom = {
+              completeDrive,
+              completeGov,
+              completeTotal,
+              overallProgress,
+              id,
+              isStart,
+              monthPic,
+              isEnd,
+              planRate,
+              yearRate,
+            };
+            this.saveItem(dataFrom);
+          });
+        }
       });
     },
     // 填报
@@ -295,7 +327,58 @@ export default {
     onSubmit() {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
-          if (!this.$route.query.modify && this.fillInDataList.length !== this.form.detailLists.length) {
+          if (
+            !this.$route.query.modify &&
+            ((!this.$route.query.secondUpdate && this.fillInDataList.length !== this.form.detailLists.length) ||
+              (this.form.upStatus === this.PROJECT_STATUS.FIRST_UNREPORTED &&
+                this.fillInDataList.length !== this.form.detailLists.length))
+          ) {
+            return this.$notify.error('请填报所有项目的上报数据');
+          }
+          let totalValue = 0;
+          const compareValue = this.form.investNum * 1.1;
+          this.form.detailLists.forEach((i) => (totalValue += Number(i.completeTotal)));
+          this.$confirm(
+            `${totalValue > compareValue ? '填报的完成投资金额已超过计划投资金额的10%，是否确认提交?' : '确认提交？'}`,
+            {
+              showClose: false,
+            },
+          )
+            .then(async () => {
+              const data = this.form.detailLists.map((item) => {
+                return {
+                  completeDrive: Number(item.completeDrive),
+                  completeGov: Number(item.completeGov),
+                  completeTotal: Number(item.completeTotal),
+                  overallProgress: Number(item.overallProgress),
+                  planRate: Number(item.planRate),
+                  yearRate: Number(item.yearRate),
+                  id: item.id,
+                  isStart: item.isStart,
+                  isEnd: item.isEnd,
+                  monthPic: item.monthPic,
+                };
+              });
+              // console.log(data);
+              await addData(data);
+              this.$notify.success({
+                title: '提交成功！',
+              });
+              this.$router.back();
+            })
+            .catch(() => {});
+        }
+      });
+    },
+    // 添加 项目
+    onSecondSubmit() {
+      this.$refs.form.validate(async (valid) => {
+        if (valid) {
+          if (
+            !this.$route.query.modify &&
+            this.form.upStatus === this.PROJECT_STATUS.FIRST_UNREPORTED &&
+            this.fillInDataList.length !== this.form.detailLists.length
+          ) {
             return this.$notify.error('请填报所有项目的上报数据');
           }
           let totalValue = 0;

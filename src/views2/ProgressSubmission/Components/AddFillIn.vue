@@ -94,10 +94,12 @@
       <el-row v-if="form.isStart" :gutter="20">
         <el-col :span="18">
           <el-form-item label="是否竣工" prop="isEnd" :rules="rule.select">
-            <el-radio v-model="form.isEnd" :label="0">否</el-radio>
-            <el-radio v-model="form.isEnd" :label="1">是</el-radio>
+            <el-radio v-model="form.isEnd" :disabled="isEndDisabled" :label="0">否</el-radio>
+            <el-radio v-model="form.isEnd" :disabled="isEndDisabled" :label="1">是</el-radio>
           </el-form-item>
-          <i style="color: #ff6b00">（选择“是”则该项目状态变更为“已竣工”，之后月份无法再进行填报）</i>
+          <i style="color: #ff6b00"
+            >（投资完成率90%以上并且总体进度100%才可选择竣工；选择“是”则该项目状态变更为“已竣工”，之后月份无法再进行填报。）</i
+          >
         </el-col>
       </el-row>
     </div>
@@ -217,11 +219,20 @@ export default {
           10000 || '-'
       );
     },
+    isEndDisabled() {
+      // 投资完成率90%以上并且总体进度100%才可选择竣工
+      return !(this.calcRateTotal(this.modifyData, this.form) > 90 && Number(this.form.overallProgress) === 100);
+    },
   },
   watch: {
     completeTotal(val) {
       if (val || val === 0) {
         this.form.completeTotal = val;
+      }
+    },
+    isEndDisabled(val) {
+      if (val) {
+        this.form.isEnd = 0;
       }
     },
   },

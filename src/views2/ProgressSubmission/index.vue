@@ -25,7 +25,7 @@
           <div v-if="VILLAGE || COUNTRY || COUNTRY_LEADER" class="inline-flex mb-2 pl-0" style="flex-wrap: wrap">
             <div class="search-item mb-4">
               <span class="label">报送时间：</span>
-              <el-date-picker v-model="query.reportingTime" type="month" placeholder="请选择" value-format="yyyy-MM">
+              <el-date-picker v-model="query.time" type="month" placeholder="请选择" value-format="yyyy-MM">
               </el-date-picker>
             </div>
             <div v-if="!VILLAGE" class="search-item mb-4">
@@ -82,9 +82,10 @@
           <div style="text-align: left">
             <el-link v-if="canVerify(scope.data)" @click="goDetail(scope)" type="primary"> 审核 </el-link>
             <el-link v-if="canDetail(scope.data)" @click="goDetail(scope)" type="primary"> 详情 </el-link>
+            <el-link v-if="canSecondReport(scope.data)" @click="goEdit(scope.data)" type="primary"> 更新报送 </el-link>
             <!--            <el-divider v-if="canReport(scope.data)" direction="vertical"></el-divider>-->
             <div style="display: inline-block">
-              <el-link v-if="canReport(scope.data)" @click="edit(scope.data)" type="primary"> 报送</el-link>
+              <el-link v-if="canReport(scope.data)" @click="edit(scope.data)" type="primary">报送 </el-link>
             </div>
           </div>
         </template>
@@ -173,7 +174,7 @@ export default {
         declarationBatch: '',
         finalStatus: '',
         name: '',
-        reportingTime: '', // 报送时间
+        time: '', // 报送时间
         date: '',
         areaId: '',
         projectStatus: null,
@@ -235,7 +236,6 @@ export default {
     this.getBatchInfo();
   },
   mounted() {
-    console.log(REPORT_STATUS);
     const opts = Object.keys(REPORT_STATUS).map((ele) => {
       console.log('ele', ele);
       return {
@@ -275,8 +275,7 @@ export default {
       const hasPerm = this.VILLAGE;
       if (
         data.projectStatus !== this.PROJECT_STATUS.TO_BE_FIRST_REPORT &&
-        data.projectStatus !== this.PROJECT_STATUS.TO_BE_REPORT &&
-        data.projectStatus !== this.PROJECT_STATUS.TO_BE_LATTER_REPORT
+        data.projectStatus !== this.PROJECT_STATUS.TO_BE_REPORT
       ) {
         // 已报送则不可在报送
         return false;
@@ -289,6 +288,14 @@ export default {
       //   return false;
       // }
       return true;
+    },
+    canSecondReport(data) {
+      const hasPerm = this.VILLAGE;
+      if (data.projectStatus !== this.PROJECT_STATUS.TO_BE_LATTER_REPORT) {
+        // 已报送则不可在报送
+        return false;
+      }
+      return hasPerm;
     },
     // 地区
     changeArea(val) {
@@ -441,13 +448,23 @@ export default {
       }
       this.$router.push({ name: 'ProgressSubmissionDetails', query: { id: id, reportingTime } });
     },
-    // 修改
+    // 报送
     edit(data) {
       const { id, reportingTime } = data;
       getProgressReportCheck({ id, reportingTime }).then(() => {
         this.$router.push({
           name: 'NewProgressSubmission',
           query: { id, reportingTime },
+        });
+      });
+    },
+    // 更新报送
+    goEdit(data) {
+      const { id, reportingTime } = data;
+      getProgressReportCheck({ id, reportingTime }).then(() => {
+        this.$router.push({
+          name: 'NewProgressSubmission',
+          query: { id, reportingTime, secondUpdate: true },
         });
       });
     },
