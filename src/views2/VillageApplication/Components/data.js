@@ -36,7 +36,7 @@ export const TABLE_DATA = [
     fourthColumn: 'incomeNum',
   },
   {
-    firstColumn: '是否为',
+    firstColumn: '村庄属性',
     secondColumn: 'villageProperty',
     thirdColumn: '',
     fourthColumn: '',
