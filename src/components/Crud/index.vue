@@ -300,6 +300,10 @@ export default {
     getMethod: {
       type: Function,
     },
+    // 获取数据前对数据的处理
+    beforeGetMethod: {
+      type: Function,
+    },
     // 自定义获取数据方法（无分页等）
     customGetMethod: {
       type: Function,
@@ -592,7 +596,7 @@ export default {
     // 获取数据
     async getItems() {
       const { page, size, query } = this;
-      const params = {
+      let params = {
         pageNum: page,
         pageSize: size,
         ...query,
@@ -602,6 +606,9 @@ export default {
         if (this.customGetMethod) {
           this.items = await this.customGetMethod({ ...query });
         } else {
+          if (this.beforeGetMethod) {
+            params = this.beforeGetMethod(params);
+          }
           const res = await this.getMethod(params);
           this.items = res.content;
           this.total = res.totalSize;

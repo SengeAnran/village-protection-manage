@@ -37,7 +37,7 @@
             </div>
             <div class="search-item mb-4">
               <span class="label">创建批次：</span>
-              <el-select v-model="query.declarationBatch" placeholder="请选择">
+              <el-select multiple v-model="query.declarationBatch" placeholder="请选择">
                 <el-option
                   v-for="item in queryDeclareTypeOpt"
                   :key="item.value"
@@ -155,7 +155,7 @@ export default {
       PROJECT_STATUS,
       hideTableAction: true,
       query: {
-        declarationBatch: '',
+        declarationBatch: [],
         finalStatus: '',
         time: '', // 报送时间
         name: '',
@@ -175,10 +175,10 @@ export default {
         },
       ],
       queryDeclareTypeOpt: [
-        {
-          label: '全部',
-          value: '',
-        },
+        // {
+        //   label: '全部',
+        //   value: '',
+        // },
       ],
       queryTimeOpt: [
         {

@@ -39,7 +39,7 @@
             </div>
             <div class="search-item mb-4">
               <span class="label">创建批次：</span>
-              <el-select v-model="query.declarationBatch" placeholder="请选择">
+              <el-select multiple v-model="query.declarationBatch" placeholder="请选择">
                 <el-option
                   v-for="item in queryDeclareTypeOpt"
                   :key="item.value"
@@ -158,7 +158,7 @@ import { recVerify } from '../../api/villageManage';
 import { downloadFile } from '@/utils/data';
 import role from '@/views2/mixins/role';
 
-import { exportDetail, getInforExport, getList, getProgressReportCheck } from '@/api2/progressSubmission';
+import { exportDetail, getInforExport, getList } from '@/api2/progressSubmission';
 import { formatMoney, formatScore } from '@/views2/utils/formatter';
 // import qs from "qs";
 export default {
@@ -171,7 +171,7 @@ export default {
       REPORT_STATUS_COLOR,
       PROJECT_STATUS,
       query: {
-        declarationBatch: '',
+        declarationBatch: [],
         finalStatus: '',
         name: '',
         time: '', // 报送时间
@@ -187,10 +187,10 @@ export default {
         },
       ],
       queryDeclareTypeOpt: [
-        {
-          label: '全部',
-          value: '',
-        },
+        // {
+        //   label: '全部',
+        //   value: '',
+        // },
       ],
       dialogDeclareYearOpt: [
         // {
@@ -451,21 +451,23 @@ export default {
     // 报送
     edit(data) {
       const { id, reportingTime } = data;
-      getProgressReportCheck({ id, reportingTime }).then(() => {
-        this.$router.push({
-          name: 'NewProgressSubmission',
-          query: { id, reportingTime },
-        });
+      // getProgressReportCheck({ id, reportingTime }).then(() => {
+      //
+      // });
+      this.$router.push({
+        name: 'NewProgressSubmission',
+        query: { id, reportingTime },
       });
     },
     // 更新报送
     goEdit(data) {
       const { id, reportingTime } = data;
-      getProgressReportCheck({ id, reportingTime }).then(() => {
-        this.$router.push({
-          name: 'NewProgressSubmission',
-          query: { id, reportingTime, secondUpdate: true },
-        });
+      // getProgressReportCheck({ id, reportingTime }).then(() => {
+      //
+      // });
+      this.$router.push({
+        name: 'NewProgressSubmission',
+        query: { id, reportingTime, secondUpdate: true },
       });
     },
     // 删除
