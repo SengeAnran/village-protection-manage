@@ -48,60 +48,31 @@
 
         <template v-slot:tableAction="scope">
           <div>
-            <el-link type="primary" @click="goProjectDetail(scope)"
-              >项目详情</el-link
-            >
+            <el-link type="primary" @click="goProjectDetail(scope)">项目详情</el-link>
             <el-divider direction="vertical"></el-divider>
-            <el-link
-              type="primary"
-              @click="goDetail(scope)"
-              v-if="userInfo.roleId === 3"
-            >
-              查看进度
-            </el-link>
-            <el-link
-              type="primary"
-              v-if="userInfo.roleId < 3"
-              @click="goHistory(scope)"
-            >
-              历史进度
-            </el-link>
-<!--            <div-->
-<!--              class="inline"-->
-<!--              v-if="canRemind(scope.data.percentage)"-->
-<!--              v-permission="70002"-->
-<!--            >-->
-<!--              <el-divider direction="vertical"></el-divider>-->
-<!--              <el-link type="primary" @click="remindProgress(scope.data.id)">-->
-<!--                催办-->
-<!--              </el-link>-->
-<!--            </div>-->
+            <el-link type="primary" @click="goDetail(scope)" v-if="userInfo.roleId === 3"> 查看进度 </el-link>
+            <el-link type="primary" v-if="userInfo.roleId < 3" @click="goHistory(scope)"> 历史进度 </el-link>
+            <!--            <div-->
+            <!--              class="inline"-->
+            <!--              v-if="canRemind(scope.data.percentage)"-->
+            <!--              v-permission="70002"-->
+            <!--            >-->
+            <!--              <el-divider direction="vertical"></el-divider>-->
+            <!--              <el-link type="primary" @click="remindProgress(scope.data.id)">-->
+            <!--                催办-->
+            <!--              </el-link>-->
+            <!--            </div>-->
           </div>
         </template>
 
         <template v-slot:crudAction>
-          <el-button
-            type="primary"
-            v-if="userInfo.roleId === 3"
-            v-permission="360001"
-            @click="$router.push({ name: 'NewSchedule' })"
-            >上报
-          </el-button>
+          <el-button type="primary" v-if="userInfo.roleId === 3" v-permission="360001" @click="toAdd">上报 </el-button>
         </template>
 
         <template v-slot:table>
-          <el-table-column
-            min-width="60px"
-            label="申报年度"
-            prop="years"
-          ></el-table-column>
+          <el-table-column min-width="60px" label="申报年度" prop="years"></el-table-column>
           <el-table-column label="项目所在地" prop="address"> </el-table-column>
-          <el-table-column
-            label="项目进度"
-            prop="percentage"
-            v-if="userInfo.roleId < 3"
-            min-width="110px"
-          >
+          <el-table-column label="项目进度" prop="percentage" v-if="userInfo.roleId < 3" min-width="110px">
             <template slot-scope="scope">
               <div
                 class="progress-wrp"
@@ -111,67 +82,34 @@
                 }"
               >
                 <span class="bg">
-                  <i
-                    class="value"
-                    :style="`width:${scope.row.percentage}%`"
-                  ></i>
+                  <i class="value" :style="`width:${scope.row.percentage}%`"></i>
                 </span>
                 <span class="value-wrp">
                   <i
                     class="num"
-                    v-if="
-                      !isSuccess(scope.row.percentage) &&
-                      !isFailed(scope.row.percentage, scope.row.finishTime)
-                    "
+                    v-if="!isSuccess(scope.row.percentage) && !isFailed(scope.row.percentage, scope.row.finishTime)"
                   >
                     {{ scope.row.percentage.toFixed(1) }}%
                   </i>
-                  <i
-                    class="el-icon-success"
-                    v-if="isSuccess(scope.row.percentage)"
-                  ></i>
-                  <i
-                    class="el-icon-error"
-                    v-if="isFailed(scope.row.percentage, scope.row.finishTime)"
-                  ></i>
+                  <i class="el-icon-success" v-if="isSuccess(scope.row.percentage)"></i>
+                  <i class="el-icon-error" v-if="isFailed(scope.row.percentage, scope.row.finishTime)"></i>
                 </span>
               </div>
             </template>
           </el-table-column>
-          <el-table-column
-            label="资金拨付进度"
-            prop="funds"
-            v-if="userInfo.roleId < 3"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.funds.toFixed(1) }}%
-            </template>
+          <el-table-column label="资金拨付进度" prop="funds" v-if="userInfo.roleId < 3">
+            <template slot-scope="scope"> {{ scope.row.funds.toFixed(1) }}% </template>
           </el-table-column>
-          <el-table-column
-            label="项目截止日期"
-            prop="finishTime"
-            v-if="userInfo.roleId < 3"
-            align="center"
-          >
+          <el-table-column label="项目截止日期" prop="finishTime" v-if="userInfo.roleId < 3" align="center">
             <template slot-scope="scope">
               <div>
-                <span>{{ scope.row.finishTime || " -- " }}</span>
-                <i
-                  @click="openDateDialog(scope.row)"
-                  v-permission="70002"
-                  class="el-icon-date"
-                ></i>
+                <span>{{ scope.row.finishTime || ' -- ' }}</span>
+                <i @click="openDateDialog(scope.row)" v-permission="70002" class="el-icon-date"></i>
               </div>
             </template>
           </el-table-column>
-          <el-table-column
-            label="总投资（万元）"
-            prop="declareAmount"
-            v-if="userInfo.roleId === 3"
-          >
-          </el-table-column>
-          <el-table-column label="进度上报时间" prop="processTime">
-          </el-table-column>
+          <el-table-column label="总投资（万元）" prop="declareAmount" v-if="userInfo.roleId === 3"> </el-table-column>
+          <el-table-column label="进度上报时间" prop="processTime"> </el-table-column>
         </template>
       </Crud>
     </div>
@@ -179,12 +117,7 @@
     <el-dialog title="修改项目截止日期" :visible.sync="dateDialog">
       <el-form ref="form" :model="form" label-width="180px">
         <el-form-item label="选择截止日期" prop="deadline" :rules="rule.date">
-          <el-date-picker
-            v-model="form.deadline"
-            type="date"
-            placeholder="选择日期"
-            value-format="yyyy-MM-dd"
-          >
+          <el-date-picker v-model="form.deadline" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
           </el-date-picker>
         </el-form-item>
       </el-form>
@@ -196,41 +129,36 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
-import rule from "@/mixins/rule.js";
-import {
-  getProjectProgress,
-  setProjectDeadline,
-  remindProgress,
-  exportList,
-} from "@/api/scheduleManage";
-import { downloadFile } from "@/utils/data"
+import { mapGetters } from 'vuex';
+import rule from '@/mixins/rule.js';
+import { getProjectProgress, setProjectDeadline, remindProgress, exportList } from '@/api/scheduleManage';
+import { downloadFile } from '@/utils/data';
 
 export default {
   mixins: [rule],
   data() {
     return {
       query: {
-        address: "",
-        years: "",
+        address: '',
+        years: '',
       },
       getMethod: getProjectProgress,
 
       dateDialog: false,
       form: {
-        editId: "",
-        deadline: "",
+        editId: '',
+        deadline: '',
       },
     };
   },
   computed: {
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(['userInfo']),
     pageName() {
-      return this.userInfo.roleId === 3? '进度上报' : '进度监管'
-    }
+      return this.userInfo.roleId === 3 ? '进度上报' : '进度监管';
+    },
   },
   mounted() {
-    console.log(this.userInfo)
+    console.log(this.userInfo);
   },
   methods: {
     // 导出
@@ -239,21 +167,21 @@ export default {
         address: this.query.address,
         years: this.query.years,
       };
-      exportList(params).then(res => {
-        downloadFile(res,'重点项目最新进度')
-      })
+      exportList(params).then((res) => {
+        downloadFile(res, '重点项目最新进度');
+      });
     },
     // 进度详情
     goDetail(row) {
       const { id } = row.data;
-      if (id) this.$router.push({ name: "ScheduleDetail", query: { id } });
+      if (id) this.$router.push({ name: 'ScheduleDetail', query: { id } });
     },
     // 项目详情
     goProjectDetail(row) {
       const { projectId } = row.data;
       this.$router.push({
-        name: "ProjectApplicationDetail",
-        query: { id: projectId, name: "ScheduleReportList", title: this.pageName },
+        name: 'ProjectApplicationDetail',
+        query: { id: projectId, name: 'ScheduleReportList', title: this.pageName },
       });
     },
     // 历史详情
@@ -261,7 +189,7 @@ export default {
       const { projectId } = row.data;
       if (projectId)
         this.$router.push({
-          name: "HistorySchedule",
+          name: 'HistorySchedule',
           query: { id: projectId },
         });
     },
@@ -274,12 +202,12 @@ export default {
     },
     // 省市进度催办
     remindProgress(id) {
-      this.$confirm("是否催办该项目进度？", "提示", {
-        type: "warning",
+      this.$confirm('是否催办该项目进度？', '提示', {
+        type: 'warning',
       }).then(async () => {
         const ids = Array.isArray(id) ? id : [id];
         remindProgress(ids).then(() => {
-          this.$notify.success("催办成功");
+          this.$notify.success('催办成功');
         });
       });
     },
@@ -296,7 +224,7 @@ export default {
             finishTime: this.form.deadline,
           };
           setProjectDeadline(params).then(() => {
-            this.$notify.success("修改成功");
+            this.$notify.success('修改成功');
             this.$refs.crud.getItems();
             this.closeDialog();
           });
@@ -315,11 +243,20 @@ export default {
       if (this.userInfo.roleId === 3 || percentage >= 100) return false;
       return true;
     },
+    // 上报
+    toAdd() {
+      const date = new Date().getDate();
+      if (date < 10 || (date > 13 && date < 25) || date > 28) {
+        this.$message.warning('不在报送时间内，请在每月10-13号、25-28号进行报送');
+        return;
+      }
+      this.$router.push({ name: 'NewSchedule' });
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
-.export-button{
+.export-button {
   float: right;
 }
 .search-item {

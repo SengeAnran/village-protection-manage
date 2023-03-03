@@ -4,12 +4,12 @@ import config from '@/utils/config';
 const { apiHost2 } = config;
 
 // 导出信息汇总表
-export const getInforExport = (params) => {
-  console.log('params', params);
+export const getInforExport = (data) => {
+  console.log('params', data);
   return axios.request({
-    method: 'get',
+    method: 'post',
     url: apiHost2 + '/api/workbench/progressReport/export/list',
-    params,
+    data,
     responseType: 'blob',
   });
 };
