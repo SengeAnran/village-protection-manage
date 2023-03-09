@@ -2,6 +2,13 @@ import axios from '@/utils/request';
 import config from '@/utils/config';
 const { apiHost2 } = config;
 
+// 【首页】获取年份下拉
+export const getYears = () => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/index/getYears`,
+  });
+};
 // 【首页】数量查询
 export const getPreviewsNum = (params) => {
   return axios.request({

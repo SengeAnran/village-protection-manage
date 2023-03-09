@@ -9,6 +9,7 @@ export default {
       province: defaultLocation,
     },
     area: defaultLocation,
+    year: '',
   },
   mutations: {
     SET_BATCH(state, param) {
@@ -16,7 +17,9 @@ export default {
         return (state.batch = []);
       }
       state.batch = param;
-      console.log(state.batch);
+    },
+    SET_YEAR(state, param) {
+      state.year = param ? parseInt(param, 10) : '';
     },
     // 设置地区市
     SET_AREA_CITY(state, value) {

@@ -2,8 +2,6 @@
   <div class="page">
     <top-fixed-box v-model="activeIndex" @toBox="toBox" />
     <div class="content-box">
-      <!--      项目调度-->
-      <ProjectSchedul></ProjectSchedul>
       <BaseBox>
         <!--        建设概况-->
         <ConstructionOverview />
@@ -25,7 +23,6 @@
 </template>
 
 <script>
-import ProjectSchedul from './Components/ProjectSchedul';
 import ConstructionOverview from './Components/ConstructionOverview';
 import ProjectScheduling from './Components/ProjectScheduling';
 import BaseBox from './Components/BaseBox';
@@ -37,7 +34,6 @@ import { mapMutations } from 'vuex';
 export default {
   name: 'index',
   components: {
-    ProjectSchedul,
     TopFixedBox,
     ConstructionOverview,
     ConstructionDeclaration,

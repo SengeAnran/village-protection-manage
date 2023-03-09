@@ -32,6 +32,7 @@ const store = new Vuex.Store({
     area: (state) => state.home.area,
     location: (state) => state.home.location,
     batch: (state) => state.home.batch,
+    year: (state) => state.home.year,
     searchQuery: (state) => state.search.searchQuery,
   },
 });

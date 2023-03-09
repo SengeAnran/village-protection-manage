@@ -24,12 +24,9 @@
         multiple
         placeholder="全部批次"
         @change="batchChange"
-        style="width: 200px; margin-right: 10px"
+        style="width: 200px"
       >
         <el-option v-for="item in batchOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-      </el-select>
-      <el-select v-model="query.year" placeholder="全部" @change="yearChange" style="width: 200px">
-        <el-option v-for="item in yearsOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
     </div>
   </div>
@@ -38,7 +35,6 @@
 <script>
 import { getSetList } from '@/api2/declarationBatch';
 import { mapGetters, mapMutations } from 'vuex';
-import { getYears } from '@/api2/homePage';
 
 export default {
   name: 'TopFixedBox',
@@ -56,21 +52,14 @@ export default {
       query: {
         areaId: '',
         declarationBatch: [],
-        year: '',
       },
-      titleList: ['项目调度', '验收评价'],
+      titleList: ['建设概况', '创建申报', '项目调度', '验收评价'],
       activeIndex: 0,
       batchOpt: [
         // {
         //   label: '全部批次',
         //   value: '全部批次',
         // },
-      ],
-      yearsOpt: [
-        {
-          label: '全部',
-          value: '',
-        },
       ],
     };
   },
@@ -80,10 +69,9 @@ export default {
   beforeMount() {
     this.initArea();
     this.setBatchOpt();
-    this.setYearOpt();
   },
   methods: {
-    ...mapMutations('home', ['SET_AREA_COUNTY', 'SET_AREA_CITY', 'SET_AREA_PROVINCE', 'SET_BATCH', 'SET_YEAR']),
+    ...mapMutations('home', ['SET_AREA_COUNTY', 'SET_AREA_CITY', 'SET_AREA_PROVINCE', 'SET_BATCH']),
     initArea() {
       if (/市$/.test(this.userInfo.areaName)) {
         return this.SET_AREA_CITY(this.userInfo.areaName);
@@ -107,21 +95,13 @@ export default {
         this.batchOpt = this.batchOpt.concat(...res.content.map((c) => ({ label: c.batch, value: c.batch })));
       });
     },
-    setYearOpt() {
-      getYears().then((res) => {
-        this.yearsOpt = this.yearsOpt.concat(...res.map((c) => ({ label: c, value: c })));
-      });
-    },
     batchChange(val) {
       this.SET_BATCH(val);
-    },
-    yearChange(val) {
-      this.SET_YEAR(val);
     },
     // 切换模块
     changeActive(index) {
       this.$emit('update', index);
-      // this.$emit('toBox', index);
+      this.$emit('toBox', index);
     },
   },
 };

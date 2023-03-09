@@ -43,7 +43,7 @@
             </div>
             <div class="search-item">
               <span class="label">创建批次：</span>
-              <el-select v-model="query.declarationBatch" placeholder="请选择">
+              <el-select multiple v-model="query.batch" placeholder="请选择">
                 <el-option
                   v-for="item in queryDeclareTypeOpt"
                   :key="item.value"
@@ -131,10 +131,10 @@ export default {
         },
       ],
       queryDeclareTypeOpt: [
-        {
-          label: '全部',
-          value: '',
-        },
+        // {
+        //   label: '全部',
+        //   value: '',
+        // },
       ],
       query: {
         address: {
@@ -145,7 +145,7 @@ export default {
         completionRateMax: undefined,
         finalStatus: undefined,
         village: undefined,
-        declarationBatch: '',
+        batch: [],
       },
       cascaderProps: CASCADER_PROPS, // 级联选择prop
 
@@ -172,11 +172,15 @@ export default {
     // 批次
     async getBatchInfo() {
       const res = await queryBatchInfo();
-      const opt = (res?.content || []).map((i) => {
+      let opt = (res?.content || []).map((i) => {
         return {
           label: i.batch,
           value: i.batch,
         };
+      });
+      opt.push({
+        label: '推广村',
+        value: '推广村',
       });
       this.queryDeclareTypeOpt = this.queryDeclareTypeOpt.concat(opt);
     },
