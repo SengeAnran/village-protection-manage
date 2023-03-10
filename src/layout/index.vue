@@ -21,7 +21,6 @@ import role from '@/views2/mixins/role';
 
 export default {
   name: 'Layout',
-  mixin: [role],
   components: {
     Header,
     AppMain,
@@ -31,7 +30,7 @@ export default {
   mounted() {
     this.alertPrompt();
   },
-  mixins: [ResizeMixin],
+  mixins: [ResizeMixin, role],
   computed: {
     ...mapState({
       sidebar: (state) => state.app.sidebar,

@@ -1,6 +1,6 @@
 <template>
   <div class="base-box-item">
-    <TotalTitle style="margin-left: 12px" v-bind="$attrs" />
+    <TotalTitle v-bind="$attrs" />
     <div class="bottom-content">
       <slot></slot>
     </div>

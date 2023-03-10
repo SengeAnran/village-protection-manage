@@ -33,6 +33,7 @@ const store = new Vuex.Store({
     location: (state) => state.home.location,
     batch: (state) => state.home.batch,
     year: (state) => state.home.year,
+    status: (state) => state.home.status,
     searchQuery: (state) => state.search.searchQuery,
   },
 });

@@ -395,6 +395,11 @@ export default {
               label: '重点村',
               value: '1002',
             };
+          } else if (item === '1003') {
+            return {
+              label: '提升村',
+              value: '1003',
+            };
           } else {
             return { label: '一般村', value: '1001' };
           }

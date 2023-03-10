@@ -139,6 +139,15 @@ export const getSubmitEarlyWarning = (data) => {
     headers: { 'APPLICATION-ID': 4 },
   });
 };
+// 【首页】报送详情
+export const getSubmitEarlyWarningDetail = (data) => {
+  return axios.request({
+    method: 'post',
+    url: apiHost2 + `/api/workbench/index/earlyWarning/detail`,
+    data,
+    headers: { 'APPLICATION-ID': 4 },
+  });
+};
 // 【首页】项目进度报送
 export const getProjectProgressReport = (params) => {
   return axios.request({

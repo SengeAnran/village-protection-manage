@@ -47,17 +47,22 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['area', 'location', 'batch', 'year']),
+    ...mapGetters(['area', 'location', 'batch', 'year', 'status']),
+    query() {
+      return {
+        area: this.area,
+        year: this.year,
+        batch: this.batch,
+        status: this.status,
+      };
+    },
   },
   watch: {
-    area() {
-      this.getData();
-    },
-    batch() {
-      this.getData();
-    },
-    year() {
-      this.getData();
+    query: {
+      handler: function () {
+        this.getData();
+      },
+      deep: true,
     },
   },
   mounted() {
@@ -79,6 +84,7 @@ export default {
         batch: this.batch,
         ...this.location,
         year: this.year,
+        status: this.status,
       };
       //项目开工率
       getProjectRate(data).then((res) => {

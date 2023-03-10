@@ -12,6 +12,14 @@
       </div>
     </div>
     <div class="box-right">
+      <el-select
+        v-model="query.status"
+        placeholder="全部"
+        @change="statusChange"
+        style="width: 200px; margin-right: 10px"
+      >
+        <el-option v-for="item in statusOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+      </el-select>
       <VillageSelectItem
         class="location-select"
         checkStrictly
@@ -57,6 +65,7 @@ export default {
         areaId: '',
         declarationBatch: [],
         year: '',
+        status: 1,
       },
       titleList: ['项目调度', '验收评价'],
       activeIndex: 0,
@@ -72,6 +81,16 @@ export default {
           value: '',
         },
       ],
+      statusOpt: [
+        {
+          label: '全部',
+          value: 0,
+        },
+        {
+          label: '调度中',
+          value: 1,
+        },
+      ],
     };
   },
   computed: {
@@ -83,7 +102,14 @@ export default {
     this.setYearOpt();
   },
   methods: {
-    ...mapMutations('home', ['SET_AREA_COUNTY', 'SET_AREA_CITY', 'SET_AREA_PROVINCE', 'SET_BATCH', 'SET_YEAR']),
+    ...mapMutations('home', [
+      'SET_AREA_COUNTY',
+      'SET_AREA_CITY',
+      'SET_AREA_PROVINCE',
+      'SET_BATCH',
+      'SET_YEAR',
+      'SET_STATUS',
+    ]),
     initArea() {
       if (/市$/.test(this.userInfo.areaName)) {
         return this.SET_AREA_CITY(this.userInfo.areaName);
@@ -117,6 +143,9 @@ export default {
     },
     yearChange(val) {
       this.SET_YEAR(val);
+    },
+    statusChange(val) {
+      this.SET_STATUS(val);
     },
     // 切换模块
     changeActive(index) {

@@ -51,17 +51,22 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['area', 'location', 'batch', 'year']),
+    ...mapGetters(['area', 'location', 'batch', 'year', 'status']),
+    query() {
+      return {
+        area: this.area,
+        year: this.year,
+        batch: this.batch,
+        status: this.status,
+      };
+    },
   },
   watch: {
-    area() {
-      this.changeArea();
-    },
-    batch() {
-      this.changeArea();
-    },
-    year() {
-      this.changeArea();
+    query: {
+      handler: function () {
+        this.changeArea();
+      },
+      deep: true,
     },
   },
   mounted() {
@@ -220,6 +225,7 @@ export default {
         batch: this.batch,
         ...this.location,
         year: this.year,
+        status: this.status,
       };
       const res = await getRanking(data);
       this.listData = res.map((i) => {

@@ -121,7 +121,7 @@ export default {
 .sort-list {
   .item {
     cursor: pointer;
-    margin: 6px 0;
+    margin: 16px 0;
     display: flex;
     position: relative;
     align-items: center;

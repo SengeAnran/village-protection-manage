@@ -35,6 +35,10 @@ export default {
         };
       },
     },
+    showName: {
+      type: Boolean,
+      default: false,
+    },
   },
   name: 'CityEvolution',
   data() {
@@ -124,6 +128,9 @@ export default {
           backgroundColor: 'rgba(0, 0, 0, 0.3)',
           formatter: (params) => {
             let str = '';
+            if (this.showName) {
+              str = `<span style="font-size:16px;">&nbsp; &nbsp;${params[0].name}</span> <br />`;
+            }
             params.forEach((item) => {
               str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
                                     "></span>
@@ -201,8 +208,6 @@ export default {
         ],
         series: [
           {
-            stack: 'AA',
-            z: 1,
             name: this.name1,
             data: this.dataList1,
             type: 'bar',
@@ -251,65 +256,67 @@ export default {
             //   },
             // },
           },
-          {
-            stack: 'AA',
-            type: 'bar',
-            name: this.name2,
-            barWidth: 10,
-            itemStyle: {
-              color: this.colors[1],
-              borderRadius: [2, 2, 0, 0],
-            },
-            label: {
-              show: false,
-              position: 'top',
-              distance: 10,
-              color: '#FFFFFF',
-              textStyle: {
-                fontSize: 22,
-              },
-            },
-            data: this.dataList2,
-          },
-          {
-            stack: 'AA',
-            z: 1,
-            name: this.name3,
-            data: this.dataList3,
-            type: 'bar',
-            barMaxWidth: 'auto',
-            barWidth: 10,
-            itemStyle: {
-              // color: {
-              //   x: 0,
-              //   y: 0,
-              //   x2: 0,
-              //   y2: 1,
-              //   type: 'linear',
-              //   global: false,
-              //   colorStops: [
-              //     {
-              //       offset: 0,
-              //       color: '#90E4FA',
-              //     },
-              //     {
-              //       offset: 1,
-              //       color: '#8CE1F9',
-              //     },
-              //   ],
-              // },
-              color: this.colors[2],
-              borderRadius: [2, 2, 0, 0],
-            },
-            label: {
-              show: false,
-              position: 'top',
-              distance: 10,
-              color: '#fff',
-            },
-          },
+          //
         ],
       };
+      if (this.name2) {
+        option.series.push({
+          name: this.name2,
+          data: this.dataList2,
+          type: 'bar',
+          barWidth: 10,
+          itemStyle: {
+            color: this.colors[1],
+            borderRadius: [2, 2, 0, 0],
+          },
+          label: {
+            show: false,
+            position: 'top',
+            distance: 10,
+            color: '#FFFFFF',
+            textStyle: {
+              fontSize: 22,
+            },
+          },
+        });
+      }
+      if (this.name3) {
+        option.series.push({
+          name: this.name3,
+          data: this.dataList3,
+          type: 'bar',
+          barMaxWidth: 'auto',
+          barWidth: 10,
+          itemStyle: {
+            // color: {
+            //   x: 0,
+            //   y: 0,
+            //   x2: 0,
+            //   y2: 1,
+            //   type: 'linear',
+            //   global: false,
+            //   colorStops: [
+            //     {
+            //       offset: 0,
+            //       color: '#90E4FA',
+            //     },
+            //     {
+            //       offset: 1,
+            //       color: '#8CE1F9',
+            //     },
+            //   ],
+            // },
+            color: this.colors[2],
+            borderRadius: [2, 2, 0, 0],
+          },
+          label: {
+            show: false,
+            position: 'top',
+            distance: 10,
+            color: '#fff',
+          },
+        });
+      }
       return option;
     },
     loadData() {

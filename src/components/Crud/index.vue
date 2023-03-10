@@ -610,7 +610,7 @@ export default {
             params = this.beforeGetMethod(params);
           }
           const res = await this.getMethod(params);
-          this.items = res.content;
+          this.items = res.content || res;
           this.total = res.totalSize;
         }
         this.loading = false;

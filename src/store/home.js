@@ -10,6 +10,7 @@ export default {
     },
     area: defaultLocation,
     year: '',
+    status: 1,
   },
   mutations: {
     SET_BATCH(state, param) {
@@ -20,6 +21,9 @@ export default {
     },
     SET_YEAR(state, param) {
       state.year = param ? parseInt(param, 10) : '';
+    },
+    SET_STATUS(state, param) {
+      state.status = param;
     },
     // 设置地区市
     SET_AREA_CITY(state, value) {
