@@ -39,6 +39,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    left: {
+      type: Boolean,
+      default: false,
+    },
   },
   name: 'CityEvolution',
   data() {
@@ -259,6 +263,11 @@ export default {
           //
         ],
       };
+      if (this.left) {
+        option.legend.left = 0;
+        option.legend.right = undefined;
+        option.legend.top = 10;
+      }
       if (this.name2) {
         option.series.push({
           name: this.name2,

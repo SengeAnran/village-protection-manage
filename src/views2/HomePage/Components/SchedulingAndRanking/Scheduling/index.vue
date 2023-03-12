@@ -94,7 +94,6 @@ export default {
       // this.chartData.dataList2 = res.map((i) => {
       //   return (i.rate * 100).toFixed(1) || 0;
       // });
-      console.log(this.chartData);
     },
     goDetail(name) {
       const index = this.listData.findIndex((i) => i.name === name);

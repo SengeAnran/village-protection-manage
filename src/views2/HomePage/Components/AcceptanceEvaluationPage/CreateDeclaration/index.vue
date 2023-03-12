@@ -1,27 +1,34 @@
 <template>
-  <base-box-item-new class="rete-content" name="投资完成率" :count="total" unit="%" :icon="iconUrl" :fixed="1">
-    <TotalSummary :data="data" />
+  <base-box-item-new class="rete-content" name="创建申报" :count="total" unit="个" :icon="iconUrl">
+    <div class="pie-chart">
+      <PieChart v-if="showBar" :list="pieDataList" :isPercent="false" unit="个" totalUnit="个" minTitle="申报总数" />
+    </div>
   </base-box-item-new>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import TotalSummary from './TotalSummary.vue';
-import { getProgressReportTotal } from '@/api2/homePage';
+import { getCountVillage } from '@/api2/homePage';
+
+import PieChart from '../../PieChart';
 
 export default {
-  components: { TotalSummary },
+  components: { PieChart },
   data() {
     return {
-      data: {},
-      total: 0,
       showBar: true,
       flag: true,
       iconUrl: require('./icon.png'),
+      pieDataList: [
+        { name: '省级审核通过', value: 0 },
+        { name: '市、县待上报', value: 0 },
+        { name: '省级审核未通过', value: 0 },
+      ],
+      total: 0,
     };
   },
   computed: {
-    ...mapGetters(['area', 'location', 'batch', 'year', 'status']),
+    ...mapGetters(['area', 'location', 'batch', 'status']),
     query() {
       return {
         area: this.area,
@@ -56,16 +63,15 @@ export default {
     getData() {
       const data = {
         batch: this.batch,
-        ...this.location,
         year: this.year,
         status: this.status,
+        ...this.location,
       };
-      //投资完成率
-      getProgressReportTotal(data).then((res) => {
-        // 投资完成率
-        const rate = res ? res.rate || 0 : 0;
-        this.total = rate * 100;
-        this.data = res;
+      getCountVillage(data).then((res) => {
+        this.pieDataList[0].value = res.passTotalCount || 0;
+        this.pieDataList[1].value = res.readyPassTotalCount || 0;
+        this.pieDataList[2].value = res.noPassTotalCount || 0;
+        this.total = res.passTotalCount + res.readyPassTotalCount + res.noPassTotalCount || 0;
       });
     },
   },
@@ -76,5 +82,9 @@ export default {
 .rete-content {
   position: relative;
   height: 100%;
+  .pie-chart {
+    height: 140px;
+    margin-top: 5px;
+  }
 }
 </style>

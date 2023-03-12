@@ -3,16 +3,17 @@
     class="my-el-dialog"
     :visible="dialog"
     append-to-body
-    :width="760"
-    :height="708"
+    width="760"
+    height="708"
     title="报送详情"
     @close="$emit('closeView')"
   >
     <Crud
       ref="crud"
       :get-method="getMethod"
+      :before-get-method="beforeGetMethod"
       :query.sync="query"
-      :tableHeight="400"
+      tableHeight="400"
       id-key="id"
       hideTableAction
       hidePagination
@@ -65,7 +66,7 @@
 
 <script>
 import { getSubmitEarlyWarningDetail } from '@/api2/homePage';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import { REPORT_STATUS, REPORT_STATUS_COLOR, getStatusName } from '@/views2/ProgressSubmission/constants';
 
 export default {
@@ -79,21 +80,20 @@ export default {
     return {
       REPORT_STATUS_COLOR,
       query: {
-        address: {
-          city: '',
-          county: '',
-        },
         projectStatus: '',
         areaId: '',
-        village: undefined,
+        village: '',
         batch: [],
+        city: '',
+        county: '',
+        province: '',
       },
       getMethod: getSubmitEarlyWarningDetail,
       reportStateOPt: [],
     };
   },
   computed: {
-    ...mapGetters(['area', 'location', 'batch']),
+    ...mapGetters(['area', 'location', 'batch', 'year', 'status']),
   },
   beforeMount() {
     const opts = Object.keys(REPORT_STATUS).map((ele) => {
@@ -112,7 +112,40 @@ export default {
     getStatusName,
     // 地区
     changeArea(val) {
+      if (val.areaId.length === 2) {
+        this.query.city = '';
+        this.query.county = '';
+        this.query.province = val.areaName;
+      } else if (val.areaId.length === 4) {
+        this.query.city = val.areaName;
+        this.query.county = '';
+        this.query.province = '';
+      } else if (val.areaId.length === 6) {
+        this.query.city = '';
+        this.query.county = val.areaName;
+        this.query.province = '';
+      }
       this.query.areaId = val.areaId;
+    },
+    beforeGetMethod(params) {
+      let query;
+      if (!params.areaId) {
+        query = {
+          ...params,
+          ...this.location,
+          batch: this.batch,
+          year: this.year,
+          status: this.status,
+        };
+      } else {
+        query = {
+          ...params,
+          batch: this.batch,
+          year: this.year,
+          status: this.status,
+        };
+      }
+      return query;
     },
   },
 };

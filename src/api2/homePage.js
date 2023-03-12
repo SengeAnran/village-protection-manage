@@ -184,6 +184,15 @@ export const getEvaluationGradeCount = (data) => {
     headers: { 'APPLICATION-ID': 4 },
   });
 };
+// 【首页】获取一老一小视频信息
+export const getOldSmallVideo = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/index/getOldSmallVideo`,
+    data,
+    headers: { 'APPLICATION-ID': 4 },
+  });
+};
 
 // 【首页】预警详情
 export const getEarlyWarningDetail = (data) => {

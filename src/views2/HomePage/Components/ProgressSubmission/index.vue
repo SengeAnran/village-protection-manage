@@ -14,7 +14,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { getProgressReport, getSubmitEarlyWarning } from '@/api2/homePage';
+import { getSubmitEarlyWarning } from '@/api2/homePage';
 
 import PieChart from '../PieChart';
 import TotalTitle from '../TotalTitle';
@@ -101,7 +101,6 @@ export default {
       };
       //项目开工率
       getSubmitEarlyWarning(data).then((res) => {
-        console.log(res);
         this.pieDataList[0].value = res.normalSubmission || 0;
         this.pieDataList[1].value = res.toSubmit || 0;
         this.pieDataList[2].value = res.completed || 0;
@@ -139,7 +138,6 @@ export default {
           },
         });
       }
-      // console.log(this.listData[index]);
     },
   },
 };

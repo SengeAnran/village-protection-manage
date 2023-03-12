@@ -35,6 +35,10 @@ export default {
         };
       },
     },
+    showName: {
+      type: Boolean,
+      default: false,
+    },
   },
   name: 'CityEvolution',
   data() {
@@ -100,8 +104,8 @@ export default {
         legend: {
           show: true,
           data: [this.name1, this.name2, this.name3],
-          right: 0,
-          top: 0,
+          left: 0,
+          top: 10,
           textStyle: {
             color: 'rgba(0, 0, 0, 0.85)',
             fontSize: 12,
@@ -124,6 +128,9 @@ export default {
           backgroundColor: 'rgba(0, 0, 0, 0.3)',
           formatter: (params) => {
             let str = '';
+            if (this.showName) {
+              str = `<span style="font-size:16px;">&nbsp; &nbsp;${params[0].name}</span> <br />`;
+            }
             params.forEach((item) => {
               str += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color: ${item.color}
                                     "></span>

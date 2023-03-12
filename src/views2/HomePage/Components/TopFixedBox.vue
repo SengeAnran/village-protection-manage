@@ -15,6 +15,7 @@
       <el-select
         v-model="query.status"
         placeholder="全部"
+        :disabled="disabled"
         @change="statusChange"
         style="width: 200px; margin-right: 10px"
       >
@@ -36,7 +37,7 @@
       >
         <el-option v-for="item in batchOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
-      <el-select v-model="query.year" placeholder="全部" @change="yearChange" style="width: 200px">
+      <el-select :disabled="disabled" v-model="query.year" placeholder="全部" @change="yearChange" style="width: 200px">
         <el-option v-for="item in yearsOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
     </div>
@@ -67,8 +68,9 @@ export default {
         year: '',
         status: 1,
       },
-      titleList: ['项目调度', '验收评价'],
+      titleList: ['项目调度', '创建验收'],
       activeIndex: 0,
+      disabled: false,
       batchOpt: [
         // {
         //   label: '全部批次',
@@ -150,7 +152,21 @@ export default {
     // 切换模块
     changeActive(index) {
       this.$emit('update', index);
+      this.resetValue();
+      this.disabled = index === 1;
       // this.$emit('toBox', index);
+    },
+    resetValue() {
+      this.query = {
+        areaId: '',
+        declarationBatch: [],
+        year: '',
+        status: 1,
+      };
+      this.SET_BATCH([]);
+      this.SET_YEAR('全部');
+      this.SET_STATUS(1);
+      this.initArea();
     },
   },
 };

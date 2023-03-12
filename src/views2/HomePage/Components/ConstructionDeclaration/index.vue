@@ -4,7 +4,7 @@
       <PieChart v-if="showBar" :list="pieDataList" :isPercent="false" unit="个" totalUnit="个" minTitle="申报总数" />
     </div>
     <div class="right-content">
-      <BaseBarChart v-if="showBar" key="申报总数sbzs" :chart-data="chartData" @goDetail="goDetail" />
+      <BaseBarChart v-if="showBar" key="申报总数" :chart-data="chartData" @goDetail="goDetail" />
     </div>
   </base-box-item>
 </template>

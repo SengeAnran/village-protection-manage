@@ -1,9 +1,12 @@
 <template>
   <div class="page">
-    <top-fixed-box v-model="activeIndex" @toBox="toBox" />
+    <!--    <top-fixed-box v-model="activeIndex" @toBox="toBox" />-->
+    <top-fixed-box v-model="activeIndex" />
     <div class="content-box">
       <!--      项目调度-->
-      <ProjectSchedul></ProjectSchedul>
+      <ProjectSchedul v-if="activeIndex === 0"></ProjectSchedul>
+      <!--     验收评价 -->
+      <AcceptanceEvaluationPage v-else></AcceptanceEvaluationPage>
       <BaseBox>
         <!--        建设概况-->
         <ConstructionOverview />
@@ -26,6 +29,7 @@
 
 <script>
 import ProjectSchedul from './Components/ProjectSchedul';
+import AcceptanceEvaluationPage from './Components/AcceptanceEvaluationPage';
 import ConstructionOverview from './Components/ConstructionOverview';
 import ProjectScheduling from './Components/ProjectScheduling';
 import BaseBox from './Components/BaseBox';
@@ -38,6 +42,7 @@ export default {
   name: 'index',
   components: {
     ProjectSchedul,
+    AcceptanceEvaluationPage,
     TopFixedBox,
     ConstructionOverview,
     ConstructionDeclaration,
@@ -58,48 +63,51 @@ export default {
     //   this.toBox(val);
     // },
   },
-  mounted() {
-    document.querySelector('.content-box').addEventListener('scroll', this.initScroll);
-  },
-  destroyed() {
-    document.querySelector('.content-box').removeEventListener('scroll', this.initScroll);
-  },
+  // mounted() {
+  //   document.querySelector('.content-box').addEventListener('scroll', this.initScroll);
+  // },
+  // destroyed() {
+  //   document.querySelector('.content-box').removeEventListener('scroll', this.initScroll);
+  // },
   beforeDestroy() {
     this['home/RESET_DATA']();
   },
   methods: {
     ...mapMutations(['home/RESET_DATA']),
-    toBox(index) {
-      this.isClick = true;
-      const dom = document.querySelectorAll('.base-box')[index];
-      const box = document.querySelector('.content-box');
-      const offsetTop = dom.offsetTop - 57;
-      box.scrollTo({
-        top: offsetTop,
-        behavior: 'smooth',
-      });
-      setTimeout(() => {
-        this.isClick = false;
-      });
-    },
-    initScroll() {
-      const dom = document.querySelector('.content-box');
-      const scrollTop = dom.scrollTop;
-      const divs = [...document.querySelectorAll('.base-box')];
-      divs.forEach((item, index) => {
-        this.contentTopList[index] = item.offsetTop - 58;
-      });
-      // 判断当前是否是点击定位的，如果不是，才有滚动定位的效果
-      if (!this.isClick) {
-        let navIndex = 0;
-        this.contentTopList.forEach((i, index) => {
-          if (scrollTop >= i) {
-            navIndex = index;
-          }
-        });
-        this.activeIndex = navIndex;
-      }
-    },
+    // 点击到达模块
+    // toBox(index) {
+    //   this.isClick = true;
+    //   const dom = document.querySelectorAll('.base-box')[index];
+    //   const box = document.querySelector('.content-box');
+    //   const offsetTop = dom.offsetTop - 57;
+    //   box.scrollTo({
+    //     top: offsetTop,
+    //     behavior: 'smooth',
+    //   });
+    //   setTimeout(() => {
+    //     this.isClick = false;
+    //   });
+    // },
+
+    // 当到达某一模块展示对应的高亮
+    // initScroll() {
+    //   const dom = document.querySelector('.content-box');
+    //   const scrollTop = dom.scrollTop;
+    //   const divs = [...document.querySelectorAll('.base-box')];
+    //   divs.forEach((item, index) => {
+    //     this.contentTopList[index] = item.offsetTop - 58;
+    //   });
+    //   // 判断当前是否是点击定位的，如果不是，才有滚动定位的效果
+    //   if (!this.isClick) {
+    //     let navIndex = 0;
+    //     this.contentTopList.forEach((i, index) => {
+    //       if (scrollTop >= i) {
+    //         navIndex = index;
+    //       }
+    //     });
+    //     this.activeIndex = navIndex;
+    //   }
+    // },
   },
 };
 </script>
