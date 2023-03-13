@@ -173,16 +173,16 @@ export default {
               str += `<span style="font-size:14px;">&nbsp; &nbsp;${item.seriesName}:  &nbsp;&nbsp;${item.value}${this.unit}</span>
                                         <br/>`;
             });
-            if (this.name2 && this.dataList2.length > 0) {
-              str += `<span>&nbsp; &nbsp;  <em>${this.name2}</em>:  &nbsp;${this.dataList2[params[0].dataIndex]}${
-                this.otherUnit
-              }<br/></span>`;
-            }
-            if (this.name3 && this.dataList3.length > 0) {
-              str += `<span>&nbsp; &nbsp;  <em>${this.name3}</em>:  &nbsp;${this.dataList3[params[0].dataIndex]}${
-                this.otherUnit
-              }<br/></span>`;
-            }
+            // if (this.name2 && this.dataList2.length > 0) {
+            //   str += `<span>&nbsp; &nbsp;  <em>${this.name2}</em>:  &nbsp;${this.dataList2[params[0].dataIndex]}${
+            //     this.otherUnit
+            //   }<br/></span>`;
+            // }
+            // if (this.name3 && this.dataList3.length > 0) {
+            //   str += `<span>&nbsp; &nbsp;  <em>${this.name3}</em>:  &nbsp;${this.dataList3[params[0].dataIndex]}${
+            //     this.otherUnit
+            //   }<br/></span>`;
+            // }
             return str;
           },
         },
@@ -252,8 +252,6 @@ export default {
         ],
         series: [
           {
-            stack: 'AA',
-            z: 1,
             name: this.name1,
             data: this.dataList1,
             type: 'bar',
@@ -287,23 +285,47 @@ export default {
               distance: 10,
               color: '#fff',
             },
-            // emphasis: {
-            //   focus: 'series',
-            //   tooltip: {
-            //     textStyle: {
-            //       color: '#fff',
-            //       fontSize: 14,
-            //     },
-            //     borderColor: 'rgba(255, 255, 255, 0.4)',
-            //     backgroundColor: 'rgba(0, 0, 0, 0.3)',
-            //     formatter: (params) => {
-            //       console.log(params);
-            //     }
-            //   },
-            // },
           },
         ],
       };
+      if (this.name2) {
+        option.legend.data.push(this.name2);
+        option.series.push({
+          name: this.name2,
+          data: this.dataList2,
+          type: 'bar',
+          barMaxWidth: 'auto',
+          barWidth: 10,
+          itemStyle: {
+            // color: {
+            //   x: 0,
+            //   y: 0,
+            //   x2: 0,
+            //   y2: 1,
+            //   type: 'linear',
+            //   global: false,
+            //   colorStops: [
+            //     {
+            //       offset: 0,
+            //       color: '#90E4FA',
+            //     },
+            //     {
+            //       offset: 1,
+            //       color: '#8CE1F9',
+            //     },
+            //   ],
+            // },
+            color: '#FEC447',
+            borderRadius: [2, 2, 0, 0],
+          },
+          label: {
+            show: false,
+            position: 'top',
+            distance: 10,
+            color: '#fff',
+          },
+        });
+      }
       return option;
     },
     loadData() {

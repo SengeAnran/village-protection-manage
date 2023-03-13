@@ -12,7 +12,7 @@
         <div class="bar-inter" :style="{ backgroundColor: barColor }"></div>
       </div>
       <div class="num">
-        {{ item.value }}<span v-if="item.unit">{{ item.unit }}</span>
+        {{ (item.value * 1).toFixed(2) }}<span v-if="item.unit">{{ item.unit }}</span>
       </div>
       <div class="tip" v-if="item.tapList && item.tapList.length > 0">
         <div class="tip-item" v-for="(item2, index2) in item.tapList" :key="index2">
@@ -80,7 +80,7 @@ export default {
   computed: {
     max() {
       const data = this.listData || [];
-      const max = data.reduce((prev, cur) => (prev > cur.value ? prev : cur.value), 0);
+      const max = data.reduce((prev, cur) => (prev > parseInt(cur.value) ? prev : parseInt(cur.value)), 0);
       return max;
     },
   },

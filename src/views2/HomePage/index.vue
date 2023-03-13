@@ -7,22 +7,22 @@
       <ProjectSchedul v-if="activeIndex === 0"></ProjectSchedul>
       <!--     验收评价 -->
       <AcceptanceEvaluationPage v-else></AcceptanceEvaluationPage>
-      <BaseBox>
-        <!--        建设概况-->
-        <ConstructionOverview />
-      </BaseBox>
-      <BaseBox>
-        <!--        创建申报-->
-        <ConstructionDeclaration />
-      </BaseBox>
-      <BaseBox>
-        <!--        项目调度-->
-        <ProjectScheduling />
-      </BaseBox>
-      <BaseBox>
-        <!--        验收评价-->
-        <AcceptanceEvaluation />
-      </BaseBox>
+      <!--      <BaseBox>-->
+      <!--        &lt;!&ndash;        建设概况&ndash;&gt;-->
+      <!--        <ConstructionOverview />-->
+      <!--      </BaseBox>-->
+      <!--      <BaseBox>-->
+      <!--        &lt;!&ndash;        创建申报&ndash;&gt;-->
+      <!--        <ConstructionDeclaration />-->
+      <!--      </BaseBox>-->
+      <!--      <BaseBox>-->
+      <!--        &lt;!&ndash;        项目调度&ndash;&gt;-->
+      <!--        <ProjectScheduling />-->
+      <!--      </BaseBox>-->
+      <!--      <BaseBox>-->
+      <!--        &lt;!&ndash;        验收评价&ndash;&gt;-->
+      <!--        <AcceptanceEvaluation />-->
+      <!--      </BaseBox>-->
     </div>
   </div>
 </template>
@@ -30,12 +30,12 @@
 <script>
 import ProjectSchedul from './Components/ProjectSchedul';
 import AcceptanceEvaluationPage from './Components/AcceptanceEvaluationPage';
-import ConstructionOverview from './Components/ConstructionOverview';
-import ProjectScheduling from './Components/ProjectScheduling';
-import BaseBox from './Components/BaseBox';
+// import ConstructionOverview from './Components/ConstructionOverview';
+// import ProjectScheduling from './Components/ProjectScheduling';
+// import BaseBox from './Components/BaseBox';
 import TopFixedBox from './Components/TopFixedBox.vue';
-import ConstructionDeclaration from './Components/ConstructionDeclaration';
-import AcceptanceEvaluation from './Components/AcceptanceEvaluation';
+// import ConstructionDeclaration from './Components/ConstructionDeclaration';
+// import AcceptanceEvaluation from './Components/AcceptanceEvaluation';
 import { mapMutations } from 'vuex';
 // import ExcellentCases from './Components/ExcellentCases';
 export default {
@@ -44,12 +44,12 @@ export default {
     ProjectSchedul,
     AcceptanceEvaluationPage,
     TopFixedBox,
-    ConstructionOverview,
-    ConstructionDeclaration,
-    AcceptanceEvaluation,
+    // ConstructionOverview,
+    // ConstructionDeclaration,
+    // AcceptanceEvaluation,
     // ExcellentCases,
-    BaseBox,
-    ProjectScheduling,
+    // BaseBox,
+    // ProjectScheduling,
   },
   data() {
     return {

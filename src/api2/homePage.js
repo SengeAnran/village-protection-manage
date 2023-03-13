@@ -190,7 +190,7 @@ export const getOldSmallVideo = (data) => {
     method: 'POST',
     url: apiHost2 + `/api/workbench/index/getOldSmallVideo`,
     data,
-    headers: { 'APPLICATION-ID': 4 },
+    headers: { 'APPLICATION-ID': 4, Referer: 'https://wlxc.zjagri.cn/v2/mlxc/fillProgress/schedule/detail?id=154' },
   });
 };
 

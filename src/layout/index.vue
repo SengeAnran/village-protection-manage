@@ -15,7 +15,7 @@
 <script>
 import { Header, AppMain, Navbar, Sidebar } from './components';
 import ResizeMixin from './mixin/ResizeHandler';
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import { alertPrompt } from '@/api2/common';
 import role from '@/views2/mixins/role';
 
@@ -37,6 +37,7 @@ export default {
       device: (state) => state.app.device,
       onlyShowDetail: (state) => state.app.onlyShowDetail,
     }),
+    ...mapGetters(['roleSystemType']),
     classObj() {
       return {
         hideSidebar: !this.sidebar.opened,
@@ -53,6 +54,10 @@ export default {
     alertPrompt() {
       // 提示
       if (!this.VILLAGE && !this.COUNTRY && !this.COUNTRY_LEADER) {
+        return;
+      }
+      // if ()
+      if (this.roleSystemType !== 4) {
         return;
       }
       alertPrompt().then((res) => {

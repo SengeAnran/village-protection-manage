@@ -19,7 +19,6 @@
       <div class="left-bottom">
         <!--        各地区项目调度情况 和首末排名-->
         <BaseBox class="height-298">
-          <!--            总体进度-->
           <SchedulingAndRanking></SchedulingAndRanking>
         </BaseBox>
       </div>

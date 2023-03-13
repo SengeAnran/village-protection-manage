@@ -20,7 +20,7 @@
   </div>
 </template>
 <script>
-import { uploadFile } from "@/api/common.js";
+import { uploadFile } from '@/api/common.js';
 
 export default {
   props: {
@@ -35,7 +35,7 @@ export default {
     // 限制文件大小（MB）
     limitSize: {
       type: Number,
-      default: 50,
+      default: 500,
     },
     multiple: {
       type: Boolean,
@@ -43,16 +43,16 @@ export default {
     },
     tip: {
       type: String,
-      default: "",
+      default: '',
     },
     accept: {
       type: String,
-      default: "*",
+      default: '*',
     },
   },
   data() {
     return {
-      dialogImageUrl: "",
+      dialogImageUrl: '',
       dialogVisible: false,
       disabled: false,
     };
@@ -71,11 +71,11 @@ export default {
     async uploadImg(info) {
       //console.log(info);
       const formData = new FormData();
-      formData.append("file", info.file);
+      formData.append('file', info.file);
 
       const res = await uploadFile(formData);
-      this.$message.success("文件上传成功");
-      this.$emit("add", { ...res, uid: info.file.uid });
+      this.$message.success('文件上传成功');
+      this.$emit('add', { ...res, uid: info.file.uid });
 
       if (this.$refs.upload.uploadFiles.length >= this.limit) {
         this.disabled = true;
@@ -83,17 +83,17 @@ export default {
     },
     handleRemove(file) {
       // this.$refs.upload.handleRemove(file);
-      this.$emit("remove", file);
+      this.$emit('remove', file);
       this.disabled = false;
     },
     beforeImgUpload(file) {
       //console.log(file);
-      const suffix = file.name.split(".").slice(-1)[0];
-      const isFormat = this.accept === "*" ? true : this.accept.indexOf(suffix) >= 0;
+      const suffix = file.name.split('.').slice(-1)[0];
+      const isFormat = this.accept === '*' ? true : this.accept.indexOf(suffix) >= 0;
       const isLimit = file.size / 1024 / 1024 < this.limitSize;
 
       if (!isFormat) {
-        this.$message.error("上传文件格式不正确!");
+        this.$message.error('上传文件格式不正确!');
       }
       if (!isLimit) {
         this.$message.error(`上传文件大小不能超过 ${this.limitSize}MB!`);

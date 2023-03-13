@@ -246,8 +246,9 @@ export default {
     // 上报
     toAdd() {
       const date = new Date().getDate();
-      if (date < 10 || (date > 13 && date < 25) || date > 28) {
-        this.$message.warning('不在报送时间内，请在每月10-13号、25-28号进行报送');
+      const hour = new Date().getHours();
+      if (date < 10 || (date === 14 && hour > 19) || (date > 14 && date < 25) || date > 28) {
+        this.$message.warning('不在报送时间内，请在每月10-14号20：00、25-28号进行报送');
         return;
       }
       this.$router.push({ name: 'NewSchedule' });

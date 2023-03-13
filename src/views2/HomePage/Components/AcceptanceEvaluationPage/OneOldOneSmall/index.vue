@@ -6,13 +6,15 @@
     <!--      <swiper-slide>Slide 3</swiper-slide>-->
     <!--      ...-->
     <!--    </swiper>-->
-    <swiper class="swiper" :options="swiperOption">
+    <swiper v-if="showSwiper" class="swiper" id="mySwiper" :options="swiperOption">
       <swiper-slide class="swiper-item" v-for="(item, index) in swiperList" :key="index">
-        <video :src="item.filePath" />
-        <div class="name">{{ item.fileName }}</div>
+        <video class="video-style" :src="item.filePath" />
+        <div class="name">{{ item.fileId }}</div>
+        <div class="paly" @click="palyVideo(item)"></div>
       </swiper-slide>
       <div class="swiper-pagination" slot="pagination"></div>
     </swiper>
+    <ViewVideo :path="palyPath" :title="title" :dialog="showDialog" @closeView="showDialog = false" />
   </base-box-item-new>
 </template>
 
@@ -21,12 +23,13 @@ import { mapGetters } from 'vuex';
 import { getEvaluationGradeCount, getOldSmallVideo } from '@/api2/homePage';
 
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
+import ViewVideo from './ViewVideo';
 import 'swiper/dist/css/swiper.css';
 
 // import PieChart from '../../PieChart';
 
 export default {
-  components: { swiper, swiperSlide },
+  components: { swiper, swiperSlide, ViewVideo },
   data() {
     return {
       showBar: true,
@@ -54,6 +57,10 @@ export default {
       },
       swiperList: [],
       total: 0,
+      showSwiper: false,
+      palyPath: '',
+      title: '',
+      showDialog: false,
     };
   },
   computed: {
@@ -75,8 +82,10 @@ export default {
       deep: true,
     },
   },
-  mounted() {
+  created() {
     this.getData();
+  },
+  mounted() {
     window.addEventListener('resize', () => {
       if (this.flag) {
         this.flag = false;
@@ -89,29 +98,34 @@ export default {
     });
   },
   methods: {
-    getData() {
+    async getData() {
       const data = {
         batch: this.batch,
         year: this.year,
         status: this.status,
         ...this.location,
       };
-      getEvaluationGradeCount(data).then((res) => {
-        this.total = Number(res.oldSmallReportNum);
-      });
-      getOldSmallVideo(data).then((res) => {
-        if (res.length > 10) {
-          this.swiperList = res.slice(0, 10);
-          return;
-        }
-        this.swiperList = res;
-      });
+      const res = await getEvaluationGradeCount(data);
+      this.total = Number(res.oldSmallReportNum);
+      const res2 = await getOldSmallVideo(data);
+      if (res2.length > 10) {
+        this.swiperList = res2.slice(0, 10);
+      } else {
+        this.swiperList = res2;
+      }
+
+      this.showSwiper = true;
     },
     onSwiper(swiper) {
       console.log(swiper);
     },
     onSlideChange() {
       console.log('slide change');
+    },
+    palyVideo(item) {
+      this.palyPath = item.filePath;
+      this.title = item.fileId + '“一老一小服务场景“视频';
+      this.showDialog = true;
     },
   },
 };
@@ -127,10 +141,34 @@ export default {
     width: 365px;
     height: 100%;
     .swiper-item {
+      position: relative;
       //width: 145px !important;
       height: 100px;
-      background-color: pink;
+      //background-color: pink;
       transform: scale(0.8);
+      .video-style {
+        width: 145px;
+        height: 82px;
+        border-radius: 7px;
+      }
+      .name {
+        text-align: center;
+        font-size: 12px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #333333;
+        line-height: 17px;
+      }
+      .paly {
+        cursor: pointer;
+        position: absolute;
+        left: 50%;
+        top: calc(50% - 10px);
+        transform: translate(-50%, -50%);
+        width: 24px;
+        height: 24px;
+        background: url('./play.png') no-repeat;
+      }
     }
     .swiper-slide-active,
     .swiper-slide-duplicate-active {

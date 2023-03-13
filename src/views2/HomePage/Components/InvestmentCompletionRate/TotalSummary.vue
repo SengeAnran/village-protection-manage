@@ -3,6 +3,12 @@
     <div class="gap"></div>
     <TotalTitle name="计划投资" unit="万元" countSize="24" :icon="false" :count="Number(formatMoney(totalPlan))" />
     <TotalItem :social="data?.planDrive || 0" :government="data?.planGov || 0" />
+    <!--    <div class="tip" v-if="item.tapList && item.tapList.length > 0">-->
+    <!--      <div class="tip-item" v-for="(item2, index2) in item.tapList" :key="index2">-->
+    <!--        <div class="tip-name">{{ item2.name }}</div>-->
+    <!--        <div class="tip-value">{{ item2.value + item2.unit }}</div>-->
+    <!--      </div>-->
+    <!--    </div>-->
     <!--    <TotalItem background-color="#70abf8" />-->
     <TotalTitle name="完成投资" unit="万元" countSize="24" :icon="false" :count="Number(formatMoney(totalComplete))" />
     <!--    <TotalItem background-color="#fed887" />-->
