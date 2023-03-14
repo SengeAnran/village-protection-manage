@@ -18,7 +18,7 @@
       </div>
       <div class="left-bottom">
         <!--        各地区项目调度情况 和首末排名-->
-        <BaseBox class="height-298">
+        <BaseBox class="height-295">
           <SchedulingAndRanking></SchedulingAndRanking>
         </BaseBox>
       </div>
@@ -28,7 +28,7 @@
         <!--          投资完成率-->
         <InvestmentCompletionRate></InvestmentCompletionRate>
       </BaseBox>
-      <BaseBox class="height-494">
+      <BaseBox class="height-491">
         <!--          本月进度报送-->
         <ProgressSubmission></ProgressSubmission>
       </BaseBox>
@@ -44,6 +44,7 @@ import InvestmentCompletionRate from '@/views2/HomePage/Components/InvestmentCom
 import OverallProgress from '@/views2/HomePage/Components/OverallProgress';
 import SchedulingAndRanking from '@/views2/HomePage/Components/SchedulingAndRanking';
 import ProgressSubmission from '@/views2/HomePage/Components/ProgressSubmission';
+import { mapGetters } from 'vuex';
 export default {
   name: 'index',
   components: {
@@ -61,8 +62,21 @@ export default {
       flag: true,
     };
   },
+  computed: {
+    ...mapGetters(['onlyShowDetail']),
+  },
+  watch: {
+    onlyShowDetail() {
+      this.reloadShow();
+    },
+  },
   mounted() {
     window.addEventListener('resize', () => {
+      this.reloadShow();
+    });
+  },
+  methods: {
+    reloadShow() {
       if (this.flag) {
         this.flag = false;
         this.showBar = false;
@@ -71,7 +85,7 @@ export default {
           this.showBar = true;
         }, 200);
       }
-    });
+    },
   },
 };
 </script>
@@ -80,11 +94,11 @@ export default {
 .height-184 {
   height: 184px;
 }
-.height-298 {
-  height: 298px;
+.height-295 {
+  height: 295px;
 }
-.height-494 {
-  height: 494px;
+.height-491 {
+  height: 491px;
 }
 .page-content {
   //height: 649px;

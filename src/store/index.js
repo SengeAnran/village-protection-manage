@@ -35,6 +35,7 @@ const store = new Vuex.Store({
     year: (state) => state.home.year,
     status: (state) => state.home.status,
     searchQuery: (state) => state.search.searchQuery,
+    onlyShowDetail: (state) => state.app.onlyShowDetail,
   },
 });
 

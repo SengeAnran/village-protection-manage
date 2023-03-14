@@ -41,7 +41,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['area', 'location', 'batch', 'status']),
+    ...mapGetters(['area', 'location', 'batch', 'status', 'onlyShowDetail']),
     query() {
       return {
         area: this.area,
@@ -58,10 +58,18 @@ export default {
       },
       deep: true,
     },
+    onlyShowDetail() {
+      this.reloadShow();
+    },
   },
   mounted() {
     this.getData();
     window.addEventListener('resize', () => {
+      this.reloadShow();
+    });
+  },
+  methods: {
+    reloadShow() {
       if (this.flag) {
         this.flag = false;
         this.showBar = false;
@@ -70,9 +78,7 @@ export default {
           this.showBar = true;
         }, 200);
       }
-    });
-  },
-  methods: {
+    },
     async getData() {
       const data = {
         batch: this.batch,

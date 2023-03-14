@@ -21,7 +21,7 @@
       </BaseBox>
     </section>
     <section class="bottom-content">
-      <BaseBox class="height-298">
+      <BaseBox class="height-294">
         <!--          各地区创建验收情况-->
         <CreateValidation />
       </BaseBox>
@@ -37,6 +37,7 @@ import AcceptanceEvaluation from '@/views2/HomePage/Components/AcceptanceEvaluat
 import EvaluationGrade from '@/views2/HomePage/Components/AcceptanceEvaluationPage/EvaluationGrade';
 import CreateValidation from '@/views2/HomePage/Components/AcceptanceEvaluationPage/CreateValidation';
 import OneOldOneSmall from '@/views2/HomePage/Components/AcceptanceEvaluationPage/OneOldOneSmall';
+import { mapGetters } from 'vuex';
 export default {
   name: 'index',
   components: {
@@ -54,8 +55,21 @@ export default {
       flag: true,
     };
   },
+  computed: {
+    ...mapGetters(['onlyShowDetail']),
+  },
+  watch: {
+    onlyShowDetail() {
+      this.reloadShow();
+    },
+  },
   mounted() {
     window.addEventListener('resize', () => {
+      this.reloadShow();
+    });
+  },
+  methods: {
+    reloadShow() {
       if (this.flag) {
         this.flag = false;
         this.showBar = false;
@@ -64,7 +78,7 @@ export default {
           this.showBar = true;
         }, 200);
       }
-    });
+    },
   },
 };
 </script>
@@ -76,11 +90,11 @@ export default {
 .height-177 {
   height: 168px !important;
 }
-.height-298 {
-  height: 298px;
+.height-294 {
+  height: 294px;
 }
 .height-494 {
-  height: 494px;
+  height: 491px;
 }
 .page-content {
   //height: 649px;

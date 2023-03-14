@@ -1,13 +1,13 @@
 const proConfig = {
   // apiHost: '/api/lswhcl', // 老
   // 未来乡村工作
-  // apiHost: '/v2/admin/apiProxy',
-  // apiHost2: '/v2/admin/apiWX',
-  // apiHost3: '/v2/admin/apiWX',
+  apiHost: '/v2/admin/apiProxy',
+  apiHost2: '/v2/admin/apiWX',
+  apiHost3: '/v2/admin/apiWX',
   // 历史文化村落保护
-  apiHost: '/v2/apiProxy',
-  apiHost2: '/v2/apiWX',
-  apiHost3: '/v2/apiWX',
+  // apiHost: '/v2/apiProxy',
+  // apiHost2: '/v2/apiWX',
+  // apiHost3: '/v2/apiWX',
 
   // loginPath: window.location.origin + '/lswhcl',
   // loginPath: 'https://wlxc.xscitydo.com:28080/portal/',

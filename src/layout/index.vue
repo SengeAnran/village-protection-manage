@@ -56,7 +56,6 @@ export default {
       if (!this.VILLAGE && !this.COUNTRY && !this.COUNTRY_LEADER) {
         return;
       }
-      // if ()
       if (this.roleSystemType !== 4) {
         return;
       }

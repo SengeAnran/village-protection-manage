@@ -54,6 +54,13 @@
                 </el-option>
               </el-select>
             </div>
+            <div class="search-item mb-4">
+              <span class="label">状态：</span>
+              <el-select v-model="query.status" placeholder="请选择">
+                <el-option v-for="item in statusOpt" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </div>
           </div>
         </template>
         <template v-slot:insert>
@@ -167,6 +174,7 @@ export default {
         // village: '',
         createBy: '',
         projectStatus: null,
+        status: 0,
       },
       declareYearOpt: [
         {
@@ -211,6 +219,16 @@ export default {
         declareYear: '',
       },
       selections: [],
+      statusOpt: [
+        {
+          label: '全部',
+          value: 0,
+        },
+        {
+          label: '调度中',
+          value: 1,
+        },
+      ],
     };
   },
   beforeMount() {

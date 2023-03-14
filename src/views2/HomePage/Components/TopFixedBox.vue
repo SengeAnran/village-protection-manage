@@ -40,6 +40,12 @@
       <el-select :disabled="disabled" v-model="query.year" placeholder="全部" @change="yearChange" style="width: 200px">
         <el-option v-for="item in yearsOpt" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
+      <el-button
+        style="margin-left: 10px"
+        :icon="showAllPage ? 'el-icon-close' : 'el-icon-full-screen'"
+        @click="showAll(!showAllPage)"
+      >
+      </el-button>
     </div>
   </div>
 </template>
@@ -93,6 +99,7 @@ export default {
           value: 1,
         },
       ],
+      showAllPage: false,
     };
   },
   computed: {
@@ -112,6 +119,12 @@ export default {
       'SET_YEAR',
       'SET_STATUS',
     ]),
+    ...mapMutations(['app/SET_ONLY_SHOW_DETAIL']),
+    // 全屏展示
+    showAll(value) {
+      this.showAllPage = value;
+      this['app/SET_ONLY_SHOW_DETAIL'](value);
+    },
     initArea() {
       if (/市$/.test(this.userInfo.areaName)) {
         return this.SET_AREA_CITY(this.userInfo.areaName);
@@ -152,20 +165,20 @@ export default {
     // 切换模块
     changeActive(index) {
       this.$emit('update', index);
-      this.resetValue();
+      index ? this.resetValue(0) : this.resetValue(1);
       this.disabled = index === 1;
       // this.$emit('toBox', index);
     },
-    resetValue() {
+    resetValue(value) {
       this.query = {
         areaId: '',
         declarationBatch: [],
         year: '',
-        status: 1,
+        status: value,
       };
       this.SET_BATCH([]);
       this.SET_YEAR('全部');
-      this.SET_STATUS(1);
+      this.SET_STATUS(value);
       this.initArea();
     },
   },

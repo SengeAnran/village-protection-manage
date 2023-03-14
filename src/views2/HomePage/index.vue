@@ -1,8 +1,9 @@
 <template>
   <div class="page">
     <!--    <top-fixed-box v-model="activeIndex" @toBox="toBox" />-->
+
     <top-fixed-box v-model="activeIndex" />
-    <div class="content-box">
+    <div class="content-box" :style="{ height: onlyShowDetail ? '100%' : 'calc(100vh - 282px)' }">
       <!--      项目调度-->
       <ProjectSchedul v-if="activeIndex === 0"></ProjectSchedul>
       <!--     验收评价 -->
@@ -36,7 +37,7 @@ import AcceptanceEvaluationPage from './Components/AcceptanceEvaluationPage';
 import TopFixedBox from './Components/TopFixedBox.vue';
 // import ConstructionDeclaration from './Components/ConstructionDeclaration';
 // import AcceptanceEvaluation from './Components/AcceptanceEvaluation';
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 // import ExcellentCases from './Components/ExcellentCases';
 export default {
   name: 'index',
@@ -57,6 +58,11 @@ export default {
       contentTopList: [], // 各模块的位置
       isClick: false,
     };
+  },
+  computed: {
+    ...mapState({
+      onlyShowDetail: (state) => state.app.onlyShowDetail,
+    }),
   },
   watch: {
     // activeIndex(val) {
@@ -118,6 +124,11 @@ export default {
   width: calc(100% + 30px);
   transform: translateX(-15px);
   //margin-top: 58px;
+  .all-page {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
 }
 .content-box {
   height: calc(100vh - 282px);
