@@ -24,9 +24,9 @@
       <VillageSelectItem
         class="location-select"
         checkStrictly
-        v-model="query.areaId"
+        v-model="query.areaValue"
         @change="changeArea"
-        :placeholder="userInfo.areaName"
+        :placeholder="area || userInfo.areaName"
       />
       <el-select
         v-model="query.declarationBatch"
@@ -54,8 +54,10 @@
 import { getSetList } from '@/api2/declarationBatch';
 import { mapGetters, mapMutations } from 'vuex';
 import { getYears } from '@/api2/homePage';
+import role from '@/views2/mixins/role';
 
 export default {
+  mixins: [role],
   name: 'TopFixedBox',
   props: {
     value: {
@@ -69,7 +71,7 @@ export default {
   data() {
     return {
       query: {
-        areaId: '',
+        areaValue: [],
         declarationBatch: [],
         year: '',
         status: 1,
@@ -103,7 +105,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userInfo']),
+    ...mapGetters(['userInfo', 'areaArr', 'area']),
+  },
+  watch: {
+    areaArr(val) {
+      if (val) {
+        this.query.areaValue = val;
+      }
+    },
   },
   beforeMount() {
     this.initArea();
@@ -126,19 +135,20 @@ export default {
       this['app/SET_ONLY_SHOW_DETAIL'](value);
     },
     initArea() {
-      if (/市$/.test(this.userInfo.areaName)) {
+      if (this.CITY || this.CITY_LEADER) {
         return this.SET_AREA_CITY(this.userInfo.areaName);
-      } else if (this.userInfo.areaName === '浙江省') {
-        this.SET_AREA_PROVINCE(this.userInfo.areaName);
-      } else {
-        return this.SET_AREA_COUNTY(this.userInfo.areaName);
       }
+      if (this.PROVINCE) {
+        return this.SET_AREA_PROVINCE(this.userInfo.areaName);
+      }
+      return this.SET_AREA_COUNTY(this.userInfo.areaName);
     },
     changeArea(val) {
-      if (val.level === '2' || /市$/.test(val.areaName)) {
+      // this.query.areaId = val.areaId;
+      if (val.level === '2' || val.areaId.length === 4) {
         return this.SET_AREA_CITY(val.areaName);
       }
-      if (val.level === '3') {
+      if (val.level === '3' || val.areaId.length === 6) {
         return this.SET_AREA_COUNTY(val.areaName);
       }
       this.SET_AREA_PROVINCE(val.areaName);
@@ -171,7 +181,7 @@ export default {
     },
     resetValue(value) {
       this.query = {
-        areaId: '',
+        areaValue: [],
         declarationBatch: [],
         year: '',
         status: value,

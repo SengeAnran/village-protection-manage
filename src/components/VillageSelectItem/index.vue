@@ -13,7 +13,9 @@ import { getSonAreas } from '@/api2/common';
 
 export default {
   props: {
-    value: String, // 用于重置
+    value: {
+      type: [Array, String],
+    }, // 用于重置
     checkStrictly: {
       type: Boolean,
       default: false,
@@ -25,19 +27,22 @@ export default {
   },
   data() {
     return {
-      cascaderValue: '',
+      cascaderValue: [],
       villageProps: {
         lazy: true,
         checkStrictly: this.checkStrictly, // 单次可选
-        lazyLoad: (node, resolve) => this.villageLazyLoad(node, resolve),
+        lazyLoad: (node, resolve) => this.villageLazyLoad(node, resolve), // lazyload来设置加载数据源的方法
+        //node为当前点击的节点，resolve为数据加载完成的回调(必须调用)
       },
     };
   },
   watch: {
     value(newVal) {
       if (newVal === '') {
-        this.cascaderValue = '';
+        this.cascaderValue = [];
+        return;
       }
+      this.cascaderValue = newVal;
     },
   },
   computed: {
@@ -51,15 +56,22 @@ export default {
       this.$emit('change', chooseAreaId);
     },
     villageLazyLoad(node, resolve) {
+      const { areaId, areaName } = store.getters.userInfo;
+      const value = { areaId, areaName };
       if (node.level === 0) {
-        resolve([{ label: store.getters.userInfo.areaName, value: store.getters.userInfo }]);
+        // 第一层
+        resolve([{ label: areaName, value: value }]);
         return;
       }
       getSonAreas({ areaId: node.value.areaId }).then((res) => {
         const nodes = res.map((c) => {
+          const value = {
+            areaId: c.areaId,
+            areaName: c.areaName,
+          };
           return {
             label: c.areaName,
-            value: c,
+            value: value,
             leaf: c.level === 3 || c.level === '3',
           };
         });

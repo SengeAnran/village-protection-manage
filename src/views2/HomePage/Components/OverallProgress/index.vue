@@ -143,7 +143,6 @@ export default {
         this.total = 0;
       }
       // 投资完成率
-      console.log('投资完成率', this.chartData2);
     },
     goDetail(name) {
       const index = this.listData.findIndex((i) => i.name === name);

@@ -610,7 +610,7 @@ export default {
             params = this.beforeGetMethod(params);
           }
           const res = await this.getMethod(params);
-          this.items = res.content || res;
+          this.items = 'content' in res ? res.content : res; // 兼容非分页模式数据
           this.total = res.totalSize;
         }
         this.loading = false;

@@ -130,22 +130,22 @@ export default {
         this.dataList1 = res.map((i) => {
           return {
             name: i.name,
-            value: (i.rate * 100 || 0).toFixed(2),
+            value: (i.rate * 100 || 0).toFixed(1),
             unit: '%',
             tapList: [
               {
                 name: '项目开工率',
-                value: (i.rate * 100 || 0).toFixed(2),
+                value: (i.rate * 100 || 0).toFixed(1),
                 unit: '%',
               },
               {
                 name: '已开工项目数',
-                value: i.startNum || 0,
+                value: (i.startNum || 0).toFixed(2),
                 unit: '个',
               },
               {
                 name: '未开工项目数',
-                value: i.notNum || 0,
+                value: (i.notNum || 0).toFixed(2),
                 unit: '个',
               },
             ],
@@ -166,22 +166,22 @@ export default {
         this.dataList2 = res.map((i) => {
           return {
             name: i.name,
-            value: (i.rate * 100 || 0).toFixed(2),
+            value: (i.rate * 100 || 0).toFixed(1),
             unit: '%',
             tapList: [
               {
                 name: '项目开工率',
-                value: (i.rate * 100 || 0).toFixed(2),
+                value: (i.rate * 100 || 0).toFixed(1),
                 unit: '%',
               },
               {
                 name: '已开工项目数',
-                value: i.startNum || 0,
+                value: (i.startNum || 0).toFixed(2),
                 unit: '个',
               },
               {
                 name: '未开工项目数',
-                value: i.notNum || 0,
+                value: (i.notNum || 0).toFixed(2),
                 unit: '个',
               },
             ],
@@ -202,22 +202,22 @@ export default {
         this.dataList1 = res.map((i) => {
           return {
             name: i.name,
-            value: (i.rate * 100 || 0).toFixed(2),
+            value: (i.rate * 100 || 0).toFixed(1),
             unit: '%',
             tapList: [
               {
                 name: '投资完成率',
-                value: (i.rate * 100 || 0).toFixed(2),
+                value: (i.rate * 100 || 0).toFixed(1),
                 unit: '%',
               },
               {
                 name: '计划投资',
-                value: i.investNum || 0,
+                value: (i.investNum || 0).toFixed(2),
                 unit: '万',
               },
               {
                 name: '完成投资',
-                value: i.completeTotal || 0,
+                value: (i.completeTotal || 0).toFixed(2),
                 unit: '万',
               },
             ],
@@ -238,22 +238,22 @@ export default {
         this.dataList2 = res.map((i) => {
           return {
             name: i.name,
-            value: (i.rate * 100 || 0).toFixed(2),
+            value: (i.rate * 100 || 0).toFixed(1),
             unit: '%',
             tapList: [
               {
                 name: '投资完成率',
-                value: (i.rate * 100 || 0).toFixed(2),
+                value: (i.rate * 100 || 0).toFixed(1),
                 unit: '%',
               },
               {
                 name: '计划投资',
-                value: i.investNum || 0,
+                value: (i.investNum || 0).toFixed(2),
                 unit: '万',
               },
               {
                 name: '完成投资',
-                value: i.completeTotal || 0,
+                value: (i.completeTotal || 0).toFixed(2),
                 unit: '万',
               },
             ],
@@ -274,7 +274,7 @@ export default {
         this.dataList1 = res.map((i) => {
           return {
             name: i.name,
-            value: i.rate || 0,
+            value: (i.rate || 0).toFixed(1),
             unit: '%',
             ...i,
             // tapList: [
@@ -310,7 +310,7 @@ export default {
         this.dataList2 = res.map((i) => {
           return {
             name: i.name,
-            value: (i.rate || 0).toFixed(2),
+            value: (i.rate || 0).toFixed(1),
             unit: '%',
             ...i,
           };

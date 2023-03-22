@@ -11,16 +11,18 @@
 
 <script>
 import * as echarts from 'echarts';
-import getSpotOption from './spotOption';
+import { getSpotOption, getSpotOption2 } from './spotOption';
 import { getProviceJSON, getCityJSON, getCountyJSON } from '@/api2/get-json';
 import { mapOption } from '@/config/mapOption';
 import { cityMap } from '@/config/cityMap';
 import { countyMap } from '@/config/countyMap';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import { getRanking } from '@/api2/homePage';
 import DataContent from './DataContent';
+import role from '@/views2/mixins/role';
 
 export default {
+  mixins: [role],
   name: 'index',
   components: { DataContent },
   data() {
@@ -35,7 +37,7 @@ export default {
       countyAreaMap: countyMap.areaMap, //  省行政区划，用于数据的查找，按行政区划查数据
       mapData: [], // 当前地图上的地区
       option: { ...mapOption.basicOption }, // map的相关配置
-      deepTree: [], // 点击地图时push，点返回时pop
+      deepTree: [], // 点击地图时push，点返回时pop 未用
       areaName: '浙江省', // 当前地名
       areaCode: '330000', // 当前行政区划
       areaLevel: 'province', // 当前级别
@@ -48,6 +50,7 @@ export default {
       zoom: 1,
       listData: [],
       geoCoordMap: {}, //点位数据
+      areaArr: [], // 地区数组用于控制首页地区塞选框联动
     };
   },
   computed: {
@@ -73,14 +76,17 @@ export default {
     this.$nextTick(async () => {
       const res = await this.mapEchartsInit(); // 绘画地图
       if (res) {
+        // 绘制地图成功
         this.getListData(); // 获取数据并打点
       }
-      // this.myChart.on('click', this.echartsMapClick);
+      // 注册地图点击事件
+      this.myChart.on('click', this.echartsMapClick);
       // 消除zoom缩放导致鼠标偏移
       this.zoom = 1 / document.body.style.zoom;
     });
   },
   methods: {
+    ...mapMutations('home', ['SET_AREA_COUNTY', 'SET_AREA_CITY', 'SET_AREA_ARR']),
     // 初次加载绘制地图
     async mapEchartsInit() {
       // echarts.registerMap('浙江省', dapuJson); //引入地图文件
@@ -89,13 +95,12 @@ export default {
       const params = {
         name: this.area,
       };
-      return await this.echartsMapClick(params);
+      return await this.echartsMapLoad(params);
     },
-    // 地图点击
-    async echartsMapClick(params) {
-      // console.log('点击了');
+    // 加载地图
+    async echartsMapLoad(params) {
       if (params.name in this.cityAreaMap) {
-        // 点击的为市级
+        // 加载的为市级
         this.areaName = params.name;
         this.areaCode = this.cityAreaMap[params.name];
         this.areaLevel = 'city';
@@ -126,6 +131,81 @@ export default {
         return await this.requestGetProvinceJson();
       } else {
         // console.log('点击错误');
+        return false;
+      }
+    },
+    // 点击地图
+    echartsMapClick(params) {
+      const areaArr = [];
+      if (params.name in this.cityAreaMap) {
+        // 点击的为市级
+        // 刷新地区数组
+        if (this.PROVINCE) {
+          areaArr.push({
+            areaId: '33',
+            areaName: '浙江省',
+          });
+          areaArr.push({
+            areaId: (this.cityAreaMap[params.name] / 100).toString(),
+            areaName: params.name,
+          });
+        }
+        if (this.CITY || this.CITY_LEADER) {
+          areaArr.push({
+            areaId: (this.cityAreaMap[params.name] / 100).toString(),
+            areaName: params.name,
+          });
+        }
+        // 切换store内地区
+        if (this.area !== params.name) {
+          // 点击地图切换
+          this.SET_AREA_CITY(params.name);
+        }
+        this.areaArr = areaArr;
+        this.SET_AREA_ARR(areaArr);
+      } else if (params.name in this.countyAreaMap) {
+        // 点击的为区县级
+        // 刷新地区数组
+        if (this.PROVINCE) {
+          areaArr.push({
+            areaId: '33',
+            areaName: '浙江省',
+          });
+          const cityAreaId = Math.floor(this.countyAreaMap[params.name] / 100) * 100;
+          areaArr.push({
+            areaId: (cityAreaId / 100).toString(),
+            areaName: this.areaCityMap[cityAreaId],
+          });
+          areaArr.push({
+            areaId: this.countyAreaMap[params.name].toString(),
+            areaName: params.name,
+          });
+        }
+        if (this.CITY || this.CITY_LEADER) {
+          const cityAreaId = (this.countyAreaMap[params.name] / 100).toFixed(0) * 100;
+          areaArr.push({
+            areaId: (cityAreaId / 100).toString(),
+            areaName: this.areaCityMap[cityAreaId],
+          });
+          areaArr.push({
+            areaId: this.countyAreaMap[params.name].toString(),
+            areaName: params.name,
+          });
+        }
+        if (this.COUNTRY || this.COUNTRY_LEADER) {
+          areaArr.push({
+            areaId: this.countyAreaMap[params.name].toString(),
+            areaName: params.name,
+          });
+        }
+        // 切换store内地区
+        if (this.area !== params.name) {
+          // 点击地图切换
+          this.SET_AREA_COUNTY(params.name);
+        }
+        this.areaArr = areaArr;
+        this.SET_AREA_ARR(areaArr);
+      } else {
         return false;
       }
     },
@@ -228,17 +308,30 @@ export default {
         status: this.status,
       };
       const res = await getRanking(data);
-      this.listData = res.map((i) => {
+      if (!this.location.county) {
+        // 打气泡数量点
+        this.listData = res.map((i) => {
+          return {
+            name: i.name,
+            value: i.numberOfCreated,
+          };
+        });
+        const optionData = this.convertData(this.listData);
+        // console.log('optionData', optionData);
+
+        this.myChart.clear();
+        this.myChart.setOption(getSpotOption(optionData, this.area), true); // 打点
+        return;
+      }
+      //  打点
+      this.listData = res.map((item) => {
         return {
-          name: i.name,
-          value: i.numberOfCreated,
+          name: item.name,
+          value: [Number(item.longitude), Number(item.latitude)],
         };
       });
-      const optionData = this.convertData(this.listData);
-      // console.log('optionData', optionData);
-
       this.myChart.clear();
-      this.myChart.setOption(getSpotOption(optionData, this.area), true); // 打点
+      this.myChart.setOption(getSpotOption2(this.listData, this.area), true); // 打点
     },
     // 绘制地图
     renderMap(map, data) {
@@ -284,7 +377,7 @@ export default {
       const params = {
         name: this.area,
       };
-      const res = await this.echartsMapClick(params);
+      const res = await this.echartsMapLoad(params);
       // console.log('res', res);
       if (res) {
         // 获取到地图的情况下才获取数据

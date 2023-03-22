@@ -34,6 +34,7 @@ const store = new Vuex.Store({
     batch: (state) => state.home.batch,
     year: (state) => state.home.year,
     status: (state) => state.home.status,
+    areaArr: (state) => state.home.areaArr,
     searchQuery: (state) => state.search.searchQuery,
     onlyShowDetail: (state) => state.app.onlyShowDetail,
   },

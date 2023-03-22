@@ -12,7 +12,7 @@
         <div class="bar-inter" :style="{ backgroundColor: barColor }"></div>
       </div>
       <div class="num">
-        {{ (item.value * 1).toFixed(2) }}<span v-if="item.unit">{{ item.unit }}</span>
+        {{ (item.value * 1).toFixed(1) }}<span v-if="item.unit">{{ item.unit }}</span>
       </div>
       <div class="tip" v-if="item.tapList && item.tapList.length > 0">
         <div class="tip-item" v-for="(item2, index2) in item.tapList" :key="index2">

@@ -4,6 +4,7 @@
       <Crud
         ref="crud"
         :get-method="getMethod"
+        :before-get-method="beforeGetMethod"
         :delete-method="deleteMethod"
         :query.sync="query"
         :showOrder="false"
@@ -278,6 +279,12 @@ export default {
     formatScore,
     formatMoney,
     getStatusName,
+    beforeGetMethod(data) {
+      if (data.name) {
+        this.level = 4;
+      }
+      return data;
+    },
     canDetail(data) {
       const hasPerm = this.level === 4;
       if (

@@ -1,5 +1,11 @@
 <template>
-  <base-box-item-new class="rete-content" name="“一老一小”服务场景建设情况" :count="total" unit="个" :icon="iconUrl">
+  <base-box-item-new
+    class="rete-content"
+    name="“一老一小”服务场景建设完成情况"
+    :count="total"
+    unit="个"
+    :icon="iconUrl"
+  >
     <!--    <swiper :slides-per-view="3" :space-between="50" @swiper="onSwiper" @slideChange="onSlideChange">-->
     <!--      <swiper-slide>Slide 1</swiper-slide>-->
     <!--      <swiper-slide>Slide 2</swiper-slide>-->
@@ -35,13 +41,6 @@ export default {
       showBar: true,
       flag: true,
       iconUrl: require('./icon.png'),
-      chartData: {
-        name: '各地市“一老一小”服务场景建设情况',
-        name1: '服务场景建设数',
-        unit: '个',
-        xAxisData: [],
-        dataList1: [],
-      },
       swiperOption: {
         loop: true,
         autoplay: {

@@ -9,6 +9,7 @@ export default {
       province: defaultLocation,
     },
     area: defaultLocation,
+    areaArr: [],
     year: '',
     status: 1,
   },
@@ -45,6 +46,9 @@ export default {
       state.location.county = '';
       state.location.province = value;
       state.area = value;
+    },
+    SET_AREA_ARR(state, value) {
+      state.areaArr = value;
     },
     RESET_DATA(state) {
       state.batch = []; // 批次
