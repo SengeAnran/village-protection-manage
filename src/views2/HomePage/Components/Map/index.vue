@@ -1,11 +1,11 @@
 <template>
   <div class="map">
-    <DataContent />
     <div
       class="map-bottom"
       ref="map"
       :style="{ zoom: zoom, transform: `scale(${1 / zoom}, ${1})`, transformOrigin: '0 0' }"
     ></div>
+    <DataContent />
   </div>
 </template>
 

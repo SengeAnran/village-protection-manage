@@ -1,8 +1,8 @@
 <template>
-  <base-box-item-new class="rete-content" name="本月进度报送" :icon="iconUrl" hideNum :fixed="1">
+  <base-box-item-new class="rete-content" name="本月进度" :icon="iconUrl" hideNum :fixed="1">
     <div class="detail" @click="dialogVisible = !dialogVisible">详情</div>
     <!--    <BarChart v-if="showBar" key="1" :chart-data="chartData" hideLegend @goDetail="goDetail" />-->
-    <TotalTitle class="rall-num" name="调度村总数" :count="otherNumber" unit="个" />
+    <TotalTitle class="rall-num" :name="totalName" :count="otherNumber" unit="个" />
     <div class="pie-chart">
       <PieChart v-if="showBar" :list="pieDataList" :isPercent="false" unit="个" totalUnit="个" minTitle="申报总数" />
     </div>
@@ -29,9 +29,10 @@ export default {
       flag: true,
       iconUrl: require('./icon.png'),
       pieDataList: [
-        { name: '已报送', value: 0 },
         { name: '待报送', value: 0 },
-        { name: '已竣工', value: 0 },
+        { name: '已报送', value: 0 },
+
+        // { name: '已竣工', value: 0 },
         { name: '未报送', value: 0 },
         { name: '报送结束', value: 0 },
       ],
@@ -69,6 +70,9 @@ export default {
         status: this.status,
       };
     },
+    totalName() {
+      return this.status ? '在建村数' : '创建村数';
+    },
   },
   watch: {
     query: {
@@ -101,11 +105,11 @@ export default {
       };
       //项目开工率
       getSubmitEarlyWarning(data).then((res) => {
-        this.pieDataList[0].value = res.normalSubmission || 0;
-        this.pieDataList[1].value = res.toSubmit || 0;
-        this.pieDataList[2].value = res.completed || 0;
-        this.pieDataList[3].value = res.notSubmitted || 0;
-        this.pieDataList[4].value = res.endNum || 0;
+        this.pieDataList[0].value = res.toSubmit || 0;
+        this.pieDataList[1].value = res.normalSubmission || 0;
+        // this.pieDataList[2].value = res.completed || 0;
+        this.pieDataList[2].value = res.notSubmitted || 0;
+        this.pieDataList[3].value = res.endNum || 0;
         this.otherNumber = res.totalNum;
         this.codeDataList[0].value = res?.red || 0;
         this.codeDataList[1].value = res?.yellow || 0;

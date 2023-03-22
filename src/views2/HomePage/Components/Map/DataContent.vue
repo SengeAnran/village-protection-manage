@@ -17,17 +17,17 @@ export default {
     return {
       dataList: [
         {
-          label: '创建数',
+          label: '创建村',
           num: 33,
           unit: '个',
         },
         {
-          label: '在建数',
+          label: '在建村',
           num: 20,
           unit: '个',
         },
         {
-          label: '验收数',
+          label: '验收村',
           num: 44,
           unit: '个',
         },

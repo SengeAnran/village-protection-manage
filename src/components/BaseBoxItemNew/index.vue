@@ -10,7 +10,6 @@
 <script>
 import TotalTitle from './TotalTitle';
 export default {
-  name: 'index',
   components: { TotalTitle },
 };
 </script>

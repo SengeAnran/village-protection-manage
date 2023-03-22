@@ -97,7 +97,7 @@ export default {
           value: 0,
         },
         {
-          label: '调度中',
+          label: '在建村',
           value: 1,
         },
       ],

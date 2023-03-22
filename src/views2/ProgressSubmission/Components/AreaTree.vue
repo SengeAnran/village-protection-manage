@@ -1,13 +1,23 @@
 <template>
   <div class="area-tree">
     <!--    <el-tree :data="data" :props="defaultProps" accordion @node-click="handleNodeClick" label="area" children="child">-->
-    <el-tree :data="data" :props="defaultProps" accordion @node-click="handleNodeClick" label="area" children="child">
+    <el-tree
+      :data="data"
+      :props="defaultProps"
+      node-key="area"
+      :default-expanded-keys="[defaultExpanded]"
+      accordion
+      @node-click="handleNodeClick"
+      label="area"
+      children="child"
+    >
     </el-tree>
   </div>
 </template>
 
 <script>
 import { getObtainArea } from '@/api2/progressSubmission';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'AreaTree',
@@ -19,6 +29,12 @@ export default {
         label: 'area',
       },
     };
+  },
+  computed: {
+    ...mapGetters(['userInfo']),
+    defaultExpanded() {
+      return this.userInfo.areaName;
+    },
   },
   beforeMount() {
     this.getData();

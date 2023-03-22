@@ -132,7 +132,7 @@ export function getSpotOption(data, map) {
         data: mapData,
       },
       {
-        name: '未来乡村创建数',
+        name: '在建村数量',
         type: 'scatter', // 散点（气泡）图。直角坐标系上的散点图可以用来展现数据的 x，y 之间的关系，如果数据项有多个维度，其它维度的值可以通过不同大小的 symbol 展现成气泡图，也可以用颜色来表现。这些可以配合 visualMap 组件完成。
         // 可以应用在直角坐标系，极坐标系，地理坐标系上。
         coordinateSystem: 'geo', // 该系列使用的坐标系，可选： 'cartesian2d'：二维的直角坐标系 ； 'polar'：使用极坐标系； 'geo'：使用地理坐标系，通过 geoIndex 指定相应的地理坐标系组件。

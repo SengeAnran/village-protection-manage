@@ -151,6 +151,7 @@
       </el-form>
     </div>
     <el-button v-if="showEdit()" class="edit-btn" type="primary" @click="handleEdit(form)">修改</el-button>
+    <el-button v-if="showDelete()" class="edit-btn" type="danger" @click="returnCounty(form)">退回县级重填</el-button>
   </div>
 </template>
 <script>
@@ -378,12 +379,44 @@ export default {
         query: { id },
       });
     },
+    // 修改
     handleEdit(data) {
       if (this.CITY || this.CITY_LEADER) {
         this.goAuditVerify(data);
       } else {
         this.edit(data);
       }
+    },
+    // 退回县级重填
+    returnCounty(data) {
+      console.log(data);
+      this.$confirm('是否确认退回该条申报信息，退回后村庄已报\n' + '\n' + '送的项目调度信息将会自动删除，需重新调度', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          const { id } = this.$route.query;
+          verify({
+            id: id, // 村庄id
+            status: 0, // 审核状态 通过:1 不通过:0
+            opinion: '', // 审核意见
+            rejectType: 1, // 审核意见
+            verifyType: 2, //1:市级审核，2：省级审核
+          }).then(() => {
+            this.$message({
+              type: 'success',
+              message: '退回成功!',
+            });
+            this.$router.back();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消退回',
+          });
+        });
     },
     showEdit() {
       // 可修改逻辑：
@@ -400,6 +433,14 @@ export default {
             !this.cityVerify) ||
             this.form.finalStatus === FINAL_STATUS.CITY_REPORT_PENDING))
       ) {
+        return true;
+      }
+      return false;
+    },
+    showDelete() {
+      // 可退回县级重填逻辑：
+      // 省级： 省级审核通过
+      if (this.PROVINCE && this.form.finalStatus === FINAL_STATUS.PROVINCE_VERIFY_PASSED) {
         return true;
       }
       return false;
