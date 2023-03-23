@@ -889,6 +889,7 @@ export default {
   display: flex;
   .table-right {
     flex: 1;
+    overflow-x: scroll;
   }
 }
 .table1 {

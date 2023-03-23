@@ -98,7 +98,7 @@
             <el-radio v-model="form.isEnd" :disabled="isEndDisabled" :label="1">是</el-radio>
           </el-form-item>
           <i style="color: #ff6b00"
-            >（投资完成率90%以上并且总体进度100%才可选择竣工；选择“是”则该项目状态变更为“已竣工”，之后月份无法再进行填报。）</i
+            >（投资完成率需达到100%并且总体进度为100%才可选择竣工；选择“是”则该项目状态变更为“已竣工”，之后月份无法再进行填报。）</i
           >
         </el-col>
       </el-row>
@@ -220,8 +220,8 @@ export default {
       );
     },
     isEndDisabled() {
-      // 投资完成率90%以上并且总体进度100%才可选择竣工
-      return !(this.calcRateTotal(this.modifyData, this.form) > 90 && Number(this.form.overallProgress) === 100);
+      // 投资完成率需达到100%才可选择竣工并且总体进度100%才可选择竣工
+      return !(this.calcRateTotal(this.modifyData, this.form) >= 100 && Number(this.form.overallProgress) === 100);
     },
   },
   watch: {
@@ -279,7 +279,8 @@ export default {
           this.startDisabled = true;
         }
       }
-      if (this.type === 'modify' && this.modifyData.id) {
+      if (this.modifyData.id) {
+        // add 和 modify 都回显数据
         const { completeTotal, completeGov, completeDrive, isStart, overallProgress, monthPic, isEnd } =
           this.modifyData;
         this.form.completeTotal = completeTotal;
@@ -290,7 +291,8 @@ export default {
         if (isEnd) {
           this.form.isEnd = isEnd;
         }
-        if (monthPic) {
+        if (monthPic && this.type === 'modify') {
+          // 填报模式不用回显照片
           this.oldPics = monthPic
             .split(',')
             .filter((ele) => Boolean(ele))

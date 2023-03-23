@@ -261,6 +261,10 @@ export default {
       return hasPerm;
     },
     canDetail(data) {
+      // 县级：展示所以详情
+      if (this.COUNTRY || this.COUNTRY_LEADER) {
+        return true;
+      }
       const hasPerm = this.VILLAGE;
       if (
         data.projectStatus === this.PROJECT_STATUS.TO_BE_FIRST_REPORT ||

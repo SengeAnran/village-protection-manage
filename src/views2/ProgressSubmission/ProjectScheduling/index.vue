@@ -506,7 +506,7 @@ export default {
     background-color: rgb(246 246 246);
     .table-right {
       border-radius: 4px;
-      padding: 12px 25px;
+      padding: 12px 12px;
       background-color: white;
     }
     .table-left {
