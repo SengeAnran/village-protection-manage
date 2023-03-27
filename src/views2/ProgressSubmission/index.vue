@@ -81,9 +81,10 @@
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
             <el-link v-if="canVerify(scope.data)" @click="goDetail(scope)" type="primary"> 审核 </el-link>
+            <el-divider v-if="canVerify(scope.data)" direction="vertical"></el-divider>
             <el-link v-if="canDetail(scope.data)" @click="goDetail(scope)" type="primary"> 详情 </el-link>
             <el-link v-if="canSecondReport(scope.data)" @click="goEdit(scope.data)" type="primary"> 更新报送 </el-link>
-            <!--            <el-divider v-if="canReport(scope.data)" direction="vertical"></el-divider>-->
+
             <div style="display: inline-block">
               <el-link v-if="canReport(scope.data)" @click="edit(scope.data)" type="primary">报送 </el-link>
             </div>

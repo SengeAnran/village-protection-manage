@@ -179,23 +179,6 @@ export default {
         },
         series: [
           {
-            zlevel: 3,
-            type: 'pie',
-            radius: ['0%', '85%'],
-            center: this.center,
-            label: {
-              position: 'center',
-              formatter: this.title,
-              color: '#FEFEFE',
-              fontSize: 14,
-              lineHeight: 20,
-              verticalAlign: 'bottom',
-              fontFamily: 'Microsoft YaHei',
-              fontWeight: 'bold',
-            },
-            data: this.list,
-          },
-          {
             zlevel: 1,
             type: 'pie',
             radius: ['0%', '95%'],
@@ -213,6 +196,24 @@ export default {
               show: false,
             },
             data: [100],
+          },
+          {
+            zlevel: 3,
+            type: 'pie',
+            radius: ['0%', '85%'],
+            center: this.center,
+            label: {
+              show: true,
+              position: 'center',
+              formatter: this.title,
+              color: 'red',
+              fontSize: 14,
+              lineHeight: 20,
+              verticalAlign: 'bottom',
+              fontFamily: 'Microsoft YaHei',
+              fontWeight: 'bold',
+            },
+            data: this.list,
           },
           // {
           //   type: 'pie',

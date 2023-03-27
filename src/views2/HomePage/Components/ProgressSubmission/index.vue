@@ -34,7 +34,7 @@ export default {
 
         // { name: '已竣工', value: 0 },
         { name: '未报送', value: 0 },
-        { name: '报送结束', value: 0 },
+        { name: '已评价', value: 0 },
       ],
       otherNumber: 0,
       codeDataList: [
@@ -109,7 +109,7 @@ export default {
         this.pieDataList[1].value = res.normalSubmission || 0;
         // this.pieDataList[2].value = res.completed || 0;
         this.pieDataList[2].value = res.notSubmitted || 0;
-        this.pieDataList[3].value = res.endNum || 0;
+        this.pieDataList[3].value = res.completed || 0;
         this.otherNumber = res.totalNum;
         this.codeDataList[0].value = res?.red || 0;
         this.codeDataList[1].value = res?.yellow || 0;
