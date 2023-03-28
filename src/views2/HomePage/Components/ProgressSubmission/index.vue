@@ -7,8 +7,14 @@
       <PieChart v-if="showBar" :list="pieDataList" :isPercent="false" unit="个" totalUnit="个" minTitle="申报总数" />
     </div>
 
-    <CodeList :code-data-list="codeDataList"></CodeList>
+    <CodeList :code-data-list="codeDataList" @showCode="showCode"></CodeList>
     <SubmissionDetails :dialog="dialogVisible" @closeView="dialogVisible = false" />
+    <EarlyWarnDetails
+      v-if="EarlyWarnVisible"
+      :dialog="EarlyWarnVisible"
+      :defaultType="defaultType"
+      @closeView="EarlyWarnVisible = false"
+    />
   </base-box-item-new>
 </template>
 
@@ -20,9 +26,10 @@ import PieChart from '../PieChart';
 import TotalTitle from '../TotalTitle';
 import CodeList from './CodeList';
 import SubmissionDetails from './SubmissionDetails';
+import EarlyWarnDetails from './EarlyWarnDetails';
 
 export default {
-  components: { TotalTitle, PieChart, CodeList, SubmissionDetails },
+  components: { TotalTitle, PieChart, CodeList, SubmissionDetails, EarlyWarnDetails },
   data() {
     return {
       showBar: true,
@@ -58,6 +65,8 @@ export default {
         },
       ],
       dialogVisible: false,
+      EarlyWarnVisible: false,
+      defaultType: '',
     };
   },
   computed: {
@@ -142,6 +151,11 @@ export default {
           },
         });
       }
+    },
+    showCode(data) {
+      this.defaultType = data.type.slice(0, 2);
+      console.log(this.defaultType);
+      this.EarlyWarnVisible = true;
     },
   },
 };

@@ -229,6 +229,7 @@
           v-if="!hidePagination"
           style="margin-top: 15px"
           background
+          :pager-count="pagerCount"
           :current-page.sync="page"
           :page-sizes="sizes"
           :page-size="size"
@@ -536,6 +537,11 @@ export default {
     defaultPage: {
       type: Number,
       default: 1,
+    },
+    // 页数
+    pagerCount: {
+      type: Number,
+      default: 8,
     },
   },
   data() {

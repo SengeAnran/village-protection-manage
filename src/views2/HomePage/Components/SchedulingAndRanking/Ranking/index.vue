@@ -4,18 +4,28 @@
       <button :class="{ active: activeIndex }" @click="changeType(true)">前五名</button>
       <button :class="{ active: !activeIndex }" @click="changeType(false)">后五名</button>
     </div>
-    <el-select class="select" v-model="type" placeholder="请选择" @change="getData">
-      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-    </el-select>
+    <!--    <el-select class="select" v-model="type" placeholder="请选择" @change="getData">-->
+    <!--      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>-->
+    <!--    </el-select>-->
     <div class="sort-list">
+      <!--      县（市、区）开工率排名-->
       <Sort
         class="sort-item"
         style="margin-right: 15px"
+        barColor="#fed887"
         :list-data="dataList1"
-        name="县（市、区）开工率排名"
+        :name="sortName1"
         @goDetail="goDetail"
       />
-      <Sort class="sort-item" :list-data="dataList2" name="村庄开工率排名" @goDetail="goDetail" />
+      <!--      村庄开工率排名-->
+      <Sort
+        class="sort-item"
+        style="margin-right: 15px"
+        :list-data="dataList2"
+        :name="sortName2"
+        @goDetail="goDetail"
+      />
+      <Sort class="sort-item" :list-data="dataList3" barColor="#817CFB" :name="sortName3" @goDetail="goDetail" />
     </div>
   </base-box-item-new>
 </template>
@@ -43,6 +53,7 @@ export default {
       iconUrl: require('./icon.png'),
       dataList1: [],
       dataList2: [],
+      dataList3: [],
       activeIndex: true,
       type: '项目开工率',
       options: [
@@ -71,6 +82,45 @@ export default {
         status: this.status,
       };
     },
+    sortName1() {
+      let name;
+      if (this.location.province) {
+        name = '各地市开工率排名';
+      }
+      if (this.location.city) {
+        name = '县（市、区）开工率排名';
+      }
+      if (this.location.county) {
+        name = '村庄开工率排名';
+      }
+      return name + (this.activeIndex ? '前五' : '后五');
+    },
+    sortName2() {
+      let name;
+      if (this.location.province) {
+        name = '各地市投资完成率排名';
+      }
+      if (this.location.city) {
+        name = '县（市、区）完成率排名';
+      }
+      if (this.location.county) {
+        name = '村庄完成率排名';
+      }
+      return name + (this.activeIndex ? '前五' : '后五');
+    },
+    sortName3() {
+      let name;
+      if (this.location.province) {
+        name = '各地市投资进度排名';
+      }
+      if (this.location.city) {
+        name = '县（市、区）进度排名';
+      }
+      if (this.location.county) {
+        name = '村庄进度排名';
+      }
+      return name + (this.activeIndex ? '前五' : '后五');
+    },
   },
   watch: {
     query: {
@@ -97,27 +147,11 @@ export default {
   },
   methods: {
     getData() {
-      switch (this.type) {
-        case '项目开工率':
-          {
-            this.changeType1();
-            this.changeType2();
-          }
-          break;
-        case '投资完成率':
-          {
-            this.changeType3();
-            this.changeType4();
-          }
-          break;
-        case '总体进度':
-          {
-            this.changeType5();
-            this.changeType6();
-          }
-          break;
-      }
+      this.changeType1();
+      this.changeType3();
+      this.changeType5();
     },
+    // 项目开工率 县（市、区）开工率排名
     changeType1() {
       const data = {
         batch: this.batch,
@@ -190,6 +224,7 @@ export default {
         });
       });
     },
+    // 投资完成率
     changeType3() {
       const data = {
         batch: this.batch,
@@ -199,7 +234,7 @@ export default {
         order: this.activeIndex ? 0 : 1,
       };
       getInvestmentCompletedRate5thPro(data).then((res) => {
-        this.dataList1 = res.map((i) => {
+        this.dataList2 = res.map((i) => {
           return {
             name: i.name,
             value: (i.rate * 100 || 0).toFixed(1),
@@ -262,6 +297,7 @@ export default {
         });
       });
     },
+    // 总体进度
     changeType5() {
       const data = {
         batch: this.batch,
@@ -271,7 +307,7 @@ export default {
         order: this.activeIndex ? 0 : 1,
       };
       getOverallProgressRate5thPro(data).then((res) => {
-        this.dataList1 = res.map((i) => {
+        this.dataList3 = res.map((i) => {
           return {
             name: i.name,
             value: (i.rate || 0).toFixed(1),
@@ -345,7 +381,8 @@ export default {
   .btns {
     position: absolute;
     top: -30px;
-    left: 264px;
+    //left: 264px;
+    right: 0;
     button {
       width: 82px;
       height: 32px;
