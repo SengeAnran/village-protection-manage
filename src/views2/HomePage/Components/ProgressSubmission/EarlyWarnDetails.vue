@@ -16,6 +16,7 @@
     <Crud
       ref="crud"
       :get-method="getMethod"
+      :before-get-method="beforeGetMethod"
       :query.sync="query"
       id-key="id"
       hideSearch
@@ -37,6 +38,12 @@
         <el-link @click="goDetail(scope)" type="primary"> 附码记录 </el-link>
       </template>
     </Crud>
+    <AttachedCodeRecord
+      v-if="showDialog"
+      :id="showId"
+      :dialog="showDialog"
+      @closeView="showDialog = false"
+    ></AttachedCodeRecord>
   </el-dialog>
 </template>
 
@@ -44,8 +51,10 @@
 import { getalertDetails } from '@/api2/homePage';
 import { mapGetters } from 'vuex';
 import { REPORT_STATUS, REPORT_STATUS_COLOR, getStatusName } from '@/views2/ProgressSubmission/constants';
+import AttachedCodeRecord from './AttachedCodeRecord';
 
 export default {
+  components: { AttachedCodeRecord },
   name: 'EarlyWarnDetail',
   props: {
     dialog: {
@@ -68,6 +77,8 @@ export default {
       },
       getMethod: getalertDetails,
       reportStateOPt: [],
+      showDialog: false,
+      showId: undefined,
     };
   },
   computed: {
@@ -89,7 +100,6 @@ export default {
   methods: {
     handleClick() {
       this.$refs.crud.getItems();
-      console.log(this.$refs.crud);
     },
     getStatusName,
     beforeGetMethod(params) {
@@ -101,10 +111,12 @@ export default {
         year: this.year,
         status: this.status,
       };
+      console.log(query);
       return query;
     },
     goDetail(scope) {
-      console.log(scope);
+      this.showId = scope.data.id;
+      this.showDialog = true;
     },
   },
 };

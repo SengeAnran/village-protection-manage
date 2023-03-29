@@ -157,6 +157,15 @@ export const getalertDetails = (data) => {
     headers: { 'APPLICATION-ID': 4 },
   });
 };
+// 【首页】附码记录
+export const getAttachedCodeRecord = (params) => {
+  return axios.request({
+    method: 'get',
+    url: apiHost2 + `/api/workbench/index/earlyWarning/attachedCodeRecord`,
+    params,
+    headers: { 'APPLICATION-ID': 4 },
+  });
+};
 // 【首页】项目进度报送
 export const getProjectProgressReport = (params) => {
   return axios.request({

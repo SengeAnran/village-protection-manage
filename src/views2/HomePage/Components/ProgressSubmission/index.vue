@@ -4,7 +4,15 @@
     <!--    <BarChart v-if="showBar" key="1" :chart-data="chartData" hideLegend @goDetail="goDetail" />-->
     <TotalTitle class="rall-num" :name="totalName" :count="otherNumber" unit="个" />
     <div class="pie-chart">
-      <PieChart v-if="showBar" :list="pieDataList" :isPercent="false" unit="个" totalUnit="个" minTitle="申报总数" />
+      <div class="chart-box">
+        <PieChart v-if="showBar" :list="pieDataList" :isPercent="false" unit="个" totalUnit="个" minTitle="申报总数" />
+      </div>
+      <div class="tip-list">
+        <div class="tip-list-item" v-for="(item, index) in tipList" :key="index">
+          <img src="./imgs/tip-icon.png" alt="" />
+          <div class="tip-content">{{ item }}</div>
+        </div>
+      </div>
     </div>
 
     <CodeList :code-data-list="codeDataList" @showCode="showCode"></CodeList>
@@ -22,7 +30,7 @@
 import { mapGetters } from 'vuex';
 import { getSubmitEarlyWarning } from '@/api2/homePage';
 
-import PieChart from '../PieChart';
+import PieChart from './PieChart';
 import TotalTitle from '../TotalTitle';
 import CodeList from './CodeList';
 import SubmissionDetails from './SubmissionDetails';
@@ -67,6 +75,12 @@ export default {
       dialogVisible: false,
       EarlyWarnVisible: false,
       defaultType: '',
+      tipList: [
+        '在本月报送时间内还未报送的村庄数',
+        '已完成本次项目进度报送的村庄数（包含已竣工、报送结束）',
+        '在本次报送时间内未完成报送的村庄数',
+        '已经完成验收评价的村庄数',
+      ],
     };
   },
   computed: {
@@ -182,6 +196,40 @@ export default {
   }
   .pie-chart {
     height: 140px;
+    display: flex;
+    .chart-box {
+      height: 100%;
+      width: calc(100% - 30px);
+    }
+    .tip-list {
+      flex: 1;
+      padding: 20px 0;
+      .tip-list-item {
+        cursor: pointer;
+        padding: 7px 0;
+        position: relative;
+        &:hover .tip-content {
+          display: block;
+        }
+        .tip-content {
+          z-index: 10;
+          display: none;
+          position: absolute;
+          right: 33px;
+          top: -40px;
+          //text-overflow: ;
+          white-space: nowrap;
+          padding: 15px 9px;
+          background: rgba(0, 0, 0, 0.6);
+          box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.15);
+          border-radius: 4px;
+          font-size: 14px;
+          font-family: PingFangSC-Medium, PingFang SC;
+          font-weight: 400;
+          color: #ffffff;
+        }
+      }
+    }
   }
 }
 </style>

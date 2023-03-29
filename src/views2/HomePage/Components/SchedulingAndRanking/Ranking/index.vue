@@ -12,7 +12,7 @@
       <Sort
         class="sort-item"
         style="margin-right: 15px"
-        barColor="#fed887"
+        barColor="rgba(112,171,248,0.85)"
         :list-data="dataList1"
         :name="sortName1"
         @goDetail="goDetail"
@@ -21,11 +21,12 @@
       <Sort
         class="sort-item"
         style="margin-right: 15px"
+        barColor="#FED887"
         :list-data="dataList2"
         :name="sortName2"
         @goDetail="goDetail"
       />
-      <Sort class="sort-item" :list-data="dataList3" barColor="#817CFB" :name="sortName3" @goDetail="goDetail" />
+      <Sort class="sort-item" :list-data="dataList3" barColor="#59CF82" :name="sortName3" @goDetail="goDetail" />
     </div>
   </base-box-item-new>
 </template>
