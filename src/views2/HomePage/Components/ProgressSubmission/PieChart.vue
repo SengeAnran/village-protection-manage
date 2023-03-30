@@ -21,7 +21,7 @@ export default {
     },
     color: {
       type: Array,
-      default: () => ['#70ABF8', '#FED887', '#FF9D9D', '#FFD6AF', '#E0E0E0'],
+      default: () => ['#70ABF8', '#FED887', '#FF9D9D', '#59CF82', '#E0E0E0'],
     },
     total: {
       type: Number,
