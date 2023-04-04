@@ -40,6 +40,7 @@ module.exports = {
   },
 
   devServer: {
+    port: 8081, // 端口号
     proxy: {
       '/api/lswhcl': {
         target: 'http://jqy.zjagri.cn/', //生产环境

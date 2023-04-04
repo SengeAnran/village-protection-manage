@@ -29,7 +29,7 @@
         <InvestmentCompletionRate></InvestmentCompletionRate>
       </BaseBox>
       <BaseBox class="height-491">
-        <!--          本月进度-->
+        <!--          报送进度-->
         <ProgressSubmission></ProgressSubmission>
       </BaseBox>
     </section>

@@ -11,7 +11,7 @@
     <div class="g-legend">
       <div class="g-legend-item">
         <span class="g-legend-icon"></span>
-        社会投资
+        带动投资
       </div>
       <div class="g-legend-item">
         <span class="g-legend-icon"></span>

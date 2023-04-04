@@ -66,8 +66,9 @@
 
 <script>
 import { getSubmitEarlyWarningDetail } from '@/api2/homePage';
-import { mapGetters, mapMutations } from 'vuex';
-import { REPORT_STATUS, REPORT_STATUS_COLOR, getStatusName } from '@/views2/ProgressSubmission/constants';
+import { mapGetters } from 'vuex';
+import { REPORT_STATUS_COLOR, getStatusName } from '@/views2/ProgressSubmission/constants';
+import { REPORT_STATUS, REPORT_STATUS2 } from './constants';
 
 export default {
   name: 'EarlyWarnDetail',
@@ -96,7 +97,7 @@ export default {
     ...mapGetters(['area', 'location', 'batch', 'year', 'status']),
   },
   beforeMount() {
-    const opts = Object.keys(REPORT_STATUS).map((ele) => {
+    const opts = Object.keys(this.status ? REPORT_STATUS2 : REPORT_STATUS).map((ele) => {
       return {
         label: REPORT_STATUS[ele],
         value: parseInt(ele),

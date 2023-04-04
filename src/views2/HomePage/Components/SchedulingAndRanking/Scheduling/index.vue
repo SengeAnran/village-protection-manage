@@ -20,8 +20,8 @@ export default {
       iconUrl: require('./icon.png'),
       chartData: {
         name: '',
-        name1: '投资完成率',
-        name2: '项目开工率',
+        name1: '项目开工率',
+        name2: '投资完成率',
         unit: '%',
         xAxisData: [],
         dataList1: [],
@@ -70,6 +70,9 @@ export default {
     },
     async getData() {
       this.showBar = false;
+      this.chartData.xAxisData = [];
+      this.chartData.dataList1 = [];
+      this.chartData.dataList2 = [];
       const data = {
         batch: this.batch,
         year: this.year,
@@ -84,7 +87,7 @@ export default {
         this.chartData.xAxisData = projectCommencementRates.map((i) => {
           return i.name;
         });
-        this.chartData.dataList2 = projectCommencementRates.map((i) => {
+        this.chartData.dataList1 = projectCommencementRates.map((i) => {
           return (i.rate * 100).toFixed(1) || 0;
         });
       }
@@ -92,7 +95,7 @@ export default {
       res2.forEach((i) => {
         const index = this.chartData.xAxisData.findIndex((j) => j === i.name);
         if (index !== -1) {
-          this.chartData.dataList1[index] = (i.rate * 100).toFixed(1) || 0;
+          this.chartData.dataList2[index] = (i.rate * 100).toFixed(1) || 0;
         }
       });
       // 避免数据不能一次性赋值导致的问题

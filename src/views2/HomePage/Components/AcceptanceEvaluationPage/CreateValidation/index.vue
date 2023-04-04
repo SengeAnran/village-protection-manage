@@ -1,5 +1,5 @@
 <template>
-  <base-box-item-new class="rete-content" name="各地区项目调度情况" :icon="iconUrl" hideNum>
+  <base-box-item-new class="rete-content" name="各地区创建验收情况" :icon="iconUrl" hideNum>
     <!--    <BarChart v-if="showBar" key="1" :chart-data="chartData" hideLegend @goDetail="goDetail" />-->
     <base-bar-chart
       v-if="showBar && (type === '创建申报' || type === '验收评价' || type === '评价等次')"
