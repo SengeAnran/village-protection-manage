@@ -379,7 +379,7 @@ export default {
             this.form.upStatus === this.PROJECT_STATUS.FIRST_UNREPORTED &&
             this.fillInDataList.length !== this.form.detailLists.length
           ) {
-            return this.$notify.error('请填报所有项目的上报数据');
+            return this.$notify.error('含有未完成填报的项目，无法提交报送');
           }
           let totalValue = 0;
           const compareValue = this.form.investNum * 1.1;

@@ -35,7 +35,7 @@
         <el-table-column label="地市" prop="city"></el-table-column>
       </template>
       <template v-slot:tableAction="scope">
-        <el-link @click="goDetail(scope)" type="primary"> 附码记录 </el-link>
+        <el-link @click="goDetail(scope)" type="primary"> 赋码记录 </el-link>
       </template>
     </Crud>
     <AttachedCodeRecord

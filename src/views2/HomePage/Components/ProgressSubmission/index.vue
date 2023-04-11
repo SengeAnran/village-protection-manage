@@ -78,7 +78,7 @@ export default {
           imgUrl: require('./green_code.png'),
         },
       ],
-      colors: ['#ea9b3b', '#77b726', '#cd2334', '#4da2ef'],
+      colors: ['#FED887', '#59CF82', '#FF9D9D', '#4da2ef'],
       dialogVisible: false,
       EarlyWarnVisible: false,
       defaultType: '',
@@ -158,7 +158,6 @@ export default {
       }
     },
     getData() {
-      this.reShow();
       const data = {
         batch: this.batch,
         year: this.year,
@@ -188,6 +187,7 @@ export default {
         // } else {
         //   this.total = 0;
         // }
+        this.reShow();
       });
     },
     goDetail(name) {
