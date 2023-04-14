@@ -220,8 +220,11 @@ export default {
       );
     },
     isEndDisabled() {
-      // 投资完成率需达到100%才可选择竣工并且总体进度100%才可选择竣工
-      return !(this.calcRateTotal(this.modifyData, this.form) >= 100 && Number(this.form.overallProgress) === 100);
+      // 投资完成率需达到100%才可选择竣工并且总体进度100%才可选择竣工或者计划投资为0 完成投资也为0的情况下也能选择已竣工
+      return !(
+        (this.calcRateTotal(this.modifyData, this.form) >= 100 && Number(this.form.overallProgress) === 100) ||
+        (this.form.planTotal === 0 && this.form.completeTotal === 0)
+      );
     },
   },
   watch: {

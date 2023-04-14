@@ -104,7 +104,6 @@ export default {
           const index = parseInt(slide.getAttribute('data-index'), 10);
           const item = that.listData[index];
           const widthContainer = that.max === 0 ? '0%' : (item.value / (that.max * 1.1)) * 100 + '%';
-          // console.log(widthContainer);
           const slideSelector = d3.select(slide);
           let blockSelector = slideSelector.select('.bar-inter');
           if (animation) {

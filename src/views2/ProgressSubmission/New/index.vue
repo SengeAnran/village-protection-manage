@@ -226,8 +226,8 @@ export default {
           return i.planGovInvestment === null;
         });
         this.showTable = true;
-        // 上半月已报送
-        if (this.$route.query.secondUpdate && this.form.upStatus !== this.PROJECT_STATUS.FIRST_UNREPORTED) {
+        // 上报（上半月和下半月）情况下进行所有数据推入
+        if (!this.$route.query.modify) {
           this.form.detailLists.forEach((i) => {
             const {
               completeDrive,
@@ -256,6 +256,37 @@ export default {
             this.saveItem(dataFrom);
           });
         }
+        // // 上半月已报送
+        // // 当进下半月报送时且上半月已报送的报送进行数据推入
+        // if (this.$route.query.secondUpdate && this.form.upStatus !== this.PROJECT_STATUS.FIRST_UNREPORTED) {
+        //   this.form.detailLists.forEach((i) => {
+        //     const {
+        //       completeDrive,
+        //       completeGov,
+        //       completeTotal,
+        //       overallProgress,
+        //       id,
+        //       isStart,
+        //       monthPic,
+        //       isEnd,
+        //       planRate,
+        //       yearRate,
+        //     } = i;
+        //     const dataFrom = {
+        //       completeDrive,
+        //       completeGov,
+        //       completeTotal,
+        //       overallProgress,
+        //       id,
+        //       isStart,
+        //       monthPic,
+        //       isEnd,
+        //       planRate,
+        //       yearRate,
+        //     };
+        //     this.saveItem(dataFrom);
+        //   });
+        // }
       });
     },
     // 填报
@@ -287,6 +318,7 @@ export default {
         this.fillInDataList.splice(index, 1, data); // 修改
       }
       // const addIndex = index === -1 ? this.fillInDataList.length - 1 : index;
+      // 更新列表的数据
       const dataListIndex = this.form.detailLists.findIndex((i) => i.id === data.id);
       const row = this.form.detailLists[dataListIndex];
       row.completeDrive = data.completeDrive;
@@ -327,14 +359,18 @@ export default {
     onSubmit() {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
-          if (
-            !this.$route.query.modify &&
-            ((!this.$route.query.secondUpdate && this.fillInDataList.length !== this.form.detailLists.length) ||
-              (this.form.upStatus === this.PROJECT_STATUS.FIRST_UNREPORTED &&
-                this.fillInDataList.length !== this.form.detailLists.length))
-          ) {
-            return this.$notify.error('请填报所有项目的上报数据');
+          if (this.testAllData()) {
+            return this.$notify.error('含有未完成填报的项目，请检查每月进度照片是否上传');
           }
+          // // 上报且（在第一次上报不足||上半月未满报送）
+          // if (
+          //   !this.$route.query.modify &&
+          //   ((!this.$route.query.secondUpdate && this.fillInDataList.length !== this.form.detailLists.length) ||
+          //     (this.form.upStatus === this.PROJECT_STATUS.FIRST_UNREPORTED &&
+          //       this.fillInDataList.length !== this.form.detailLists.length))
+          // ) {
+          //   return this.$notify.error('含有未完成填报的项目，请检查每月进度照片是否上传');
+          // }
           let totalValue = 0;
           const compareValue = this.form.investNum * 1.1;
           this.form.detailLists.forEach((i) => (totalValue += Number(i.completeTotal)));
@@ -370,6 +406,19 @@ export default {
         }
       });
     },
+    //  校验填报的所有数据
+    testAllData() {
+      // 找到不合理的项目
+      return this.fillInDataList.some((item) => {
+        //“其中政府投资、其中完成投资、总体进度、是否开工、项自进度情况照片”
+        return (
+          item.completeGov === null ||
+          item.completeDrive === null ||
+          item.completeTotal === null ||
+          (item.isStart && (item.monthPic === null || item.monthPic === ''))
+        );
+      });
+    },
     // 添加 项目
     onSecondSubmit() {
       this.$refs.form.validate(async (valid) => {
@@ -379,7 +428,7 @@ export default {
             this.form.upStatus === this.PROJECT_STATUS.FIRST_UNREPORTED &&
             this.fillInDataList.length !== this.form.detailLists.length
           ) {
-            return this.$notify.error('含有未完成填报的项目，无法提交报送');
+            return this.$notify.error('含有未完成填报的项目，请检查每月进度照片是否上传');
           }
           let totalValue = 0;
           const compareValue = this.form.investNum * 1.1;
