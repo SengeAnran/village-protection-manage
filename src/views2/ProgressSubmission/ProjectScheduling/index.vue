@@ -132,6 +132,8 @@
 </template>
 <script>
 import { mapMutations } from 'vuex';
+//import导入
+import moment from 'moment';
 
 import { queryBatchInfo, queryTypeDeclaration, getRecVillages, deleteVillageItem, getTime } from '@/api2/villageManage';
 import {
@@ -226,7 +228,7 @@ export default {
           value: 0,
         },
         {
-          label: '调度中',
+          label: '在建村',
           value: 1,
         },
       ],
@@ -363,7 +365,9 @@ export default {
         };
         // console.log(data);
         const res = await getInforExport(data);
-        downloadFile(res, '信息汇总表.xlsx');
+        const time = moment().format('YYYY-MM-DD HH_mm_ss');
+        const fileName = `信息汇总表${time}.xlsx`;
+        downloadFile(res, fileName);
         this.$notify.success('导出成功');
       });
     },
@@ -381,7 +385,9 @@ export default {
           ids: this.selections.map((item) => item.id),
         };
         const res = await exportDetail(data);
-        downloadFile(res, '浙江省未来乡村项目进度表.xlsx');
+        const time = moment().format('YYYY-MM-DD HH_mm_ss');
+        const fileName = `浙江省未来乡村项目进度表${time}.xlsx`;
+        downloadFile(res, fileName);
         this.$notify.success('导出成功');
       });
     },

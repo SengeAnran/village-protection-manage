@@ -241,6 +241,7 @@ import {
 } from './utils';
 
 import { formatMoney } from '@/views2/utils/formatter';
+import moment from 'moment';
 
 const sort = (rule, value, callback) => {
   if (!value) {
@@ -432,7 +433,9 @@ export default {
         }).then(async () => {
           const data = this.selections.map((ele) => ele.id);
           const res = await materialPrinting(data);
-          downloadFile(res, '未来乡村创建申报材料打印.zip', 'application/gzip');
+          const time = moment().format('YYYY-MM-DD HH_mm_ss');
+          const fileName = `未来乡村创建申报材料打印${time}.zip`;
+          downloadFile(res, fileName, 'application/gzip');
           // this.$notify.success('导出成功');
         });
       }
@@ -440,10 +443,12 @@ export default {
     exportList() {
       // console.log(this.$refs.crud);
       // if (Array.isArray([])) return;
+      const time = moment().format('YYYY-MM-DD HH_mm_ss');
+      const fileName = `${this.exportFileName}${time}.xlsx`;
       if (this.PROVINCE) {
-        return this._proExportFiles(getvillagesExport, this.exportFileName + '.xlsx');
+        return this._proExportFiles(getvillagesExport, fileName);
       }
-      this._exportFiles(getvillagesExport, this.exportFileName + '.xlsx');
+      this._exportFiles(getvillagesExport, fileName);
     },
     _exportFiles(exportFunc, fileName = '导出信息汇总表 ') {
       if (!this.selections.length) {

@@ -1,9 +1,16 @@
 <template>
   <el-dialog class="import-dialog" title="批量导入" :visible.sync="importDialogVisible" width="504px" center>
-    <UploadFile2 tip="支持格式：.xlsx" accept=".xlsx,.xlw" :data="importFiles" :upload-method="uploadMethod" returnData
-      @returnData="returnDatas($event)" />
+    <UploadFile2
+      tip="支持格式：.xlsx"
+      accept=".xlsx,.xlw"
+      :data="importFiles"
+      :upload-method="uploadMethod"
+      returnData
+      @returnData="returnDatas($event)"
+    />
     <div style="margin: 0 auto; text-align: center">
-      <el-button icon="el-icon-download" type="primary" plain @click="downLoad" style="margin: 32px 0 8px">模板下载
+      <el-button icon="el-icon-download" type="primary" plain @click="downLoad" style="margin: 32px 0 8px"
+        >模板下载
       </el-button>
       <div>请根据模板进行信息填写</div>
     </div>
@@ -17,19 +24,20 @@
 <script>
 import { importBatch, getTemplate } from '@/api2/villageManage';
 import { downloadFile } from '@/utils/data';
+import moment from 'moment';
 
 export default {
   props: {
     value: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   data() {
     return {
       uploadMethod: importBatch,
       importFiles: [],
-    }
+    };
   },
   computed: {
     importDialogVisible: {
@@ -38,7 +46,7 @@ export default {
       },
       get: function () {
         return this.value;
-      }
+      },
     },
   },
   watch: {
@@ -52,7 +60,9 @@ export default {
     // 下载模版
     async downLoad() {
       const res = await getTemplate();
-      downloadFile(res, '批量导入模版');
+      const time = moment().format('YYYY-MM-DD HH_mm_ss');
+      const fileName = `批量导入模版${time}`;
+      downloadFile(res, fileName);
       this.$notify.success('下载成功！');
     },
     returnDatas(data) {
@@ -61,6 +71,6 @@ export default {
       this.importDialogVisible = false;
       this.importFiles = [];
     },
-  }
-}
+  },
+};
 </script>

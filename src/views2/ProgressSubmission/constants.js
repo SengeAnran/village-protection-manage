@@ -55,7 +55,8 @@ export const PROJECT_STATUS = {
   TO_BE_FIRST_REPORT: 11, // 上半月待报送
   TO_BE_LATTER_REPORT: 21, // 下半月待报送
   TO_BE_REPORT: 0, // 本月待报送
-  CITY_VERIFY_PENDING: 1, // 县级待审核
+  COUNTY_VERIFY_PENDING: 1, // 县级待审核
+  CITY_VERIFY_PENDING: 7, // 市级待审核
   REPORTED: 2, // 本月已报送
   FIRST_REPORTED: 13, // 上半月已报送
   LATTER_REPORTED: 23, // 下半月已报送

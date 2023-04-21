@@ -160,6 +160,7 @@ import { downloadFile } from '@/utils/data';
 import { CITY_LEVEL_RATING } from './constants';
 import { FINAL_STATUE_COLOR, DECLARE_STATUS, FINAL_STATUS } from '@/views2/utils/constants';
 import { formatMoney } from '@/views2/utils/formatter';
+import moment from 'moment';
 
 export default {
   components: { ListSearch },
@@ -288,15 +289,21 @@ export default {
         }).then(async () => {
           const data = this.selections.map((ele) => ele.id);
           const res = await materialPrinting(data);
-          downloadFile(res, '未来乡村验收评价材料打印.zip', 'application/gzip');
+          const time = moment().format('YYYY-MM-DD HH_mm_ss');
+          const fileName = `未来乡村验收评价材料打印${time}.zip`;
+          downloadFile(res, fileName, 'application/gzip');
         });
       }
     },
     exportList() {
       if (this.PROVINCE) {
-        return this._proExportFiles(exportList, '信息汇总表.xlsx');
+        const time = moment().format('YYYY-MM-DD HH_mm_ss');
+        const fileName = `信息汇总表${time}.xlsx`;
+        return this._proExportFiles(exportList, fileName);
       }
-      this._exportFiles(exportList, '信息汇总表.xlsx');
+      const time = moment().format('YYYY-MM-DD HH_mm_ss');
+      const fileName = `信息汇总表${time}.xlsx`;
+      this._exportFiles(exportList, fileName);
     },
     _exportFiles(exportFunc, fileName = '导出信息汇总表 ') {
       if (!this.selections.length) {

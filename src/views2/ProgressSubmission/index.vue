@@ -81,7 +81,9 @@
         <template v-slot:tableAction="scope">
           <div style="text-align: left">
             <el-link v-if="canVerify(scope.data)" @click="goDetail(scope)" type="primary"> 审核 </el-link>
-            <el-divider v-if="canVerify(scope.data)" direction="vertical"></el-divider>
+            <!--          市级审核  -->
+            <el-link v-if="canCityVerify(scope.data)" @click="cityVerity(scope)" type="primary"> 审核 </el-link>
+            <el-divider v-if="canVerify(scope.data) || canCityVerify(scope.data)" direction="vertical"></el-divider>
             <el-link v-if="canDetail(scope.data)" @click="goDetail(scope)" type="primary"> 详情 </el-link>
             <el-link v-if="canSecondReport(scope.data)" @click="goEdit(scope.data)" type="primary"> 更新报送 </el-link>
 
@@ -103,7 +105,7 @@
         <!--        </template>-->
 
         <template v-slot:table>
-          <el-table-column label="报送时间" prop="reportingTime" fixed></el-table-column>
+          <el-table-column label="报送时间" prop="villageUpTime" fixed></el-table-column>
           <el-table-column label="村（片区）名称" prop="name"></el-table-column>
           <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
           <el-table-column label="项目数" prop="projectNum"></el-table-column>
@@ -149,6 +151,9 @@
         </template>
       </Crud>
     </div>
+    <el-dialog title="审核" :visible.sync="cityRDialogVisible" width="90%">
+      <city-review v-if="cityRDialogVisible" @closeView="cityRDialogVisible = false" />
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -169,8 +174,11 @@ import role from '@/views2/mixins/role';
 
 import { exportDetail, getInforExport, getList } from '@/api2/progressSubmission';
 import { formatMoney, formatScore } from '@/views2/utils/formatter';
+import moment from 'moment';
 // import qs from "qs";
+import CityReview from './Components/CityReview';
 export default {
+  components: { CityReview },
   mixins: [role],
   data() {
     // const date = new Date();
@@ -226,6 +234,7 @@ export default {
         declareYear: '',
       },
       selections: [],
+      cityRDialogVisible: false,
     };
   },
   beforeMount() {
@@ -262,12 +271,23 @@ export default {
     formatMoney,
     formatScore,
     getStatusName,
+    // 县级审核
     canVerify(data) {
-      const hasPerm = this.CITY || this.COUNTRY_LEADER;
-      if (data.projectStatus !== this.PROJECT_STATUS.CITY_VERIFY_PENDING) {
+      const hasPerm = this.COUNTRY || this.COUNTRY_LEADER;
+      if (data.projectStatus !== this.PROJECT_STATUS.COUNTY_VERIFY_PENDING) {
         return false;
       }
       return hasPerm;
+    },
+    // 市级审核
+    canCityVerify(data) {
+      console.log(data);
+      return true;
+      // const hasPerm = this.CITY || this.CITY_LEADER;
+      // if (data.projectStatus !== this.PROJECT_STATUS.CITY_VERIFY_PENDING) {
+      //   return false;
+      // }
+      // return hasPerm;
     },
     canDetail(data) {
       // 县级：展示所以详情
@@ -345,7 +365,9 @@ export default {
           pageSize,
         };
         const res = await getInforExport(data);
-        downloadFile(res, '信息汇总表.xlsx');
+        const time = moment().format('YYYY-MM-DD HH_mm_ss');
+        const fileName = `信息汇总表${time}.xlsx`;
+        downloadFile(res, fileName);
         // this.$notify.success('导出成功');
       });
     },
@@ -363,7 +385,9 @@ export default {
           ids: this.selections.map((item) => item.id),
         };
         const res = await exportDetail(data);
-        downloadFile(res, '浙江省未来乡村项目进度表.xlsx');
+        const time = moment().format('YYYY-MM-DD HH_mm_ss');
+        const fileName = `浙江省未来乡村项目进度表${time}.xlsx`;
+        downloadFile(res, fileName);
         this.$notify.success('导出成功');
       });
     },
@@ -449,6 +473,12 @@ export default {
     async getDialogDataList(params) {
       const res = await getRecVillages(params);
       return res;
+    },
+    // 市级审核
+    cityVerity(scope) {
+      console.log('市级审核', scope);
+      this.cityRDialogVisible = true;
+      //
     },
     // 详情
     goDetail(scope) {

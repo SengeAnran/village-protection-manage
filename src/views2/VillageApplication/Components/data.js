@@ -24,9 +24,9 @@ export const TABLE_DATA = [
     fourthColumn: 'phone',
   },
   {
-    firstColumn: '户籍人口数 (万人)',
+    firstColumn: '户籍人口数 (人)',
     secondColumn: 'huNum',
-    thirdColumn: '常住人口数 (万人)',
+    thirdColumn: '常住人口数 (人)',
     fourthColumn: 'personNum',
   },
   {

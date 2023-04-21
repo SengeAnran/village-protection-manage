@@ -76,12 +76,12 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="户籍人口数（万人）" prop="huNum" :rules="rule.inputNumber">
+            <el-form-item label="户籍人口数（人）" prop="huNum" :rules="rule.inputNumber">
               <el-input-number v-model="form.huNum" placeholder="请输入" maxlength="8"></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="常住人口数（万人）" prop="personNum" :rules="rule.inputNumber">
+            <el-form-item label="常住人口数（人）" prop="personNum" :rules="rule.inputNumber">
               <el-input-number v-model="form.personNum" placeholder="请输入" maxlength="8"></el-input-number>
             </el-form-item>
           </el-col>

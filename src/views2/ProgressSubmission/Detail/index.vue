@@ -24,6 +24,12 @@
         <el-form-item label="联系方式" prop="resPopulation">
           <p class="content">{{ form.phone }}</p>
         </el-form-item>
+        <el-form-item label="区县审核时间" prop="resPopulation">
+          <p class="content">{{ form.countyAuditTime }}</p>
+        </el-form-item>
+        <el-form-item label="市级审核时间" prop="resPopulation">
+          <p class="content">{{ form.cityAuditTime }}</p>
+        </el-form-item>
       </div>
       <el-form-item>
         <!--        <div class="import">-->
@@ -148,7 +154,7 @@ export default {
         this.showTable = true;
         if (
           this.form &&
-          this.form.projectStatus === this.PROJECT_STATUS.CITY_VERIFY_PENDING &&
+          this.form.projectStatus === this.PROJECT_STATUS.COUNTY_VERIFY_PENDING &&
           (this.COUNTRY || this.COUNTRY_LEADER)
         ) {
           this.type = 'verity';
@@ -175,7 +181,7 @@ export default {
     },
     // 县级审核通过
     pass() {
-      this.$confirm('是否确认通过，通过后该条报送信息流转至省（市）调度', '提示', {
+      this.$confirm('是否确认提交填报的信息，提交后的信息将流转至市级审核', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',

@@ -25,6 +25,10 @@
       :permission-edit="0"
       :permission-delete="0"
     >
+      <template v-slot:export>
+        <el-button icon="el-icon-download" type="primary" plain @click="exportMethod"> 导出信息汇总表 </el-button>
+        <!--          <el-button icon="el-icon-download" type="primary" plain @click="exportMethod2"> 导出项目进度表 </el-button>-->
+      </template>
       <template v-slot:search>
         <div class="search-content inline-flex mb-6 pl-0">
           <div class="search-item">
@@ -69,6 +73,9 @@ import { getSubmitEarlyWarningDetail } from '@/api2/homePage';
 import { mapGetters } from 'vuex';
 import { REPORT_STATUS_COLOR, getStatusName } from '@/views2/ProgressSubmission/constants';
 import { REPORT_STATUS, REPORT_STATUS2 } from './constants';
+import { getInforExport } from '@/api2/progressSubmission';
+import moment from 'moment';
+import { downloadFile } from '@/utils/data';
 
 export default {
   name: 'EarlyWarnDetail',
@@ -147,6 +154,32 @@ export default {
         };
       }
       return query;
+    },
+    // 导出信息汇总表
+    async exportMethod() {
+      // if (this.selections.length === 0) {
+      //   this.$notify.error('请选择需要导出的数据');
+      //   return;
+      // }
+      this.$confirm('是否导出数据？', '提示', {
+        type: 'warning',
+      }).then(async () => {
+        // const pageNum = this.$refs.crud.page;
+        // const pageSize = this.$refs.crud.size;
+        // const pageSize
+        const data = {
+          // ids: this.selections.map((item) => item.id),
+          ...this.query,
+          // pageNum,
+          // pageSize,
+        };
+        // console.log(data);
+        const res = await getInforExport(data);
+        const time = moment().format('YYYY-MM-DD HH_mm_ss');
+        const fileName = `信息汇总表${time}.xlsx`;
+        downloadFile(res, fileName);
+        this.$notify.success('导出成功');
+      });
     },
   },
 };

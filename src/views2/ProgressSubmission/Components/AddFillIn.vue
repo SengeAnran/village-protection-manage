@@ -30,6 +30,14 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
+          <el-form-item label="是否开工" prop="isStart" :rules="rule.select">
+            <el-radio v-model="form.isStart" :disabled="startDisabled" :label="0">否</el-radio>
+            <el-radio v-model="form.isStart" :disabled="startDisabled" :label="1">是</el-radio>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="8">
           <el-form-item label="本月完成总投资（万元）" prop="completeTotal" :rules="completeTotalInput">
             <el-input v-model="form.completeTotal" disabled placeholder="-"></el-input>
           </el-form-item>
@@ -75,14 +83,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-form-item label="是否开工" prop="isStart" :rules="rule.select">
-            <el-radio v-model="form.isStart" :disabled="startDisabled" :label="0">否</el-radio>
-            <el-radio v-model="form.isStart" :disabled="startDisabled" :label="1">是</el-radio>
-          </el-form-item>
-        </el-col>
-      </el-row>
+
       <el-row v-if="form.isStart" :gutter="20">
         <el-col :span="20">
           <el-form-item label="本月项目进度情况照片" prop="monthPic" :rules="rule.upload">
@@ -97,9 +98,7 @@
             <el-radio v-model="form.isEnd" :disabled="isEndDisabled" :label="0">否</el-radio>
             <el-radio v-model="form.isEnd" :disabled="isEndDisabled" :label="1">是</el-radio>
           </el-form-item>
-          <i style="color: #ff6b00"
-            >（投资完成率需达到100%并且总体进度为100%才可选择竣工；选择“是”则该项目状态变更为“已竣工”，之后月份无法再进行填报。）</i
-          >
+          <i style="color: #ff6b00">（总体进度不可小于或大于投资完成率20%）</i>
         </el-col>
       </el-row>
     </div>

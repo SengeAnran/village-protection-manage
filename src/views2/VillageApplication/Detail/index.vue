@@ -163,6 +163,7 @@ import { getVillageItemDetail, getvillageDetailExport, verify } from '@/api2/vil
 import { downloadFile } from '@/utils/data';
 import { formatMoney } from '@/views2/utils/formatter';
 import { FINAL_STATUS } from '@/views2/utils/constants';
+import moment from 'moment';
 
 export default {
   mixins: [rule, role],
@@ -311,7 +312,9 @@ export default {
     async clickExport() {
       const { id } = this.$route.query;
       const res = await getvillageDetailExport({ id });
-      downloadFile(res, '浙江省未来乡村创建申报表', 'application/msword');
+      const time = moment().format('YYYY-MM-DD HH_mm_ss');
+      const fileName = `浙江省未来乡村创建申报表${time}`;
+      downloadFile(res, fileName, 'application/msword');
     },
     countTotal() {
       return HISTORY_BUILDINGS.reduce((pre, next) => {

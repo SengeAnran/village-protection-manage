@@ -159,6 +159,7 @@ import { downloadFile } from '@/utils/data';
 import { CITY_LEVEL_RATING } from './constants';
 import { FINAL_STATUE_COLOR, DECLARE_STATUS, FINAL_STATUS } from '@/views2/utils/constants';
 import { formatMoney } from '@/views2/utils/formatter';
+import moment from 'moment';
 
 export default {
   components: { ListSearch },
@@ -280,7 +281,9 @@ export default {
         }).then(async () => {
           const data = this.selections.map((ele) => ele.id);
           const res = await materialPrinting(data);
-          downloadFile(res, '未来乡村验收评价材料打印.zip', 'application/gzip');
+          const time = moment().format('YYYY-MM-DD HH_mm_ss');
+          const fileName = `未来乡村验收评价材料打印${time}.zip`;
+          downloadFile(res, fileName, 'application/gzip');
         });
       }
     },
