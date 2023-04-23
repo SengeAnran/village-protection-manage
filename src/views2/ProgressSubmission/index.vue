@@ -22,11 +22,19 @@
         @selectionChange="selectionChange"
       >
         <template v-slot:search>
-          <div v-if="VILLAGE || COUNTRY || COUNTRY_LEADER" class="inline-flex mb-2 pl-0" style="flex-wrap: wrap">
+          <div
+            v-if="VILLAGE || COUNTRY || COUNTRY_LEADER || CITY_LEADER || CITY"
+            class="inline-flex mb-2 pl-0"
+            style="flex-wrap: wrap"
+          >
             <div class="search-item mb-4">
               <span class="label">报送时间：</span>
               <el-date-picker v-model="query.time" type="month" placeholder="请选择" value-format="yyyy-MM">
               </el-date-picker>
+            </div>
+            <div class="search-item" v-if="CITY || CITY_LEADER">
+              <span class="label">地区：</span>
+              <VillageSelectItem checkStrictly v-model="query.areaId" @change="changeArea" />
             </div>
             <div v-if="!VILLAGE" class="search-item mb-4">
               <span class="label">村（片区）名称：</span>
@@ -83,7 +91,7 @@
             <el-link v-if="canVerify(scope.data)" @click="goDetail(scope)" type="primary"> 审核 </el-link>
             <!--          市级审核  -->
             <el-link v-if="canCityVerify(scope.data)" @click="cityVerity(scope)" type="primary"> 审核 </el-link>
-            <el-divider v-if="canVerify(scope.data) || canCityVerify(scope.data)" direction="vertical"></el-divider>
+            <el-divider v-if="canVerify(scope.data)" direction="vertical"></el-divider>
             <el-link v-if="canDetail(scope.data)" @click="goDetail(scope)" type="primary"> 详情 </el-link>
             <el-link v-if="canSecondReport(scope.data)" @click="goEdit(scope.data)" type="primary"> 更新报送 </el-link>
 
@@ -106,7 +114,7 @@
 
         <template v-slot:table>
           <el-table-column label="报送时间" prop="villageUpTime" fixed></el-table-column>
-          <el-table-column label="村（片区）名称" prop="name"></el-table-column>
+          <el-table-column label="村（片区）名称" prop="village"></el-table-column>
           <el-table-column label="创建批次" prop="declarationBatch"></el-table-column>
           <el-table-column label="项目数" prop="projectNum"></el-table-column>
           <el-table-column label="已开工项目数" prop="startNum"></el-table-column>
@@ -152,7 +160,7 @@
       </Crud>
     </div>
     <el-dialog title="审核" :visible.sync="cityRDialogVisible" width="90%">
-      <city-review v-if="cityRDialogVisible" @closeView="cityRDialogVisible = false" />
+      <city-review v-if="cityRDialogVisible" :id="showId" :reportingTime="showReportingTime" @closeView="closeView" />
     </el-dialog>
   </div>
 </template>
@@ -196,6 +204,8 @@ export default {
         areaId: '',
         projectStatus: null,
         isAudit: undefined,
+        city: '', // 市
+        county: '', //县
       },
       declareYearOpt: [
         {
@@ -235,6 +245,8 @@ export default {
       },
       selections: [],
       cityRDialogVisible: false,
+      showId: undefined,
+      showReportingTime: undefined,
     };
   },
   beforeMount() {
@@ -251,11 +263,13 @@ export default {
     if (this.COUNTRY || this.COUNTRY_LEADER) {
       this.query.isAudit = 1;
     }
+    if (this.CITY || this.CITY_LEADER) {
+      this.query.isAudit = 7;
+    }
     this.getBatchInfo();
   },
   mounted() {
     const opts = Object.keys(REPORT_STATUS).map((ele) => {
-      console.log('ele', ele);
       return {
         label: REPORT_STATUS[ele],
         value: parseInt(ele),
@@ -281,13 +295,13 @@ export default {
     },
     // 市级审核
     canCityVerify(data) {
-      console.log(data);
-      return true;
-      // const hasPerm = this.CITY || this.CITY_LEADER;
-      // if (data.projectStatus !== this.PROJECT_STATUS.CITY_VERIFY_PENDING) {
-      //   return false;
-      // }
-      // return hasPerm;
+      // console.log(data);
+      // return true;
+      const hasPerm = this.CITY || this.CITY_LEADER;
+      if (data.projectStatus !== this.PROJECT_STATUS.CITY_VERIFY_PENDING) {
+        return false;
+      }
+      return hasPerm;
     },
     canDetail(data) {
       // 县级：展示所以详情
@@ -332,6 +346,15 @@ export default {
     },
     // 地区
     changeArea(val) {
+      console.log(val);
+      if (val.areaId.length === 6) {
+        this.query.county = val.areaName;
+        this.query.city = '';
+      }
+      if (val.areaId.length === 4) {
+        this.query.county = '';
+        this.query.city = val.areaName;
+      }
       this.query.areaId = val.areaId;
     },
     tableRowClassName({ row }) {
@@ -477,6 +500,9 @@ export default {
     // 市级审核
     cityVerity(scope) {
       console.log('市级审核', scope);
+      const { id = undefined, reportingTime = '' } = scope.data;
+      this.showReportingTime = reportingTime;
+      this.showId = id;
       this.cityRDialogVisible = true;
       //
     },
@@ -546,6 +572,12 @@ export default {
         );
       }
       return false;
+    },
+    closeView(val) {
+      if (val) {
+        this.$refs.crud.getItems();
+      }
+      this.cityRDialogVisible = false;
     },
   },
 };

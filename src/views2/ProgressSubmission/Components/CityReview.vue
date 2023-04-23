@@ -2,32 +2,32 @@
   <el-form style="padding-left: 14px" ref="form" class="form" label-position="top" :model="form" label-width="80px">
     <div class="input-item-wrp">
       <el-form-item label="村（片区）名称" prop="villageId">
-        <p class="content">{{ form.name }}</p>
+        <p class="content">{{ form.villageName }}</p>
       </el-form-item>
       <el-form-item label="区县" prop="villageId">
-        <p class="content">{{ form.name }}</p>
+        <p class="content">{{ form.country }}</p>
       </el-form-item>
       <el-form-item label="创建批次" prop="declarationBatch">
         <p class="content">{{ form.declarationBatch }}</p>
       </el-form-item>
       <el-form-item label="项目开工率" prop="investNum">
         <p class="content">
-          {{ form.investNum }}
+          {{ form.startRate ? formatScore(form.startRate || 0) + '%' : '' }}
         </p>
       </el-form-item>
       <el-form-item label="投资完成率" prop="investNum">
         <p class="content">
-          {{ form.investNum }}
+          {{ form.rate ? formatScore(form.rate || 0) + '%' : '' }}
         </p>
       </el-form-item>
       <el-form-item label="总体进度" prop="investNum">
         <p class="content">
-          {{ form.investNum }}
+          {{ form.overallProgress ? formatScore(form.overallProgress || 0) + '%' : '' }}
         </p>
       </el-form-item>
-      <el-form-item label="报送时间" prop="investNum">
+      <el-form-item label="报送时间" prop="villageUpTime">
         <p class="content">
-          {{ 2023 - 12 - 12 }}
+          {{ form.villageUpTime }}
         </p>
       </el-form-item>
     </div>
@@ -35,7 +35,8 @@
       <!--        <div class="import">-->
       <!--          <el-button type="primary" @click="lookHistory">历史数据</el-button>-->
       <!--        </div>-->
-      <CityRVilliageListTable type="look" :data="form.detailLists"> </CityRVilliageListTable>
+      <CityRVilliageListTable type="look" :data="form.cityProjects" :defaultFirstYear="defaultFirstYear">
+      </CityRVilliageListTable>
       <i style="color: #ff6b00">若填报的数据有误，请联系区县负责人修改</i>
     </el-form-item>
     <div id="verify"></div>
@@ -46,11 +47,17 @@
 
 <script>
 import CityRVilliageListTable from './CityRVilliageListTable';
-import { countryAudit } from '@/api2/progressSubmission';
+import { cityAudit, getCityDetail } from '@/api2/progressSubmission';
+import { formatMoney, formatScore } from '@/views2/utils/formatter';
 export default {
   components: { CityRVilliageListTable },
+  props: {
+    id: Number,
+    reportingTime: String,
+  },
   data() {
     return {
+      defaultFirstYear: undefined,
       form: {
         area: '',
         villageName: '',
@@ -59,13 +66,30 @@ export default {
         leader: '',
         contactPerson: '',
         phone: '',
-        detailLists: [],
-        endLists: [],
+        cityProjects: [],
         reportingTime: '',
       },
     };
   },
+  beforeMount() {
+    this.init();
+  },
   methods: {
+    formatMoney,
+    formatScore,
+    init() {
+      const { id, reportingTime } = this;
+      if (!id) return;
+      // if (showComplete) {
+      //   this.activeName = 'second';
+      // }
+      getCityDetail({ id, reportingTime }).then((res) => {
+        this.form = res;
+        if (res.cityProjects && res.cityProjects[0] && res.cityProjects[0].firstYear) {
+          this.defaultFirstYear = res.cityProjects[0].firstYear;
+        }
+      });
+    },
     // 市级审核通过
     pass() {
       this.$confirm('是否确认填报数据无误', '提示', {
@@ -76,14 +100,20 @@ export default {
         const data = {
           ids: this.getProjectIds(),
         };
-        countryAudit(data).then(() => {
+        cityAudit(data).then(() => {
           this.$message({
             type: 'success',
             message: '提交成功!',
           });
-          this.$emit('closeView');
+          this.$emit('closeView', true);
         });
       });
+    },
+    getProjectIds() {
+      const ids = this.form.cityProjects.map((i) => {
+        return i.id;
+      });
+      return ids;
     },
   },
 };

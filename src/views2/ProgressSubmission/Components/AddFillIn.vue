@@ -38,17 +38,20 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="本月完成总投资（万元）" prop="completeTotal" :rules="completeTotalInput">
+          <!--          <el-form-item label="本月完成总投资（万元）" prop="completeTotal" :rules="completeTotalInput">-->
+          <el-form-item label="本月完成总投资（万元）" prop="completeTotal" :rules="rule.inputNumber">
             <el-input v-model="form.completeTotal" disabled placeholder="-"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="其中政府投资（万元）" prop="completeGov" :rules="completeGovInput">
+          <!--          <el-form-item label="其中政府投资（万元）" prop="completeGov" :rules="completeGovInput">-->
+          <el-form-item label="其中政府投资（万元）" prop="completeGov" :rules="rule.inputNumber">
             <el-input v-model="form.completeGov" placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="其中带动投资（万元）" prop="completeDrive" :rules="completeDriveInput">
+          <!--          <el-form-item label="其中带动投资（万元）" prop="completeDrive" :rules="completeDriveInput">-->
+          <el-form-item label="其中带动投资（万元）" prop="completeDrive" :rules="rule.inputNumber">
             <el-input v-model="form.completeDrive" placeholder="请输入" maxlength="8"></el-input>
           </el-form-item>
         </el-col>
@@ -98,7 +101,9 @@
             <el-radio v-model="form.isEnd" :disabled="isEndDisabled" :label="0">否</el-radio>
             <el-radio v-model="form.isEnd" :disabled="isEndDisabled" :label="1">是</el-radio>
           </el-form-item>
-          <i style="color: #ff6b00">（总体进度不可小于或大于投资完成率20%）</i>
+          <i style="color: #ff6b00"
+            >（投资完成率需达到100%并且总体进度为100%才可选择竣工；选择“是”则该项目状态变更为“已竣工”，之后月份无法再进行填报。）</i
+          >
         </el-col>
       </el-row>
     </div>
@@ -305,44 +310,26 @@ export default {
 
       // this.oldMeetingPic = res.
     },
+
     // 添加 项目
     onSubmit() {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
-          const dataFrom = {
-            completeDrive: Number(this.form.completeDrive),
-            completeGov: Number(this.form.completeGov),
-            completeTotal: Number(this.form.completeTotal),
-            overallProgress: Number(this.form.overallProgress),
-            id: this.id,
-            isStart: this.form.isStart,
-            monthPic: (this.form.monthPic || [])
-              .map((i) => {
-                return i.filePath;
+          //点击【确认】增加判断，若项目是否开工为否却已填写完成投资和总体进度，弹出操作确认弹窗；
+          //该项目已填写完成投资和总体进度，是否确认项目为未开工状态
+          if (!this.form.isStart && this.form.completeTotal && this.form.overallProgress) {
+            this.$confirm('该项目已填写完成投资和总体进度，是否确认项目为未开工状态', {
+              showClose: false,
+            })
+              .then(() => {
+                console.log(111);
+                this.detailData();
               })
-              .join(','),
-            // monthPic: this.form.monthPic,
-            isEnd: this.form.isEnd,
-            planRate: this.calcRateTotal(this.modifyData, this.form),
-            yearRate: this.calcRateCurrentYear(this.modifyData, this.form),
-          };
-          // console.log(dataFrom);
-          if (this.$route.query.modify) {
-            postSaveOne(dataFrom).then(() => {
-              this.$message({
-                type: 'success',
-                message: '修改成功!',
-              });
-              this.$emit('saveItem', dataFrom);
-              this.$emit('refresh');
-              this.$refs.form.resetFields();
-              this.$emit('input', false);
-            });
-          } else {
-            this.$emit('saveItem', dataFrom);
-            this.$refs.form.resetFields();
-            this.$emit('input', false);
+              .catch(() => {});
+            return;
           }
+          this.detailData();
+
           // postSaveOne(data).then(() => {
           //   this.$message({
           //     type: 'success',
@@ -354,6 +341,42 @@ export default {
           // });
         }
       });
+    },
+    detailData() {
+      const dataFrom = {
+        completeDrive: Number(this.form.completeDrive),
+        completeGov: Number(this.form.completeGov),
+        completeTotal: Number(this.form.completeTotal),
+        overallProgress: Number(this.form.overallProgress),
+        id: this.id,
+        isStart: this.form.isStart,
+        monthPic: (this.form.monthPic || [])
+          .map((i) => {
+            return i.filePath;
+          })
+          .join(','),
+        // monthPic: this.form.monthPic,
+        isEnd: this.form.isEnd,
+        planRate: this.calcRateTotal(this.modifyData, this.form),
+        yearRate: this.calcRateCurrentYear(this.modifyData, this.form),
+      };
+      // console.log(dataFrom);
+      if (this.$route.query.modify) {
+        postSaveOne(dataFrom).then(() => {
+          this.$message({
+            type: 'success',
+            message: '修改成功!',
+          });
+          this.$emit('saveItem', dataFrom);
+          this.$emit('refresh');
+          this.$refs.form.resetFields();
+          this.$emit('input', false);
+        });
+      } else {
+        this.$emit('saveItem', dataFrom);
+        this.$refs.form.resetFields();
+        this.$emit('input', false);
+      }
     },
     //  计划投资完成率（%）
     calcRateTotal(scope, formData) {
@@ -443,12 +466,21 @@ export default {
         callback();
       }
     },
+    // 投资完成率
+    getInvCompletionRate() {
+      return ((this.form.completeTotal || 0) / (this.form.planTotal || 1)) * 100;
+    },
     // 校验overallProgress
     overallProgressInputValue(rule, value, callback) {
       if (!value && value !== 0) {
         callback(new Error('填写不能为空'));
-      } else if (Number(value) < (Number(this.form.lastOverallProgress) || 0)) {
-        callback(new Error('不可少于之前报送总体进度'));
+        // } else if (Number(value) < (Number(this.form.lastOverallProgress) || 0)) {
+      } else if (
+        Number(value) < this.getInvCompletionRate() * 0.8 ||
+        Number(value) > this.getInvCompletionRate() * 1.2
+      ) {
+        //总体进度不可小于或大于投资完成率20%
+        callback(new Error('总体进度不可小于或大于投资完成率20%'));
       } else {
         callback();
       }

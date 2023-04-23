@@ -13,30 +13,22 @@
       </template>
     </el-table-column>
     <el-table-column label="计划总投资（万元）" header-align="center">
-      <el-table-column :label="`${firstYear}年`" header-align="center">
+      <el-table-column :label="`${defaultFirstYear}年`" header-align="center">
         <template slot-scope="scope">
-          <span>{{ formatMoney(scope.row.planFirstGov || 0) }}</span>
+          <span>{{ formatMoney(scope.row.planFirst || 0) }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column :label="`${firstYear + 1}年`" header-align="center">
+      <el-table-column :label="`${defaultFirstYear + 1}年`" header-align="center">
         <template slot-scope="scope">
-          <span>{{ formatMoney(scope.row.planSecondGov || 0) }}</span>
+          <span>{{ formatMoney(scope.row.planSecond || 0) }}</span>
         </template>
       </el-table-column>
     </el-table-column>
-    <el-table-column label="完成投资（万元）" header-align="center">
-      <el-table-column :label="`${firstYear}年`" header-align="center">
-        <template slot-scope="scope">
-          <span>{{ formatMoney(scope.row.planFirstGov || 0) }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column :label="`${firstYear + 1}年`" header-align="center">
-        <template slot-scope="scope">
-          <span>{{ formatMoney(scope.row.planSecondGov || 0) }}</span>
-        </template>
-      </el-table-column>
+    <el-table-column label="本次完成投资（万元）" header-align="center">
+      <template slot-scope="scope">
+        {{ scope.row.completeTotal || scope.row.completeTotal === 0 ? formatMoney(scope.row.completeTotal || 0) : '-' }}
+      </template>
     </el-table-column>
     <el-table-column align="center" label="投资完成率（%）">
       <template slot-scope="scope">
@@ -46,11 +38,12 @@
     </el-table-column>
     <el-table-column align="center" label="总体进度（%）" width="170">
       <template slot-scope="scope">
-        {{
-          scope.row.overallProgress || scope.row.overallProgress === 0
-            ? scope.row.overallProgress.toFixed(1) + '%'
-            : '-'
-        }}
+        {{ scope.row.overallProgress || scope.row.overallProgress === 0 ? scope.row.overallProgress.toFixed(1) : '-' }}
+      </template>
+    </el-table-column>
+    <el-table-column align="center" label="是否竣工" width="170">
+      <template slot-scope="scope">
+        {{ scope.row.isEnd ? '是' : '否' }}
       </template>
     </el-table-column>
     <el-table-column fixed="right" v-if="useAction" label="操作">
@@ -99,7 +92,6 @@ export default {
       refill: false,
       isFirstTimeReport: false,
       lastUpdateTime: '',
-      firstYear: 2022,
       rules: {},
     };
   },
@@ -107,9 +99,6 @@ export default {
     ...mapGetters(['userInfo']),
   },
   beforeMount() {
-    if (this.defaultFirstYear) {
-      this.firstYear = this.defaultFirstYear;
-    }
     this.init();
   },
   methods: {

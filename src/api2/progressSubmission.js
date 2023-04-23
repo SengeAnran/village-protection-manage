@@ -52,6 +52,14 @@ export const getDetail = (params) => {
     params,
   });
 };
+// 市级审核报送详情
+export const getCityDetail = (params) => {
+  return axios.request({
+    method: 'GET',
+    url: apiHost2 + `/api/workbench/progressReport/detailCityAudit`,
+    params,
+  });
+};
 // 报送历史
 export const getHistory = (data) => {
   return axios.request({
@@ -132,6 +140,14 @@ export const countryAudit = (data) => {
   return axios.request({
     method: 'POST',
     url: apiHost2 + `/api/workbench/progressReport/audit`,
+    data,
+  });
+};
+// 市级-项目进度审核
+export const cityAudit = (data) => {
+  return axios.request({
+    method: 'POST',
+    url: apiHost2 + `/api/workbench/progressReport/auditCity`,
     data,
   });
 };

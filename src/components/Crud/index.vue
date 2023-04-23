@@ -541,7 +541,7 @@ export default {
     // 页数
     pagerCount: {
       type: Number,
-      default: 8,
+      default: 7,
     },
   },
   data() {

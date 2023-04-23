@@ -588,6 +588,16 @@ export const defaultRoutes2 = [
         component: () => import('@/views2/ProgressSubmission/index.vue'),
       },
       {
+        path: '/progressSubmission/index',
+        name: 'ProgressSubmissionList',
+        meta: {
+          // icon: "cunzhuangshenbao",
+          menuIds: [USER_TYPE.CITY, USER_TYPE.CITY_LEADER],
+          title: '市级审核',
+        },
+        component: () => import('@/views2/ProgressSubmission/index.vue'),
+      },
+      {
         path: '/progressSubmission/projectScheduling/index',
         name: 'ProjectSchedulingList',
         meta: {
