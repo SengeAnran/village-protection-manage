@@ -40,6 +40,13 @@
                 clearable
               ></el-date-picker>
             </div>
+            <div class="search-item">
+              <span class="label">状态：</span>
+              <el-select v-model="query.status" placeholder="请选择">
+                <el-option v-for="item in queryStatusOpt" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </div>
           </div>
         </template>
         <template v-slot:export>
@@ -133,6 +140,7 @@ import { mapGetters } from 'vuex';
 import rule from '@/mixins/rule.js';
 import { getProjectProgress, setProjectDeadline, remindProgress, exportList } from '@/api/scheduleManage';
 import { downloadFile } from '@/utils/data';
+import moment from 'moment';
 
 export default {
   mixins: [rule],
@@ -141,8 +149,19 @@ export default {
       query: {
         address: '',
         years: '',
+        status: 0,
       },
       getMethod: getProjectProgress,
+      queryStatusOpt: [
+        {
+          label: '全部',
+          value: 0,
+        },
+        {
+          label: '在建村',
+          value: 1,
+        },
+      ],
 
       dateDialog: false,
       form: {
@@ -167,8 +186,10 @@ export default {
         address: this.query.address,
         years: this.query.years,
       };
+      const time = moment().format('YYYY-MM-DD HH_mm_ss');
+      const fileName = `重点项目最新进度${time}`;
       exportList(params).then((res) => {
-        downloadFile(res, '重点项目最新进度');
+        downloadFile(res, fileName);
       });
     },
     // 进度详情

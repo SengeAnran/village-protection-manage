@@ -22,56 +22,25 @@
           >
         </div>
 
-        <el-form
-          v-show="active === 0"
-          ref="form1"
-          :model="form1"
-          label-width="100px"
-          label-position="top"
-        >
+        <el-form v-show="active === 0" ref="form1" :model="form1" label-width="100px" label-position="top">
           <p class="ml-4 my-2">基本信息</p>
           <div>
-            <el-form-item
-              class="inline-block"
-              label="申报年度："
-              :rules="rule.select"
-              prop="years"
-            >
+            <el-form-item class="inline-block" label="申报年度：" :rules="rule.select" prop="years">
               <p class="input">{{ form1.years }}</p>
             </el-form-item>
-            <el-form-item
-              class="inline-block"
-              label="项目类型："
-              :rules="rule.select"
-              prop="projectType"
-            >
+            <el-form-item class="inline-block" label="项目类型：" :rules="rule.select" prop="projectType">
               <p class="input">{{ projectTypeMap[form1.projectType] }}</p>
             </el-form-item>
-            <el-form-item
-              class="inline-block"
-              label="项目所在地："
-              :rules="rule.select"
-              prop="villageDetailId"
-            >
+            <el-form-item class="inline-block" label="项目所在地：" :rules="rule.select" prop="villageDetailId">
               <p class="input">{{ form1.address }}</p>
-<!--              <p class="input">{{ form1.address }}{{ form1.villageName }}</p>-->
+              <!--              <p class="input">{{ form1.address }}{{ form1.villageName }}</p>-->
             </el-form-item>
           </div>
           <div>
-            <el-form-item
-              class="inline-block"
-              label="申报时间："
-              :rules="rule.select"
-              prop="years"
-            >
+            <el-form-item class="inline-block" label="申报时间：" :rules="rule.select" prop="years">
               <p class="input">{{ form1.gmtCreate }}</p>
             </el-form-item>
-            <el-form-item
-              class="inline-block"
-              label="状态："
-              :rules="rule.select"
-              prop="projectType"
-            >
+            <el-form-item class="inline-block" label="状态：" :rules="rule.select" prop="projectType">
               <div class="input">
                 <el-tag>{{ projectStatusMap[form1.projectStatus] }}</el-tag>
               </div>
@@ -80,28 +49,13 @@
 
           <div>
             <p class="ml-4 my-2">管理信息</p>
-            <el-form-item
-              class="inline-block"
-              label="项目负责人："
-              :rules="rule.input"
-              prop="projectManager"
-            >
+            <el-form-item class="inline-block" label="项目负责人：" :rules="rule.input" prop="projectManager">
               <p class="input">{{ form1.projectManager }}</p>
             </el-form-item>
-            <el-form-item
-              class="inline-block"
-              label="负责人联系电话："
-              :rules="rule.input"
-              prop="managerMobile"
-            >
+            <el-form-item class="inline-block" label="负责人联系电话：" :rules="rule.input" prop="managerMobile">
               <p class="input">{{ form1.managerMobile }}</p>
             </el-form-item>
-            <el-form-item
-              class="inline-block"
-              label="项目主管部门："
-              :rules="rule.input"
-              prop="departmentName"
-            >
+            <el-form-item class="inline-block" label="项目主管部门：" :rules="rule.input" prop="departmentName">
               <p class="input">{{ form1.departmentName }}</p>
             </el-form-item>
           </div>
@@ -114,12 +68,7 @@
             >
               <p class="input">{{ form1.departmentManagerName }}</p>
             </el-form-item>
-            <el-form-item
-              class="inline-block"
-              label="主管部门联系电话："
-              :rules="rule.input"
-              prop="departmentMobile"
-            >
+            <el-form-item class="inline-block" label="主管部门联系电话：" :rules="rule.input" prop="departmentMobile">
               <p class="input">{{ form1.departmentMobile }}</p>
             </el-form-item>
             <el-form-item
@@ -132,32 +81,17 @@
             </el-form-item>
           </div>
           <div>
-            <el-form-item
-              class="inline-block"
-              label="施工单位联系电话："
-              :rules="rule.input"
-              prop="companyMobile"
-            >
+            <el-form-item class="inline-block" label="施工单位联系电话：" :rules="rule.input" prop="companyMobile">
               <p class="input">{{ form1.companyMobile }}</p>
             </el-form-item>
           </div>
           <div>
             <p class="ml-4 my-2">投资构成</p>
             <div>
-              <el-form-item
-                class="inline-block"
-                label="省级资金（万元）："
-                :rules="rule.input"
-                prop="provinceFee"
-              >
+              <el-form-item class="inline-block" label="省级资金（万元）：" :rules="rule.input" prop="provinceFee">
                 <p class="input">{{ form1.provinceFee }}万元</p>
               </el-form-item>
-              <el-form-item
-                class="inline-block"
-                label="市级资金（万元）："
-                :rules="rule.input"
-                prop="cityFee"
-              >
+              <el-form-item class="inline-block" label="市级资金（万元）：" :rules="rule.input" prop="cityFee">
                 <p class="input">{{ form1.cityFee }}万元</p>
               </el-form-item>
               <el-form-item
@@ -170,28 +104,13 @@
               </el-form-item>
             </div>
             <div>
-              <el-form-item
-                class="inline-block"
-                label="乡镇资金（万元）："
-                :rules="rule.input"
-                prop="bankFee"
-              >
+              <el-form-item class="inline-block" label="乡镇资金（万元）：" :rules="rule.input" prop="bankFee">
                 <p class="input">{{ form1.bankFee }}万元</p>
               </el-form-item>
-              <el-form-item
-                class="inline-block"
-                label="村级资金（万元）："
-                :rules="rule.input"
-                prop="villageFee"
-              >
+              <el-form-item class="inline-block" label="村级资金（万元）：" :rules="rule.input" prop="villageFee">
                 <p class="input">{{ form1.villageFee }}万元</p>
               </el-form-item>
-              <el-form-item
-                class="inline-block"
-                label="其他投入（万元）："
-                :rules="rule.input"
-                prop="otherFee"
-              >
+              <el-form-item class="inline-block" label="其他投入（万元）：" :rules="rule.input" prop="otherFee">
                 <p class="input">{{ form1.otherFee }}万元</p>
               </el-form-item>
             </div>
@@ -204,108 +123,31 @@
           </div>
         </el-form>
 
-        <el-form
-          v-show="active === 1"
-          ref="form2"
-          :model="form2"
-          label-width="100px"
-          label-position="top"
-        >
-          <el-form-item
-            label="项目村概况："
-            :rules="rule.input"
-            prop="villageOverview"
-          >
-            <el-input
-              v-model="form2.villageOverview"
-              type="textarea"
-              placeholder="请输入"
-              :rows="5"
-              readonly
-            />
+        <el-form v-show="active === 1" ref="form2" :model="form2" label-width="100px" label-position="top">
+          <el-form-item label="项目村概况：" :rules="rule.input" prop="villageOverview">
+            <el-input v-model="form2.villageOverview" type="textarea" placeholder="请输入" :rows="5" readonly />
           </el-form-item>
-          <el-form-item
-            label="投资必要性分析："
-            :rules="rule.input"
-            prop="investAnalysis"
-          >
-            <el-input
-              v-model="form2.investAnalysis"
-              type="textarea"
-              placeholder="请输入"
-              :rows="5"
-              readonly
-            />
+          <el-form-item label="投资必要性分析：" :rules="rule.input" prop="investAnalysis">
+            <el-input v-model="form2.investAnalysis" type="textarea" placeholder="请输入" :rows="5" readonly />
           </el-form-item>
-          <el-form-item
-            label="建设项目："
-            :rules="rule.input"
-            prop="projectDetails"
-          >
-            <el-input
-              v-model="form2.projectDetails"
-              type="textarea"
-              placeholder="请输入"
-              :rows="5"
-              readonly
-            />
+          <el-form-item label="建设项目：" :rules="rule.input" prop="projectDetails">
+            <el-input v-model="form2.projectDetails" type="textarea" placeholder="请输入" :rows="5" readonly />
           </el-form-item>
-          <el-form-item
-            label="建设方案："
-            :rules="rule.input"
-            prop="projectPlan"
-          >
-            <el-input
-              v-model="form2.projectPlan"
-              type="textarea"
-              placeholder="请输入"
-              :rows="5"
-              readonly
-            />
+          <el-form-item label="建设方案：" :rules="rule.input" prop="projectPlan">
+            <el-input v-model="form2.projectPlan" type="textarea" placeholder="请输入" :rows="5" readonly />
           </el-form-item>
-          <el-form-item
-            label="财政补助资金支持环节："
-            :rules="rule.input"
-            prop="financialSupport"
-          >
-            <el-input
-              v-model="form2.financialSupport"
-              type="textarea"
-              placeholder="请输入"
-              :rows="5"
-              readonly
-            />
+          <el-form-item label="财政补助资金支持环节：" :rules="rule.input" prop="financialSupport">
+            <el-input v-model="form2.financialSupport" type="textarea" placeholder="请输入" :rows="5" readonly />
           </el-form-item>
-          <el-form-item
-            label="社会效益分析："
-            :rules="rule.input"
-            prop="benefitAnalysis"
-          >
-            <el-input
-              v-model="form2.benefitAnalysis"
-              type="textarea"
-              placeholder="请输入"
-              :rows="5"
-              readonly
-            />
+          <el-form-item label="社会效益分析：" :rules="rule.input" prop="benefitAnalysis">
+            <el-input v-model="form2.benefitAnalysis" type="textarea" placeholder="请输入" :rows="5" readonly />
           </el-form-item>
         </el-form>
 
-        <el-form
-          v-show="active === 2"
-          ref="form3"
-          :model="form3"
-          label-width="100px"
-          label-position="top"
-        >
+        <el-form v-show="active === 2" ref="form3" :model="form3" label-width="100px" label-position="top">
           <p class="ml-4 my-2">古建筑修复项目（幢、平方米）</p>
           <div>
-            <el-form-item
-              class="inline-block"
-              label="顶瓦修复幢数："
-              :rules="rule.input"
-              prop="tileRepairNum"
-            >
+            <el-form-item class="inline-block" label="顶瓦修复幢数：" :rules="rule.input" prop="tileRepairNum">
               <p class="input">{{ form3.tileRepairNum }}</p>
             </el-form-item>
             <el-form-item
@@ -316,12 +158,7 @@
             >
               <p class="input">{{ form3.tileRepairArea }}</p>
             </el-form-item>
-            <el-form-item
-              class="inline-block"
-              label="墙体加固幢数："
-              :rules="rule.input"
-              prop="wallRepairNum"
-            >
+            <el-form-item class="inline-block" label="墙体加固幢数：" :rules="rule.input" prop="wallRepairNum">
               <p class="input">{{ form3.wallRepairNum }}</p>
             </el-form-item>
           </div>
@@ -334,12 +171,7 @@
             >
               <p class="input">{{ form3.wallRepairArea }}</p>
             </el-form-item>
-            <el-form-item
-              class="inline-block"
-              label="立面改造幢数："
-              :rules="rule.input"
-              prop="faceReformNum"
-            >
+            <el-form-item class="inline-block" label="立面改造幢数：" :rules="rule.input" prop="faceReformNum">
               <p class="input">{{ form3.faceReformNum }}</p>
             </el-form-item>
             <el-form-item
@@ -352,12 +184,7 @@
             </el-form-item>
           </div>
           <div>
-            <el-form-item
-              class="inline-block"
-              label="构件修复幢数："
-              :rules="rule.input"
-              prop="componentRepairNum"
-            >
+            <el-form-item class="inline-block" label="构件修复幢数：" :rules="rule.input" prop="componentRepairNum">
               <p class="input">{{ form3.componentRepairNum }}</p>
             </el-form-item>
             <el-form-item
@@ -368,33 +195,18 @@
             >
               <p class="input">{{ form3.componentRepairQuantity }}</p>
             </el-form-item>
-            <el-form-item
-              class="inline-block"
-              label="异地迁入幢数："
-              :rules="rule.input"
-              prop="moveInNum"
-            >
+            <el-form-item class="inline-block" label="异地迁入幢数：" :rules="rule.input" prop="moveInNum">
               <p class="input">{{ form3.moveInNum }}</p>
             </el-form-item>
           </div>
           <div>
-            <el-form-item
-              class="inline-block"
-              label="异地迁入面积："
-              :rules="rule.input"
-              prop="moveInArea"
-            >
+            <el-form-item class="inline-block" label="异地迁入面积：" :rules="rule.input" prop="moveInArea">
               <p class="input">{{ form3.moveInArea }}</p>
             </el-form-item>
           </div>
           <p class="ml-4 my-2">与历史风貌有冲突的建（构）物修整改造项目</p>
           <div>
-            <el-form-item
-              class="inline-block"
-              label="立面改造幢数："
-              :rules="rule.input"
-              prop="clashFaceReformNum"
-            >
+            <el-form-item class="inline-block" label="立面改造幢数：" :rules="rule.input" prop="clashFaceReformNum">
               <p class="input">{{ form3.clashFaceReformNum }}</p>
             </el-form-item>
             <el-form-item
@@ -405,12 +217,7 @@
             >
               <p class="input">{{ form3.clashFaceReformArea }}</p>
             </el-form-item>
-            <el-form-item
-              class="inline-block"
-              label="结构降层幢数："
-              :rules="rule.input"
-              prop="structureNum"
-            >
+            <el-form-item class="inline-block" label="结构降层幢数：" :rules="rule.input" prop="structureNum">
               <p class="input">{{ form3.structureNum }}</p>
             </el-form-item>
           </div>
@@ -431,23 +238,13 @@
             >
               <p class="input">{{ form3.demolishArea }}</p>
             </el-form-item>
-            <el-form-item
-              class="inline-block"
-              label="异地搬迁户数："
-              :rules="rule.input"
-              prop="moveFamilyNum"
-            >
+            <el-form-item class="inline-block" label="异地搬迁户数：" :rules="rule.input" prop="moveFamilyNum">
               <p class="input">{{ form3.moveFamilyNum }}</p>
             </el-form-item>
           </div>
           <p class="ml-4 my-2">搬迁安置区基本公建设施项目（亩、万元）</p>
           <div>
-            <el-form-item
-              class="inline-block"
-              label="用地面积（0-100亩）："
-              :rules="rule.input"
-              prop="landUseArea"
-            >
+            <el-form-item class="inline-block" label="用地面积（0-100亩）：" :rules="rule.input" prop="landUseArea">
               <p class="input">{{ form3.landUseArea }}</p>
             </el-form-item>
             <el-form-item
@@ -469,20 +266,10 @@
           </div>
           <p class="ml-4 my-2">村内古道修复与改造（平方米、公里）</p>
           <div>
-            <el-form-item
-              class="inline-block"
-              label="面积（0-50000㎡）："
-              :rules="rule.input"
-              prop="oldWayArea"
-            >
+            <el-form-item class="inline-block" label="面积（0-50000㎡）：" :rules="rule.input" prop="oldWayArea">
               <p class="input">{{ form3.oldWayArea }}</p>
             </el-form-item>
-            <el-form-item
-              class="inline-block"
-              label="古道里程（0-5公里）："
-              :rules="rule.input"
-              prop="oldWayMileage"
-            >
+            <el-form-item class="inline-block" label="古道里程（0-5公里）：" :rules="rule.input" prop="oldWayMileage">
               <p class="input">{{ form3.oldWayMileage }}</p>
             </el-form-item>
           </div>
@@ -498,18 +285,9 @@
         </el-form>
         <!--      <div style="margin-bottom: 24px">{{ tips }}</div>-->
         <div class="opinion">请填写审核意见</div>
-        <el-input
-          type="textarea"
-          :rows="8"
-          placeholder="请输入"
-          v-model="textarea">
-        </el-input>
+        <el-input type="textarea" :rows="8" placeholder="请输入" v-model="textarea"> </el-input>
         <div class="bottom-button">
-          <el-button
-            @click="$router.back()"
-          >
-            取消
-          </el-button>
+          <el-button @click="$router.back()"> 取消 </el-button>
           <el-button type="primary" @click="onConfirm()" v-html="roleId === 2 ? '确定' : '提交'"></el-button>
         </div>
       </div>
@@ -518,45 +296,46 @@
 </template>
 
 <script>
-import rule from "@/mixins/rule";
-import _ from "lodash";
-import {getProjectDetail, verifyProject, pogressExportDetail} from "@/api/projectDeclare";
-import { downloadWordFile } from "@/utils/data"
-import {mapGetters} from "vuex";
+import rule from '@/mixins/rule';
+import _ from 'lodash';
+import { getProjectDetail, verifyProject, pogressExportDetail } from '@/api/projectDeclare';
+import { downloadWordFile } from '@/utils/data';
+import { mapGetters } from 'vuex';
+import moment from 'moment';
 
 export default {
   mixins: [rule],
   data() {
     return {
-      id: "",
+      id: '',
       // 基本信息
       form1: {
-        years: "",
-        projectType: "",
-        villageDetailId: "",
-        projectManager: "",
-        managerMobile: "",
-        departmentName: "",
-        departmentManagerName: "",
-        departmentMobile: "",
-        constructionCompanyName: "",
-        companyMobile: "",
+        years: '',
+        projectType: '',
+        villageDetailId: '',
+        projectManager: '',
+        managerMobile: '',
+        departmentName: '',
+        departmentManagerName: '',
+        departmentMobile: '',
+        constructionCompanyName: '',
+        companyMobile: '',
         provinceFee: undefined,
         cityFee: undefined,
         countryFee: undefined,
         villageFee: undefined,
-          bankFee: undefined, // 银行资金改为乡镇资金
+        bankFee: undefined, // 银行资金改为乡镇资金
         otherFee: undefined,
         imagesArr: [],
       },
       // 可行性摘要
       form2: {
-        villageOverview: "",
-        investAnalysis: "",
-        projectDetails: "",
-        projectPlan: "",
-        financialSupport: "",
-        benefitAnalysis: "",
+        villageOverview: '',
+        investAnalysis: '',
+        projectDetails: '',
+        projectPlan: '',
+        financialSupport: '',
+        benefitAnalysis: '',
       },
       // 建设项目清单
       form3: {
@@ -586,27 +365,26 @@ export default {
       active: 0,
       //待市级审核：2001 市级审核不通过:2002 省级审核不通过: 2003 市级审核通过 待省级审核:2004 审核通过:2999
       projectTypeMap: {
-        30001: "修缮",
-        30002: "扩建",
-        30003: "开发利用",
+        30001: '修缮',
+        30002: '扩建',
+        30003: '开发利用',
       },
       projectStatusMap: {
-        2001: "待市级审核",
-        2002: "市级审核不通过",
-        2003: "省级审核不通过",
-        2004: "市级审核通过，待省级审核",
-        2999: "审核通过",
+        2001: '待市级审核',
+        2002: '市级审核不通过',
+        2003: '省级审核不通过',
+        2004: '市级审核通过，待省级审核',
+        2999: '审核通过',
       },
 
-
-      dialogId: "",
-      textarea: "",
+      dialogId: '',
+      textarea: '',
       status: null,
       verifyKey: false,
     };
   },
   computed: {
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(['userInfo']),
     roleId() {
       //console.log(this.userInfo.roleId);
       return this.userInfo.roleId;
@@ -647,11 +425,12 @@ export default {
     //导出
     clickExport() {
       const { id } = this.$route.query;
-      const fileName = '项目申报文本'
-      pogressExportDetail({id}).then(res => {
+      const time = moment().format('YYYY-MM-DD HH_mm_ss');
+      const fileName = '项目申报文本' + time;
+      pogressExportDetail({ id }).then((res) => {
         //console.log(res)
-        downloadWordFile(res,fileName)
-      })
+        downloadWordFile(res, fileName);
+      });
     },
     changeRoute() {
       if (this.$route.query.from && this.$route.query.from === 'ScheduleReportList') {
@@ -665,7 +444,7 @@ export default {
       }
     },
     async getDetail() {
-      if (this.type === "add") {
+      if (this.type === 'add') {
         return;
       }
       this.detail = await getProjectDetail(this.id);
@@ -676,12 +455,12 @@ export default {
       this.form1.imagesArr = _.cloneDeep(this.detail.baseInfo.imagesFilesList);
     },
     onConfirm() {
-      if (this.status === "0" || this.status === "1") {
+      if (this.status === '0' || this.status === '1') {
         this.dialogId = this.$route.query.id;
         this.submit();
         // this.dialogVisible = false;
       } else {
-        this.$notify.error("请选择通过或不通过");
+        this.$notify.error('请选择通过或不通过');
       }
     },
     async submit() {
@@ -690,7 +469,7 @@ export default {
         status: this.status,
         remark: this.textarea,
       });
-      this.$notify.success("操作成功");
+      this.$notify.success('操作成功');
       this.$router.back();
     },
   },
@@ -700,7 +479,7 @@ export default {
 <style lang="scss" scoped>
 .export {
   margin-bottom: 25px;
-  .export-button{
+  .export-button {
     float: right;
   }
 }

@@ -112,7 +112,7 @@ export default {
     });
     opts.unshift({
       label: '全部',
-      value: null,
+      value: '',
     });
     this.reportStateOPt = opts;
   },

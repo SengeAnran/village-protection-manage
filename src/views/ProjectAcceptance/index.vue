@@ -46,25 +46,13 @@
           </div>
           <div class="search-item">
             <span class="label">申报年度：</span>
-            <el-date-picker
-              v-model="query.years"
-              type="year"
-              placeholder="选择年"
-              value-format="yyyy"
-            >
+            <el-date-picker v-model="query.years" type="year" placeholder="选择年" value-format="yyyy">
             </el-date-picker>
           </div>
           <div class="search-item">
             <span class="label">状态：</span>
-            <el-select
-              v-model="query.checkStatus"
-              placeholder="请选择状态"
-              clearable
-            >
-              <el-option
-                value=""
-                label="全部"
-              ></el-option>
+            <el-select v-model="query.checkStatus" placeholder="请选择状态" clearable>
+              <el-option value="" label="全部"></el-option>
               <el-option
                 v-for="item in Object.keys(reviewStatusMap)"
                 :key="item"
@@ -77,38 +65,22 @@
       </template>
 
       <template v-slot:export>
-        <el-button v-if="userInfo.roleId === 1 && query.declareType === 1002" class="export-button" @click="clickExport">导出</el-button>
+        <el-button v-if="userInfo.roleId === 1 && query.declareType === 1002" class="export-button" @click="clickExport"
+          >导出</el-button
+        >
       </template>
 
-      <template
-        v-slot:table
-        v-if="
-          query.declareType === 1001 ||
-          (query.declareType === 1002 && userInfo.roleId !== 3)
-        "
-      >
+      <template v-slot:table v-if="query.declareType === 1001 || (query.declareType === 1002 && userInfo.roleId !== 3)">
         <!-- S 一般村申报 -->
-        <el-table-column
-          label="申报年度"
-          prop="years"
-          key="years"
-        ></el-table-column>
-        <el-table-column
-          label="项目所在地"
-          prop="address"
-          key="address"
-        ></el-table-column>
+        <el-table-column label="申报年度" prop="years" key="years"></el-table-column>
+        <el-table-column label="项目所在地" prop="address" key="address"></el-table-column>
         <el-table-column
           v-if="query.declareType === 1002"
           label="总投资（万元）"
           prop="totalFee"
           key="totalFee"
         ></el-table-column>
-        <el-table-column
-          label="申报时间"
-          prop="gmtCreate"
-          key="gmtCreate"
-        ></el-table-column>
+        <el-table-column label="申报时间" prop="gmtCreate" key="gmtCreate"></el-table-column>
         <el-table-column label="状态" prop="reviewStatus" key="reviewStatus">
           <template slot-scope="scope">
             <p v-if="scope.row.checkStatus">
@@ -138,12 +110,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column
-          :min-width="40"
-          label="总投资（万元）"
-          prop="totalFee"
-          key="totalFee2"
-        ></el-table-column>
+        <el-table-column :min-width="40" label="总投资（万元）" prop="totalFee" key="totalFee2"></el-table-column>
         <el-table-column label="进度" align="center" key="checkStatus2">
           <template slot-scope="scope">
             <Steps :status="scope.row.checkStatus" />
@@ -157,13 +124,7 @@
           <el-link type="primary" @click="toVillage(scope)">村庄详情</el-link>
           <el-divider direction="vertical"></el-divider>
         </div>
-        <div
-          class="inline"
-          v-if="
-            actionControl('项目详情', scope.data.checkStatus) &&
-            query.declareType === 1002
-          "
-        >
+        <div class="inline" v-if="actionControl('项目详情', scope.data.checkStatus) && query.declareType === 1002">
           <el-link type="primary" @click="toProject(scope)">项目详情</el-link>
           <el-divider direction="vertical"></el-divider>
         </div>
@@ -175,57 +136,47 @@
           @click="toAuditSave(scope, 'add')"
           >验收</el-link
         >
-<!--        <el-link-->
-<!--          v-if="actionControl('修改', scope.data.checkStatus)"-->
-<!--          v-permission="modifyPermission"-->
-<!--          type="primary"-->
-<!--          @click="toAuditSave(scope, 'edit')"-->
-<!--          >修改</el-link-->
-<!--        >-->
-        <el-link
-          type="primary"
-          v-if="actionControl('验收详情', scope.data.checkStatus)"
-          @click="toVerifyDetail(scope)"
+        <!--        <el-link-->
+        <!--          v-if="actionControl('修改', scope.data.checkStatus)"-->
+        <!--          v-permission="modifyPermission"-->
+        <!--          type="primary"-->
+        <!--          @click="toAuditSave(scope, 'edit')"-->
+        <!--          >修改</el-link-->
+        <!--        >-->
+        <el-link type="primary" v-if="actionControl('验收详情', scope.data.checkStatus)" @click="toVerifyDetail(scope)"
           >验收详情</el-link
         >
-        <div
-          class="inline"
-          v-if="scope.data.rectifyFlag"
-        >
+        <div class="inline" v-if="scope.data.rectifyFlag">
           <el-divider direction="vertical"></el-divider>
-          <el-link type="primary" @click="toAuditSave(scope, 'rectify')"
-            >整改</el-link
-          >
+          <el-link type="primary" @click="toAuditSave(scope, 'rectify')">整改</el-link>
         </div>
-        <div
-          class="inline"
-          v-if="scope.data.rectifyDetailFlag"
-        >
+        <div class="inline" v-if="scope.data.rectifyDetailFlag">
           <el-divider direction="vertical"></el-divider>
-          <el-link type="primary" @click="toRectificationDetail(scope)"
-            >整改详情</el-link
-          >
+          <el-link type="primary" @click="toRectificationDetail(scope)">整改详情</el-link>
         </div>
-        <el-divider v-if="actionControl('验收详情', scope.data.checkStatus) && scope.data.modifyFlag" direction="vertical"></el-divider>
+        <el-divider
+          v-if="actionControl('验收详情', scope.data.checkStatus) && scope.data.modifyFlag"
+          direction="vertical"
+        ></el-divider>
         <el-link
           v-if="scope.data.modifyFlag"
           v-permission="modifyPermission"
           type="primary"
           @click="toAuditSave(scope, 'edit')"
-        >修改
-        </el-link
-        >
+          >修改
+        </el-link>
       </template>
     </Crud>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapGetters } from "vuex";
-import { getAcceptanceList, exportList } from "@/api/projectAcceptance";
-import rule from "@/mixins/rule";
-import Steps from "./components/Steps.vue";
-import { downloadFile } from "@/utils/data"
+import { mapMutations, mapGetters } from 'vuex';
+import { getAcceptanceList, exportList } from '@/api/projectAcceptance';
+import rule from '@/mixins/rule';
+import Steps from './components/Steps.vue';
+import { downloadFile } from '@/utils/data';
+import moment from 'moment';
 
 export default {
   mixins: [rule],
@@ -235,34 +186,33 @@ export default {
       query: {
         // 一般村:1001 重点村:1002 提升村:1003
         declareType: 1002,
-        years: "",
-        checkStatus: "",
-        address: "",
+        years: '',
+        checkStatus: '',
+        address: '',
       },
       getMethod: getAcceptanceList,
       // 验收状态 待县级填报: 2000 待市级审核：2001 市级审核驳回:2002 省级审核驳回: 2003 市级审核通过 待省级审核:2004 验收通过:2999
       reviewStatusMap: {
-        2000: "待县级填报",
-        2001: "待市级审核",
-        2002: "市级审核驳回",
-        2003: "省级审核驳回",
-        2004: "市级审核通过，待省级审核",
-        2999: "验收通过",
+        2000: '待县级填报',
+        2001: '待市级审核',
+        2002: '市级审核驳回',
+        2003: '省级审核驳回',
+        2004: '市级审核通过，待省级审核',
+        2999: '验收通过',
       },
       routers: {
-        "/projectApplication/detail": true,
-        "/projectAcceptance/save": true,
-        "/projectAcceptance/verify/detail": true,
-        "/villageApplication/villageDetail": true,
-      }
-
+        '/projectApplication/detail': true,
+        '/projectAcceptance/save': true,
+        '/projectAcceptance/verify/detail': true,
+        '/villageApplication/villageDetail': true,
+      },
     };
   },
   computed: {
-    ...mapGetters(["declareType"]),
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(['declareType']),
+    ...mapGetters(['userInfo']),
     pageName() {
-      return this.userInfo.roleId === 3? '项目验收' : this.userInfo.roleId === 1? '绩效评价':'市级复核'
+      return this.userInfo.roleId === 3 ? '项目验收' : this.userInfo.roleId === 1 ? '绩效评价' : '市级复核';
     },
     modifyPermission() {
       const roleId = this.userInfo.roleId;
@@ -302,17 +252,18 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     const routers = {
-      "/projectApplication/detail": true,
-      "/projectAcceptance/save": true,
-      "/projectAcceptance/verify/detail": true,
-      "/villageApplication/villageDetail": true,
+      '/projectApplication/detail': true,
+      '/projectAcceptance/save': true,
+      '/projectAcceptance/verify/detail': true,
+      '/villageApplication/villageDetail': true,
     };
-    next((vm => {
-      if (!routers[from.path]) { // 如果来自非二级页面
+    next((vm) => {
+      if (!routers[from.path]) {
+        // 如果来自非二级页面
         vm.resetDeclareType(); // 一些操作
         vm.query.declareType = vm.declareType; // 修改本地值
       }
-    }));
+    });
   },
   // beforeRouteLeave(to, from, next) {
   //   // 导航离开该组件的对应路由时调用
@@ -323,7 +274,7 @@ export default {
   //   next();
   // },
   methods: {
-    ...mapMutations("projectAcceptance", ["changeDeclareType", "resetDeclareType"]),
+    ...mapMutations('projectAcceptance', ['changeDeclareType', 'resetDeclareType']),
     // 导出
     clickExport() {
       const data = {
@@ -331,9 +282,11 @@ export default {
         checkStatus: this.query.checkStatus,
         address: this.query.address,
       };
-      exportList(data).then(res => {
-        downloadFile(res,'重点村规划评审清单')
-      })
+      const time = moment().format('YYYY-MM-DD HH_mm_ss');
+      const fileName = `重点村规划评审清单${time}`;
+      exportList(data).then((res) => {
+        downloadFile(res, fileName);
+      });
     },
     changeType(code) {
       this.query.declareType = code;
@@ -342,21 +295,23 @@ export default {
     },
     toVillage(scope) {
       this.$router.push(
-        `/villageApplication/villageDetail?id=${scope.data.id}&name=ProjectAcceptanceList&title=${this.pageName}`
+        `/villageApplication/villageDetail?id=${scope.data.id}&name=ProjectAcceptanceList&title=${this.pageName}`,
       );
     },
     toProject(scope) {
-      this.$router.push(`/projectApplication/detail?id=${scope.data.id}&name=ProjectAcceptanceList&title=${this.pageName}`);
+      this.$router.push(
+        `/projectApplication/detail?id=${scope.data.id}&name=ProjectAcceptanceList&title=${this.pageName}`,
+      );
     },
     toAuditSave(scope, type) {
       this.$router.push(
-        `/projectAcceptance/save?type=${type}&id=${scope.data.id}&year=${scope.data.years}&total=${scope.data.totalFee}&date=${scope.data.gmtCreate}&address=${scope.data.address}&declareType=${this.query.declareType}`
+        `/projectAcceptance/save?type=${type}&id=${scope.data.id}&year=${scope.data.years}&total=${scope.data.totalFee}&date=${scope.data.gmtCreate}&address=${scope.data.address}&declareType=${this.query.declareType}`,
       );
     },
     // 去整改详情
     toRectificationDetail(scope) {
       this.$router.push(
-        `/projectAcceptance/rectification/detail?id=${scope.data.id}&year=${scope.data.years}&total=${scope.data.totalFee}&date=${scope.data.gmtCreate}&address=${scope.data.address}&declareType=${this.query.declareType}`
+        `/projectAcceptance/rectification/detail?id=${scope.data.id}&year=${scope.data.years}&total=${scope.data.totalFee}&date=${scope.data.gmtCreate}&address=${scope.data.address}&declareType=${this.query.declareType}`,
       );
     },
     toVerifyDetail(scope) {
@@ -371,20 +326,11 @@ export default {
     actionControl(actionName, declareStatus) {
       const { roleId } = this.userInfo;
       if (roleId === 3) {
-        return (
-          this.XIANJI_ACTION[actionName] &&
-          this.XIANJI_ACTION[actionName](declareStatus)
-        );
+        return this.XIANJI_ACTION[actionName] && this.XIANJI_ACTION[actionName](declareStatus);
       } else if (roleId === 2) {
-        return (
-          this.SHIJI_ACTION[actionName] &&
-          this.SHIJI_ACTION[actionName](declareStatus)
-        );
+        return this.SHIJI_ACTION[actionName] && this.SHIJI_ACTION[actionName](declareStatus);
       } else if (roleId === 1) {
-        return (
-          this.ADMIN_ACTION[actionName] &&
-          this.ADMIN_ACTION[actionName](declareStatus)
-        );
+        return this.ADMIN_ACTION[actionName] && this.ADMIN_ACTION[actionName](declareStatus);
       }
       return false;
     },
@@ -408,7 +354,7 @@ export default {
     // 整改
     _canReview(status, roleId) {
       // return roleId === 3 && (status === 2002 || status === 2003);
-      return roleId === 3 && (status === 2999);
+      return roleId === 3 && status === 2999;
     },
     // 整改详情
     _canReviewDetail(status) {
@@ -417,9 +363,7 @@ export default {
     },
     // 修改
     _canModify(status, roleId) {
-      return (
-        (roleId === 3 && status === 2001) || (roleId === 2 && status === 2004)
-      );
+      return (roleId === 3 && status === 2001) || (roleId === 2 && status === 2004);
     },
   },
 };
@@ -433,7 +377,7 @@ export default {
     color: #333333;
   }
 }
-.export-button{
+.export-button {
   float: right;
 }
 ::v-deep .table-action {

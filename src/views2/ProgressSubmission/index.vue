@@ -144,7 +144,7 @@
               }}
             </template>
           </el-table-column>
-          <el-table-column label="本月总体进度" sortable prop="overallProgress">
+          <el-table-column label="总体进度" sortable prop="overallProgress">
             <template v-slot="scope">
               {{ scope.row.overallProgress ? formatScore(scope.row.overallProgress || 0) + '%' : '-' }}
             </template>

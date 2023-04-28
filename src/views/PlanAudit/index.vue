@@ -31,15 +31,8 @@
           </div>
           <div class="search-item">
             <span class="label">状态：</span>
-            <el-select
-              v-model="query.reviewStatus"
-              placeholder="请选择状态"
-              clearable
-            >
-              <el-option
-                value=""
-                label="全部"
-              ></el-option>
+            <el-select v-model="query.reviewStatus" placeholder="请选择状态" clearable>
+              <el-option value="" label="全部"></el-option>
               <el-option
                 v-for="item in Object.keys(formatReviewStatus)"
                 :key="item"
@@ -67,35 +60,18 @@
 
       <template v-slot:table>
         <el-table-column label="申报年度" prop="declareYear"></el-table-column>
-        <el-table-column
-          label="重点村庄名称"
-          prop="villageName"
-        ></el-table-column>
-        <el-table-column v-if="userInfo.roleId < 3 "
-          label="所在县"
-          prop="county"
-        ></el-table-column>
-        <el-table-column v-if="userInfo.roleId < 2 "
-          label="所在市"
-          prop="city"
-        ></el-table-column>
-        <el-table-column
-          label="评审规划时间"
-          prop="gmtCreate"
-        ></el-table-column>
+        <el-table-column label="重点村庄名称" prop="villageName"></el-table-column>
+        <el-table-column v-if="userInfo.roleId < 3" label="所在县" prop="county"></el-table-column>
+        <el-table-column v-if="userInfo.roleId < 2" label="所在市" prop="city"></el-table-column>
+        <el-table-column label="评审规划时间" prop="gmtCreate"></el-table-column>
         <el-table-column label="状态" prop="reviewStatus">
-          <template slot-scope="scope">{{
-            reviewStatusMap[scope.row.reviewStatus]
-          }}</template>
+          <template slot-scope="scope">{{ reviewStatusMap[scope.row.reviewStatus] }}</template>
         </el-table-column>
       </template>
 
       <template v-slot:tableAction="scope">
         <div style="text-align: left">
-          <div
-            class="inline"
-            v-if="actionControl('村庄详情', scope.data.reviewStatus)"
-          >
+          <div class="inline" v-if="actionControl('村庄详情', scope.data.reviewStatus)">
             <el-link type="primary" @click="toVillage(scope)">村庄详情</el-link>
             <el-divider direction="vertical"></el-divider>
           </div>
@@ -119,51 +95,27 @@
             @click="toAuditDetail(scope)"
             >评审详情</el-link
           >
-          <div
-            class="inline"
-            v-if="actionControl('审核', scope.data.reviewStatus)"
-            v-permission="330003"
-          >
+          <div class="inline" v-if="actionControl('审核', scope.data.reviewStatus)" v-permission="330003">
             <el-divider direction="vertical"></el-divider>
             <el-link type="primary" @click="openDialog(scope)">审核</el-link>
           </div>
-          <div
-            class="inline"
-            v-if="actionControl('审核详情', scope.data.reviewStatus)"
-          >
+          <div class="inline" v-if="actionControl('审核详情', scope.data.reviewStatus)">
             <el-divider direction="vertical"></el-divider>
-            <el-link type="primary" @click="toVerifyDetail(scope)"
-              >审核详情</el-link
-            >
+            <el-link type="primary" @click="toVerifyDetail(scope)">审核详情</el-link>
           </div>
         </div>
       </template>
     </Crud>
-    <el-dialog
-      :visible.sync="showDialog"
-      title="审核"
-      width="500px"
-      @close="resetForm"
-    >
+    <el-dialog :visible.sync="showDialog" title="审核" width="500px" @close="resetForm">
       <el-form ref="form" :model="form" label-position="top">
-        <el-form-item
-          label="是否通过该重点村规划评审："
-          :rules="rule.select"
-          prop="status"
-        >
+        <el-form-item label="是否通过该重点村规划评审：" :rules="rule.select" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio :label="1">通过</el-radio>
             <el-radio :label="0">不通过</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="审核意见：">
-          <el-input
-            v-model="form.remark"
-            type="textarea"
-            :rows="5"
-            placeholder="请输入"
-          >
-          </el-input>
+          <el-input v-model="form.remark" type="textarea" :rows="5" placeholder="请输入"> </el-input>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -177,40 +129,41 @@
 </template>
 
 <script>
-import { getPlanList, exportList, verifyPlan } from "@/api/planningReview";
-import rule from "@/mixins/rule";
-import { mapGetters } from "vuex";
-import { downloadFile } from "@/utils/data"
+import { getPlanList, exportList, verifyPlan } from '@/api/planningReview';
+import rule from '@/mixins/rule';
+import { mapGetters } from 'vuex';
+import { downloadFile } from '@/utils/data';
+import moment from 'moment';
 
 export default {
   mixins: [rule],
   data() {
     return {
       query: {
-        declareYear: "",
-        reviewStatus: "",
+        declareYear: '',
+        reviewStatus: '',
       },
       ids: [],
       getMethod: getPlanList,
       // 未填报:2000（此状态县级可进行填报） 待市级审核：2001（此状态县级可修改评审） 市级审核不通过:2002 省级审核不通过: 2003 市级审核通过 待省级审核:2004 验收通过:2999
       reviewStatusMap: {
-        2000: "未填报",
-        2001: "待市级审核",
-        2002: "市级审核不通过",
-        2003: "省级审核不通过",
-        2004: "市级审核通过，待省级审核",
-        2999: "验收通过",
+        2000: '未填报',
+        2001: '待市级审核',
+        2002: '市级审核不通过',
+        2003: '省级审核不通过',
+        2004: '市级审核通过，待省级审核',
+        2999: '验收通过',
       },
       showDialog: false,
       form: {
-        id: "",
-        remark: "",
-        status: "",
+        id: '',
+        remark: '',
+        status: '',
       },
     };
   },
   computed: {
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(['userInfo']),
     formatReviewStatus() {
       if (this.userInfo.roleId !== 3) {
         delete this.reviewStatusMap[2000];
@@ -245,16 +198,18 @@ export default {
         // pageSize: '',
         reviewStatus: this.query.reviewStatus,
         ids: this.ids,
-      }
-      exportList(params).then(res => {
-        downloadFile(res,'历史文化（传统）村落保护利用重点村规划评审结果情况表')
-      })
+      };
+      const time = moment().format('YYYY-MM-DD HH_mm_ss');
+      const fileName = `历史文化（传统）村落保护利用重点村规划评审结果情况表${time}`;
+      exportList(params).then((res) => {
+        downloadFile(res, fileName);
+      });
     },
     selectionChange(val) {
       //console.log(val);
       this.ids = [];
-      val.forEach(item => {
-        this.ids.push(item.id)
+      val.forEach((item) => {
+        this.ids.push(item.id);
       });
       //console.log(this.ids);
     },
@@ -278,9 +233,7 @@ export default {
       }
     },
     toVillage(scope) {
-      this.$router.push(
-        `/villageApplication/villageDetail?id=${scope.data.id}&name=PlanAuditList&title=规划评审`
-      );
+      this.$router.push(`/villageApplication/villageDetail?id=${scope.data.id}&name=PlanAuditList&title=规划评审`);
     },
     toAuditSave(scope, type) {
       this.$router.push(`/planAudit/save?type=${type}&id=${scope.data.id}`);
@@ -290,7 +243,7 @@ export default {
     },
     toVerifyDetail(scope) {
       this.$router.push(
-        `/planAudit/verify/detail?id=${scope.data.id}&villageName=${scope.data.villageName}&reviewStatus=${scope.data.reviewStatus}&declareYear=${scope.data.declareYear}`
+        `/planAudit/verify/detail?id=${scope.data.id}&villageName=${scope.data.villageName}&reviewStatus=${scope.data.reviewStatus}&declareYear=${scope.data.declareYear}`,
       );
     },
     openDialog(scope) {
@@ -308,9 +261,9 @@ export default {
     resetForm() {
       this.showDialog = false;
       this.form = {
-        id: "",
-        remark: "",
-        status: "",
+        id: '',
+        remark: '',
+        status: '',
       };
       this.$refs.form.resetFields();
     },
@@ -318,7 +271,7 @@ export default {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
           await verifyPlan(this.form);
-          this.$notify.success("提交成功");
+          this.$notify.success('提交成功');
           this.resetForm();
           this.$refs.crud.getItems();
         }
@@ -333,20 +286,11 @@ export default {
     actionControl(actionName, reviewStatus) {
       const { roleId } = this.userInfo;
       if (roleId === 3) {
-        return (
-          this.XIANJI_ACTION[actionName] &&
-          this.XIANJI_ACTION[actionName](reviewStatus)
-        );
+        return this.XIANJI_ACTION[actionName] && this.XIANJI_ACTION[actionName](reviewStatus);
       } else if (roleId === 2) {
-        return (
-          this.SHIJI_ACTION[actionName] &&
-          this.SHIJI_ACTION[actionName](reviewStatus)
-        );
+        return this.SHIJI_ACTION[actionName] && this.SHIJI_ACTION[actionName](reviewStatus);
       } else if (roleId === 1) {
-        return (
-          this.ADMIN_ACTION[actionName] &&
-          this.ADMIN_ACTION[actionName](reviewStatus)
-        );
+        return this.ADMIN_ACTION[actionName] && this.ADMIN_ACTION[actionName](reviewStatus);
       }
       return false;
     },
@@ -363,9 +307,7 @@ export default {
     // 评审详情
     _canViewReview(reviewStatus, roleId) {
       if (roleId === 3) {
-        return (
-          reviewStatus > 2001 && reviewStatus !== 2002 && reviewStatus !== 2003
-        ); // 2001 可修改，此时不展示详情，可从修改里看
+        return reviewStatus > 2001 && reviewStatus !== 2002 && reviewStatus !== 2003; // 2001 可修改，此时不展示详情，可从修改里看
       } else if (roleId < 3) {
         return reviewStatus > 2000; // 县级提交后就可以看评审详情
       }
@@ -382,9 +324,7 @@ export default {
     // 审核详情
     _canViewDeclare(reviewStatus, roleId) {
       if (roleId === 3) {
-        return (
-          reviewStatus > 2001 && reviewStatus !== 2002 && reviewStatus !== 2003
-        );
+        return reviewStatus > 2001 && reviewStatus !== 2002 && reviewStatus !== 2003;
       } else if (roleId === 2) {
         return reviewStatus > 2001;
       } else if (roleId === 1) {
@@ -408,7 +348,7 @@ export default {
     color: #333333;
   }
 }
-.export-button{
+.export-button {
   //float: right;
 }
 ::v-deep .table-action {
