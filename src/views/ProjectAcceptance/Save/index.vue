@@ -2,10 +2,7 @@
   <div>
     <el-form ref="form" :model="form" label-width="100px" label-position="top">
       <div class="block">
-        <div
-          class="text-lg cursor-pointer inline-block"
-          @click="$router.back()"
-        >
+        <div class="text-lg cursor-pointer inline-block" @click="$router.back()">
           <i class="el-icon-arrow-left"></i>
           <span> {{ typeMap[type] }}</span>
         </div>
@@ -13,11 +10,7 @@
           <el-form-item class="inline-block" label="申报年度：">
             <p class="input">{{ year }}</p>
           </el-form-item>
-          <el-form-item
-            class="inline-block"
-            label="总投资："
-            v-if="Number(declareType) === 1002"
-          >
+          <el-form-item class="inline-block" label="总投资：" v-if="Number(declareType) === 1002">
             <p class="input">{{ total }}万元</p>
           </el-form-item>
           <el-form-item class="inline-block" label="申报日期：">
@@ -29,14 +22,8 @@
           <el-form-item class="inline-block" label="项目类型：">
             <p class="input">{{ declareTypeMap[declareType] }}</p>
           </el-form-item>
-          <el-form-item
-            class="inline-block"
-            label="验收详情："
-            v-if="userInfo.roleId !== 3 || type === 'rectify'"
-          >
-            <el-button type="primary" @click="toVerifyDetail"
-              >查看验收详情</el-button
-            >
+          <el-form-item class="inline-block" label="验收详情：" v-if="userInfo.roleId !== 3 || type === 'rectify'">
+            <el-button type="primary" @click="toVerifyDetail">查看验收详情</el-button>
           </el-form-item>
           <p class="ml-4 mb-2 mt-4">{{ descName.slice(0, 2) }}</p>
           <el-form-item
@@ -54,41 +41,22 @@
           <el-row :gutter="40" v-if="type === 'add' && declareType === '1002' && roleId === 1">
             <el-col :span="6">
               <el-form-item label="分数:" :rules="rule.input" prop="score">
-                <el-input
-                  v-model.lazy="form.score"
-                  type="number"
-                  placeholder="请输入评价分数"
-                  @change="computeGrade"
-                />
+                <el-input v-model.lazy="form.score" type="number" placeholder="请输入评价分数" @change="computeGrade" />
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="等级:" prop="grade">
-                <el-input
-                  v-model="form.grade"
-                  type="text"
-                  disabled
-                  placeholder="自动计算"
-                />
+                <el-input v-model="form.grade" type="text" disabled placeholder="自动计算" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-form-item :label="descName" :rules="rule.input" prop="remark">
-            <el-input
-              v-model="form.remark"
-              type="textarea"
-              :rows="5"
-              placeholder="请输入"
-            />
+            <el-input v-model="form.remark" type="textarea" :rows="5" placeholder="请输入" />
           </el-form-item>
-          <el-form-item
-            label="上传附件："
-            :rules="rule.upload"
-            prop="processFilesArr"
-          >
+          <el-form-item label="上传附件：" :rules="rule.upload" prop="processFilesArr">
             <UploadFile
               tip="支持格式：.doc, .docx, .pdf"
-              accept=".doc,.docx,.pdf"
+              accept=".doc,.docx,.pdf,.PDF"
               :data="form.processFilesArr"
               @add="onFileAdd($event, 'processFilesArr')"
               @remove="onFileRemove($event, 'processFilesArr')"
@@ -105,9 +73,9 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import rule from "@/mixins/rule";
-import _ from "lodash";
+import { mapGetters } from 'vuex';
+import rule from '@/mixins/rule';
+import _ from 'lodash';
 import {
   // getAcceptanceDetail,
   verify,
@@ -115,51 +83,51 @@ import {
   getRectificationInfo,
   addRectify,
   getRectifyDetail,
-} from "@/api/projectAcceptance";
+} from '@/api/projectAcceptance';
 
 export default {
   mixins: [rule],
   data() {
     return {
-      id: "",
-      type: "",
+      id: '',
+      type: '',
       typeMap: {
-        add: "验收信息",
-        edit: "修改",
-        view: "查看",
-        rectify: "整改",
-        rectifyDetail: "整改详情",
+        add: '验收信息',
+        edit: '修改',
+        view: '查看',
+        rectify: '整改',
+        rectifyDetail: '整改详情',
       },
       form: {
         declareType: 0,
-        id: "",
+        id: '',
         processFilesArr: [],
-        remark: "",
-        status: "",
-        score: "", // 分数
-        grade: "", // 等级
+        remark: '',
+        status: '',
+        score: '', // 分数
+        grade: '', // 等级
       },
       declareTypeMap: {
-        1001: "一般村项目",
-        1002: "重点村项目",
+        1001: '一般村项目',
+        1002: '重点村项目',
       },
       detail: {},
-      year: "",
-      total: "",
-      date: "",
-      address: "",
-      declareType: "",
-      roleId: "",
+      year: '',
+      total: '',
+      date: '',
+      address: '',
+      declareType: '',
+      roleId: '',
     };
   },
   computed: {
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(['userInfo']),
     descName() {
-      return this.type === "edit"
-        ? "修改描述"
-        : this.type === "rectify" || this.type === "rectifyDetail"
-        ? "整改描述"
-        : "验收意见";
+      return this.type === 'edit'
+        ? '修改描述'
+        : this.type === 'rectify' || this.type === 'rectifyDetail'
+        ? '整改描述'
+        : '验收意见';
     },
   },
 
@@ -173,16 +141,16 @@ export default {
     this.total = this.$route.query.total;
     this.date = this.$route.query.date;
     this.address = this.$route.query.address;
-    this.roleId = this.$store.state.user.userInfo.roleId
+    this.roleId = this.$store.state.user.userInfo.roleId;
     this.getDetail();
   },
   methods: {
     async getDetail() {
-      if (this.type === "add") {
+      if (this.type === 'add') {
         return;
       }
-      if (this.type === "rectifyDetail") {
-        await this.getRectifyDetail(this.id)
+      if (this.type === 'rectifyDetail') {
+        await this.getRectifyDetail(this.id);
         // this.form = _.cloneDeep(this.detail);
         // console.log('111');
         this.form.processFilesArr = _.cloneDeep(this.detail.uploadFileList);
@@ -193,23 +161,28 @@ export default {
 
         this.form.processFilesArr = _.cloneDeep(this.detail.processFilesList);
       }
-
     },
     // 计算等级
     computeGrade() {
       switch (true) {
-        case this.form.score < 60: {
-          this.form.grade = '不合格';
-          this.form.status = 0;
-        } break;
-        case this.form.score < 70: {
-          this.form.grade = '合格';
-          this.form.status = 1;
-        } break;
-        case this.form.score < 85: {
-          this.form.grade = '良好';
-          this.form.status = 1;
-        } break;
+        case this.form.score < 60:
+          {
+            this.form.grade = '不合格';
+            this.form.status = 0;
+          }
+          break;
+        case this.form.score < 70:
+          {
+            this.form.grade = '合格';
+            this.form.status = 1;
+          }
+          break;
+        case this.form.score < 85:
+          {
+            this.form.grade = '良好';
+            this.form.status = 1;
+          }
+          break;
         default: {
           this.form.grade = '优秀';
           this.form.status = 1;
@@ -234,20 +207,20 @@ export default {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
           this.$myConfirm({
-            content: "是否确认提交",
+            content: '是否确认提交',
           }).then(async () => {
             const form = _.cloneDeep(this.form);
             form.id = this.id;
             form.declareType = this.declareType;
             // 图片数组处理
-            const keyArray = ["processFilesArr"];
+            const keyArray = ['processFilesArr'];
             keyArray.forEach((key) => {
               form[key] = form[key].map((item) => item.fileId);
             });
             try {
-              if (this.type === "add") {
+              if (this.type === 'add') {
                 await verify(form);
-              } else if (this.type === "rectify") {
+              } else if (this.type === 'rectify') {
                 form.projectId = this.id;
                 form.modifyDescription = form.remark;
                 form.uploadFiles = form.processFilesArr;
@@ -255,7 +228,7 @@ export default {
               } else {
                 await verifyByCounty(form);
               }
-              this.$notify.success("提交成功");
+              this.$notify.success('提交成功');
               this.$router.back();
             } catch (err) {
               console.log(err);

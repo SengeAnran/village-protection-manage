@@ -34,11 +34,7 @@
         </template>
 
         <template v-slot:table>
-          <el-table-column
-            label="政策名称"
-            prop="policyName"
-            width="500"
-          ></el-table-column>
+          <el-table-column label="政策名称" prop="policyName" width="500"></el-table-column>
           <el-table-column label="上传时间" prop="gmtCreate">
             <!--            <template slot-scope="scope">-->
             <!--              <p>{{ declareType[scope.row.declareType] }}</p>-->
@@ -46,29 +42,25 @@
           </el-table-column>
         </template>
         <template v-slot:tableEdit="scope">
-          <el-link
-            type="danger"
-            @click.native="download(scope)"
-          >下载</el-link
-          >
+          <el-link type="danger" @click.native="download(scope)">下载</el-link>
         </template>
         <template v-slot:form>
           <el-form-item label="政策名称：" prop="policyName" :rules="rule.input">
             <el-input v-model="form.policyName" placeholder="请输入"></el-input>
           </el-form-item>
-          <el-form-item label="政策文件：" :rules="rule.upload" prop="multipartFileVOList" >
+          <el-form-item label="政策文件：" :rules="rule.upload" prop="multipartFileVOList">
             <UploadFile
               :data="form.multipartFileVOList"
               tip="支持扩展名：.rar .zip .doc .docx .pdf .jpg..."
-              accept=".rar,.zip,.doc,.docx,.pdf,.jpg"
+              accept=".rar,.zip,.doc,.docx,.pdf,.jpg,.PDF"
               @add="addFile($event, 'multipartFileVOList')"
               @remove="removeFile($event, 'multipartFileVOList')"
             >
             </UploadFile>
-<!--            <p style="color: #999999" class="py-3">-->
-<!--&lt;!&ndash;              <i class="el-icon-warning"></i>&ndash;&gt;-->
-<!--              支持扩展名：.rar .zip .doc .docx .pdf .jpg...-->
-<!--            </p>-->
+            <!--            <p style="color: #999999" class="py-3">-->
+            <!--&lt;!&ndash;              <i class="el-icon-warning"></i>&ndash;&gt;-->
+            <!--              支持扩展名：.rar .zip .doc .docx .pdf .jpg...-->
+            <!--            </p>-->
           </el-form-item>
         </template>
       </Crud>
@@ -77,9 +69,9 @@
 </template>
 <script>
 // import { mapMutations, mapGetters } from "vuex";
-import {downloadFileByI} from '@/utils/data'
-import { getList, createPolicy, deletePolicy } from "@/api/policy";
-import rule from "@/mixins/rule";
+import { downloadFileByI } from '@/utils/data';
+import { getList, createPolicy, deletePolicy } from '@/api/policy';
+import rule from '@/mixins/rule';
 
 export default {
   mixins: [rule],
@@ -90,22 +82,19 @@ export default {
       },
       form: {
         policyName: '',
-        multipartFileVOList:[],
+        multipartFileVOList: [],
       },
       getMethod: getList,
       addMethod: createPolicy,
       deleteMethod: deletePolicy,
     };
   },
-  computed: {
-  },
-  beforeMount() {
-  },
-  mounted() {
-  },
+  computed: {},
+  beforeMount() {},
+  mounted() {},
   methods: {
     download(row) {
-      row.data.filePathList.forEach(item =>{
+      row.data.filePathList.forEach((item) => {
         downloadFileByI(item);
       });
     },
@@ -116,14 +105,13 @@ export default {
     removeFile(file, key) {
       let removeIndex;
       this.form[key].forEach((item, index) => {
-        if(item.uid === file.uid || item.filePath === file.url)
-          removeIndex = index
-      })
-      if(removeIndex !== -1) {
-        this.form[key].splice(removeIndex,1);
+        if (item.uid === file.uid || item.filePath === file.url) removeIndex = index;
+      });
+      if (removeIndex !== -1) {
+        this.form[key].splice(removeIndex, 1);
       }
     },
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>

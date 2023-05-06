@@ -49,7 +49,7 @@
           <el-form-item label="规划文本：" :rules="rule.upload" prop="planFilesArr">
             <UploadFile
               tip="支持格式：.ppt, .pptx, .pdf"
-              accept=".ppt,.pptx,.pdf"
+              accept=".ppt,.pptx,.pdf,.PDF"
               :data="form.planFilesArr"
               @add="onFileAdd($event, 'planFilesArr')"
               @remove="onFileRemove($event, 'planFilesArr')"
@@ -62,7 +62,7 @@
           <el-form-item label="上传附件：" :rules="rule.upload" prop="suggestionFilesArr">
             <UploadFile
               tip="支持格式：.doc, .docx, .pdf"
-              accept=".doc,.docx,.pdf"
+              accept=".doc,.docx,.pdf,.PDF"
               :data="form.suggestionFilesArr"
               @add="onFileAdd($event, 'suggestionFilesArr')"
               @remove="onFileRemove($event, 'suggestionFilesArr')"
@@ -72,7 +72,7 @@
           <el-form-item label="上传政府批复附件：" :rules="rule.upload" prop="approvalFilesArr">
             <UploadFile
               tip="支持格式：.doc, .docx,.pdf"
-              accept=".doc,.docx,.pdf"
+              accept=".doc,.docx,.pdf,.PDF"
               :data="form.approvalFilesArr"
               @add="onFileAdd($event, 'approvalFilesArr')"
               @remove="onFileRemove($event, 'approvalFilesArr')"
