@@ -6,7 +6,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { getOverallProgressRate5thPro, getProgressReport } from '@/api2/homePage';
+import { getOverallProgressRate5thPro, getProgressReport, getVariousIndicators } from '@/api2/homePage';
 import BarChart from './BarChart';
 
 export default {
@@ -97,16 +97,22 @@ export default {
         this.chartData1.dataList1 = res.map((i) => {
           return (i.overallProgress * 1).toFixed(2);
         });
-
-        if (res.length > 0) {
-          const total =
-            res.reduce((prev, cur) => {
-              return prev + cur.overallProgress * 1;
-            }, 0) / res.length;
-          this.total = total.toFixed(1) * 1;
+        const res2 = await getVariousIndicators(data);
+        console.log('res2', res2);
+        if (res2 && res2.length > 0 && res2[0].overallProgress) {
+          this.total = res2[0].overallProgress;
         } else {
           this.total = 0;
         }
+        // if (res.length > 0) {
+        //   const total =
+        //     res.reduce((prev, cur) => {
+        //       return prev + cur.overallProgress * 1;
+        //     }, 0) / res.length;
+        //   this.total = total.toFixed(1) * 1;
+        // } else {
+        //   this.total = 0;
+        // }
         this.chartData = this.chartData1;
         this.hideLegend = true;
         return;

@@ -75,7 +75,12 @@
         </template>
         <template v-slot:export>
           <el-button icon="el-icon-download" type="primary" plain @click="exportList"> 导出信息汇总表 </el-button>
-          <el-button v-if="COUNTRY || COUNTRY_LEADER" icon="el-icon-download" type="primary" plain @click="exportDatas"
+          <el-button
+            v-if="COUNTRY || COUNTRY_LEADER || CITY_LEADER || CITY"
+            icon="el-icon-download"
+            type="primary"
+            plain
+            @click="exportDatas"
             >材料打印
           </el-button>
           <el-button v-if="COUNTRY_LEADER || CITY_LEADER" type="primary" @click="UnifiedReport"> 统一上报</el-button>

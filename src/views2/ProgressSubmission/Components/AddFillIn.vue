@@ -440,6 +440,8 @@ export default {
     completeGovInputValue(rule, value, callback) {
       if (!value && value !== 0) {
         callback(new Error('填写不能为空'));
+      } else if (isNaN(value)) {
+        callback(new Error('请输入正确格式的数字'));
       } else if (Number(value) < (Number(this.form.lastGov) || 0)) {
         callback(new Error('不可少于之前报送政府投资'));
       } else {
@@ -450,6 +452,8 @@ export default {
     completeTotalInputValue(rule, value, callback) {
       if (!value && value !== 0) {
         callback(new Error('填写不能为空'));
+      } else if (isNaN(value)) {
+        callback(new Error('请输入正确格式的数字'));
       } else if (Number(value) < (Number(this.form.lastTotal) || 0)) {
         callback(new Error('不可少于之前报送完成总投资'));
       } else {
@@ -460,6 +464,8 @@ export default {
     completeDriveInputValue(rule, value, callback) {
       if (!value && value !== 0) {
         callback(new Error('填写不能为空'));
+      } else if (isNaN(value)) {
+        callback(new Error('请输入正确格式的数字'));
       } else if (Number(value) < (Number(this.form.lastDrive) || 0)) {
         callback(new Error('不可少于之前报送带动投资'));
       } else {
@@ -475,12 +481,28 @@ export default {
       if (!value && value !== 0) {
         callback(new Error('填写不能为空'));
         // } else if (Number(value) < (Number(this.form.lastOverallProgress) || 0)) {
+      } else if (isNaN(value)) {
+        callback(new Error('请输入正确格式的数字'));
+      } else if (this.getInvCompletionRate() === 0 && this.form.planTotal === 0) {
+        //若完成投资率数值为0 ，需判断总计划投资是否为0，是则限制不生效，否则限制依旧生效
+        if (value * 1 >= 0 && value * 1 <= 100) {
+          callback();
+        } else {
+          callback(new Error('请输入正确的数字范围'));
+        }
+      } else if (this.getInvCompletionRate() > 100) {
+        //若完成投资率数值为0 ，需判断总计划投资是否为0，是则限制不生效，否则限制依旧生效
+        if (value * 1 >= 80 && value * 1 <= 100) {
+          callback();
+        } else {
+          callback(new Error('请输入正确的数字范围'));
+        }
       } else if (
         Number(value) < this.getInvCompletionRate() * 0.8 ||
         Number(value) > this.getInvCompletionRate() * 1.2
       ) {
         //总体进度不可小于或大于投资完成率20%
-        callback(new Error('总体进度不可小于或大于投资完成率20%'));
+        callback(new Error('总体进度不可小于或大于投资完成率的20%'));
       } else {
         callback();
       }

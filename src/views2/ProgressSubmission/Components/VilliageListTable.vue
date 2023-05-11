@@ -45,13 +45,13 @@
         {{ formatScore(scope.row.yearRate || 0) }}
       </template>
     </el-table-column>
-    <el-table-column align="center" :label="isEnd ? '计划投资完成率（%）' : '本月计划投资完成率（%）'">
+    <el-table-column align="center" :label="isEnd ? '计划投资完成率（%）' : '本次计划投资完成率（%）'">
       <template slot-scope="scope">
         <!--        {{ scope.row.planRate || scope.row.planRate === 0 ? scope.row.planRate.toFixed(1) + '%' : '-' }}-->
         {{ scope.row.planRate ? formatScore(scope.row.planRate) : '-' }}
       </template>
     </el-table-column>
-    <el-table-column :label="isEnd ? '完成投资（万元）' : '本月完成投资（万元）'" header-align="center">
+    <el-table-column :label="isEnd ? '完成投资（万元）' : '本次完成投资（万元）'" header-align="center">
       <!-- 村级用户 -->
       <el-table-column align="center" label="总投资" width="100">
         <template slot-scope="scope">
@@ -73,7 +73,7 @@
         </template>
       </el-table-column>
     </el-table-column>
-    <el-table-column align="center" :label="isEnd ? '总体进度（%）' : '本月总体进度（%）'" width="170">
+    <el-table-column align="center" :label="isEnd ? '总体进度（%）' : '本次总体进度（%）'" width="170">
       <template slot-scope="scope">
         {{
           scope.row.overallProgress || scope.row.overallProgress === 0

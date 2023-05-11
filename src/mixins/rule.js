@@ -13,7 +13,7 @@ const number = (rule, value, callback) => {
     callback(new Error('填写不能为空'));
     // }else if((typeof value === String && value.indexOf(".") !== -1 && value.split('.').length > 2) || !parseFloat(value) || parseFloat(value).toString() !== value){
   } else if (isNaN(value)) {
-    callback(new Error('请输入正确格式的数字')); //防止输入多个小数点
+    callback(new Error('请输入正确格式的数字')); //防止输入多个小数点或特殊字符
   } else {
     callback();
   }

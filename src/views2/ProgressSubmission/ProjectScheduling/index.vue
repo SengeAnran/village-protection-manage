@@ -368,7 +368,7 @@ export default {
         const time = moment().format('YYYY-MM-DD HH_mm_ss');
         const fileName = `信息汇总表${time}.xlsx`;
         downloadFile(res, fileName);
-        this.$notify.success('导出成功');
+        // this.$notify.success('导出成功');
       });
     },
     // 导出项目进度表

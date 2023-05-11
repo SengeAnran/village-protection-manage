@@ -72,6 +72,15 @@ export const getProgressReport = (data) => {
     headers: { 'APPLICATION-ID': 4 },
   });
 };
+// 【首页】总体进度值
+export const getVariousIndicators = (data) => {
+  return axios.request({
+    method: 'post',
+    url: apiHost2 + `/api/workbench/index/variousIndicators`,
+    data,
+    headers: { 'APPLICATION-ID': 4 },
+  });
+};
 
 /*前后排名*/
 

@@ -76,6 +76,7 @@ import { REPORT_STATUS, REPORT_STATUS2 } from './constants';
 import { getInforExport } from '@/api2/progressSubmission';
 import moment from 'moment';
 import { downloadFile } from '@/utils/data';
+import { getTime } from '@/api2/villageManage';
 
 export default {
   name: 'EarlyWarnDetail',
@@ -98,6 +99,7 @@ export default {
       },
       getMethod: getSubmitEarlyWarningDetail,
       reportStateOPt: [],
+      time: '',
     };
   },
   computed: {
@@ -115,8 +117,17 @@ export default {
       value: '',
     });
     this.reportStateOPt = opts;
+    // 报送时间
+    this.getTimeInfo();
   },
   methods: {
+    // 报送时间
+    async getTimeInfo() {
+      const res = await getTime();
+      if (res && res.length > 0) {
+        this.time = res[res.length - 1];
+      }
+    },
     getStatusName,
     // 地区
     changeArea(val) {
@@ -170,6 +181,8 @@ export default {
         const data = {
           // ids: this.selections.map((item) => item.id),
           ...this.query,
+          status: 1, //在建村
+          time: this.time,
           // pageNum,
           // pageSize,
         };
