@@ -33,7 +33,7 @@
     <el-table-column align="center" label="投资完成率（%）">
       <template slot-scope="scope">
         <!--        {{ scope.row.yearRate || scope.row.yearRate === 0 ? scope.row.yearRate.toFixed(1) + '%' : '-' }}-->
-        {{ formatScore(scope.row.yearRate || 0) }}
+        {{ formatScore(scope.row.planRate || 0) }}
       </template>
     </el-table-column>
     <el-table-column align="center" label="总体进度（%）" width="170">
