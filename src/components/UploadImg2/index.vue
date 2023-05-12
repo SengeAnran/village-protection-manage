@@ -163,7 +163,7 @@ export default {
         };
       });
       this.data = dest;
-      this.$emit('input', dest);
+      file.status === 'success' && this.$emit('input', dest);
       this.$emit('change', dest);
       this.dispatch('ElFormItem', 'el.form.change', [dest]);
     },
