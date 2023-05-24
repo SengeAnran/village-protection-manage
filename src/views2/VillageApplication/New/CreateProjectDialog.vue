@@ -86,7 +86,7 @@
           class="number"
         ></el-input-number>
       </el-form-item>
-      <el-form-item label="类型：" prop="type">
+      <el-form-item label="类型：" prop="type" :rules="rule.select">
         <el-select v-model="projectForm.type" placeholder="请选择">
           <el-option v-for="(item, index) of types" :key="index" :label="item.name" :value="item.value"></el-option>
         </el-select>

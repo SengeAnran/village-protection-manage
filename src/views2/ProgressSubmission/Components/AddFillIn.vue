@@ -38,8 +38,8 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <!--          <el-form-item label="本月完成总投资（万元）" prop="completeTotal" :rules="completeTotalInput">-->
-          <el-form-item label="本月完成总投资（万元）" prop="completeTotal" :rules="rule.inputNumber">
+          <!--          <el-form-item label="本次完成总投资（万元）" prop="completeTotal" :rules="completeTotalInput">-->
+          <el-form-item label="本次完成总投资（万元）" prop="completeTotal" :rules="rule.inputNumber">
             <el-input v-model="form.completeTotal" disabled placeholder="-"></el-input>
           </el-form-item>
         </el-col>
@@ -76,7 +76,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="本月总体进度（%）" prop="overallProgress" :rules="overallProgressInput">
+          <el-form-item label="本次总体进度（%）" prop="overallProgress" :rules="overallProgressInput">
             <el-input v-model="form.overallProgress" placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
@@ -89,7 +89,7 @@
 
       <el-row v-if="form.isStart" :gutter="20">
         <el-col :span="20">
-          <el-form-item label="本月项目进度情况照片" prop="monthPic" :rules="rule.upload">
+          <el-form-item label="本次项目进度情况照片" prop="monthPic" :rules="rule.upload">
             <UploadImg2 :modal="false" :defaultData="oldPics" v-model="form.monthPic" :limit="5" />
             <i style="color: #d40000">请上传1至5张照片，每张大小不可超过10MB</i>
           </el-form-item>
@@ -153,16 +153,16 @@ export default {
         projectName: '', // 项目名称
         type: '', // 类型
         planTotal: '', // 计划总投资（万元）
-        completeTotal: '', // 本月完成总投资（万元）
+        completeTotal: '', // 本次完成总投资（万元）
         completeGov: '', // 其中政府投资（万元）
         completeDrive: '', // 其中带动投资（万元）
         lastTotal: '', // 之前报送完成总投资（万元）
         lastGov: '', // 之前报送政府投资（万元）
         lastDrive: '', // 之前报送带动投资（万元）
-        overallProgress: '', // 本月总体进度（%）
+        overallProgress: '', // 本次总体进度（%）
         lastOverallProgress: '', // 之前报送总体进度（%）
         isStart: '', // 是否开工
-        monthPic: [], // 本月项目进度情况照片
+        monthPic: [], // 本次项目进度情况照片
         isEnd: '', // 是否竣工
 
         planRate: '', // 计划投资完成率（%）
@@ -491,7 +491,7 @@ export default {
           callback(new Error('请输入正确的数字范围'));
         }
       } else if (this.getInvCompletionRate() > 100) {
-        //若完成投资率数值为0 ，需判断总计划投资是否为0，是则限制不生效，否则限制依旧生效
+        //若完成投资率数值大于100% ，填写数值填写范围80%～100%
         if (value * 1 >= 80 && value * 1 <= 100) {
           callback();
         } else {
@@ -503,6 +503,9 @@ export default {
       ) {
         //总体进度不可小于或大于投资完成率20%
         callback(new Error('总体进度不可小于或大于投资完成率的20%'));
+      } else if (Number(value) < this.form.lastOverallProgress || 0) {
+        //总体进度不可小于上次填写的数值限制
+        callback(new Error('总体进度不可小于上次填写的数值'));
       } else {
         callback();
       }

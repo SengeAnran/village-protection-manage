@@ -1,6 +1,6 @@
 <template>
   <div class="add-fill-in-detail">
-    <div class="report-time">{{ reportingTime }} 报送</div>
+    <div class="report-time">{{ time }} 报送</div>
     <detail-form v-bind="$attrs" :form="form" :oldPics="oldPics" />
   </div>
 </template>
@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       firstYear: 2022,
-      reportingTime: '', // 月份
+      reportingTimes: null, // 月份
       options: [], // 时间选项
       form: {
         projectName: '', // 项目名称
@@ -84,6 +84,11 @@ export default {
       }
     },
   },
+  computed: {
+    time() {
+      return this.reportingTimes || this.reportingTime;
+    },
+  },
   beforeMount() {
     this.getData();
   },
@@ -117,7 +122,7 @@ export default {
             .map((ele) => ({ filePath: ele }));
         }
         if (this.type === 'verity' && res.times && res.times.length > 0) {
-          this.reportingTime = res.times[0];
+          this.reportingTimes = res.times[0];
           this.options = res.times.map((i) => {
             return {
               label: i,
