@@ -135,6 +135,15 @@ export const postSaveOne = (data) => {
     data,
   });
 };
+
+// 已竣工改为未竣工
+export const changeToNotEnd = (params) => {
+  return axios.request({
+    method: 'get',
+    url: apiHost2 + `/api/workbench/progressReport/changeToNotEnd`,
+    params,
+  });
+};
 // 县级-项目进度审核
 export const countryAudit = (data) => {
   return axios.request({

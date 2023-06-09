@@ -68,6 +68,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    initDisabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -101,6 +105,10 @@ export default {
       },
       immediate: true,
     },
+  },
+  mounted() {
+    // 一开始就不能修改
+    this.disabled = this.initDisabled;
   },
   methods: {
     async uploadImg(info) {

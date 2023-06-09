@@ -31,8 +31,8 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="是否开工" prop="isStart" :rules="rule.select">
-            <el-radio v-model="form.isStart" :disabled="startDisabled" :label="0">否</el-radio>
-            <el-radio v-model="form.isStart" :disabled="startDisabled" :label="1">是</el-radio>
+            <el-radio v-model="form.isStart" :disabled="completedDisabled || startDisabled" :label="0">否</el-radio>
+            <el-radio v-model="form.isStart" :disabled="completedDisabled || startDisabled" :label="1">是</el-radio>
           </el-form-item>
         </el-col>
       </el-row>
@@ -46,13 +46,18 @@
         <el-col :span="8">
           <!--          <el-form-item label="其中政府投资（万元）" prop="completeGov" :rules="completeGovInput">-->
           <el-form-item label="其中政府投资（万元）" prop="completeGov" :rules="rule.inputNumber">
-            <el-input v-model="form.completeGov" placeholder="请输入"></el-input>
+            <el-input v-model="form.completeGov" :disabled="completedDisabled" placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <!--          <el-form-item label="其中带动投资（万元）" prop="completeDrive" :rules="completeDriveInput">-->
           <el-form-item label="其中带动投资（万元）" prop="completeDrive" :rules="rule.inputNumber">
-            <el-input v-model="form.completeDrive" placeholder="请输入" maxlength="8"></el-input>
+            <el-input
+              v-model="form.completeDrive"
+              :disabled="completedDisabled"
+              placeholder="请输入"
+              maxlength="8"
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -77,7 +82,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="本次总体进度（%）" prop="overallProgress" :rules="overallProgressInput">
-            <el-input v-model="form.overallProgress" placeholder="请输入"></el-input>
+            <el-input v-model="form.overallProgress" :disabled="completedDisabled" placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -90,7 +95,13 @@
       <el-row v-if="form.isStart" :gutter="20">
         <el-col :span="20">
           <el-form-item label="本次项目进度情况照片" prop="monthPic" :rules="rule.upload">
-            <UploadImg2 :modal="false" :defaultData="oldPics" v-model="form.monthPic" :limit="5" />
+            <UploadImg2
+              :modal="false"
+              :initDisabled="completedDisabled"
+              :defaultData="oldPics"
+              v-model="form.monthPic"
+              :limit="5"
+            />
             <i style="color: #d40000">请上传1至5张照片，每张大小不可超过10MB</i>
           </el-form-item>
         </el-col>
@@ -119,7 +130,7 @@
 <script>
 import { PROJECT_TYPE } from './constants';
 import rule from '@/mixins/rule';
-import { getFillInDEcho, postSaveOne } from '@/api2/progressSubmission';
+import { changeToNotEnd, getFillInDEcho, postSaveOne } from '@/api2/progressSubmission';
 import { formatMoney, formatScore } from '@/views2/utils/formatter';
 // const completeGovInputValue = (rule, value, callback) => {
 //   console.log(rule, value);
@@ -137,6 +148,7 @@ export default {
       default: true,
     },
     type: {
+      // completedModify, modify , add
       type: String,
       default: 'add',
     },
@@ -230,6 +242,10 @@ export default {
         (this.form.planTotal === 0 && this.form.completeTotal === 0)
       );
     },
+    completedDisabled() {
+      // 已竣工的修改控制
+      return this.type === 'completedModify';
+    },
   },
   watch: {
     completeTotal(val) {
@@ -298,7 +314,7 @@ export default {
         if (isEnd) {
           this.form.isEnd = isEnd;
         }
-        if (monthPic && this.type === 'modify') {
+        if (monthPic && (this.type === 'modify' || this.type === 'completedModify')) {
           // 填报模式不用回显照片
           this.oldPics = monthPic
             .split(',')
@@ -328,6 +344,11 @@ export default {
               .catch(() => {});
             return;
           }
+          //  已竣工修改未竣工
+          if (this.type === 'completedModify') {
+            this.changeToNoEnd();
+            return;
+          }
           this.detailData();
 
           // postSaveOne(data).then(() => {
@@ -340,6 +361,31 @@ export default {
           //   this.$emit('input', false);
           // });
         }
+      });
+    },
+    // 已竣工改为未竣工
+    changeToNoEnd() {
+      const params = {
+        id: this.id,
+      };
+      if (this.form.isEnd) {
+        // 未修改
+        this.$message({
+          type: 'success',
+          message: '修改成功!',
+        });
+        this.$refs.form.resetFields();
+        this.$emit('input', false);
+        return;
+      }
+      changeToNotEnd(params).then(() => {
+        this.$message({
+          type: 'success',
+          message: '修改成功!',
+        });
+        this.$emit('refresh');
+        this.$refs.form.resetFields();
+        this.$emit('input', false);
       });
     },
     detailData() {

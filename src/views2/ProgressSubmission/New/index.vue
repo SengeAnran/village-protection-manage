@@ -80,7 +80,7 @@
                 <template v-slot:action="scope">
                   <el-link @click="goDetail(scope)" v-if="scope.data.showDetail" type="primary"> 详情 </el-link>
                   <el-divider v-if="scope.data.showDetail" direction="vertical"></el-divider>
-                  <el-link v-if="scope.data.canEdit" @click="goModify(scope)" type="primary"> 修改 </el-link>
+                  <el-link v-if="scope.data.canEdit" @click="goCompletedModify(scope)" type="primary"> 修改 </el-link>
                 </template>
               </VilliageListTable>
             </el-tab-pane>
@@ -296,11 +296,18 @@ export default {
       this.dialogType = 'add';
       this.fillInDialogVisible = true;
     },
-    // 修改
+    // 未竣工修改
     goModify(scope) {
       this.modifyData = _.cloneDeep(scope.data);
       this.projectId = scope.data.id;
       this.dialogType = 'modify';
+      this.fillInDialogVisible = true;
+    },
+    // 已竣工修改
+    goCompletedModify(scope) {
+      this.modifyData = _.cloneDeep(scope.data);
+      this.projectId = scope.data.id;
+      this.dialogType = 'completedModify';
       this.fillInDialogVisible = true;
     },
     // 详情
